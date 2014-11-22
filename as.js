@@ -1,11 +1,3 @@
-//oServer.get('/home/forgotPassword',oWRegister.getUserResetEmail);
-
-
-
-
-
-
-
 
 var express = require('express');
 var as = express();
@@ -31,7 +23,7 @@ as.use(express.static(__dirname + '/static'));
 if ('development' === as.get('env')) {
   as.use(errorHandler());
 }
-as.use(oOLM.initialize());                
+//as.use(oOLM.initialize());                
 oSMM.initiat(as); // pass in the application to be secured... must appear after express session
 
 
@@ -62,4 +54,3 @@ function four_oh_four(req, res) {
     res.writeHead(404, { "Content-Type" : "application/json" });
     res.end(JSON.stringify(oHelpers.invalid_resource()) + "\n");
 }
-
