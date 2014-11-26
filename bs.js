@@ -23,6 +23,8 @@ bs.use(bodyParser.urlencoded({ extended: true }));
 
 //local only
 //if(process.env.STAGE=='local'){
+
+bs.get('/favicon.ico', oOperationsLogRouter);
 bs.use(exp.static(  './static'));
 //bs.use(exp.static(__dirname +  '/static'));
 //console.log(__dirname +  '/static');
@@ -37,11 +39,11 @@ bs.use(logger('dev'));
 
 bs.use(oSCM.initialize());
 bs.use(oSCM.session());
-
 bs.use(oOLM.logRequest());
 
 bs.post('/home/login', oSCM.loginUser());
 bs.post('/home/registration',oSCM.registerUser());
+
 
 bs.use(oSCM.userIsAuthorized());
 
