@@ -1,0 +1,17 @@
+{
+    "name" : "api",
+    "description": "api server ",
+    "version" : "0.1.0",
+    "private": true,
+    "dependencies" : {
+    "express": "^4.8.8",
+    "express-session": "^1.8.2",
+    "body-parser": "^1.5.2",
+    "errorhandler": "^1.1.1",
+    "morgan": "^1.2.2",
+    "debug": "~2.0.0",
+    "esb": "git+ssh://git@bitbucket.org:lionleo/lbs.api.esb.git#development",
+    "scm": "git+ssh://git@bitbucket.org:lionleo/lbs.api.scm.git#development",
+    "olm": "git+ssh://git@bitbucket.org:lionleo/lbs.api.olm.git#development"
+       }
+}
