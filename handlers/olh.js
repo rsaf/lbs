@@ -14,7 +14,7 @@ var r = {
 */
 
 
-module.exports = function(paramService, paramESB)
+module.exports = function(paramService, esbMessage)
 {
 var operationsLogRouter = paramService.Router();
 
@@ -28,7 +28,7 @@ operationsLogRouter.get('/all.json', function(paramRequest, paramResponse, param
   "pl": {"userAccountID":paramRequest.user.id, "opType":null, "pageNumber":1, "pageSize":10}
   };
 
-paramESB.message(m)
+    esbMessage(m)
     .then(function(r) {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
       paramResponse.end(JSON.stringify(r));
@@ -48,7 +48,7 @@ operationsLogRouter.get('/business.json', function(paramRequest, paramResponse, 
   "pl": {"userAccountID":paramRequest.user.id, "opType":"业务操作", "pageNumber":1, "pageSize":10}
   };
 
-paramESB.message(m)
+    esbMessage(m)
     .then(function(r) {
       //console.log(r.pl);
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
@@ -69,7 +69,7 @@ operationsLogRouter.get('/access.json',function(paramRequest, paramResponse, par
   "pl": {"userAccountID":paramRequest.user.id, "opType":"授权操作", "pageNumber":1, "pageSize":10}
   };
 
-paramESB.message(m)
+    esbMessage(m)
     .then(function(r) {
       //console.log(r.pl);
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
@@ -83,4 +83,4 @@ paramESB.message(m)
 });
 
   return operationsLogRouter;
-}
+};
