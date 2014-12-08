@@ -35,6 +35,7 @@ try {
     bs.use(scmPassport.initialize());
     bs.use(scmPassport.session());
     console.log('BS: configuring user requests logger middleware...');
+
     bs.use(olmRequestLogger());
 
     bs.use('/home', oHomeRouter);
