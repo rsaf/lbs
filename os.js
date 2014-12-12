@@ -1,50 +1,59 @@
-
+var exp = require('express');
+var bs = exp();
 var logger = require('morgan');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
 var oHelpers= require('./utilities/helpers.js');
 
-var express = require('express');
-var ps = express();
-var esb = require('./esb.js');
+var oHomeRouter ;
+var oOperationsLogRouter ;
+var oServiceRouter ;
 
-var psRouter = require('./handlers/psHandler.js')(ps,esb);
 
-//Required for addressing the orthogonal concerns of security (authentication, authorization) and  user actions logging
-//Only the ssm and olm modules have addresses orthogonal concerns
-var oSSM = require('ssm');
-var oOLM = require('olm');
+module.exports.startBS = function(scmPassport, scmCheckUserAccess, olmRequestLogger, paramESB){
+console.log('\nBS: self configuring with injected dependencies ....');
+try {
 
-//Set default environmental variables
-bs.set('port', process.env.PORT || 80);
-bs.set('env', process.env.TYPE || 'development');
+    oHomeRouter = require('./handlers/hh.js')(exp, paramESB);
+    oOperationsLogRouter = require('./handlers/olh.js')(exp, paramESB);
+    oServiceRouter = require('./handlers/smh.js')(exp, paramESB);
 
-bs.use(express.static(__dirname + '/static'));
+// all environments
+    bs.set('port', process.env.PORT || 10000);
+    bs.use(session({resave: true, saveUninitialized: true, secret: 'uwotm8'}));
+    bs.use(bodyParser.json());
+    bs.use(bodyParser.urlencoded({extended: true}));
 
-//Development only
-if ('development' === bs.get('env')) {
-  bs.use(errorHandler());
-  bs.use(logger('dev'));
+    bs.get('/favicon.ico', oOperationsLogRouter); // this is messing our logger
+    bs.use(exp.static('./static'));
+
+    bs.use(errorHandler());
+    bs.use(logger('dev'));
+
+    console.log('BS: configuring security middleware...');
+    bs.use(scmPassport.initialize());
+    bs.use(scmPassport.session());
+    console.log('BS: configuring user requests logger middleware...');
+
+    bs.use(olmRequestLogger());
+
+    bs.use('/home', oHomeRouter);
+    console.log('BS: configuring user acl middleware...');
+    bs.use(scmCheckUserAccess());
+
+    console.log('BS: configuring REST endpoints request handles middleware...');
+    //REST API Interface
+    //Business functions expose from here
+    bs.use('/workspace/operationslog', oOperationsLogRouter);
+    bs.use('/workspace/services', oServiceRouter);
+    bs.all('*', oHelpers.four_oh_four);
+
+    console.log('BS: bs is fully configured ...');
+    return bs;
+}
+catch(ex){
+    console.log(ex);
 }
 
-bs.use(session({ resave: true,saveUninitialized: true,secret: 'uwotm8' }));
-bs.use(bodyParser.json());
-bs.use(bodyParser.urlencoded({ extended: true }));
-
-bs.use(oOLM.logRequest());
-oSMM.initiat(bs); // pass in the application to be secured... must appear after express session
-
-//Addresses orthogonal concerns of authorizing users
-bs.use(oSMM.userIsAuthorized);
-
-//Functional modules routers
-bs.use('/v1/ps', psRouter);
-
-
-//All unkonwn REST requests
-bs.all('*', oHelpers.four_oh_four);
-
-bs.listen(bs.get('port'), function(){
-  console.log(" Dynamic content server started on port: "  + bs.get('port'));
-});
+};

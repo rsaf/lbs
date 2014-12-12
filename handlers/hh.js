@@ -5,6 +5,8 @@ module.exports = function(paramService, esbMessage){
     var homeRouter = paramService.Router();
     var userloginVerifier = null;
     var registerUzer = null;
+    var sessionUser = null;
+
     var m1 = {
         "ns":'scm',
         "op": 'getVerifyUserLogin',
@@ -27,6 +29,16 @@ module.exports = function(paramService, esbMessage){
             //console.log(r2);
             registerUzer = r2.pl.fn;
             homeRouter.post('/registration', registerUzer());
+            var m3 = {
+                "ns":'scm',
+                "op": 'getSessionUser',
+                "pl": null
+            };
+            return esbMessage(m3);
+        })
+        .then(function(r3){
+            sessionUser = r3.pl.fn;
+            homeRouter.get('/user', sessionUser());
         })
         .fail(function(err) {
             console.log('error: ' + err);
