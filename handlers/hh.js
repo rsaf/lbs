@@ -6,6 +6,7 @@ module.exports = function(paramService, esbMessage){
     var userloginVerifier = null;
     var registerUzer = null;
     var sessionUser = null;
+    var logoutUser = null;
 
     var m1 = {
         "ns":'scm',
@@ -39,6 +40,18 @@ module.exports = function(paramService, esbMessage){
         .then(function(r3){
             sessionUser = r3.pl.fn;
             homeRouter.get('/user', sessionUser());
+
+            var m4 = {
+                "ns":'scm',
+                "op": 'getLogoutUser',
+                "pl": null
+            };
+            return esbMessage(m4);
+
+        })
+        .then(function(r4){
+            logoutUser = r4.pl.fn;
+            homeRouter.get('/logout', logoutUser());
         })
         .fail(function(err) {
             console.log('error: ' + err);
