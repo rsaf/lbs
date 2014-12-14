@@ -1,57 +1,107 @@
-
 var exp = require('express');
 var bs = exp();
-var esb = require('esb');
-
 var logger = require('morgan');
-var session = require('express-session');
+var expressSession = require('express-session');
 var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
 var oHelpers= require('./utilities/helpers.js');
-var oWASRouter = require('./utilities/wasrouter.js');
-var oSCM = require('scm');
-var oOLM = require('olm');
 
-var oOperationsLogRouter = require('./handlers/olh.js')(exp,esb);
-var oHomeRouter = require('./handlers/hh.js');
+var oHomeRouter ;
+var oOperationsLogRouter ;
+var oServiceRouter ;
 
-// all environments
-bs.set('port', process.env.PORT || 80);
-bs.use(session({ resave: true,saveUninitialized: true,secret: 'uwotm8' }));
-bs.use(bodyParser.json());
-bs.use(bodyParser.urlencoded({ extended: true }));
+var Q = require('q');
 
-//local only
-//if(process.env.STAGE=='local'){
-
-bs.get('/favicon.ico', oOperationsLogRouter);
-bs.use(exp.static(  './static'));
-//bs.use(exp.static(__dirname +  '/static'));
-//console.log(__dirname +  '/static');
-//}
-
-// local or development only
-//if (process.env.STAGE == 'local'|| process.env.STAGE =='development') {
-bs.use(errorHandler());
-bs.use(logger('dev'));
-//console.log(process.env.STAGE);
-//}
-
-bs.use(oSCM.initialize());
-bs.use(oSCM.session());
-bs.use(oOLM.logRequest());
-
-bs.post('/home/login', oSCM.loginUser());
-bs.post('/home/registration',oSCM.registerUser());
+var scmPassportObject = null;
+var olmRequestLoggerFunction = null;
+var scmCheckUserFunction = null;
+var esbMessageFunction = null;
+var bsPort = null;
+var p0 = null;
+var p1 = null;
+var p2 = null;
+var p3 = null;
 
 
-bs.use(oSCM.userIsAuthorized());
+module.exports.startBS = function(paramESBMessage){
+console.log('\nBS: self configuring with injected dependencies ....');
+try {
+    esbMessageFunction = paramESBMessage;
+    // the promise for this init is completed once we get mongoose
+    p0 = esbMessageFunction({
+        op: 'dependency',
+        pl: {dn: 'bsport'}
+    });
 
-//REST API Interface
-//Business functions expose from here
-bs.use('/workspace/operationslog', oOperationsLogRouter);
-bs.use('/workspace/finance', oOperationsLogRouter);
+    p1 = esbMessageFunction({
+        ns: 'scm',
+        op: 'getPassport'
+    });
 
-bs.get('*', oHelpers.four_oh_four);
+    p2 = esbMessageFunction({
+        ns: 'olm',
+        op: 'getLogRequest'
+    });
 
-module.exports = bs;
+    p3 = esbMessageFunction({
+        ns: 'scm',
+        op: 'getUserIsAuthorizedChecker'
+    });
+
+    console.log('\nBootstrapper: getting BS dependencies ...');
+    return Q.all([p0, p1, p2, p3]).then(function (r) {
+        //console.log(r);
+        bsPort = r[0].pl.fn;
+        scmPassportObject = r[1].pl.fn;
+        olmRequestLoggerFunction = r[2].pl.fn;
+        scmCheckUserFunction = r[3].pl.fn;
+
+        oHomeRouter = require('./handlers/hh.js')(exp, paramESBMessage);
+        oOperationsLogRouter = require('./handlers/olh.js')(exp, paramESBMessage);
+        oServiceRouter = require('./handlers/smh.js')(exp, paramESBMessage);
+
+
+        bs.set('port', bsPort);
+        bs.use(expressSession({resave: true, saveUninitialized: true, secret: 'uwotm8'}));
+        bs.use(bodyParser.json());
+        bs.use(bodyParser.urlencoded({extended: true}));
+
+        bs.get('/favicon.ico', oOperationsLogRouter); // this is messing our logger
+        bs.use(exp.static('./static'));
+
+        bs.use(errorHandler());
+        bs.use(logger('dev'));
+
+        console.log('BS: configuring security middleware...');
+        bs.use(scmPassportObject.initialize());
+        bs.use(scmPassportObject.session());
+        console.log('BS: configuring user requests logger middleware...');
+
+        bs.use(olmRequestLoggerFunction());
+
+        bs.use('/home', oHomeRouter);
+        console.log('BS: configuring user acl middleware...');
+        bs.use(scmCheckUserFunction());
+
+        console.log('BS: configuring REST endpoints request handles middleware...');
+        //REST API Interface
+        //Business functions expose from here
+        bs.use('/workspace/operationslog', oOperationsLogRouter);
+        bs.use('/workspace/services', oServiceRouter);
+        bs.all('*', oHelpers.four_oh_four);
+
+        bs.listen(bs.get('port'));
+
+        console.log('BS: bs is fully configured ...');
+        return Q({pl: {fn: bs}, er: null});
+    })
+    .fail(function (r) {
+        console.log('BS: starting bs failed with failure message: ' + r);
+        return Q({pl: null, er: {ec: null, em: r}})
+    });
+}
+catch(ex){
+    console.log(ex);
+}
+
+};
