@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+var debug = require('debug')('api');
+
+
+var startTime = new Date();
+var endTime = null;
+console.log('\nBootstrapper: starting system boot strapping at ' + startTime.toLocaleString());
+var esb = require('esb');
+var bs = require('../bs.js');
+console.log('Bootstrapper: loading ESB ...' );
+
+var esbPromise = esb.startESB().then(function(r){
+    //console.log(r);
+    var esbMessageFunction = r.pl.fn;
+
+    console.log('\Bootstrapper: starting BS with dependencies injected...' );
+
+    var bsPromise = bs.startBS(esbMessageFunction).then(function(r){
+      var bsServer = r.pl.fn;
+
+      console.log('\nBootstrapper: BS is up and listening on port: ' + bsServer.address().port);
+      console.log('Bootstrapper: ESB and BS are both up and ready to handle requests....' );
+
+      endTime = new Date();
+      console.log('Bootstrapper: system boot strapping commpleted at  ' + endTime.toLocaleString());
+      console.log('Bootstrapper: system boot strapping took ' + ((endTime.getTime() - startTime.getTime())/1000) + ' seconds ');
+
+    });
+
+  });
+
+
+
