@@ -9,6 +9,7 @@ var oHelpers= require('./utilities/helpers.js');
 var oHomeRouter ;
 var oOperationsLogRouter ;
 var oServiceRouter ;
+var oPhotoServiceRouter ;
 
 var Q = require('q');
 
@@ -24,7 +25,7 @@ var p3 = null;
 
 
 module.exports.startBS = function(paramESBMessage){
-console.log('\nBS: self configuring with injected dependencies ....');
+
 try {
     esbMessageFunction = paramESBMessage;
     // the promise for this init is completed once we get mongoose
@@ -48,8 +49,9 @@ try {
         op: 'getUserIsAuthorizedChecker'
     });
 
-    console.log('\nBootstrapper: getting BS dependencies ...');
+    console.log('\nBS: getting BS dependencies ...');
     return Q.all([p0, p1, p2, p3]).then(function (r) {
+
         //console.log(r);
         bsPort = r[0].pl.fn;
         scmPassportObject = r[1].pl.fn;
@@ -59,15 +61,17 @@ try {
         oHomeRouter = require('./handlers/hh.js')(exp, paramESBMessage);
         oOperationsLogRouter = require('./handlers/olh.js')(exp, paramESBMessage);
         oServiceRouter = require('./handlers/smh.js')(exp, paramESBMessage);
+        oPhotoServiceRouter = require('./handlers/psh.js')(exp, paramESBMessage);
 
-
+        console.log('BS: self configuring with injected dependencies ....');
         bs.set('port', bsPort);
         bs.use(expressSession({resave: true, saveUninitialized: true, secret: 'uwotm8'}));
         bs.use(bodyParser.json());
         bs.use(bodyParser.urlencoded({extended: true}));
 
         bs.get('/favicon.ico', oOperationsLogRouter); // this is messing our logger
-        bs.use(exp.static('./static'));
+        bs.get('/', oHelpers.testStartPage); //use for local testing only
+        bs.use(exp.static('./static')); //use for local testing only
 
         bs.use(errorHandler());
         bs.use(logger('dev'));
@@ -88,12 +92,13 @@ try {
         //Business functions expose from here
         bs.use('/workspace/operationslog', oOperationsLogRouter);
         bs.use('/workspace/services', oServiceRouter);
+        bs.use('/workspace/photoservices',oPhotoServiceRouter);
         bs.all('*', oHelpers.four_oh_four);
 
-        bs.listen(bs.get('port'));
+        var bsInstance =  bs.listen(bs.get('port'));
 
         console.log('BS: bs is fully configured ...');
-        return Q({pl: {fn: bs}, er: null});
+        return Q({pl: {fn: bsInstance}, er: null});
     })
     .fail(function (r) {
         console.log('BS: starting bs failed with failure message: ' + r);
