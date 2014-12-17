@@ -1,32 +1,25 @@
 
-module.exports = function(paramPS, paramESB)
-{
+module.exports = function(paramPS, paramESB) {
 var psRouter = paramPS.Router();
 
 //get Activity by lzcode
-//get --> https://os.lanid.cn/v1/ps/activities/:lzcode.json
-psRouter.get('/activities/:lzcode.json', function(paramRequest, paramResponse, paramNext){
+ //workspace/phototoservices/v1/idphotos/:lzcode.json
+psRouter.get('/idphotos/:lzcode.json', function(paramRequest, paramResponse, paramNext){
 
 });
 
-//post photo(s) by activity id
-//post --> https://os.lanid.cn/v1/ps/activities/:activityId/photos.json
-psRouter.post('/activities/:activityId/photos.json', function(paramRequest, paramResponse, paramNext){
+  //get all photos by activity id
+  //workspace/photoservices/v1/idphotos/:activityID.json
+  psRouter.get('/idphotos/:activityId.json',function(paramRequest, paramResponse, paramNext){
 
-});
+  });
 
-//get photo by activity id and photo id
-//get --> https://os.lanid.cn/v1/ps/activities/:activityId/photos/:photoId.json
-psRouter.get('/activities/:activitiyId/photos/:photoId.json',function(paramRequest, paramResponse, paramNext){
-
-});
-
-//get all photos by activity id
-//get --> https://os.lanid.cn/v1/ps/activities/:activityId/photos.json
-psRouter.get('/activities/:activityId/photos.json',function(paramRequest, paramResponse, paramNext){
+  //get photo by activity id and special code
+  //workspace/photoservices/v1/idphotos/:activityID/:tzcode.json
+psRouter.get('/idphotos/:activitiyID/:photoID.json',function(paramRequest, paramResponse, paramNext){
 
 });
 
   return psRouter;
-}
+};
 
