@@ -92,7 +92,7 @@ try {
         //Business functions expose from here
         bs.use('/workspace/operationslog', oOperationsLogRouter);
         bs.use('/workspace/services', oServiceRouter);
-        bs.use('/workspace/photoservices',oPhotoServiceRouter);
+        bs.use('/workspace/photoservices/v1',oPhotoServiceRouter);
         bs.all('*', oHelpers.four_oh_four);
 
         var bsInstance =  bs.listen(bs.get('port'));
