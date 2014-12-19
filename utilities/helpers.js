@@ -1,3 +1,4 @@
+var fs = require('fs');
 
 exports.version = '0.1.0';
 
@@ -27,4 +28,22 @@ function invalid_resource() {
 exports.four_oh_four = function(req, res) {
     res.writeHead(404, { "Content-Type" : "application/json" });
     res.end(JSON.stringify(invalid_resource()) + "\n");
+}
+
+exports.testStartPage = function (req, res) {
+    console.log('Helper: getting start page ..');
+    //var startPage = '/Users/LBS006/dev/bitbucket/lbs.lanid.web.leo/static/default.html';
+    var startPage = '/Users/LBS006/dev/bitbucket/lbs.lanid.web.leo/static/index.html';
+    fs.readFile(
+        startPage,
+        function (err, contents) {
+            if (err) {
+                send_failure(res, err);
+                return;
+            }
+            contents = contents.toString('utf8');
+            res.writeHead(200, { "Content-Type": "text/html" });
+            res.end(contents);
+        }
+    );
 }
