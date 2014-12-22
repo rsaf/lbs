@@ -11,6 +11,7 @@
     "errorhandler": "^1.1.1",
     "morgan": "^1.2.2",
     "debug": "~2.0.0",
-    "esb": "git+ssh://git@bitbucket.org:lionleo/lbs.api.esb.git#development"
+    "esb": "git+ssh://git@bitbucket.org:lionleo/lbs.api.esb.git#development",
+    "mcm": "git+ssh://git@bitbucket.org:lionleo/lbs.api.mcm.git#development"
        }
 }
