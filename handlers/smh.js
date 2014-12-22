@@ -61,6 +61,72 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(r));
     });
   });
+  serviceManagementRouter.get('/servicenames.json', function(paramRequest, paramResponse, paramNext){
+//    var m = {
+//      "ns":"smm",
+//      "op": "servicesByCreator",
+//      "pl": {
+//        "userAccountID":paramRequest.user.id
+//      }
+//    };
+//    esbMessage(m)
+//    .then(function(r) {
+      var r = {err:null,pl:['service name one','service name two']};
+      paramResponse.writeHead(200, {"Content-Type": "application/json"});
+      paramResponse.end(JSON.stringify(r));
+//    })
+//    .fail(function(r) {
+//      paramResponse.writeHead(501, {"Content-Type": "application/json"});
+//      if(r.er && r.er.ec && r.er.ec>1000){
+//        r.er.em='Server poblem....';
+//      }
+//      paramResponse.end(JSON.stringify(r));
+//    });
+  });
+  serviceManagementRouter.get('/servicetypes.json', function(paramRequest, paramResponse, paramNext){
+//    var m = {
+//      "ns":"smm",
+//      "op": "servicesByCreator",
+//      "pl": {
+//        "userAccountID":paramRequest.user.id
+//      }
+//    };
+//    esbMessage(m)
+//    .then(function(r) {
+      var r = {err:null,pl:['service type one','service type two']};
+      paramResponse.writeHead(200, {"Content-Type": "application/json"});
+      paramResponse.end(JSON.stringify(r));
+//    })
+//    .fail(function(r) {
+//      paramResponse.writeHead(501, {"Content-Type": "application/json"});
+//      if(r.er && r.er.ec && r.er.ec>1000){
+//        r.er.em='Server poblem....';
+//      }
+//      paramResponse.end(JSON.stringify(r));
+//    });
+  });
+  serviceManagementRouter.get('/servicepointtypes.json', function(paramRequest, paramResponse, paramNext){
+//    var m = {
+//      "ns":"smm",
+//      "op": "servicesByCreator",
+//      "pl": {
+//        "userAccountID":paramRequest.user.id
+//      }
+//    };
+//    esbMessage(m)
+//    .then(function(r) {
+      var r = {err:null,pl:['servicepoint type one','servicepoint type two']};
+      paramResponse.writeHead(200, {"Content-Type": "application/json"});
+      paramResponse.end(JSON.stringify(r));
+//    })
+//    .fail(function(r) {
+//      paramResponse.writeHead(501, {"Content-Type": "application/json"});
+//      if(r.er && r.er.ec && r.er.ec>1000){
+//        r.er.em='Server poblem....';
+//      }
+//      paramResponse.end(JSON.stringify(r));
+//    });
+  });
   serviceManagementRouter.post('/newservicepoint.json', function(paramRequest, paramResponse, paramNext){
     var m;
     var servicePoint;
