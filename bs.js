@@ -10,6 +10,7 @@ var oHomeRouter ;
 var oOperationsLogRouter ;
 var oServiceRouter ;
 var oPhotoServiceRouter ;
+var oProfileRouter ;
 
 var Q = require('q');
 
@@ -62,6 +63,7 @@ try {
         oOperationsLogRouter = require('./handlers/olh.js')(exp, paramESBMessage);
         oServiceRouter = require('./handlers/smh.js')(exp, paramESBMessage);
         oPhotoServiceRouter = require('./handlers/psh.js')(exp, paramESBMessage);
+        oProfileRouter = require('./handlers/uph.js')(exp, paramESBMessage);
 
         console.log('BS: self configuring with injected dependencies ....');
         bs.set('port', bsPort);
@@ -92,7 +94,9 @@ try {
         //Business functions expose from here
         bs.use('/workspace/operationslog', oOperationsLogRouter);
         bs.use('/workspace/services', oServiceRouter);
-        bs.use('/workspace/photoservices',oPhotoServiceRouter);
+        bs.use('/workspace/photoservices/v1',oPhotoServiceRouter);
+        bs.use('/workspace/profiles/v1',oProfileRouter);
+
         bs.all('*', oHelpers.four_oh_four);
 
         var bsInstance =  bs.listen(bs.get('port'));

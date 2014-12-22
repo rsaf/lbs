@@ -46,4 +46,10 @@ exports.testStartPage = function (req, res) {
             res.end(contents);
         }
     );
-}
+};
+
+
+exports.sendResponse = function(paramResponse, paramHeaderCode, paramResponseMessage) {
+    paramResponse.writeHead(paramHeaderCode, { "Content-Type" : "application/json" });
+    paramResponse.end(JSON.stringify(paramResponseMessage));
+};
