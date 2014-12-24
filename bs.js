@@ -94,7 +94,7 @@ try {
         //Business functions expose from here
         bs.use('/workspace/operationslog', oOperationsLogRouter);
         bs.use('/workspace/services', oServiceRouter);
-        bs.use('/workspace/photoservices/v1',oPhotoServiceRouter);
+        bs.use('/workspace/v1/photoservices/',oPhotoServiceRouter);
         bs.use('/workspace/profiles/v1',oProfileRouter);
 
         bs.all('*', oHelpers.four_oh_four);
