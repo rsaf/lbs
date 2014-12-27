@@ -1,4 +1,3 @@
-
 //All lanID specific business logics for the loging module are handle here
 /*
  var m = {
