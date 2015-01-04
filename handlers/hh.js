@@ -18,7 +18,7 @@ module.exports = function(paramService, esbMessage){
         .then(function(r1) {
             //console.log(r1);
             userloginVerifier = r1.pl.fn;
-            homeRouter.post('/login', userloginVerifier());
+            homeRouter.post('/login.json', userloginVerifier());
             var m2 = {
                 "ns":'scm',
                 "op": 'getRegisterUser',
@@ -29,7 +29,7 @@ module.exports = function(paramService, esbMessage){
         .then(function(r2){
             //console.log(r2);
             registerUzer = r2.pl.fn;
-            homeRouter.post('/registration', registerUzer());
+            homeRouter.post('/registration.json', registerUzer());
             var m3 = {
                 "ns":'scm',
                 "op": 'getSessionUser',
@@ -39,7 +39,7 @@ module.exports = function(paramService, esbMessage){
         })
         .then(function(r3){
             sessionUser = r3.pl.fn;
-            homeRouter.get('/user', sessionUser());
+            homeRouter.get('/user.json', sessionUser());
 
             var m4 = {
                 "ns":'scm',
@@ -51,7 +51,7 @@ module.exports = function(paramService, esbMessage){
         })
         .then(function(r4){
             logoutUser = r4.pl.fn;
-            homeRouter.get('/logout', logoutUser());
+            homeRouter.get('/logout.json', logoutUser());
         })
         .fail(function(err) {
             console.log('error: ' + err);
