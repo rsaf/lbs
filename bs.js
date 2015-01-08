@@ -11,6 +11,10 @@ var oOperationsLogRouter ;
 var oServiceRouter ;
 var oPhotoServiceRouter ;
 var oProfileRouter ;
+var oUserNotificationRouter;
+var oRequestRouter;
+var oPhotosRouter;
+
 
 var Q = require('q');
 
@@ -62,8 +66,11 @@ try {
         oHomeRouter = require('./handlers/hh.js')(exp, paramESBMessage);
         oOperationsLogRouter = require('./handlers/olh.js')(exp, paramESBMessage);
         oServiceRouter = require('./handlers/smh.js')(exp, paramESBMessage);
-        oPhotoServiceRouter = require('./handlers/psh.js')(exp, paramESBMessage);
+        oPhotoServiceRouter = require('./handlers/pmh.js')(exp, paramESBMessage);
         oProfileRouter = require('./handlers/uph.js')(exp, paramESBMessage);
+        oUserNotificationRouter = require('./handlers/unh.js')(exp, paramESBMessage);
+        oRequestRouter = require('./handlers/rmh.js')(exp, paramESBMessage);
+        oPhotosRouter= require('./handlers/pph.js')(exp, paramESBMessage);
 
         console.log('BS: self configuring with injected dependencies ....');
         bs.set('port', bsPort);
@@ -96,6 +103,9 @@ try {
         bs.use('/workspace/services', oServiceRouter);
         bs.use('/workspace/v1/photoservices/',oPhotoServiceRouter);
         bs.use('/workspace/profiles/v1',oProfileRouter);
+        bs.use('/workspace/notifications', oUserNotificationRouter);
+        bs.use('/workspace/requests', oRequestRouter);
+        bs.use('/workspace/photos', oPhotosRouter);
 
 
 
