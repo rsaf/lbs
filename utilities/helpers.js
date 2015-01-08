@@ -32,8 +32,10 @@ exports.four_oh_four = function(req, res) {
 
 exports.testStartPage = function (req, res) {
     console.log('Helper: getting start page ..');
-    //var startPage = '/Users/LBS006/dev/bitbucket/lbs.lanid.web.leo/static/default.html';
+    //var startPage = '/Users/LBS006/dev/bitbucket/lbs.lanid.web.leo/static/as.html';
     var startPage = '/Users/LBS006/dev/bitbucket/lbs.lanid.web.leo/static/index.html';
+    //var startPage = '/Users/LBS006/dev/bitbucket/lbs.lanid.web.leo/static/os.html';
+
     fs.readFile(
         startPage,
         function (err, contents) {
