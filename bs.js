@@ -6,14 +6,26 @@ var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
 var oHelpers= require('./utilities/helpers.js');
 
-var oHomeRouter ;
-var oOperationsLogRouter ;
-var oServiceRouter ;
-var oPhotoServiceRouter ;
-var oProfileRouter ;
-var oUserNotificationRouter;
-var oRequestRouter;
-var oPhotosRouter;
+
+var oHomeRouter ;               //  home
+var oUserNotificationRouter;    // workspace/notifications  ==>  mdh.js  mdm
+var oUserRouter;                // workspace/users          ==>  sch.js  scm
+var oProfileRouter;             // workspace/profile        ==>  uph.js  scm
+var oRequestRouter;             // workspace/requests       ==>  rmh.js  rmm
+var oStandardsRouter;           // workspace/standards      ==>  pmh.js  pmm
+var oPhotosRouter;              // workspace/photos         ==>  dmh.js  dmm
+var oInspectionRouter;          // workspace/inspection     ==>  pmh.js  pmm
+var oCorrectionsRouter;         // workspace/corrections    ==>  pmh.js  pmm
+var oServiceRouter ;            // workspace/services       ==>  smh.js  smm
+var oActivitiesRouter;          // workspace/activities     ==>  bmh.js  bmm
+var oResponsesRouter;           // workspace/responses      ==>  bmh.js  bmm
+var oFinanceRouter;             // workspace/finance        ==>  fmh.js  fmm
+var oInterfacesRouter           // workspace/interfaces     ==>  sch.js  scm
+var oOperationsLogRouter ;      // workspace/operationslog  ==>  olh.js  olm
+
+var oPhotoServiceRouter ;       // workspace/photoservices  ==>  pmh.js  pmm
+
+
 
 
 var Q = require('q');
@@ -63,14 +75,28 @@ try {
         olmRequestLoggerFunction = r[2].pl.fn;
         scmCheckUserFunction = r[3].pl.fn;
 
-        oHomeRouter = require('./handlers/hh.js')(exp, paramESBMessage);
-        oOperationsLogRouter = require('./handlers/olh.js')(exp, paramESBMessage);
-        oServiceRouter = require('./handlers/smh.js')(exp, paramESBMessage);
-        oPhotoServiceRouter = require('./handlers/pmh.js')(exp, paramESBMessage);
-        oProfileRouter = require('./handlers/uph.js')(exp, paramESBMessage);
-        oUserNotificationRouter = require('./handlers/unh.js')(exp, paramESBMessage);
-        oRequestRouter = require('./handlers/rmh.js')(exp, paramESBMessage);
-        oPhotosRouter= require('./handlers/pph.js')(exp, paramESBMessage);
+
+
+
+        oHomeRouter = require('./handlers/hh.js')(exp, paramESBMessage);                // home
+        oUserNotificationRouter = require('./handlers/mdh.js')(exp, paramESBMessage);   // workspace/notifications
+        oUserRouter = require('./handlers/sch.js')(exp, paramESBMessage);               // workspace/users
+        oProfileRouter = require('./handlers/uph.js')(exp, paramESBMessage);            // workspace/profile
+        oRequestRouter = require('./handlers/rmh.js')(exp, paramESBMessage);            // workspace/requests
+        oStandardsRouter =  require('./handlers/pmh.js')(exp, paramESBMessage);         // workspace/standards
+        oPhotosRouter= require('./handlers/dmh.js')(exp, paramESBMessage);              // workspace/photos
+        oInspectionRouter = require('./handlers/pmh.js')(exp, paramESBMessage);         // workspace/inspection
+        oCorrectionsRouter = require('./handlers/pmh.js')(exp, paramESBMessage);        // workspace/corrections
+        oServiceRouter = require('./handlers/smh.js')(exp, paramESBMessage);            // workspace/services
+        oActivitiesRouter = require('./handlers/bmh.js')(exp, paramESBMessage);         // workspace/activities
+        oResponsesRouter  =  require('./handlers/bmh.js')(exp, paramESBMessage);        // workspace/responses
+        oFinanceRouter = require('./handlers/fmh.js')(exp, paramESBMessage);            // workspace/finance
+        oInterfacesRouter = require('./handlers/sch.js')(exp, paramESBMessage);         // workspace/interfaces
+        oOperationsLogRouter = require('./handlers/olh.js')(exp, paramESBMessage);      // workspace/operationslog
+
+        oPhotoServiceRouter = require('./handlers/pmh.js')(exp, paramESBMessage);       // workspace/photoservices
+
+
 
         console.log('BS: self configuring with injected dependencies ....');
         bs.set('port', bsPort);
@@ -99,13 +125,35 @@ try {
         console.log('BS: configuring REST endpoints request handles middleware...');
         //REST API Interface
         //Business functions expose from here
-        bs.use('/workspace/operationslog', oOperationsLogRouter);
-        bs.use('/workspace/services', oServiceRouter);
-        bs.use('/workspace/v1/photoservices/',oPhotoServiceRouter);
-        bs.use('/workspace/profiles/v1',oProfileRouter);
+
+
+
+
+
+
+
         bs.use('/workspace/notifications', oUserNotificationRouter);
+        bs.use('workspace/users', oUserRouter);
+        bs.use('/workspace/profiles/v1',oProfileRouter);
         bs.use('/workspace/requests', oRequestRouter);
+        bs.use('/workspace/standards', oStandardsRouter );
         bs.use('/workspace/photos', oPhotosRouter);
+        bs.use('/workspace/inspection', oInspectionRouter);
+        bs.use('/workspace/corrections',  oCorrectionsRouter );
+        bs.use('/workspace/services', oServiceRouter);
+        bs.use('workspace/activities', oActivitiesRouter);
+        bs.use('workspace/responses',  oResponsesRouter);
+        bs.use('workspace/finance',  oFinanceRouter);
+        bs.use('workspace/interfaces',  oInterfacesRouter);
+        bs.use('workspace/interfaces',  oInterfacesRouter);
+        bs.use('/workspace/operationslog', oOperationsLogRouter);
+        bs.use('workspace/photoservices',   oPhotoServiceRouter);
+
+
+
+
+
+
 
 
 
