@@ -64,8 +64,98 @@ module.exports = function(paramPS, paramESBMessage) {
                 oHelpers.sendResponse(paramResponse,404,r);
             });
     });
-
+    upRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
+      if (paramRequest.params.type === 'personal'){
+          oHelpers.sendResponse(paramResponse,200,personal);
+      }
+      else if(paramRequest.params.type === 'corporate'){
+          oHelpers.sendResponse(paramResponse,200,corporate);
+      }
+    });
     return upRouter;
-
 };
+
+var personal = {
+  "pl": [{
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "Personal name",
+      "creator": "系统创建",
+      "dateCreated": "2013/07/22",
+      "status": "正常"
+    }
+    , {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "Candy",
+      "creator": "Andy",
+      "dateCreated": "2013/05/10",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "Lsf",
+      "creator": "Andy",
+      "dateCreated": "2013/05/20",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "雪中情",
+      "creator": "Andy",
+      "dateCreated": "2013/06/13",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "漫天飞舞",
+      "creator": "雪中情",
+      "dateCreated": "2013/05/05",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "forever91",
+      "creator": "雪中情",
+      "dateCreated": "2013/05/22",
+      "status": "正常"
+    }]
+}
+;
+
+var corporate = {
+  "pl": [{
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "Corporate name",
+      "creator": "系统创建",
+      "dateCreated": "2013/07/22",
+      "status": "正常"
+    }
+    , {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "Candy",
+      "creator": "Andy",
+      "dateCreated": "2013/05/10",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "Lsf",
+      "creator": "Andy",
+      "dateCreated": "2013/05/20",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "雪中情",
+      "creator": "Andy",
+      "dateCreated": "2013/06/13",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "漫天飞舞",
+      "creator": "雪中情",
+      "dateCreated": "2013/05/05",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "forever91",
+      "creator": "雪中情",
+      "dateCreated": "2013/05/22",
+      "status": "正常"
+    }]
+}
+;
 

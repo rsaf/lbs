@@ -2,6 +2,7 @@
  * Created by LBS006 on 12/3/14.
  */
 var q = require('q');
+var oHelpers = require('../utilities/helpers.js');
 
 module.exports = function(paramService,  esbMessage){
   var serviceManagementRouter = paramService.Router();
@@ -187,7 +188,89 @@ module.exports = function(paramService,  esbMessage){
     });
   });
 
+  serviceManagementRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
+      if (paramRequest.params.type === 'allbookings'){
+          oHelpers.sendResponse(paramResponse,200,allbookings);
+      }
+      else if(paramRequest.params.type === 'busnessrecords'){
+          oHelpers.sendResponse(paramResponse,200,busnessrecords);
+      }
+    });
 
         //createServicePoint
   return serviceManagementRouter;
 };
+
+
+var allbookings = {
+  "pl": [{
+      "field1": "L0121210120",
+      "field2": "证照拍摄",
+      "field3": "王大力",
+      "field4": "2014-08-05 12:23:16",
+      "field5": "待办"
+    }, {
+      "field1": "L0121210120",
+      "field2": "证照拍摄",
+      "field3": "李丽",
+      "field4": "2014-08-05 12:23:16",
+      "field5": "已完成"
+    }, {
+      "field1": "L0121210120",
+      "field2": "证照拍摄",
+      "field3": "孙悟空",
+      "field4": "2014-08-05 12:29:16",
+      "field5": "取消"
+    }, {
+      "field1": "L0121210120",
+      "field2": "证照拍摄",
+      "field3": "黄蓉",
+      "field4": "2014-08-05 12:22:16",
+      "field5": "过期"
+    }, {
+      "field1": "L0121210120",
+      "field2": "证照拍摄",
+      "field3": "周林",
+      "field4": "2014-08-05 12:23:16",
+      "field5": "待办"
+    }]
+};
+
+        
+var busnessrecords = {
+  "pl": [{
+      "field1": "L0121210120",
+      "field2": "证照拍摄",
+      "field3": "50",
+      "field4": "未完成",
+      "field5": "王大力"
+    }, {
+      "field1": "L0121210120",
+      "field2": "证照拍摄",
+      "field3": "20",
+      "field4": "已完成",
+      "field5": "李丽"
+    }, {
+      "field1": "L0121210120",
+      "field2": "证照拍摄",
+      "field3": "50",
+      "field4": "取消",
+      "field5": "孙悟空"
+    }, {
+      "field1": "L0121210120",
+      "field2": "证照拍摄",
+      "field3": "50",
+      "field4": "已完成",
+      "field5": "黄蓉"
+    }, {
+      "field1": "L0121210120",
+      "field2": "证照拍摄",
+      "field3": "50",
+      "field4": "已完成",
+      "field5": "周林"
+    }]
+};
+
+
+        
+        

@@ -131,7 +131,7 @@ try {
 
 
         bs.use('/workspace/notifications', oUserNotificationRouter);
-        bs.use('workspace/users', oUserRouter);
+        bs.use('/workspace/users', oUserRouter);
         bs.use('/workspace/profiles/v1',oProfileRouter);
         bs.use('/workspace/requests', oRequestRouter);
         bs.use('/workspace/standards', oStandardsRouter );
@@ -139,13 +139,13 @@ try {
         bs.use('/workspace/inspection', oInspectionRouter);
         bs.use('/workspace/corrections',  oCorrectionsRouter );
         bs.use('/workspace/services', oServiceRouter);
-        bs.use('workspace/activities', oActivitiesRouter);
-        bs.use('workspace/responses',  oResponsesRouter);
-        bs.use('workspace/finance',  oFinanceRouter);
-        bs.use('workspace/interfaces',  oInterfacesRouter);
-        bs.use('workspace/interfaces',  oInterfacesRouter);
+        bs.use('/workspace/activities', oActivitiesRouter);
+        bs.use('/workspace/responses',  oResponsesRouter);
+        bs.use('/workspace/finance',  oFinanceRouter);
+        bs.use('/workspace/interfaces',  oInterfacesRouter);
+        bs.use('/workspace/interfaces',  oInterfacesRouter);
         bs.use('/workspace/operationslog', oOperationsLogRouter);
-        bs.use('workspace/photoservices',   oPhotoServiceRouter);
+        bs.use('/workspace/photoservices',   oPhotoServiceRouter);
 
 
 
