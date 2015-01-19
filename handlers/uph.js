@@ -114,8 +114,7 @@ var personal = {
       "dateCreated": "2013/05/22",
       "status": "正常"
     }]
-}
-;
+};
 
 var corporate = {
   "pl": [{
@@ -156,6 +155,5 @@ var corporate = {
       "dateCreated": "2013/05/22",
       "status": "正常"
     }]
-}
-;
+};
 
