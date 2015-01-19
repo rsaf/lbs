@@ -45,6 +45,59 @@ module.exports = function(paramPS, paramESBMessage) {
 
     });
 
+
+//get workspace/v1/profiles/personal.json
+    upRouter.get('/personal.json', function(paramRequest, paramResponse){
+
+        var m = {
+            "ns":"upm",
+            "op": "getAllPersonalProfiles",
+            "pl":{ }
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+                //console.log(r.pl);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+//get workspace/v1/profiles/personal.json
+    upRouter.get('/personal/:profileID.json', function(paramRequest, paramResponse){
+
+        var m = {
+            "ns":"upm",
+            "op": "readPersonalProfileByUserID",
+            "pl":{userAccountID:paramRequest.user.id}
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+                //console.log(r.pl);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+//get workspace/v1/profiles/personal.json
+    upRouter.put('/personal/:profileID.json', function(paramRequest, paramResponse){
+        console.log ()
+      
+
+    });
+
+
 //post workspace/v1/profiles/navigation.json
     upRouter.post('/navigation.json',function(paramRequest, paramResponse){
         var m = {
@@ -75,7 +128,33 @@ module.exports = function(paramPS, paramESBMessage) {
     return upRouter;
 };
 
-var personal = {
+//
+//get     /workspace/v1/profiles/personal.json ==> read
+//get     /workspace/v1/profiles/personal/:personal.json ==>   /workspace/profiles/LZ000678987.json ==> read a specific user
+//
+//create (put)
+//put    /workspace/v1/profile/personal.json  ==> creates a new profile
+//
+//update (delete)
+//post   /workspace/v1/profile/personal/:personal.json  ==> update the profile
+//
+//delete /workspace/v1/profile/personal/:personal.json  ==> mark for delete
+//
+//get     /workspace/v1/profiles/corporate.json ==> read
+//get     /workspace/v1/profiles/corporate/:corporate.json ==>   /workspace/profiles/LZ000678987.json ==> read a specific user
+//
+//create (put)
+//put    /workspace/v1/profile/corporate.json  ==> creates a new profile
+//
+//update (delete)
+//post   /workspace/v1/profiles/corporate/:corporate.json ==> update the profile
+//
+//delete /workspace/v1/profiles/corporate/:corporate.json  ==> mark for delete
+
+
+
+
+                                                                      var personal = {
   "pl": [{
       "imageurl": "/commons/images/passportPhoto_other.jpg",
       "name": "Personal name",
