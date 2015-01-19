@@ -11,18 +11,20 @@ module.exports = function(paramService,  esbMessage){
     var service;
     q().then(function(){
       service = JSON.parse(paramRequest.body.json);
-      console.log(service);
       return {
         "ns":"smm",
         "op": "createService",
         "pl": {
-          "userid":paramRequest.user.id,
-          //serviceType:service.serviceType,//@todo, cannot do this because it has no objectid
-          //serviceProvider:service.serviceProvider,//@todo: cannot set this because we dont have the user organisation here
-          price:service.price,
-          serviceName: service.serviceName,
-          servicePoints: service.servicePoints,
-          briefOverview:service.description
+          "userid":paramRequest.user.id
+          ,serviceName:service.serviceName
+          //,serviceType:service.serviceType //not do this as it is not a valid object id
+          ,briefOverview:service.briefOverview
+          ,standardPayment:service.standardPayment
+          ,standardServicePrice:service.standardServicePrice
+          ,standardPricing:service.standardPricing
+          ,standardServiceNotes:service.standardServiceNotes
+          ,standardReservationRequest:service.standardReservationRequest
+          ,priceList:service.priceList
         }
       };
       
@@ -133,7 +135,6 @@ module.exports = function(paramService,  esbMessage){
     var servicePoint;
     q().then(function(){
       servicePoint = JSON.parse(paramRequest.body.json);
-      console.log(servicePoint);
       return {
         "ns":"smm",
         "op": "createServicePoint",
