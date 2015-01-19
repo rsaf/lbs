@@ -9,23 +9,21 @@ var oHelpers= require('./utilities/helpers.js');
 
 var oHomeRouter ;               //  home
 var oUserNotificationRouter;    // workspace/notifications  ==>  mdh.js  mdm
-var oUserRouter;                // workspace/users          ==>  sch.js  scm
-var oProfileRouter;             // workspace/profile        ==>  uph.js  scm
+var oUserRouter;                // workspace/users          ==>  sch.js  scm ///
+var oProfileRouter;             // workspace/profile        ==>  uph.js  upm
 var oRequestRouter;             // workspace/requests       ==>  rmh.js  rmm
 var oStandardsRouter;           // workspace/standards      ==>  pmh.js  pmm
 var oPhotosRouter;              // workspace/photos         ==>  dmh.js  dmm
-var oInspectionRouter;          // workspace/inspection     ==>  pmh.js  pmm
-var oCorrectionsRouter;         // workspace/corrections    ==>  pmh.js  pmm
-var oServiceRouter ;            // workspace/services       ==>  smh.js  smm
-var oActivitiesRouter;          // workspace/activities     ==>  bmh.js  bmm
-var oResponsesRouter;           // workspace/responses      ==>  bmh.js  bmm
+var oInspectionRouter;          // workspace/inspection     ==>  pmh.js  pmm //
+var oCorrectionsRouter;         // workspace/corrections    ==>  pmh.js  pmm //
+var oServiceRouter ;            // workspace/services       ==>  smh.js  smm //
+var oActivitiesRouter;          // workspace/activities     ==>  bmh.js  bmm ///
+var oResponsesRouter;           // workspace/responses      ==>  bmh.js  bmm ///
 var oFinanceRouter;             // workspace/finance        ==>  fmh.js  fmm
 var oInterfacesRouter           // workspace/interfaces     ==>  sch.js  scm
 var oOperationsLogRouter ;      // workspace/operationslog  ==>  olh.js  olm
 
 var oPhotoServiceRouter ;       // workspace/photoservices  ==>  pmh.js  pmm
-
-
 
 
 var Q = require('q');
