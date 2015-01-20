@@ -74,7 +74,7 @@ module.exports = function(paramService,  esbMessage){
 //    };
 //    esbMessage(m)
 //    .then(function(r) {
-      var r = {err:null,pl:['service name one','service name two']};
+      var r = {err:null,pl:['拍板输出','证照拍摄']};
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
       paramResponse.end(JSON.stringify(r));
 //    })
@@ -96,7 +96,7 @@ module.exports = function(paramService,  esbMessage){
 //    };
 //    esbMessage(m)
 //    .then(function(r) {
-      var r = {err:null,pl:['service type one','service type two']};
+      var r = {err:null,pl:['证照服务','信用评价','信息核验']};
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
       paramResponse.end(JSON.stringify(r));
 //    })
@@ -118,7 +118,7 @@ module.exports = function(paramService,  esbMessage){
 //    };
 //    esbMessage(m)
 //    .then(function(r) {
-      var r = {err:null,pl:['servicepoint type one','servicepoint type two']};
+      var r = {err:null,pl:['证照网店','信用网店']};
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
       paramResponse.end(JSON.stringify(r));
 //    })
