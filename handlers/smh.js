@@ -24,7 +24,7 @@ module.exports = function(paramService,  esbMessage){
           ,standardPricing:service.standardPricing
           ,standardServiceNotes:service.standardServiceNotes
           ,standardReservationRequest:service.standardReservationRequest
-          ,priceList:service.priceList
+          ,PriceList:service.PriceList
         }
       };
       
@@ -49,6 +49,31 @@ module.exports = function(paramService,  esbMessage){
       "op": "servicesByCreator",
       "pl": {
         "userAccountID":paramRequest.user.id
+      }
+    };
+    esbMessage(m)
+    .then(function(r) {
+      paramResponse.writeHead(200, {"Content-Type": "application/json"});
+      paramResponse.end(JSON.stringify(r));
+    })
+    .fail(function(r) {
+      paramResponse.writeHead(501, {"Content-Type": "application/json"});
+      if(r.er && r.er.ec && r.er.ec>1000){
+        r.er.em='Server poblem....';
+      }
+      paramResponse.end(JSON.stringify(r));
+    });
+  });
+  serviceManagementRouter.get('/myservice.json', function(paramRequest, paramResponse, paramNext){
+    var query = {};
+    if(typeof paramRequest.query._id!=='undefined'){
+      query._id=paramRequest.query._id;
+    }
+    var m = {
+      "ns":"smm",
+      "op": "myservice",
+      "pl": {
+        "query":query
       }
     };
     esbMessage(m)
