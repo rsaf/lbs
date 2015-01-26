@@ -10,7 +10,6 @@ var oHelpers= require('../utilities/helpers.js');
 //typically, collections should be nouns.
 //collections of collections are possibles ( /workspace/profiles.json a collection and /workspace/profiles/personals.json collection within collection)
 
-
 //put /workspace/v1/profiles/personals.json  --> will create a new personal user profile
 //get /workspace/v1/profiles/personals/p1007070990.json --> will get a particular personal profile , can also be done as put workspace/profiles/:profileID.json,  :profileID.json is a variable
 //post /workspace/v1/profiles/personals/p1007070990.json --> will update a particular personal profile
@@ -21,6 +20,220 @@ var oHelpers= require('../utilities/helpers.js');
 module.exports = function(paramPS, paramESBMessage) {
     var upRouter = paramPS.Router();
     var esbMessage = paramESBMessage;
+
+
+
+//get workspace/profiles/v1/personal.json
+    upRouter.get('/personal.json', function(paramRequest, paramResponse){
+
+     //oHelpers.sendResponse(paramResponse,200,personalUserProfile );
+        console.log("\n userID :" + paramRequest.user.id);
+        var m = {
+            "ns":"upm",
+            "op": "readPersonalProfileByUserID",
+            "pl":{"userAccountID":paramRequest.user.id}
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                console.log('-------------resource fetched successfully------------------:');
+                console.log('---------------requested resource--------------------:');
+                console.log(r);
+
+
+
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+
+
+
+    //get workspace/profiles/v1/idphotos.json
+    upRouter.get('/idphotos.json', function(paramRequest, paramResponse){
+
+        oHelpers.sendResponse(paramResponse,200,idphotos );
+
+    });
+
+    //get workspace/profiles/v1/otherphotos.json
+    upRouter.get('/otherphotos.json', function(paramRequest, paramResponse){
+
+        oHelpers.sendResponse(paramResponse,200,otherphotos );
+
+    });
+
+//get workspace/profiles/v1/personal.json
+    upRouter.get('/personal/:profileID.json', function(paramRequest, paramResponse){
+
+        var m = {
+            "ns":"upm",
+            "op": "readPersonalProfileByUserID",
+            "pl":{userAccountID:paramRequest.user.id}
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+                //console.log(r.pl);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+//post workspace/profiles/v1/personal.json
+    upRouter.post('/personal.json', function(paramRequest, paramResponse){
+
+        console.log('--------------- new post request--------------------');
+        console.log('--------------- new post request--------------------');
+        console.log('--------------- new post request--------------------');
+        console.log('------------------post body--------------------:');
+        console.log(paramRequest.body);
+        console.log('--------------- end of new post request--------------------');
+        console.log('--------------- end of new post request--------------------');
+        console.log('--------------- end of new post request--------------------');
+
+
+
+        var m = {
+            "ns":"upm",
+            "op": "createPersonalProfile",
+            "pl":paramRequest.body
+        };
+
+//        m.pl.userAccountID="54c1c79c4d754999038abf1b";
+//        m.pl.lzID = "642d0eff3748330000dc5631";
+//        m.pl.lzID.completion = 10;
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                var feedback = {'status':true}
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+           console.log('errorror'+r);
+
+                var feedback = {'status':false}
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+
+
+
+
+    //post workspace/profiles/v1/personal.json
+    upRouter.post('/upload.json', function(paramRequest, paramResponse){
+
+        console.log('--------------- new post request--------------------');
+        console.log('--------------- new post request--------------------');
+        console.log('--------------- new post request--------------------');
+        console.log('------------------post body--------------------:');
+        console.log('------------------uploaded photo--------------------:');
+        console.log(paramRequest.body);
+        console.log('--------------- end of new post request--------------------');
+        console.log('--------------- end of new post request--------------------');
+        console.log('--------------- end of new post request--------------------');
+        oHelpers.sendResponse(paramResponse,200,paramRequest.body);
+
+
+
+
+
+    });
+
+
+
+
+
+
+//put workspace/v1/profiles/:personal.json
+    upRouter.put('/personal/:profileID.json', function(paramRequest, paramResponse){
+        console.log ()
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//post workspace/v1/profiles/navigation.json
+    upRouter.post('/navigation.json',function(paramRequest, paramResponse){
+        var m = {
+            "ns":"upm",
+            "op": "updateUserNavigation",
+            "pl":{ id:paramRequest.user.id,userType:paramRequest.user.userType }
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+                //console.log(r.pl);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+    });
+
 
 
 //get workspace/v1/profiles/navigation.json
@@ -45,78 +258,6 @@ module.exports = function(paramPS, paramESBMessage) {
 
     });
 
-
-//get workspace/v1/profiles/personal.json
-    upRouter.get('/personal.json', function(paramRequest, paramResponse){
-
-        var m = {
-            "ns":"upm",
-            "op": "getAllPersonalProfiles",
-            "pl":{ }
-        };
-
-        esbMessage(m)
-            .then(function(r) {
-                //console.log(r.pl);
-                oHelpers.sendResponse(paramResponse,200,r);
-            })
-            .fail(function(r) {
-                console.log(r.er);
-                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
-                oHelpers.sendResponse(paramResponse,404,r);
-            });
-
-    });
-
-//get workspace/v1/profiles/personal.json
-    upRouter.get('/personal/:profileID.json', function(paramRequest, paramResponse){
-
-        var m = {
-            "ns":"upm",
-            "op": "readPersonalProfileByUserID",
-            "pl":{userAccountID:paramRequest.user.id}
-        };
-
-        esbMessage(m)
-            .then(function(r) {
-                //console.log(r.pl);
-                oHelpers.sendResponse(paramResponse,200,r);
-            })
-            .fail(function(r) {
-                console.log(r.er);
-                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
-                oHelpers.sendResponse(paramResponse,404,r);
-            });
-
-    });
-
-//get workspace/v1/profiles/personal.json
-    upRouter.put('/personal/:profileID.json', function(paramRequest, paramResponse){
-        console.log ()
-      
-
-    });
-
-
-//post workspace/v1/profiles/navigation.json
-    upRouter.post('/navigation.json',function(paramRequest, paramResponse){
-        var m = {
-            "ns":"upm",
-            "op": "updateUserNavigation",
-            "pl":{ id:paramRequest.user.id,userType:paramRequest.user.userType }
-        };
-
-        esbMessage(m)
-            .then(function(r) {
-                //console.log(r.pl);
-                oHelpers.sendResponse(paramResponse,200,r);
-            })
-            .fail(function(r) {
-                console.log(r.er);
-                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
-                oHelpers.sendResponse(paramResponse,404,r);
-            });
-    });
     upRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
       if (paramRequest.params.type === 'personal'){
           oHelpers.sendResponse(paramResponse,200,personal);
@@ -124,6 +265,7 @@ module.exports = function(paramPS, paramESBMessage) {
       else if(paramRequest.params.type === 'corporate'){
           oHelpers.sendResponse(paramResponse,200,corporate);
       }
+
     });
     return upRouter;
 };
@@ -151,10 +293,735 @@ module.exports = function(paramPS, paramESBMessage) {
 //
 //delete /workspace/v1/profiles/corporate/:corporate.json  ==> mark for delete
 
+var personalUserProfile = {
+    "pl":{
+        "basic":{
+            "avatar":"../../commons/images/bachend/backendProfilePic.png"
+            ,"userName":"Frankie"
+            ,"gender":"女"
+            ,"dateOfBirth":"1990/10/20"
+            ,"country":"中国"
+            ,"placeOfBrith":"江苏省南京市"
+            ,"currentResidence":"江苏省南京市"
+
+        }
+        ,"private":{
+            "lastestPhoto":"../../commons/images/Latest-photo.jpg"
+            ,"IDNumber":"无"
+            ,"fullName":"无"
+            ,"lanID":"无"
+
+        }
+        ,"contacts":{
+            "email":"**780183@qq.con"
+            ,"linkToPhone":"150****0157可直接使用此号码登录"
+            ,"linkToQQ":"未设置QQ绑定"
+            ,"linkToWechat":"未设置微信绑定"
+
+        }
+    }
+};
 
 
 
-                                                                      var personal = {
+
+var idphotos = {
+    "pl": [
+        {
+            "photourl": "/commons/images/singlePhoto_03.jpg",
+            "category": "其他照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1002
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_ID.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1003
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1004
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1005
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1006
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1007
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1008
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1009
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1010
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1011
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1012
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1013
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1014
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1015
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1016
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1017
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1018
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1019
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1020
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1021
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1022
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1023
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1024
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1025
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1026
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1027
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1028
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1029
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1030
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1031
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1032
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1033
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1034
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1035
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1036
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1037
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1038
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1039
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1040
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1041
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1042
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1043
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1044
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1045
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1046
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1047
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1048
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1049
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1050
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1051
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1052
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1053
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1054
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1055
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1056
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1057
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1058
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1059
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1060
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1061
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1062
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1063
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1064
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1065
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1066
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1067
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1068
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1069
+        },
+        {
+            "photourl": "/commons/images/passportPhoto_other.jpg",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1070
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1071
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1072
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "工作照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1073
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1074
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo10.png",
+            "category": "身份证照片",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1075
+        }
+    ]
+}
+
+
+
+var otherphotos = {
+
+    "pl": [
+        {
+            "photourl": "/commons/images/IDPhotoDemo1.png",
+            "category": "自由畅想",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1002
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo5.png",
+            "category": "曾经的美好回忆",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1003
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo2.png",
+            "category": "海南美景",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1004
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo3.png",
+            "category": "美好心情",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1005
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo4.png",
+            "category": "IMG001",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1006
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo7.png",
+            "category": "IMG002",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1007
+        },
+        {
+            "photourl": "/commons/images/photo2.jpg",
+            "category": "逛逛",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1008
+        },
+        {
+            "photourl": "/commons/images/photo3.jpg",
+            "category": "my pic",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1009
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo5.png",
+            "category": "曾经的美好回忆",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1010
+        },
+        {
+            "photourl": "/commons/images/IDPhotoDemo2.png",
+            "category": "海南美景",
+            "pixelSize": "22mmx32mm",
+            "fileSize": "120Kb",
+            "uploadDate": "2013/07/22",
+            "_id": 1011
+        }
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+var personal = {
   "pl": [{
       "imageurl": "/commons/images/passportPhoto_other.jpg",
       "name": "Personal name",
