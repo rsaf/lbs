@@ -42,9 +42,6 @@ module.exports = function(paramPS, paramESBMessage) {
                 console.log('---------------requested resource--------------------:');
                 console.log(r);
 
-
-
-
                 oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
@@ -159,9 +156,9 @@ module.exports = function(paramPS, paramESBMessage) {
         console.log('--------------- new post request--------------------');
         console.log('--------------- new post request--------------------');
         console.log('--------------- new post request--------------------');
-        console.log('------------------post body--------------------:');
-        console.log('------------------uploaded photo--------------------:');
-        console.log(paramRequest.body);
+        console.log(paramRequest);
+
+
         console.log('--------------- end of new post request--------------------');
         console.log('--------------- end of new post request--------------------');
         console.log('--------------- end of new post request--------------------');
