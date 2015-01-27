@@ -1,10 +1,7 @@
-    var oHelpers = require('../utilities/helpers.js');
+   var oHelpers = require('../utilities/helpers.js');
+   var formidable = require('formidable');
+   var fs = require('fs-extra');
 
-    //added
-    http = require('http'),
-    formidable = require('formidable'),
-    fs = require('fs'),
-    path = require('path');
 
 //API design supports standard HTTP verbs
 //PUT --> Create (Creation)
@@ -19,8 +16,6 @@
 //get /workspace/v1/profiles/personals/p1007070990.json --> will get a particular personal profile , can also be done as put workspace/profiles/:profileID.json,  :profileID.json is a variable
 //post /workspace/v1/profiles/personals/p1007070990.json --> will update a particular personal profile
 //delete /workspace/v1/profiles/personals/p1007070990.json --> will delete a particular personal profile
-
-//
 
 module.exports = function (paramPS, paramESBMessage) {
     var upRouter = paramPS.Router();
