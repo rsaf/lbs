@@ -3,7 +3,7 @@ var oHelpers= require('../utilities/helpers.js');
 
 
 //added
-http = require('http'),
+    http = require('http'),
     formidable = require('formidable'),
     fs = require('fs'),
     path = require('path');
@@ -260,25 +260,25 @@ module.exports = function(paramPS, paramESBMessage) {
 
 
 
-    //post workspace/profiles/v1/personal.json
-    upRouter.post('/upload.json', function(paramRequest, paramResponse){
-
-        console.log('--------------- new post request--------------------');
-        console.log('--------------- new post request--------------------');
-        console.log('--------------- new post request--------------------');
-        console.log(paramRequest);
-
-
-        console.log('--------------- end of new post request--------------------');
-        console.log('--------------- end of new post request--------------------');
-        console.log('--------------- end of new post request--------------------');
-        oHelpers.sendResponse(paramResponse,200,paramRequest.body);
-
-
-
-
-
-    });
+    //post workspace/profiles/v1/uplaod.json
+//    upRouter.post('/upload.json', function(paramRequest, paramResponse){
+//
+//        console.log('--------------- new post request--------------------');
+//        console.log('--------------- new post request--------------------');
+//        console.log('--------------- new post request--------------------');
+//        console.log(paramRequest);
+//
+//
+//        console.log('--------------- end of new post request--------------------');
+//        console.log('--------------- end of new post request--------------------');
+//        console.log('--------------- end of new post request--------------------');
+//        oHelpers.sendResponse(paramResponse,200,paramRequest.body);
+//
+//
+//
+//
+//
+//    });
 
 
 
