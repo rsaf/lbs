@@ -58,7 +58,19 @@ module.exports = function(paramPS, paramESBMessage) {
 
 // Upload route.
     //workspace/profiles/v1/upload
-    upRouter.post('upload.json', function(req, res) {
+    upRouter.post('upload', function(req, res) {
+
+
+
+
+        console.log('--------------- new image upload--------------------');
+        console.log('--------------- new image upload--------------------');
+        console.log('--------------- new image upload--------------------');
+        console.log('--------------- new image upload--------------------');
+        console.log('--------------- new image upload--------------------');
+
+
+
         var form = new formidable.IncomingForm();
         form.parse(req, function(err, fields, files) {
             // `file` is the name of the <input> field of type `file`
@@ -71,7 +83,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
                // new_path = path.join('/uploads/'+ file_name + '.' + file_ext);
 
-               new_path =  '/Users/rollandsafort/Desktop/test/'+ file_name + '.' + file_ext;
+               new_path =  '/Users/rollandsafort/Desktop/test/'+ file_name + '2.' + file_ext;
 
             console.log('---------------old_path',old_path,'---------------------');
 
