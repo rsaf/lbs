@@ -1,7 +1,5 @@
-   var oHelpers = require('../utilities/helpers.js');
-   var formidable = require('formidable');
-   var fs = require('fs-extra');
 
+var oHelpers= require('../utilities/helpers.js');
 
 //API design supports standard HTTP verbs
 //PUT --> Create (Creation)
@@ -17,125 +15,84 @@
 //post /workspace/v1/profiles/personals/p1007070990.json --> will update a particular personal profile
 //delete /workspace/v1/profiles/personals/p1007070990.json --> will delete a particular personal profile
 
-module.exports = function (paramPS, paramESBMessage) {
+//
+
+module.exports = function(paramPS, paramESBMessage) {
     var upRouter = paramPS.Router();
     var esbMessage = paramESBMessage;
 
 
-// Upload route.
-    //workspace/profiles/v1/upload
-    upRouter.post('upload.json', function (req, res) {
-        console.log('--------------- new image upload--------------------');
-        console.log('--------------- new image upload--------------------');
-        console.log('--------------- new image upload--------------------');
-        console.log('--------------- new image upload--------------------');
-        console.log('--------------- new image upload--------------------');
-        var form = new formidable.IncomingForm();
-        form.parse(req, function (err, fields, files) {
-            // `file` is the name of the <input> field of type `file`
-                var old_path = files.file.path,
-                file_size = files.file.size,
-                file_ext = files.file.name.split('.').pop(),
-                index = old_path.lastIndexOf('/') + 1,
-                file_name = old_path.substr(index),
-                // new_path = path.join(process.env.PWD, '/uploads/', file_name + '.' + file_ext);
-                // new_path = path.join('/uploads/'+ file_name + '.' + file_ext);
-
-                new_path = '/Users/rollandsafort/Desktop/test/' + file_name + '2.' + file_ext;
-
-                console.log('---------------old_path', old_path, '---------------------');
-
-                fs.readFile(old_path, function (err, data) {
-
-                console.log('---------------data :', data, '---------------------');
-                console.log('---------------file_size :', file_size, '---------------------');
-                console.log('--------------- file_name: ', file_name, '---------------------');
-                console.log('--------------- new_path: ', new_path, '---------------------');
-
-                fs.writeFile(new_path, data, function (err) {
-                    fs.unlink(old_path, function (err) {
-                        if (err) {
-                            res.status(500);
-                            res.json({'success': false});
-                        } else {
-                            res.status(200);
-                            res.json({'success': true, 'data': "<img src:'+ data+'+>"});
-                        }
-                    });
-                });
-            });
-        });
-    });
-
 
 //get workspace/profiles/v1/personal.json
-    upRouter.get('/personal.json', function (paramRequest, paramResponse) {
+    upRouter.get('/personal.json', function(paramRequest, paramResponse){
 
-        //oHelpers.sendResponse(paramResponse,200,personalUserProfile );
+     //oHelpers.sendResponse(paramResponse,200,personalUserProfile );
         console.log("\n userID :" + paramRequest.user.id);
         var m = {
-            "ns": "upm",
+            "ns":"upm",
             "op": "readPersonalProfileByUserID",
-            "pl": {"userAccountID": paramRequest.user.id}
+            "pl":{"userAccountID":paramRequest.user.id}
         };
 
         esbMessage(m)
-            .then(function (r) {
+            .then(function(r) {
 
 
                 console.log('-------------resource fetched successfully------------------:');
                 console.log('---------------requested resource--------------------:');
                 console.log(r);
 
-                oHelpers.sendResponse(paramResponse, 200, r);
+                oHelpers.sendResponse(paramResponse,200,r);
             })
-            .fail(function (r) {
+            .fail(function(r) {
                 console.log(r.er);
-                var r = {pl: null, er: {ec: 404, em: "could not find navigation"}};
-                oHelpers.sendResponse(paramResponse, 404, r);
+                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
 
 
-    //get workspace/profiles/v1/idphotos.json
-    upRouter.get('/idphotos.json', function (paramRequest, paramResponse) {
 
-        oHelpers.sendResponse(paramResponse, 200, idphotos);
+
+    //get workspace/profiles/v1/idphotos.json
+    upRouter.get('/idphotos.json', function(paramRequest, paramResponse){
+
+        oHelpers.sendResponse(paramResponse,200,idphotos );
 
     });
 
     //get workspace/profiles/v1/otherphotos.json
-    upRouter.get('/otherphotos.json', function (paramRequest, paramResponse) {
+    upRouter.get('/otherphotos.json', function(paramRequest, paramResponse){
 
-        oHelpers.sendResponse(paramResponse, 200, otherphotos);
+        oHelpers.sendResponse(paramResponse,200,otherphotos );
 
     });
 
 //get workspace/profiles/v1/personal.json
-    upRouter.get('/personal/:profileID.json', function (paramRequest, paramResponse) {
+    upRouter.get('/personal/:profileID.json', function(paramRequest, paramResponse){
 
         var m = {
-            "ns": "upm",
+            "ns":"upm",
             "op": "readPersonalProfileByUserID",
-            "pl": {userAccountID: paramRequest.user.id}
+            "pl":{userAccountID:paramRequest.user.id}
         };
 
         esbMessage(m)
-            .then(function (r) {
+            .then(function(r) {
                 //console.log(r.pl);
-                oHelpers.sendResponse(paramResponse, 200, r);
+                oHelpers.sendResponse(paramResponse,200,r);
             })
-            .fail(function (r) {
+            .fail(function(r) {
                 console.log(r.er);
-                var r = {pl: null, er: {ec: 404, em: "could not find navigation"}};
-                oHelpers.sendResponse(paramResponse, 404, r);
+                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
 
 //post workspace/profiles/v1/personal.json
-    upRouter.post('/personal.json', function (paramRequest, paramResponse) {
+    upRouter.post('/personal.json', function(paramRequest, paramResponse){
 
         console.log('--------------- new post request--------------------');
         console.log('--------------- new post request--------------------');
@@ -147,10 +104,11 @@ module.exports = function (paramPS, paramESBMessage) {
         console.log('--------------- end of new post request--------------------');
 
 
+
         var m = {
-            "ns": "upm",
+            "ns":"upm",
             "op": "createPersonalProfile",
-            "pl": paramRequest.body
+            "pl":paramRequest.body
         };
 
 //        m.pl.userAccountID="54c1c79c4d754999038abf1b";
@@ -158,115 +116,152 @@ module.exports = function (paramPS, paramESBMessage) {
 //        m.pl.lzID.completion = 10;
 
         esbMessage(m)
-            .then(function (r) {
+            .then(function(r) {
 
 
-                var feedback = {'status': true}
-                console.log('feedback----------', feedback);
-                console.log('feedback----------', feedback);
-                console.log('feedback----------', feedback);
-                console.log('feedback----------', feedback);
-                console.log('feedback----------', feedback);
-                console.log('feedback----------', feedback);
+                var feedback = {'status':true}
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
 
-                oHelpers.sendResponse(paramResponse, 200, r);
+                oHelpers.sendResponse(paramResponse,200,r);
             })
-            .fail(function (r) {
-                console.log('errorror' + r);
+            .fail(function(r) {
+           console.log('errorror'+r);
 
-                var feedback = {'status': false}
-                console.log('feedback----------', feedback);
-                console.log('feedback----------', feedback);
-                console.log('feedback----------', feedback);
-                console.log('feedback----------', feedback);
-                console.log('feedback----------', feedback);
-                console.log('feedback----------', feedback);
+                var feedback = {'status':false}
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
+                console.log('feedback----------',feedback);
                 console.log(r.er);
-                var r = {pl: null, er: {ec: 404, em: "could not find navigation"}};
-                oHelpers.sendResponse(paramResponse, 404, r);
+                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
 
 
-    //post workspace/profiles/v1/uplaod.json
-//    upRouter.post('/upload.json', function(paramRequest, paramResponse){
-//
-//        console.log('--------------- new post request--------------------');
-//        console.log('--------------- new post request--------------------');
-//        console.log('--------------- new post request--------------------');
-//        console.log(paramRequest);
-//
-//
-//        console.log('--------------- end of new post request--------------------');
-//        console.log('--------------- end of new post request--------------------');
-//        console.log('--------------- end of new post request--------------------');
-//        oHelpers.sendResponse(paramResponse,200,paramRequest.body);
-//
-//
-//
-//
-//
-//    });
+
+
+
+    //post workspace/profiles/v1/personal.json
+    upRouter.post('/upload.json', function(paramRequest, paramResponse){
+
+        console.log('--------------- new post request--------------------');
+        console.log('--------------- new post request--------------------');
+        console.log('--------------- new post request--------------------');
+        console.log(paramRequest);
+
+
+        console.log('--------------- end of new post request--------------------');
+        console.log('--------------- end of new post request--------------------');
+        console.log('--------------- end of new post request--------------------');
+        oHelpers.sendResponse(paramResponse,200,paramRequest.body);
+
+
+
+
+
+    });
+
+
+
+
 
 
 //put workspace/v1/profiles/:personal.json
-    upRouter.put('/personal/:profileID.json', function (paramRequest, paramResponse) {
-        console.log()
+    upRouter.put('/personal/:profileID.json', function(paramRequest, paramResponse){
+        console.log ()
 
-    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //post workspace/v1/profiles/navigation.json
-    upRouter.post('/navigation.json', function (paramRequest, paramResponse) {
+    upRouter.post('/navigation.json',function(paramRequest, paramResponse){
         var m = {
-            "ns": "upm",
+            "ns":"upm",
             "op": "updateUserNavigation",
-            "pl": {id: paramRequest.user.id, userType: paramRequest.user.userType}
+            "pl":{ id:paramRequest.user.id,userType:paramRequest.user.userType }
         };
 
         esbMessage(m)
-            .then(function (r) {
+            .then(function(r) {
                 //console.log(r.pl);
-                oHelpers.sendResponse(paramResponse, 200, r);
+                oHelpers.sendResponse(paramResponse,200,r);
             })
-            .fail(function (r) {
+            .fail(function(r) {
                 console.log(r.er);
-                var r = {pl: null, er: {ec: 404, em: "could not find navigation"}};
-                oHelpers.sendResponse(paramResponse, 404, r);
+                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                oHelpers.sendResponse(paramResponse,404,r);
             });
     });
+
 
 
 //get workspace/v1/profiles/navigation.json
-    upRouter.get('/navigation.json', function (paramRequest, paramResponse) {
+    upRouter.get('/navigation.json', function(paramRequest, paramResponse){
 
         var m = {
-            "ns": "upm",
+            "ns":"upm",
             "op": "getUserNavigation",
-            "pl": {id: paramRequest.user.id, userType: paramRequest.user.userType}
+            "pl":{ id:paramRequest.user.id,userType:paramRequest.user.userType }
         };
 
         esbMessage(m)
-            .then(function (r) {
+            .then(function(r) {
                 //console.log(r.pl);
-                oHelpers.sendResponse(paramResponse, 200, r);
+                oHelpers.sendResponse(paramResponse,200,r);
             })
-            .fail(function (r) {
+            .fail(function(r) {
                 console.log(r.er);
-                var r = {pl: null, er: {ec: 404, em: "could not find navigation"}};
-                oHelpers.sendResponse(paramResponse, 404, r);
+                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
 
-    upRouter.get('/:type.json', function (paramRequest, paramResponse, paramNext) {
-        if (paramRequest.params.type === 'personal') {
-            oHelpers.sendResponse(paramResponse, 200, personal);
-        }
-        else if (paramRequest.params.type === 'corporate') {
-            oHelpers.sendResponse(paramResponse, 200, corporate);
-        }
+    upRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
+      if (paramRequest.params.type === 'personal'){
+          oHelpers.sendResponse(paramResponse,200,personal);
+      }
+      else if(paramRequest.params.type === 'corporate'){
+          oHelpers.sendResponse(paramResponse,200,corporate);
+      }
 
     });
     return upRouter;
@@ -296,33 +291,35 @@ module.exports = function (paramPS, paramESBMessage) {
 //delete /workspace/v1/profiles/corporate/:corporate.json  ==> mark for delete
 
 var personalUserProfile = {
-    "pl": {
-        "basic": {
-            "avatar": "../../commons/images/bachend/backendProfilePic.png"
-            , "userName": "Frankie"
-            , "gender": "女"
-            , "dateOfBirth": "1990/10/20"
-            , "country": "中国"
-            , "placeOfBrith": "江苏省南京市"
-            , "currentResidence": "江苏省南京市"
+    "pl":{
+        "basic":{
+            "avatar":"../../commons/images/bachend/backendProfilePic.png"
+            ,"userName":"Frankie"
+            ,"gender":"女"
+            ,"dateOfBirth":"1990/10/20"
+            ,"country":"中国"
+            ,"placeOfBrith":"江苏省南京市"
+            ,"currentResidence":"江苏省南京市"
 
         }
-        , "private": {
-            "lastestPhoto": "../../commons/images/Latest-photo.jpg"
-            , "IDNumber": "无"
-            , "fullName": "无"
-            , "lanID": "无"
+        ,"private":{
+            "lastestPhoto":"../../commons/images/Latest-photo.jpg"
+            ,"IDNumber":"无"
+            ,"fullName":"无"
+            ,"lanID":"无"
 
         }
-        , "contacts": {
-            "email": "**780183@qq.con"
-            , "linkToPhone": "150****0157可直接使用此号码登录"
-            , "linkToQQ": "未设置QQ绑定"
-            , "linkToWechat": "未设置微信绑定"
+        ,"contacts":{
+            "email":"**780183@qq.con"
+            ,"linkToPhone":"150****0157可直接使用此号码登录"
+            ,"linkToQQ":"未设置QQ绑定"
+            ,"linkToWechat":"未设置微信绑定"
 
         }
     }
 };
+
+
 
 
 var idphotos = {
@@ -923,6 +920,7 @@ var idphotos = {
 }
 
 
+
 var otherphotos = {
 
     "pl": [
@@ -1010,85 +1008,95 @@ var otherphotos = {
 }
 
 
+
+
+
+
+
+
+
+
+
+
 var personal = {
-    "pl": [{
-        "imageurl": "/commons/images/passportPhoto_other.jpg",
-        "name": "Personal name",
-        "creator": "系统创建",
-        "dateCreated": "2013/07/22",
-        "status": "正常"
+  "pl": [{
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "Personal name",
+      "creator": "系统创建",
+      "dateCreated": "2013/07/22",
+      "status": "正常"
     }
-        , {
-            "imageurl": "/commons/images/passportPhoto_other.jpg",
-            "name": "Candy",
-            "creator": "Andy",
-            "dateCreated": "2013/05/10",
-            "status": "正常"
-        }, {
-            "imageurl": "/commons/images/passportPhoto_other.jpg",
-            "name": "Lsf",
-            "creator": "Andy",
-            "dateCreated": "2013/05/20",
-            "status": "正常"
-        }, {
-            "imageurl": "/commons/images/passportPhoto_other.jpg",
-            "name": "雪中情",
-            "creator": "Andy",
-            "dateCreated": "2013/06/13",
-            "status": "正常"
-        }, {
-            "imageurl": "/commons/images/passportPhoto_other.jpg",
-            "name": "漫天飞舞",
-            "creator": "雪中情",
-            "dateCreated": "2013/05/05",
-            "status": "正常"
-        }, {
-            "imageurl": "/commons/images/passportPhoto_other.jpg",
-            "name": "forever91",
-            "creator": "雪中情",
-            "dateCreated": "2013/05/22",
-            "status": "正常"
-        }]
+    , {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "Candy",
+      "creator": "Andy",
+      "dateCreated": "2013/05/10",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "Lsf",
+      "creator": "Andy",
+      "dateCreated": "2013/05/20",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "雪中情",
+      "creator": "Andy",
+      "dateCreated": "2013/06/13",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "漫天飞舞",
+      "creator": "雪中情",
+      "dateCreated": "2013/05/05",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "forever91",
+      "creator": "雪中情",
+      "dateCreated": "2013/05/22",
+      "status": "正常"
+    }]
 };
 
 var corporate = {
-    "pl": [{
-        "imageurl": "/commons/images/passportPhoto_other.jpg",
-        "name": "Corporate name",
-        "creator": "系统创建",
-        "dateCreated": "2013/07/22",
-        "status": "正常"
+  "pl": [{
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "Corporate name",
+      "creator": "系统创建",
+      "dateCreated": "2013/07/22",
+      "status": "正常"
     }
-        , {
-            "imageurl": "/commons/images/passportPhoto_other.jpg",
-            "name": "Candy",
-            "creator": "Andy",
-            "dateCreated": "2013/05/10",
-            "status": "正常"
-        }, {
-            "imageurl": "/commons/images/passportPhoto_other.jpg",
-            "name": "Lsf",
-            "creator": "Andy",
-            "dateCreated": "2013/05/20",
-            "status": "正常"
-        }, {
-            "imageurl": "/commons/images/passportPhoto_other.jpg",
-            "name": "雪中情",
-            "creator": "Andy",
-            "dateCreated": "2013/06/13",
-            "status": "正常"
-        }, {
-            "imageurl": "/commons/images/passportPhoto_other.jpg",
-            "name": "漫天飞舞",
-            "creator": "雪中情",
-            "dateCreated": "2013/05/05",
-            "status": "正常"
-        }, {
-            "imageurl": "/commons/images/passportPhoto_other.jpg",
-            "name": "forever91",
-            "creator": "雪中情",
-            "dateCreated": "2013/05/22",
-            "status": "正常"
-        }]
+    , {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "Candy",
+      "creator": "Andy",
+      "dateCreated": "2013/05/10",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "Lsf",
+      "creator": "Andy",
+      "dateCreated": "2013/05/20",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "雪中情",
+      "creator": "Andy",
+      "dateCreated": "2013/06/13",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "漫天飞舞",
+      "creator": "雪中情",
+      "dateCreated": "2013/05/05",
+      "status": "正常"
+    }, {
+      "imageurl": "/commons/images/passportPhoto_other.jpg",
+      "name": "forever91",
+      "creator": "雪中情",
+      "dateCreated": "2013/05/22",
+      "status": "正常"
+    }]
 };
 
