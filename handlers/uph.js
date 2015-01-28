@@ -15,19 +15,6 @@ var oHelpers= require('../utilities/helpers.js');
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 //API design supports standard HTTP verbs
 //PUT --> Create (Creation)
 //GET --> Read (Retrieval)
@@ -58,7 +45,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
 // Upload route.
     //workspace/profiles/v1/upload
-    upRouter.post('upload', function(req, res) {
+    upRouter.post('/upload.json', function(req, res){
 
 
 
@@ -70,9 +57,20 @@ module.exports = function(paramPS, paramESBMessage) {
         console.log('--------------- new image upload--------------------');
 
 
+        var m = {
+            "ns":"dmm",
+            "op": "uploadImage",
+            "pl": null
+        };
 
         var form = new formidable.IncomingForm();
         form.parse(req, function(err, fields, files) {
+
+
+
+
+
+
             // `file` is the name of the <input> field of type `file`
             var old_path = files.file.path,
                 file_size = files.file.size,
@@ -84,10 +82,20 @@ module.exports = function(paramPS, paramESBMessage) {
                // new_path = path.join('/uploads/'+ file_name + '.' + file_ext);
 
                new_path =  '/Users/rollandsafort/Desktop/test/'+ file_name + '2.' + file_ext;
+              console.log('real file name: '+files.file.name);
 
             console.log('---------------old_path',old_path,'---------------------');
 
             fs.readFile(old_path, function(err, data) {
+
+
+                m.pl = {fileData: data};
+                esbMessage(m).then(function(r){
+                    console.log(r);
+                }).fail(function(r){
+                    console.log(r);
+                });
+
 
                 console.log('---------------data :',data,'---------------------');
                 console.log('---------------file_size :',file_size,'---------------------');
@@ -101,7 +109,7 @@ module.exports = function(paramPS, paramESBMessage) {
                             res.json({'success': false});
                         } else {
                             res.status(200);
-                            res.json({'success': true, 'data':"<img src:'+ data+'+>"});
+                            res.json({'success': true});
                         }
                     });
                 });
