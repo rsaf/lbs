@@ -47,16 +47,6 @@ module.exports = function(paramPS, paramESBMessage) {
     //workspace/profiles/v1/upload
     upRouter.post('/upload.json', function(req, res){
 
-
-
-
-        console.log('--------------- new image upload--------------------');
-        console.log('--------------- new image upload--------------------');
-        console.log('--------------- new image upload--------------------');
-        console.log('--------------- new image upload--------------------');
-        console.log('--------------- new image upload--------------------');
-
-
         var m = {
             "ns":"dmm",
             "op": "uploadImage",
@@ -78,9 +68,6 @@ module.exports = function(paramPS, paramESBMessage) {
                 index = old_path.lastIndexOf('/') + 1,
                 file_name = old_path.substr(index),
                // new_path = path.join(process.env.PWD, '/uploads/', file_name + '.' + file_ext);
-
-               // new_path = path.join('/uploads/'+ file_name + '.' + file_ext);
-
                new_path =  '/Users/rollandsafort/Desktop/test/'+ file_name + '2.' + file_ext;
               console.log('real file name: '+files.file.name);
 
