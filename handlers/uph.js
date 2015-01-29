@@ -57,10 +57,6 @@ module.exports = function(paramPS, paramESBMessage) {
         form.parse(req, function(err, fields, files) {
 
 
-
-
-
-
             // `file` is the name of the <input> field of type `file`
             var old_path = files.file.path,
                 file_size = files.file.size,
@@ -76,12 +72,12 @@ module.exports = function(paramPS, paramESBMessage) {
             fs.readFile(old_path, function(err, data) {
 
 
-                m.pl = {fileData: data};
-                esbMessage(m).then(function(r){
-                    console.log(r);
-                }).fail(function(r){
-                    console.log(r);
-                });
+//                m.pl = {fileData: data};
+//                esbMessage(m).then(function(r){
+//                    console.log(r);
+//                }).fail(function(r){
+//                    console.log(r);
+//                });
 
 
                 console.log('---------------data :',data,'---------------------');
@@ -224,7 +220,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
         var m = {
             "ns":"upm",
-            "op": "createPersonalProfile",
+            "op": "updatePersonalProfile",
             "pl":paramRequest.body
         };
 
