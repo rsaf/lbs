@@ -6,25 +6,27 @@ var oHelpers = require('../utilities/helpers.js');
 
 module.exports = function(paramService,  esbMessage){
   var serviceManagementRouter = paramService.Router();
-  serviceManagementRouter.post('/newservice.json', function(paramRequest, paramResponse, paramNext){
+  serviceManagementRouter.post('/service.json', function(paramRequest, paramResponse, paramNext){
     var m;
     var service;
     q().then(function(){
-      service = JSON.parse(paramRequest.body.json);
+      service = JSON.parse(paramRequest.body.pl.service);
       return {
         "ns":"smm",
-        "op": "createService",
+        "op": "persistService",
         "pl": {
           "userid":paramRequest.user.id
-          ,serviceName:service.serviceName
-          //,serviceType:service.serviceType //not do this as it is not a valid object id
-          ,briefOverview:service.briefOverview
-          ,standardPayment:service.standardPayment
-          ,standardServicePrice:service.standardServicePrice
-          ,standardPricing:service.standardPricing
-          ,standardServiceNotes:service.standardServiceNotes
-          ,standardReservationRequest:service.standardReservationRequest
-          ,PriceList:service.PriceList
+          ,"service":{
+            serviceName:service.serviceName
+            ,serviceType:service.serviceType
+            ,briefOverview:service.briefOverview
+            ,standardPayment:service.standardPayment
+            ,standardServicePrice:service.standardServicePrice
+            ,standardPricing:service.standardPricing
+            ,standardServiceNotes:service.standardServiceNotes
+            ,standardReservationRequest:service.standardReservationRequest
+            ,PriceList:service.PriceList
+          }
         }
       };
       
@@ -43,15 +45,24 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(r));
     });
   });
-  serviceManagementRouter.get('/myservices.json', function(paramRequest, paramResponse, paramNext){
-    var m = {
-      "ns":"smm",
-      "op": "servicesByCreator",
-      "pl": {
-        "userAccountID":paramRequest.user.id
-      }
-    };
-    esbMessage(m)
+  serviceManagementRouter.put ('/service.json', function(paramRequest, paramResponse, paramNext){
+    var m;
+    var service;
+    q().then(function(){
+      m = JSON.parse(paramRequest.body.json);
+      service = m.pl.service;
+      return {
+        "ns":"smm",
+        "op": "persistService",
+        "pl": {
+          "userid":paramRequest.user.id
+          ,service:service
+        }
+      };
+      
+    }).then(function(m){
+      return esbMessage(m);
+    })
     .then(function(r) {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
       paramResponse.end(JSON.stringify(r));
@@ -64,7 +75,7 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(r));
     });
   });
-  serviceManagementRouter.get('/myservice.json', function(paramRequest, paramResponse, paramNext){
+  serviceManagementRouter.get ('/service.json', function(paramRequest, paramResponse, paramNext){
     var query = {};
     if(typeof paramRequest.query._id!=='undefined'){
       query._id=paramRequest.query._id;
@@ -89,97 +100,157 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(r));
     });
   });
-  serviceManagementRouter.get('/servicenames.json', function(paramRequest, paramResponse, paramNext){
-//    var m = {
-//      "ns":"smm",
-//      "op": "servicesByCreator",
-//      "pl": {
-//        "userAccountID":paramRequest.user.id
-//      }
-//    };
-//    esbMessage(m)
-//    .then(function(r) {
-      var r = {err:null,pl:['拍板输出','证照拍摄']};
+  serviceManagementRouter.get ('/services.json', function(paramRequest, paramResponse, paramNext){
+    var m = {
+      "ns":"smm",
+      "op": "servicesByCreator",
+      "pl": {
+        "userAccountID":paramRequest.user.id
+      }
+    };
+    esbMessage(m)
+    .then(function(r) {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
       paramResponse.end(JSON.stringify(r));
-//    })
-//    .fail(function(r) {
-//      paramResponse.writeHead(501, {"Content-Type": "application/json"});
-//      if(r.er && r.er.ec && r.er.ec>1000){
-//        r.er.em='Server poblem....';
-//      }
-//      paramResponse.end(JSON.stringify(r));
-//    });
+    })
+    .fail(function(r) {
+      paramResponse.writeHead(501, {"Content-Type": "application/json"});
+      if(r.er && r.er.ec && r.er.ec>1000){
+        r.er.em='Server poblem....';
+      }
+      paramResponse.end(JSON.stringify(r));
+    });
+  });
+  serviceManagementRouter.get('/servicenames.json', function(paramRequest, paramResponse, paramNext){
+    var m = {
+      "ns":"smm",
+      "op": "serviceNames",
+      "pl": null
+    };
+    esbMessage(m)
+    .then(function(r) {
+        paramResponse.writeHead(200, {"Content-Type": "application/json"});
+        paramResponse.end(JSON.stringify(r));
+    })
+    .fail(function(r) {
+      paramResponse.writeHead(501, {"Content-Type": "application/json"});
+      if(r.er && r.er.ec && r.er.ec>1000){
+        r.er.em='Server poblem....';
+      }
+      paramResponse.end(JSON.stringify(r));
+    });
   });
   serviceManagementRouter.get('/servicetypes.json', function(paramRequest, paramResponse, paramNext){
-//    var m = {
-//      "ns":"smm",
-//      "op": "servicesByCreator",
-//      "pl": {
-//        "userAccountID":paramRequest.user.id
-//      }
-//    };
-//    esbMessage(m)
-//    .then(function(r) {
-      var r = {err:null,pl:['证照服务','信用评价','信息核验']};
-      paramResponse.writeHead(200, {"Content-Type": "application/json"});
+    var m = {
+      "ns":"smm",
+      "op": "serviceTypes",
+      "pl": null
+    };
+    esbMessage(m)
+    .then(function(r) {
+        paramResponse.writeHead(200, {"Content-Type": "application/json"});
+        paramResponse.end(JSON.stringify(r));
+    })
+    .fail(function(r) {
+      paramResponse.writeHead(501, {"Content-Type": "application/json"});
+      if(r.er && r.er.ec && r.er.ec>1000){
+        r.er.em='Server poblem....';
+      }
       paramResponse.end(JSON.stringify(r));
-//    })
-//    .fail(function(r) {
-//      paramResponse.writeHead(501, {"Content-Type": "application/json"});
-//      if(r.er && r.er.ec && r.er.ec>1000){
-//        r.er.em='Server poblem....';
-//      }
-//      paramResponse.end(JSON.stringify(r));
-//    });
+    });
   });
   serviceManagementRouter.get('/servicepointtypes.json', function(paramRequest, paramResponse, paramNext){
-//    var m = {
-//      "ns":"smm",
-//      "op": "servicesByCreator",
-//      "pl": {
-//        "userAccountID":paramRequest.user.id
-//      }
-//    };
-//    esbMessage(m)
-//    .then(function(r) {
-      var r = {err:null,pl:['证照网店','信用网店']};
+    var m = {
+      "ns":"smm",
+      "op": "servicePointTypes",
+      "pl": null
+    };
+    esbMessage(m)
+    .then(function(r) {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
       paramResponse.end(JSON.stringify(r));
-//    })
-//    .fail(function(r) {
-//      paramResponse.writeHead(501, {"Content-Type": "application/json"});
-//      if(r.er && r.er.ec && r.er.ec>1000){
-//        r.er.em='Server poblem....';
-//      }
-//      paramResponse.end(JSON.stringify(r));
-//    });
+    })
+    .fail(function(r) {
+      paramResponse.writeHead(501, {"Content-Type": "application/json"});
+      if(r.er && r.er.ec && r.er.ec>1000){
+        r.er.em='Server poblem....';
+      }
+      paramResponse.end(JSON.stringify(r));
+    });
   });
-  serviceManagementRouter.post('/newservicepoint.json', function(paramRequest, paramResponse, paramNext){
+  serviceManagementRouter.post('/servicepoint.json', function(paramRequest, paramResponse, paramNext){
     var m;
     var servicePoint;
     q().then(function(){
-      servicePoint = JSON.parse(paramRequest.body.json);
+      m = JSON.parse(paramRequest.body.json);
+      servicePoint = m.pl.servicePoint;
       return {
         "ns":"smm",
-        "op": "createServicePoint",
+        "op": "persistServicePoint",
         "pl": {
           "userid":paramRequest.user.id,
-          servicePointCode:servicePoint.servicePointCode,//these should not be set for new unless youre an admin and can approve immediately
-          servicePointStatus:servicePoint.servicePointStatus,//same as code
-          servicePointName:servicePoint.servicePointName,
-          servicePointAddress:servicePoint.servicePointAddress,
-          servicePointType:servicePoint.servicePointType,
-          operatingHours:servicePoint.operatingHours,
-          contactPerson:servicePoint.contactPerson,
-          contactPhone:servicePoint.contactPhone,
-          servicePointDescription:servicePoint.servicePointDescription
+          'servicePoint':servicePoint
         }
       };
       
     }).then(function(m){
       return esbMessage(m);
     })
+    .then(function(r) {
+      paramResponse.writeHead(200, {"Content-Type": "application/json"});
+      paramResponse.end(JSON.stringify(r));
+    })
+    .fail(function(r) {
+      paramResponse.writeHead(501, {"Content-Type": "application/json"});
+      if(r.er && r.er.ec && r.er.ec>1000){
+        r.er.em='Server poblem....';
+      }
+      paramResponse.end(JSON.stringify(r));
+    });
+  });
+  serviceManagementRouter.put ('/servicepoint.json', function(paramRequest, paramResponse, paramNext){
+    var m;
+    var servicePoint;
+    q().then(function(){
+      m = JSON.parse(paramRequest.body.json);
+      servicePoint = m.pl.servicePoint;
+      return {
+        "ns":"smm",
+        "op": "persistServicePoint",
+        "pl": {
+          "userid":paramRequest.user.id
+          ,servicePoint:servicePoint
+        }
+      };
+      
+    }).then(function(m){
+      return esbMessage(m);
+    })
+    .then(function(r) {
+      paramResponse.writeHead(200, {"Content-Type": "application/json"});
+      paramResponse.end(JSON.stringify(r));
+    })
+    .fail(function(r) {
+      paramResponse.writeHead(501, {"Content-Type": "application/json"});
+      if(r.er && r.er.ec && r.er.ec>1000){
+        r.er.em='Server poblem....';
+      }
+      paramResponse.end(JSON.stringify(r));
+    });
+  });
+  serviceManagementRouter.get ('/servicepoint.json', function(paramRequest, paramResponse, paramNext){
+    var query = {};
+    if(typeof paramRequest.query._id!=='undefined'){
+      query._id=paramRequest.query._id;
+    }
+    var m = {
+      "ns":"smm",
+      "op": "myservicePoint",
+      "pl": {
+        "query":query
+      }
+    };
+    esbMessage(m)
     .then(function(r) {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
       paramResponse.end(JSON.stringify(r));
