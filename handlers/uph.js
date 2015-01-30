@@ -1,6 +1,20 @@
 
 var oHelpers= require('../utilities/helpers.js');
 
+
+//added
+    http = require('http'),
+    formidable = require('formidable'),
+    fs = require('fs'),
+    path = require('path');
+
+
+
+
+
+
+
+
 //API design supports standard HTTP verbs
 //PUT --> Create (Creation)
 //GET --> Read (Retrieval)
@@ -20,6 +34,105 @@ var oHelpers= require('../utilities/helpers.js');
 module.exports = function(paramPS, paramESBMessage) {
     var upRouter = paramPS.Router();
     var esbMessage = paramESBMessage;
+
+
+
+
+
+
+
+
+
+// Upload route.
+    //workspace/profiles/v1/upload
+    upRouter.post('/upload.json', function(req, res){
+
+        var m = {
+            "ns":"dmm",
+            "op": "uploadImage",
+            "pl": null
+        };
+
+        var form = new formidable.IncomingForm();
+        form.parse(req, function(err, fields, files) {
+
+
+            // `file` is the name of the <input> field of type `file`
+            var old_path = files.file.path,
+                file_size = files.file.size,
+                file_ext = files.file.name.split('.').pop(),
+                index = old_path.lastIndexOf('/') + 1,
+                file_name = old_path.substr(index),
+               // new_path = path.join(process.env.PWD, '/uploads/', file_name + '.' + file_ext);
+               new_path =  '/Users/rollandsafort/Desktop/test/'+ file_name + '2.' + file_ext;
+              console.log('real file name: '+files.file.name);
+
+            console.log('---------------old_path',old_path,'---------------------');
+
+            fs.readFile(old_path, function(err, data) {
+
+
+//                m.pl = {fileData: data};
+//                esbMessage(m).then(function(r){
+//                    console.log(r);
+//                }).fail(function(r){
+//                    console.log(r);
+//                });
+
+
+                console.log('---------------data :',data,'---------------------');
+                console.log('---------------file_size :',file_size,'---------------------');
+                console.log('--------------- file_name: ', file_name,'---------------------');
+                console.log('--------------- new_path: ', new_path,'---------------------');
+
+                fs.writeFile(new_path, data, function(err) {
+                    fs.unlink(old_path, function(err) {
+                        if (err) {
+                            res.status(500);
+                            res.json({'success': false});
+                        } else {
+                            res.status(200);
+                            res.json({'success': true});
+                        }
+                    });
+                });
+            });
+        });
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -107,7 +220,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
         var m = {
             "ns":"upm",
-            "op": "createPersonalProfile",
+            "op": "updatePersonalProfile",
             "pl":paramRequest.body
         };
 
@@ -150,25 +263,25 @@ module.exports = function(paramPS, paramESBMessage) {
 
 
 
-    //post workspace/profiles/v1/personal.json
-    upRouter.post('/upload.json', function(paramRequest, paramResponse){
-
-        console.log('--------------- new post request--------------------');
-        console.log('--------------- new post request--------------------');
-        console.log('--------------- new post request--------------------');
-        console.log(paramRequest);
-
-
-        console.log('--------------- end of new post request--------------------');
-        console.log('--------------- end of new post request--------------------');
-        console.log('--------------- end of new post request--------------------');
-        oHelpers.sendResponse(paramResponse,200,paramRequest.body);
-
-
-
-
-
-    });
+    //post workspace/profiles/v1/uplaod.json
+//    upRouter.post('/upload.json', function(paramRequest, paramResponse){
+//
+//        console.log('--------------- new post request--------------------');
+//        console.log('--------------- new post request--------------------');
+//        console.log('--------------- new post request--------------------');
+//        console.log(paramRequest);
+//
+//
+//        console.log('--------------- end of new post request--------------------');
+//        console.log('--------------- end of new post request--------------------');
+//        console.log('--------------- end of new post request--------------------');
+//        oHelpers.sendResponse(paramResponse,200,paramRequest.body);
+//
+//
+//
+//
+//
+//    });
 
 
 
