@@ -1,3 +1,5 @@
+///forcing push
+
 
 var oHelpers= require('../utilities/helpers.js');
 
@@ -6,8 +8,6 @@ var oHelpers= require('../utilities/helpers.js');
     http = require('http'),
     formidable = require('formidable'),
     fs = require('fs'),
-    path = require('path');
-
 
 
 
@@ -53,6 +53,8 @@ module.exports = function(paramPS, paramESBMessage) {
             "pl": null
         };
 
+
+
         var form = new formidable.IncomingForm();
         form.parse(req, function(err, fields, files) {
 
@@ -70,14 +72,6 @@ module.exports = function(paramPS, paramESBMessage) {
             console.log('---------------old_path',old_path,'---------------------');
 
             fs.readFile(old_path, function(err, data) {
-
-
-//                m.pl = {fileData: data};
-//                esbMessage(m).then(function(r){
-//                    console.log(r);
-//                }).fail(function(r){
-//                    console.log(r);
-//                });
 
 
                 console.log('---------------data :',data,'---------------------');
