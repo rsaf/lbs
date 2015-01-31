@@ -66,14 +66,14 @@ module.exports = function(paramPS, paramESBMessage) {
                 index = old_path.lastIndexOf('/') + 1,
                 file_name = old_path.substr(index),
                // new_path = path.join(process.env.PWD, '/uploads/', file_name + '.' + file_ext);
-               new_path =  '/Users/rollandsafort/Desktop/test/'+ file_name + '2.' + file_ext;
+               new_path =  '/Users/LBS006/Desktop/test/'+ file_name + '2.' + file_ext;
               console.log('real file name: '+files.file.name);
 
             console.log('---------------old_path',old_path,'---------------------');
 
             fs.readFile(old_path, function(err, data) {
 
-
+             esbMessage()
                 console.log('---------------data :',data,'---------------------');
                 console.log('---------------file_size :',file_size,'---------------------');
                 console.log('--------------- file_name: ', file_name,'---------------------');
@@ -96,40 +96,6 @@ module.exports = function(paramPS, paramESBMessage) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //get workspace/profiles/v1/personal.json
     upRouter.get('/personal.json', function(paramRequest, paramResponse){
 
@@ -143,12 +109,6 @@ module.exports = function(paramPS, paramESBMessage) {
 
         esbMessage(m)
             .then(function(r) {
-
-
-                console.log('-------------resource fetched successfully------------------:');
-                console.log('---------------requested resource--------------------:');
-                console.log(r);
-
                 oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
@@ -287,35 +247,6 @@ module.exports = function(paramPS, paramESBMessage) {
         console.log ()
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //post workspace/v1/profiles/navigation.json
