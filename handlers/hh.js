@@ -34,8 +34,8 @@ module.exports = function(paramService, esbMessage){
     };
     var p4 = esbMessage(m4);
 
-    console.log('\nsch: getting security dependencies ...');
-    return Q.all([p1, p2, p3, p4]).then(function (r) {
+    //console.log('\nsch: getting security dependencies ...');
+    Q.all([p1, p2, p3, p4]).then(function (r) {
 
         //console.log(r);
         userloginVerifier = r[0].pl.fn;

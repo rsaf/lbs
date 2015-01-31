@@ -73,9 +73,6 @@ try {
         olmRequestLoggerFunction = r[2].pl.fn;
         scmCheckUserFunction = r[3].pl.fn;
 
-
-
-
         oHomeRouter = require('./handlers/hh.js')(exp, paramESBMessage);                // home
         oUserNotificationRouter = require('./handlers/mdh.js')(exp, paramESBMessage);   // workspace/notifications
         oUserRouter = require('./handlers/sch.js')(exp, paramESBMessage);               // workspace/users
@@ -94,8 +91,6 @@ try {
 
         oPhotoServiceRouter = require('./handlers/pmh.js')(exp, paramESBMessage);       // workspace/photoservices
 
-
-
         console.log('BS: self configuring with injected dependencies ....');
         bs.set('port', bsPort);
         bs.use(expressSession({resave: true, saveUninitialized: true, secret: 'uwotm8'}));
@@ -105,6 +100,7 @@ try {
         bs.get('/favicon.ico', oOperationsLogRouter); // this is messing our logger
         bs.get('/', oHelpers.testStartPage); //use for local testing only
         bs.use(exp.static('./static')); //use for local testing only
+        bs.use('/photos', exp.static('./photos')); //use for local testing only
 
         bs.use(errorHandler());
         bs.use(logger('dev'));
@@ -124,12 +120,6 @@ try {
         //REST API Interface
         //Business functions expose from here
 
-
-
-
-
-
-
         bs.use('/workspace/notifications', oUserNotificationRouter);
         bs.use('/workspace/users', oUserRouter);
         bs.use('/workspace/profiles/v1',oProfileRouter);
@@ -146,16 +136,6 @@ try {
         bs.use('/workspace/interfaces',  oInterfacesRouter);
         bs.use('/workspace/operationslog', oOperationsLogRouter);
         bs.use('/workspace/photoservices',   oPhotoServiceRouter);
-
-
-
-
-
-
-
-
-
-
 
         bs.all('*', oHelpers.four_oh_four);
 

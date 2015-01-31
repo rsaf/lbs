@@ -3,17 +3,8 @@
 
 var oHelpers= require('../utilities/helpers.js');
 
-
-//added
-    http = require('http'),
-    formidable = require('formidable'),
-    fs = require('fs'),
-
-
-
-
-
-
+var formidable = require('formidable');
+var fs = require('fs');
 
 //API design supports standard HTTP verbs
 //PUT --> Create (Creation)
@@ -35,66 +26,42 @@ module.exports = function(paramPS, paramESBMessage) {
     var upRouter = paramPS.Router();
     var esbMessage = paramESBMessage;
 
-
-
-
-
-
-
-
-
-// Upload route.
-    //workspace/profiles/v1/upload
-    upRouter.post('/upload.json', function(req, res){
-
-        var m = {
-            "ns":"dmm",
-            "op": "uploadImage",
-            "pl": null
-        };
-
-
-
+    //Upload route.
+    //workspace/profiles/v1/upload.json
+    upRouter.post('/upload.json', function(paramRequest, paramResponse){
+        console.log("\n photo being uploaded by userID: " + paramRequest.user.id);
         var form = new formidable.IncomingForm();
-        form.parse(req, function(err, fields, files) {
-
-
-            // `file` is the name of the <input> field of type `file`
-            var old_path = files.file.path,
-                file_size = files.file.size,
-                file_ext = files.file.name.split('.').pop(),
-                index = old_path.lastIndexOf('/') + 1,
-                file_name = old_path.substr(index),
-               // new_path = path.join(process.env.PWD, '/uploads/', file_name + '.' + file_ext);
-               new_path =  '/Users/LBS006/Desktop/test/'+ file_name + '2.' + file_ext;
-              console.log('real file name: '+files.file.name);
-
-            console.log('---------------old_path',old_path,'---------------------');
-
+        form.parse(paramRequest, function(err, fields, files) {
+            //`file` is the name of the <input> field of type `file`
+            var old_path = files.file.path;
+            var file_size = files.file.size;
+            var file_ext = files.file.name.split('.').pop();
+            var file_name = files.file.name;
             fs.readFile(old_path, function(err, data) {
-
-             esbMessage()
-                console.log('---------------data :',data,'---------------------');
-                console.log('---------------file_size :',file_size,'---------------------');
-                console.log('--------------- file_name: ', file_name,'---------------------');
-                console.log('--------------- new_path: ', new_path,'---------------------');
-
-                fs.writeFile(new_path, data, function(err) {
-                    fs.unlink(old_path, function(err) {
-                        if (err) {
-                            res.status(500);
-                            res.json({'success': false});
-                        } else {
-                            res.status(200);
-                            res.json({'success': true});
-                        }
+                    var m = {
+                        "ns":"dmm",
+                        "op": "uploadImage",
+                        "pl": null
+                    };
+                    m.pl = {
+                        userAccountID: paramRequest.user.id,
+                        imageName: file_name,
+                        imageData: data
+                    };
+                    esbMessage(m).then(function(r){
+                        console.log('uph: uploaded image with uuid... ');
+                        console.log(r);
+                        var r1 = {pl:{status: true}, er:null};
+                        oHelpers.sendResponse(paramResponse,200,r1)
+                    }).fail(function(r){
+                        console.log('uph: fail to upload image..');
+                        console.log(r);
+                        var r1 = {pl:null, er:{ec:414,em:"could not upload image"}};
+                        oHelpers.sendResponse(paramResponse,404,r1);
                     });
-                });
             });
         });
     });
-
-
 
 //get workspace/profiles/v1/personal.json
     upRouter.get('/personal.json', function(paramRequest, paramResponse){
@@ -119,26 +86,18 @@ module.exports = function(paramPS, paramESBMessage) {
 
     });
 
-
-
-
     //get workspace/profiles/v1/idphotos.json
     upRouter.get('/idphotos.json', function(paramRequest, paramResponse){
-
         oHelpers.sendResponse(paramResponse,200,idphotos );
-
     });
 
     //get workspace/profiles/v1/otherphotos.json
     upRouter.get('/otherphotos.json', function(paramRequest, paramResponse){
-
         oHelpers.sendResponse(paramResponse,200,otherphotos );
-
     });
 
 //get workspace/profiles/v1/personal.json
     upRouter.get('/personal/:profileID.json', function(paramRequest, paramResponse){
-
         var m = {
             "ns":"upm",
             "op": "readPersonalProfileByUserID",
@@ -160,7 +119,6 @@ module.exports = function(paramPS, paramESBMessage) {
 
 //post workspace/profiles/v1/personal.json
     upRouter.post('/personal.json', function(paramRequest, paramResponse){
-
         console.log('--------------- new post request--------------------');
         console.log('--------------- new post request--------------------');
         console.log('--------------- new post request--------------------');
@@ -169,9 +127,6 @@ module.exports = function(paramPS, paramESBMessage) {
         console.log('--------------- end of new post request--------------------');
         console.log('--------------- end of new post request--------------------');
         console.log('--------------- end of new post request--------------------');
-
-
-
         var m = {
             "ns":"upm",
             "op": "updatePersonalProfile",
@@ -184,8 +139,6 @@ module.exports = function(paramPS, paramESBMessage) {
 
         esbMessage(m)
             .then(function(r) {
-
-
                 var feedback = {'status':true}
                 console.log('feedback----------',feedback);
                 console.log('feedback----------',feedback);
@@ -213,41 +166,11 @@ module.exports = function(paramPS, paramESBMessage) {
 
     });
 
-
-
-
-
-    //post workspace/profiles/v1/uplaod.json
-//    upRouter.post('/upload.json', function(paramRequest, paramResponse){
-//
-//        console.log('--------------- new post request--------------------');
-//        console.log('--------------- new post request--------------------');
-//        console.log('--------------- new post request--------------------');
-//        console.log(paramRequest);
-//
-//
-//        console.log('--------------- end of new post request--------------------');
-//        console.log('--------------- end of new post request--------------------');
-//        console.log('--------------- end of new post request--------------------');
-//        oHelpers.sendResponse(paramResponse,200,paramRequest.body);
-//
-//
-//
-//
-//
-//    });
-
-
-
-
-
-
 //put workspace/v1/profiles/:personal.json
     upRouter.put('/personal/:profileID.json', function(paramRequest, paramResponse){
         console.log ()
 
 });
-
 
 //post workspace/v1/profiles/navigation.json
     upRouter.post('/navigation.json',function(paramRequest, paramResponse){
@@ -268,9 +191,7 @@ module.exports = function(paramPS, paramESBMessage) {
                 oHelpers.sendResponse(paramResponse,404,r);
             });
     });
-
-
-
+    
 //get workspace/v1/profiles/navigation.json
     upRouter.get('/navigation.json', function(paramRequest, paramResponse){
 
@@ -356,9 +277,6 @@ var personalUserProfile = {
         }
     }
 };
-
-
-
 
 var idphotos = {
     "pl": [
@@ -957,8 +875,6 @@ var idphotos = {
     ]
 }
 
-
-
 var otherphotos = {
 
     "pl": [
@@ -1044,17 +960,6 @@ var otherphotos = {
         }
     ]
 }
-
-
-
-
-
-
-
-
-
-
-
 
 var personal = {
   "pl": [{
