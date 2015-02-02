@@ -4,10 +4,25 @@
 var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
 
+function _initRequestMessage(paramRequest){
+  return {
+    rdu: '000000000000000000000009'
+    ,rdo: '000000000000000000000008'
+    ,rc: 'code'
+    ,rt: 'title'
+    ,rsu: paramRequest.user.id
+    ,rso: paramRequest.user.id
+    ,rs: 'status'
+    ,rb: 'body'
+    ,rtr: '000000000000000000000005'
+  };
+}
+
 module.exports = function(paramService,  esbMessage){
   var serviceManagementRouter = paramService.Router();
   serviceManagementRouter.post('/service.json', function(paramRequest, paramResponse, paramNext){
     var m={};
+    var response;
     q().then(function(){
       m.op = "createTransaction";
       m.pl={
@@ -35,8 +50,13 @@ module.exports = function(paramService,  esbMessage){
       return esbMessage(m);
     })
     .then(function(r) {
+      response=r;
+      m.op="createRequestMessage";
+      m.pl.requestMessage = _initRequestMessage(paramRequest);
+      return esbMessage(m);
+    }).then(function() {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      paramResponse.end(JSON.stringify(r));
+      paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
       paramResponse.writeHead(501, {"Content-Type": "application/json"});
@@ -48,6 +68,7 @@ module.exports = function(paramService,  esbMessage){
   });
   serviceManagementRouter.put ('/service.json', function(paramRequest, paramResponse, paramNext){
     var m={};
+    var response;
     q().then(function(){
       m.op = "createTransaction";
       m.pl={
@@ -66,8 +87,13 @@ module.exports = function(paramService,  esbMessage){
       return esbMessage(m);
     })
     .then(function(r) {
+      response=r;
+      m.op="createRequestMessage";
+      m.pl.requestMessage = _initRequestMessage(paramRequest);
+      return esbMessage(m);
+    }).then(function() {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      paramResponse.end(JSON.stringify(r));
+      paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
       paramResponse.writeHead(501, {"Content-Type": "application/json"});
@@ -187,6 +213,7 @@ module.exports = function(paramService,  esbMessage){
         }
       }
     };
+    var response;
     q().then(function(){
       return esbMessage(m);
     }).then(function (){
@@ -197,8 +224,13 @@ module.exports = function(paramService,  esbMessage){
       return esbMessage(m);
     })
     .then(function(r) {
+      response=r;
+      m.op="createRequestMessage";
+      m.pl.requestMessage = _initRequestMessage(paramRequest);
+      return esbMessage(m);
+    }).then(function() {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      paramResponse.end(JSON.stringify(r));
+      paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
       paramResponse.writeHead(501, {"Content-Type": "application/json"});
@@ -219,6 +251,7 @@ module.exports = function(paramService,  esbMessage){
         }
       }
     };
+    var response;
     q().then(function(){
       return esbMessage(m);
     }).then(function (){
@@ -229,8 +262,13 @@ module.exports = function(paramService,  esbMessage){
       return esbMessage(m);
     })
     .then(function(r) {
+      response=r;
+      m.op="createRequestMessage";
+      m.pl.requestMessage = _initRequestMessage(paramRequest);
+      return esbMessage(m);
+    }).then(function() {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      paramResponse.end(JSON.stringify(r));
+      paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
       paramResponse.writeHead(501, {"Content-Type": "application/json"});
