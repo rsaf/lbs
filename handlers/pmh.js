@@ -25,7 +25,6 @@ module.exports = function (paramPS, esbMessage) {
         oHelpers.sendResponse(paramResponse, 200, {pl: 'get all photos by special code', er: null});
     });
 
-
     //get photo standard by standard code
     //workspace/v1/phototoservices/standards/:standardcode.json
     psRouter.get('/standards/:standardcode.json', function (paramRequest, paramResponse) {
@@ -123,9 +122,7 @@ module.exports = function (paramPS, esbMessage) {
           oHelpers.sendResponse(paramResponse,200,folders);
       }
     });
-    
-    
-    
+
     return psRouter;
 };
 

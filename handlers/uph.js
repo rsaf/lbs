@@ -1,6 +1,5 @@
 ///forcing push
 
-
 var oHelpers= require('../utilities/helpers.js');
 
 var formidable = require('formidable');
@@ -20,8 +19,6 @@ var fs = require('fs');
 //post /workspace/v1/profiles/personals/p1007070990.json --> will update a particular personal profile
 //delete /workspace/v1/profiles/personals/p1007070990.json --> will delete a particular personal profile
 
-//
-
 module.exports = function(paramPS, paramESBMessage) {
     var upRouter = paramPS.Router();
     var esbMessage = paramESBMessage;
@@ -40,22 +37,41 @@ module.exports = function(paramPS, paramESBMessage) {
             fs.readFile(old_path, function(err, data) {
                     var m = {
                         "ns":"dmm",
-                        "op": "uploadImage",
+                        "op":"dmm_uploadPhoto", //pmm_uploadPhoto uploadImage
                         "pl": null
                     };
                     m.pl = {
-                        userAccountID: paramRequest.user.id,
-                        imageName: file_name,
+                        uID: paramRequest.user.id,
+                        oID: paramRequest.user.id,
+                        ign: file_name,
+                        imageExt:file_ext,
                         imageData: data
                     };
                     esbMessage(m).then(function(r){
                         console.log('uph: uploaded image with uuid... ');
-                        console.log(r);
-                        var r1 = {pl:{status: true}, er:null};
-                        oHelpers.sendResponse(paramResponse,200,r1)
+                        //console.log(r);
+                        var m2 = {
+                            "ns":"upm",
+                            "op": "updatePersonalProfile",
+                            "pl":null
+                        };
+                        m2.pl = {
+                            userAccountID: paramRequest.user.id,
+                            //private: {
+                            //    lastestPhoto: {value: '../../commons/images/Latest-photo.jpg'}
+                            //},
+                            basic: {
+                                avatar: {value: r.pl.uri}
+                            }
+                        };
+                        esbMessage(m2).then(function(r2){
+                            //console.log(r2);
+                            var r3 = {pl:{status: true}, er:null};
+                            oHelpers.sendResponse(paramResponse,200,r3);
+                        });
                     }).fail(function(r){
                         console.log('uph: fail to upload image..');
-                        console.log(r);
+                        //console.log(r);
                         var r1 = {pl:null, er:{ec:414,em:"could not upload image"}};
                         oHelpers.sendResponse(paramResponse,404,r1);
                     });
@@ -76,6 +92,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
         esbMessage(m)
             .then(function(r) {
+                console.log(r);
                 oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
@@ -191,7 +208,7 @@ module.exports = function(paramPS, paramESBMessage) {
                 oHelpers.sendResponse(paramResponse,404,r);
             });
     });
-    
+
 //get workspace/v1/profiles/navigation.json
     upRouter.get('/navigation.json', function(paramRequest, paramResponse){
 
