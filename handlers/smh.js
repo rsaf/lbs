@@ -60,7 +60,7 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
-      //@todo: roll back all (not sure why Q.all don't want to play nice. fin is never called when I tried that
+      //@todo: set roll back status wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
       return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
       .then(function(){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
@@ -115,11 +115,18 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
-      paramResponse.writeHead(501, {"Content-Type": "application/json"});
-      if(r.er && r.er.ec && r.er.ec>1000){
-        r.er.em='Server poblem....';
-      }
-      paramResponse.end(JSON.stringify(r));
+      //@todo: set roll back status wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
+      return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
+      .then(function(){
+         return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
+      })
+      .fin(function(){
+        paramResponse.writeHead(501, {"Content-Type": "application/json"});
+        if(r.er && r.er.ec && r.er.ec>1000){
+          r.er.em='Server poblem....';
+        }
+        paramResponse.end(JSON.stringify(r));
+      });
     });
   });
   serviceManagementRouter.get ('/service.json', function(paramRequest, paramResponse, paramNext){
@@ -254,11 +261,18 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
-      paramResponse.writeHead(501, {"Content-Type": "application/json"});
-      if(r.er && r.er.ec && r.er.ec>1000){
-        r.er.em='Server poblem....';
-      }
-      paramResponse.end(JSON.stringify(r));
+      //@todo: set roll back status wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
+      return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
+      .then(function(){
+         return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
+      })
+      .fin(function(){
+        paramResponse.writeHead(501, {"Content-Type": "application/json"});
+        if(r.er && r.er.ec && r.er.ec>1000){
+          r.er.em='Server poblem....';
+        }
+        paramResponse.end(JSON.stringify(r));
+      });
     });
   });
   serviceManagementRouter.put ('/servicepoint.json', function(paramRequest, paramResponse, paramNext){
@@ -294,11 +308,18 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
-      paramResponse.writeHead(501, {"Content-Type": "application/json"});
-      if(r.er && r.er.ec && r.er.ec>1000){
-        r.er.em='Server poblem....';
-      }
-      paramResponse.end(JSON.stringify(r));
+      //@todo: set roll back status wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
+      return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
+      .then(function(){
+         return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
+      })
+      .fin(function(){
+        paramResponse.writeHead(501, {"Content-Type": "application/json"});
+        if(r.er && r.er.ec && r.er.ec>1000){
+          r.er.em='Server poblem....';
+        }
+        paramResponse.end(JSON.stringify(r));
+      });
     });
   });
   serviceManagementRouter.get ('/servicepoint.json', function(paramRequest, paramResponse, paramNext){
