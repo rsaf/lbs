@@ -37,7 +37,7 @@ module.exports = function(paramPS, paramESBMessage) {
             fs.readFile(old_path, function(err, data) {
                     var m = {
                         "ns":"dmm",
-                        "op":"dmm_uploadPhoto", //pmm_uploadPhoto uploadImage
+                        "op":"pmm_uploadPhoto", //dmm_uploadPhoto uploadImage
                         "pl": null
                     };
                     m.pl = {
