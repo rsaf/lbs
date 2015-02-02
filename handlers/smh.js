@@ -18,54 +18,16 @@ function _initRequestMessage(paramRequest){
   };
 }
 
+
 module.exports = function(paramService,  esbMessage){
+  function _commitTransaction(m){
+    m.pl.transaction = {
+      _id:m.pl.transactionid
+    }
+    m.op='commitTransaction';
+    return esbMessage(m);
+  }
   var serviceManagementRouter = paramService.Router();
-  serviceManagementRouter.post('/service.json', function(paramRequest, paramResponse, paramNext){
-    var m={};
-    var response;
-    q().then(function(){
-      m.op = "createTransaction";
-      m.pl={
-        userid:paramRequest.user.id
-        ,transaction:{
-          description:'persist Service'
-          ,modules:['smm','rmm']
-        }
-      };
-      return esbMessage(m)
-    }).then(function(m){
-      var service = JSON.parse(paramRequest.body.pl.service);
-      m.pl.service = {
-        serviceName:service.serviceName
-        ,serviceType:service.serviceType
-        ,briefOverview:service.briefOverview
-        ,standardPayment:service.standardPayment
-        ,standardServicePrice:service.standardServicePrice
-        ,standardPricing:service.standardPricing
-        ,standardServiceNotes:service.standardServiceNotes
-        ,standardReservationRequest:service.standardReservationRequest
-        ,PriceList:service.PriceList
-      };
-      m.op='persistService';
-      return esbMessage(m);
-    })
-    .then(function(r) {
-      response=r;
-      m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest);
-      return esbMessage(m);
-    }).then(function() {
-      paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      paramResponse.end(JSON.stringify(response));
-    })
-    .fail(function(r) {
-      paramResponse.writeHead(501, {"Content-Type": "application/json"});
-      if(r.er && r.er.ec && r.er.ec>1000){
-        r.er.em='Server poblem....';
-      }
-      paramResponse.end(JSON.stringify(r));
-    });
-  });
   serviceManagementRouter.put ('/service.json', function(paramRequest, paramResponse, paramNext){
     var m={};
     var response;
@@ -91,6 +53,63 @@ module.exports = function(paramService,  esbMessage){
       m.op="createRequestMessage";
       m.pl.requestMessage = _initRequestMessage(paramRequest);
       return esbMessage(m);
+    }).then(function() {
+      return _commitTransaction(m);
+    }).then(function() {
+      paramResponse.writeHead(200, {"Content-Type": "application/json"});
+      paramResponse.end(JSON.stringify(response));
+    })
+    .fail(function(r) {
+      //@todo: roll back all (not sure why Q.all don't want to play nice. fin is never called when I tried that
+      return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
+      .then(function(){
+         return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
+      })
+      .fin(function(){
+        paramResponse.writeHead(501, {"Content-Type": "application/json"});
+        if(r.er && r.er.ec && r.er.ec>1000){
+          r.er.em='Server poblem....';
+        }
+        paramResponse.end(JSON.stringify(r));
+      });
+    });
+  });
+  serviceManagementRouter.post('/service.json', function(paramRequest, paramResponse, paramNext){
+    var m={};
+    var response;
+    q().then(function(){
+      m.op = "createTransaction";
+      m.pl={
+        userid:paramRequest.user.id
+        ,transaction:{
+          description:'persist Service'
+          ,modules:['smm','rmm']
+        }
+      };
+      return esbMessage(m);
+    }).then(function(m){
+      var service = JSON.parse(paramRequest.body.pl.service);
+      m.pl.service = {
+        serviceName:service.serviceName
+        ,serviceType:service.serviceType
+        ,briefOverview:service.briefOverview
+        ,standardPayment:service.standardPayment
+        ,standardServicePrice:service.standardServicePrice
+        ,standardPricing:service.standardPricing
+        ,standardServiceNotes:service.standardServiceNotes
+        ,standardReservationRequest:service.standardReservationRequest
+        ,PriceList:service.PriceList
+      };
+      m.op='persistService';
+      return esbMessage(m);
+    })
+    .then(function(r) {
+      response=r;
+      m.op="createRequestMessage";
+      m.pl.requestMessage = _initRequestMessage(paramRequest);
+      return esbMessage(m);
+    }).then(function() {
+      return _commitTransaction(m)
     }).then(function() {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
       paramResponse.end(JSON.stringify(response));
@@ -229,6 +248,8 @@ module.exports = function(paramService,  esbMessage){
       m.pl.requestMessage = _initRequestMessage(paramRequest);
       return esbMessage(m);
     }).then(function() {
+      return _commitTransaction(m);
+    }).then(function() {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
       paramResponse.end(JSON.stringify(response));
     })
@@ -266,6 +287,8 @@ module.exports = function(paramService,  esbMessage){
       m.op="createRequestMessage";
       m.pl.requestMessage = _initRequestMessage(paramRequest);
       return esbMessage(m);
+    }).then(function() {
+      return _commitTransaction(m);
     }).then(function() {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
       paramResponse.end(JSON.stringify(response));
