@@ -7,31 +7,31 @@ var oHelpers = require('../utilities/helpers.js');
 module.exports = function(paramService,  esbMessage){
   var serviceManagementRouter = paramService.Router();
   serviceManagementRouter.post('/service.json', function(paramRequest, paramResponse, paramNext){
-    var m;
-    var service;
+    var m={};
     q().then(function(){
-      service = JSON.parse(paramRequest.body.pl.service);
-      return {
-        "ns":"smm",
-        "op": "persistService",
-        "pl": {
-          "userid":paramRequest.user.id
-          ,transactionid:'000000000000000000000007'
-          ,"service":{
-            serviceName:service.serviceName
-            ,serviceType:service.serviceType
-            ,briefOverview:service.briefOverview
-            ,standardPayment:service.standardPayment
-            ,standardServicePrice:service.standardServicePrice
-            ,standardPricing:service.standardPricing
-            ,standardServiceNotes:service.standardServiceNotes
-            ,standardReservationRequest:service.standardReservationRequest
-            ,PriceList:service.PriceList
-          }
+      m.op = "createTransaction";
+      m.pl={
+        userid:paramRequest.user.id
+        ,transaction:{
+          description:'persist Service'
+          ,modules:['smm','rmm']
         }
       };
-      
+      return esbMessage(m)
     }).then(function(m){
+      var service = JSON.parse(paramRequest.body.pl.service);
+      m.pl.service = {
+        serviceName:service.serviceName
+        ,serviceType:service.serviceType
+        ,briefOverview:service.briefOverview
+        ,standardPayment:service.standardPayment
+        ,standardServicePrice:service.standardServicePrice
+        ,standardPricing:service.standardPricing
+        ,standardServiceNotes:service.standardServiceNotes
+        ,standardReservationRequest:service.standardReservationRequest
+        ,PriceList:service.PriceList
+      };
+      m.op='persistService';
       return esbMessage(m);
     })
     .then(function(r) {
@@ -47,22 +47,22 @@ module.exports = function(paramService,  esbMessage){
     });
   });
   serviceManagementRouter.put ('/service.json', function(paramRequest, paramResponse, paramNext){
-    var m;
-    var service;
+    var m={};
     q().then(function(){
-      m = JSON.parse(paramRequest.body.json);
-      service = m.pl.service;
-      return {
-        "ns":"smm",
-        "op": "persistService",
-        "pl": {
-          "userid":paramRequest.user.id
-          ,transactionid:'000000000000000000000007'
-          ,service:service
+      m.op = "createTransaction";
+      m.pl={
+        userid:paramRequest.user.id
+        ,transaction:{
+          description:'persist Service'
+          ,modules:['smm','rmm']
         }
       };
-      
+      return esbMessage(m)
     }).then(function(m){
+      var reqMsg = JSON.parse(paramRequest.body.json),
+      service=reqMsg.pl.service;
+      m.pl.service = service;
+      m.op='persistService';
       return esbMessage(m);
     })
     .then(function(r) {
@@ -83,7 +83,6 @@ module.exports = function(paramService,  esbMessage){
       query._id=paramRequest.query._id;
     }
     var m = {
-      "ns":"smm",
       "op": "myservice",
       "pl": {
         "query":query
@@ -104,7 +103,6 @@ module.exports = function(paramService,  esbMessage){
   });
   serviceManagementRouter.get ('/services.json', function(paramRequest, paramResponse, paramNext){
     var m = {
-      "ns":"smm",
       "op": "servicesByCreator",
       "pl": {
         "userAccountID":paramRequest.user.id
@@ -125,7 +123,6 @@ module.exports = function(paramService,  esbMessage){
   });
   serviceManagementRouter.get('/servicenames.json', function(paramRequest, paramResponse, paramNext){
     var m = {
-      "ns":"smm",
       "op": "serviceNames",
       "pl": null
     };
@@ -163,7 +160,6 @@ module.exports = function(paramService,  esbMessage){
   });
   serviceManagementRouter.get('/servicepointtypes.json', function(paramRequest, paramResponse, paramNext){
     var m = {
-      "ns":"smm",
       "op": "servicePointTypes",
       "pl": null
     };
@@ -181,22 +177,23 @@ module.exports = function(paramService,  esbMessage){
     });
   });
   serviceManagementRouter.post('/servicepoint.json', function(paramRequest, paramResponse, paramNext){
-    var m;
-    var servicePoint;
-    q().then(function(){
-      m = JSON.parse(paramRequest.body.json);
-      servicePoint = m.pl.servicePoint;
-      return {
-        "ns":"smm",
-        "op": "persistServicePoint",
-        "pl": {
-          "userid":paramRequest.user.id
-          ,'servicePoint':servicePoint
-          ,transactionid:'54c98bd8f52b230201056cfd'
+    var m={
+      "op": "createTransaction"
+      ,"pl": {
+        "userid":paramRequest.user.id
+        ,transaction:{
+          description:'persist ServicePoint'
+          ,modules:['smm','rmm']
         }
-      };
-      
-    }).then(function(m){
+      }
+    };
+    q().then(function(){
+      return esbMessage(m);
+    }).then(function (){
+      var reqMsg = JSON.parse(paramRequest.body.json),
+      servicePoint = reqMsg.pl.servicePoint;
+      m.op="persistServicePoint";
+      m.pl.servicePoint = servicePoint;
       return esbMessage(m);
     })
     .then(function(r) {
@@ -212,22 +209,23 @@ module.exports = function(paramService,  esbMessage){
     });
   });
   serviceManagementRouter.put ('/servicepoint.json', function(paramRequest, paramResponse, paramNext){
-    var m;
-    var servicePoint;
-    q().then(function(){
-      m = JSON.parse(paramRequest.body.json);
-      servicePoint = m.pl.servicePoint;
-      return {
-        "ns":"smm",
-        "op": "persistServicePoint",
-        "pl": {
-          "userid":paramRequest.user.id
-          ,servicePoint:servicePoint
-          ,transactionid:'54c98bd8f52b230201056cfd'
+    var m={
+      "op": "createTransaction"
+      ,"pl": {
+        "userid":paramRequest.user.id
+        ,transaction:{
+          description:'persist ServicePoint'
+          ,modules:['smm','rmm']
         }
-      };
-      
-    }).then(function(m){
+      }
+    };
+    q().then(function(){
+      return esbMessage(m);
+    }).then(function (){
+      var reqMsg = JSON.parse(paramRequest.body.json),
+      servicePoint = reqMsg.pl.servicePoint;
+      m.op="persistServicePoint";
+      m.pl.servicePoint = servicePoint;
       return esbMessage(m);
     })
     .then(function(r) {
@@ -252,7 +250,6 @@ module.exports = function(paramService,  esbMessage){
       "op": "myservicePoint",
       "pl": {
         "query":query
-        ,transactionid:'54c98bd8f52b230201056cfd'
       }
     };
     esbMessage(m)
