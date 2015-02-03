@@ -4,7 +4,7 @@
 var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
 
-function _initRequestMessage(paramRequest){
+function _initRequestMessage(paramRequest,type){
   return {
     rdu: '000000000000000000000009'
     ,rdo: '000000000000000000000008'
@@ -14,7 +14,7 @@ function _initRequestMessage(paramRequest){
     ,rso: paramRequest.user.id
     ,rs: 'status'
     ,rb: 'body'
-    ,rtr: '000000000000000000000005'
+    ,rtr: type
   };
 }
 
@@ -58,7 +58,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r;
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010');
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
@@ -73,7 +73,7 @@ module.exports = function(paramService,  esbMessage){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
       })
       .fin(function(){
-        _rollBackTransaction();
+        _rollBackTransaction(m);
         paramResponse.writeHead(501, {"Content-Type": "application/json"});
         if(r.er && r.er.ec && r.er.ec>1000){
           r.er.em='Server poblem....';
@@ -96,7 +96,8 @@ module.exports = function(paramService,  esbMessage){
       };
       return esbMessage(m);
     }).then(function(m){
-      var service = JSON.parse(paramRequest.body.pl.service);
+      var reqMsg = JSON.parse(paramRequest.body.json);
+      var service = reqMsg.pl.service;
       m.pl.service = {
         serviceName:service.serviceName
         ,serviceType:service.serviceType
@@ -114,7 +115,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r;
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010');
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m)
@@ -123,13 +124,14 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
+      console.log('0000000000 in fail:',r)
       //@todo: set roll back status wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
       return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
       .then(function(){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
       })
       .fin(function(){
-        _rollBackTransaction();
+        _rollBackTransaction(m);
         paramResponse.writeHead(501, {"Content-Type": "application/json"});
         if(r.er && r.er.ec && r.er.ec>1000){
           r.er.em='Server poblem....';
@@ -261,7 +263,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r;
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000020');
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
@@ -276,7 +278,7 @@ module.exports = function(paramService,  esbMessage){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
       })
       .fin(function(){
-        _rollBackTransaction();
+        _rollBackTransaction(m);
         paramResponse.writeHead(501, {"Content-Type": "application/json"});
         if(r.er && r.er.ec && r.er.ec>1000){
           r.er.em='Server poblem....';
@@ -309,7 +311,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r;
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000020');
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
@@ -324,7 +326,7 @@ module.exports = function(paramService,  esbMessage){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
       })
       .fin(function(){
-        _rollBackTransaction();
+        _rollBackTransaction(m);
         paramResponse.writeHead(501, {"Content-Type": "application/json"});
         if(r.er && r.er.ec && r.er.ec>1000){
           r.er.em='Server poblem....';
