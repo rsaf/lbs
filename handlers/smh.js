@@ -27,6 +27,13 @@ module.exports = function(paramService,  esbMessage){
     m.op='commitTransaction';
     return esbMessage(m);
   }
+  function _rollBackTransaction(m){
+    m.pl.transaction = {
+      _id:m.pl.transactionid
+    }
+    m.op='wmm_rollBackTransaction';
+    return esbMessage(m);
+  }
   var serviceManagementRouter = paramService.Router();
   serviceManagementRouter.put ('/service.json', function(paramRequest, paramResponse, paramNext){
     var m={};
@@ -66,6 +73,7 @@ module.exports = function(paramService,  esbMessage){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
       })
       .fin(function(){
+        _rollBackTransaction();
         paramResponse.writeHead(501, {"Content-Type": "application/json"});
         if(r.er && r.er.ec && r.er.ec>1000){
           r.er.em='Server poblem....';
@@ -121,6 +129,7 @@ module.exports = function(paramService,  esbMessage){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
       })
       .fin(function(){
+        _rollBackTransaction();
         paramResponse.writeHead(501, {"Content-Type": "application/json"});
         if(r.er && r.er.ec && r.er.ec>1000){
           r.er.em='Server poblem....';
@@ -267,6 +276,7 @@ module.exports = function(paramService,  esbMessage){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
       })
       .fin(function(){
+        _rollBackTransaction();
         paramResponse.writeHead(501, {"Content-Type": "application/json"});
         if(r.er && r.er.ec && r.er.ec>1000){
           r.er.em='Server poblem....';
@@ -314,6 +324,7 @@ module.exports = function(paramService,  esbMessage){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
       })
       .fin(function(){
+        _rollBackTransaction();
         paramResponse.writeHead(501, {"Content-Type": "application/json"});
         if(r.er && r.er.ec && r.er.ec>1000){
           r.er.em='Server poblem....';
