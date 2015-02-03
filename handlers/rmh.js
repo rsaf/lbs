@@ -19,12 +19,18 @@ var oHelpers= require('../utilities/helpers.js');
 module.exports = function(paramService, esbMessage)
 {
   var requestRouter = paramService.Router();
-
-    requestRouter.get('/:requestType.json', function(paramRequest, paramResponse, paramNext){
+  function _getRequestMessages(req,filter){
+    var m = {
+      op:'rmm_getRequests',
+      pl:{userid:'000000000000000000000009'}
+    }
+    return esbMessage(m)
+  }
+  requestRouter.get('/:requestType.json', function(paramRequest, paramResponse, paramNext){
     //console.log('get all json called  ');
-
+        var promise;
         if (paramRequest.params.requestType === 'all'){
-            oHelpers.sendResponse(paramResponse,200,all);
+            promise = _getRequestMessages(paramRequest,{});
         }
         else if(paramRequest.params.requestType === 'approved'){
             oHelpers.sendResponse(paramResponse,200,approved);
@@ -36,6 +42,19 @@ module.exports = function(paramService, esbMessage)
 
         else if(paramRequest.params.requestType === 'unprocess'){
             oHelpers.sendResponse(paramResponse,200,unprocess);
+        }
+        if(promise){
+          promise.then(function(msg) {
+            paramResponse.writeHead(200, {"Content-Type": "application/json"});
+            paramResponse.end(JSON.stringify(msg));
+          })
+          .fail(function(r) {
+            paramResponse.writeHead(501, {"Content-Type": "application/json"});
+            if(r.er && r.er.ec && r.er.ec>1000){
+              r.er.em='Server poblem....';
+            }
+            paramResponse.end(JSON.stringify(r));
+          });
         }
 
 
