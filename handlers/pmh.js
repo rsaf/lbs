@@ -31,8 +31,6 @@ module.exports = function (paramPS, esbMessage) {
     psRouter.get('/standards/:standardcode.json', function (paramRequest, paramResponse) {
 
 
-        console.log('  standard by code paramRequest.body' , paramRequest.body);
-
         var m = {
             "ns": "pmm",
             "op": "pmm_readStandardByCode",
@@ -41,13 +39,11 @@ module.exports = function (paramPS, esbMessage) {
 
 
 
-        console.log('paramRequest.body.sc',paramRequest.body.sc);
 
         esbMessage(m)
             .then(function (r) {
                 oHelpers.sendResponse(paramResponse, 200, r.pl);
 
-                console.log('  standard by code returned value' ,  r.pl);
 
             })
             .fail(function (r) {
@@ -102,12 +98,11 @@ module.exports = function (paramPS, esbMessage) {
             "pl": {uc:paramRequest.params.usagecode}
         };
 
-        console.log('paramRequest.params.usagecode    : \n', paramRequest.params.usagecode);
+
 
         esbMessage(m)
             .then(function (r) {
 
-                console.log(' returned usage: ' , r);
                 oHelpers.sendResponse(paramResponse, 200, r.pl);
             })
             .fail(function (r) {
@@ -131,7 +126,6 @@ module.exports = function (paramPS, esbMessage) {
         m.pl.oID= paramRequest.user.id;
 
 
-        console.log('posted message: ' , m.pl);
 
 
         esbMessage(m)
@@ -139,7 +133,7 @@ module.exports = function (paramPS, esbMessage) {
                 oHelpers.sendResponse(paramResponse, 200, r.pl);
             })
             .fail(function (r) {
-                console.log(r);
+
                 oHelpers.sendResponse(paramResponse, 501, r.er);
             });
     });
@@ -169,7 +163,7 @@ module.exports = function (paramPS, esbMessage) {
                 oHelpers.sendResponse(paramResponse, 200, r.pl);
             })
             .fail(function (r) {
-                console.log(r);
+
                 oHelpers.sendResponse(paramResponse, 501, r.er);
             });
     });
@@ -177,9 +171,6 @@ module.exports = function (paramPS, esbMessage) {
     //update photo standard by standard code
     //workspace/v1/phototoservices/standards/:standardcode.json
     psRouter.put('/standards/:standardcode.json', function (paramRequest, paramResponse) {
-
-        console.log('update stardard by code --------- :',paramRequest.body);
-
 
         var m = {
             "ns": "pmm",
@@ -193,13 +184,10 @@ module.exports = function (paramPS, esbMessage) {
         esbMessage(m)
             .then(function (r) {
 
-
-                console.log('pmh success callback  :  r  \n',r);
                 oHelpers.sendResponse(paramResponse, 200, r.pl);
             })
             .fail(function (r) {
 
-                console.log('pmh failure callback');
                 oHelpers.sendResponse(paramResponse, 401, r.er);
             });
     });
@@ -210,7 +198,6 @@ module.exports = function (paramPS, esbMessage) {
 
         if(paramRequest.body.sc === paramRequest.params.standardcode){
 
-            console.log(' identified delete request: ');
 
         var m = {
             "ns": "pmm",
@@ -239,7 +226,7 @@ module.exports = function (paramPS, esbMessage) {
 
             r = {er: 'requeste unidentied!' , pl:null}
 
-            console.log(r);
+
             oHelpers.sendResponse(paramResponse, 500,r );
         }
 
@@ -251,9 +238,7 @@ module.exports = function (paramPS, esbMessage) {
     //workspace/standards/usages/:usagecode.json
     psRouter.delete('/usages/:usagecode.json', function (paramRequest, paramResponse) {
 
-//        if(paramRequest.body.uc === paramRequest.params.usagecode){
-//
-//            console.log(' identified usage delete request: ');
+
 
             var m = {
                 "ns": "pmm",
@@ -275,16 +260,6 @@ module.exports = function (paramPS, esbMessage) {
                 .fail(function (r) {
                     oHelpers.sendResponse(paramResponse, 401, r.er);
                 });
-
-//        }
-//        else
-//        {
-//
-//            r = {er: 'requeste unidentied!' , pl:null}
-//
-//            console.log(r);
-//            oHelpers.sendResponse(paramResponse, 500,r );
-//        }
 
 
 

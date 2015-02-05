@@ -23,7 +23,7 @@ module.exports = function(paramService, esbMessage)
 
 //    /workspace/notifications/:notificationType.json
     userNotificationRouter.get('/:notificationType.json', function(paramRequest, paramResponse, paramNext){
-    //console.log('get all json called  ');
+
 
         var m = {
             ns: 'mdm',
@@ -58,13 +58,18 @@ module.exports = function(paramService, esbMessage)
 
         esbMessage(m)
          .then(function(r) {
+                console.log('returned notification--------------------------:');
+                console.log('returned notification--------------------------:');
+                console.log('returned notification--------------------------:');
+                console.log('returned notification--------------------------:');
+                console.log('returned notification--------------------------:');
+                console.log('returned notification:   ',JSON.stringify(r));
 
            paramResponse.writeHead(200, {"Content-Type": "application/json"});
            paramResponse.end(JSON.stringify(r));
          })
          .fail(function(r) {
 
-             console.log(r.er);
              var r = {pl:null, er:{ec:404,em:"could not find notification"}};
              oHelpers.sendResponse(paramResponse,404,r);
          });
@@ -75,7 +80,6 @@ module.exports = function(paramService, esbMessage)
 
     //    /workspace/notifications/mailling/contacts.json
   userNotificationRouter.post('/mailling/contacts.json', function(paramRequest, paramResponse, paramNext){
-        //console.log('get all json called  ');
 
         var m = {
             ns: 'mdm',
@@ -89,17 +93,6 @@ module.exports = function(paramService, esbMessage)
             }
         };
 
-
-
-
-      console.log('contacts------------------------:');
-      console.log('contacts------------------------:');
-      console.log('contacts------------------------:');
-      console.log('contacts------------------------',paramRequest.body);
-
-      // response format
-
-
       var validatedContacts =  {
           "pl": null
       };
@@ -108,7 +101,7 @@ module.exports = function(paramService, esbMessage)
       validatedContacts.pl = [{'status':true, loginname:'user@qq.com', 'userID':'54c876c024a7000'},
           {'status':true, loginname:'guest', 'userID': '89c876cc24a7111'},
           {'status':true, 'loginname':'cuser2', 'userID': '36c876c02412759'},
-      {'status':false, 'loginname':'user@qq.com', 'userID': '36c876cc0024159'}];
+      {'status':false, 'loginname':'user2@qq.com', 'userID': '36c876cc0024159'}];
 
 
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
@@ -142,11 +135,9 @@ module.exports = function(paramService, esbMessage)
 
 
         console.log('request sending email to  :   \n  ', paramRequest.body  );
-        var contactName = paramRequest.body.users[0].ln;
+        var contactName = paramRequest.body.recipients[0].to;
 
         console.log('contactName  :   \n  ', contactName  );
-
-       // r  = {'status': 'success'}
 
 
         var m = {
@@ -154,17 +145,34 @@ module.exports = function(paramService, esbMessage)
             vs: '1.0',
             op: 'sendNotification',
             pl: {
-                recipients:[{
-                    inmail:{to:''+contactName},
-                    weixin:{to:'lionleo001'},
-                    sms:{to:'15900755434'},
-                    email:{to:'rolland@lbsconsulting.com'}
+                recipients: [{
+                    inmail: {to: '' + contactName},
+                    weixin: {to: 'lionleo001'},
+                    sms: {to: '15900755434'},
+                    email: {to: 'rolland@lbsconsulting.com'}
                 }],
-                notification:{
-                    subject:'事务提交成功',
-                    body:'事务提交成功事务提交成功事务提交成功事务提交成功事务提交成功事务提交成功事务提交成功',
-                    notificationType:'业务通知'}
-            }};
+                notification: paramRequest.body.notification
+            }
+        };
+
+
+//        var m = {
+//            ns: 'mdm',
+//            vs: '1.0',
+//            op: 'sendNotification',
+//            pl: {
+//                recipients:[{
+//                    inmail:{to:''+contactName},
+//                    weixin:{to:'lionleo001'},
+//                    sms:{to:'15900755434'},
+//                    email:{to:'rolland@lbsconsulting.com'}
+//                }],
+//                notification:{
+//                    subject:'事务提交成功',
+//                    body:'事务提交成功事务提交成功事务提交成功事务提交成功事务提交成功事务提交成功事务提交成功',
+//                    notificationType:'业务通知'}
+//            }
+//        };
 
         esbMessage(m)
             .then(function(r) {
@@ -184,36 +192,87 @@ module.exports = function(paramService, esbMessage)
 
 
 
+
+
+    ///workspace/notifications/update/:viewstate.json
+    userNotificationRouter.put('/update/:viewstate.json', function(paramRequest, paramResponse, paramNext){
+
+
+        console.log('request sending email to  :   \n  ', paramRequest.body.messageID  );
+        console.log('contactName  :   \n  ', paramRequest.body.messageID  );
+        console.log('viewstate  :   \n  ', paramRequest.params.viewstate );
+
+
+
+
+
+
+        var m = {
+    ns: 'mdm',
+    vs: '1.0',
+    op: 'updateViewStatus',
+   pl:{
+       messageID:paramRequest.body.messageID
+      ,viewStatus:paramRequest.params.viewstate
+   }
+};
+
+
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                console.log('return value     -----:', r);
+                paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                paramResponse.end(JSON.stringify(r));
+            })
+            .fail(function(r) {
+
+                var r = {pl:null, er:{ec:404,em:"could not update view state"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+
+    });
+
+
+
+
+
+
+
+
     return userNotificationRouter;
 };
 
-
-var all = {
-    "pl":[{"title":"all data","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:23:16"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"注册成功","type":"账户通知","time":"2014-08-05 12:35:16"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"}]
-};
-
-var read = {
-    "pl":[{"title":"read data","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:23:16"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"注册成功","type":"账户通知","time":"2014-08-05 12:35:16"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"}]
-};
-
-var unread ={"pl":[{"title":"unread data","type":"业务通知","time":"2014-08-05 12:23:16"},
-    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-    {"title":"注册成功","type":"账户通知","time":"2014-08-05 12:35:16"},
-    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"}]
-};
-
+//
+//var all = {
+//    "pl":[{"title":"all data","type":"业务通知","time":"2014-08-05 12:29:00"},
+//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:23:16"},
+//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
+//        {"title":"注册成功","type":"账户通知","time":"2014-08-05 12:35:16"},
+//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
+//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
+//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"}]
+//};
+//
+//var read = {
+//    "pl":[{"title":"read data","type":"业务通知","time":"2014-08-05 12:29:00"},
+//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:23:16"},
+//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
+//        {"title":"注册成功","type":"账户通知","time":"2014-08-05 12:35:16"},
+//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
+//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
+//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"}]
+//};
+//
+//var unread ={"pl":[{"title":"unread data","type":"业务通知","time":"2014-08-05 12:23:16"},
+//    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
+//    {"title":"注册成功","type":"账户通知","time":"2014-08-05 12:35:16"},
+//    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
+//    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
+//    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
+//    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"}]
+//};
+//
