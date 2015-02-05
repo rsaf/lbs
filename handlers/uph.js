@@ -1,9 +1,19 @@
 ///forcing push
 
+
 var oHelpers= require('../utilities/helpers.js');
 
-var formidable = require('formidable');
-var fs = require('fs');
+
+//added
+    http = require('http'),
+    formidable = require('formidable'),
+    fs = require('fs'),
+
+
+
+
+
+
 
 //API design supports standard HTTP verbs
 //PUT --> Create (Creation)
@@ -19,65 +29,101 @@ var fs = require('fs');
 //post /workspace/v1/profiles/personals/p1007070990.json --> will update a particular personal profile
 //delete /workspace/v1/profiles/personals/p1007070990.json --> will delete a particular personal profile
 
+//
+
 module.exports = function(paramPS, paramESBMessage) {
     var upRouter = paramPS.Router();
     var esbMessage = paramESBMessage;
 
-    //Upload route.
-    //workspace/profiles/v1/upload.json
-    upRouter.post('/upload.json', function(paramRequest, paramResponse){
-        console.log("\n photo being uploaded by userID: " + paramRequest.user.id);
+
+
+
+// Upload route.
+    //workspace/profiles/v1/upload
+    upRouter.post('/upload.json', function(req, res){
+
+        var m = {
+            "ns":"dmm",
+            "op": "uploadImage",
+            "pl": null
+        };
+
+
+
         var form = new formidable.IncomingForm();
-        form.parse(paramRequest, function(err, fields, files) {
-            //`file` is the name of the <input> field of type `file`
-            var old_path = files.file.path;
-            var file_size = files.file.size;
-            var file_ext = files.file.name.split('.').pop();
-            var file_name = files.file.name;
+        form.parse(req, function(err, fields, files) {
+
+
+            // `file` is the name of the <input> field of type `file`
+            var old_path = files.file.path,
+                file_size = files.file.size,
+                file_ext = files.file.name.split('.').pop(),
+                index = old_path.lastIndexOf('/') + 1,
+                file_name = old_path.substr(index),
+               // new_path = path.join(process.env.PWD, '/uploads/', file_name + '.' + file_ext);
+               new_path =  '/Users/rollandsafort/Desktop/test/'+ file_name + '2.' + file_ext;
+              console.log('real file name: '+files.file.name);
+
+            console.log('---------------old_path',old_path,'---------------------');
+
             fs.readFile(old_path, function(err, data) {
-                    var m = {
-                        "ns":"dmm",
-                        "op":"pmm_uploadPhoto", //dmm_uploadPhoto uploadImage
-                        "pl": null
-                    };
-                    m.pl = {
-                        uID: paramRequest.user.id,
-                        oID: paramRequest.user.id,
-                        ign: file_name,
-                        imageExt:file_ext,
-                        imageData: data
-                    };
-                    esbMessage(m).then(function(r){
-                        console.log('uph: uploaded image with uuid... ');
-                        //console.log(r);
-                        var m2 = {
-                            "ns":"upm",
-                            "op": "updatePersonalProfile",
-                            "pl":null
-                        };
-                        m2.pl = {
-                            userAccountID: paramRequest.user.id,
-                            //private: {
-                            //    lastestPhoto: {value: '../../commons/images/Latest-photo.jpg'}
-                            //},
-                            basic: {
-                                avatar: {value: r.pl.uri}
-                            }
-                        };
-                        esbMessage(m2).then(function(r2){
-                            //console.log(r2);
-                            var r3 = {pl:{status: true}, er:null};
-                            oHelpers.sendResponse(paramResponse,200,r3);
-                        });
-                    }).fail(function(r){
-                        console.log('uph: fail to upload image..');
-                        //console.log(r);
-                        var r1 = {pl:null, er:{ec:414,em:"could not upload image"}};
-                        oHelpers.sendResponse(paramResponse,404,r1);
+
+
+                console.log('---------------data :',data,'---------------------');
+                console.log('---------------file_size :',file_size,'---------------------');
+                console.log('--------------- file_name: ', file_name,'---------------------');
+                console.log('--------------- new_path: ', new_path,'---------------------');
+
+                fs.writeFile(new_path, data, function(err) {
+                    fs.unlink(old_path, function(err) {
+                        if (err) {
+                            res.status(500);
+                            res.json({'success': false});
+                        } else {
+                            res.status(200);
+                            res.json({'success': true});
+                        }
                     });
+                });
             });
         });
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //get workspace/profiles/v1/personal.json
     upRouter.get('/personal.json', function(paramRequest, paramResponse){
@@ -92,7 +138,6 @@ module.exports = function(paramPS, paramESBMessage) {
 
         esbMessage(m)
             .then(function(r) {
-                console.log(r);
                 oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
@@ -103,18 +148,26 @@ module.exports = function(paramPS, paramESBMessage) {
 
     });
 
+
+
+
     //get workspace/profiles/v1/idphotos.json
     upRouter.get('/idphotos.json', function(paramRequest, paramResponse){
+
         oHelpers.sendResponse(paramResponse,200,idphotos );
+
     });
 
     //get workspace/profiles/v1/otherphotos.json
     upRouter.get('/otherphotos.json', function(paramRequest, paramResponse){
+
         oHelpers.sendResponse(paramResponse,200,otherphotos );
+
     });
 
 //get workspace/profiles/v1/personal.json
     upRouter.get('/personal/:profileID.json', function(paramRequest, paramResponse){
+
         var m = {
             "ns":"upm",
             "op": "readPersonalProfileByUserID",
@@ -136,6 +189,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
 //post workspace/profiles/v1/personal.json
     upRouter.post('/personal.json', function(paramRequest, paramResponse){
+
         console.log('--------------- new post request--------------------');
         console.log('--------------- new post request--------------------');
         console.log('--------------- new post request--------------------');
@@ -144,6 +198,9 @@ module.exports = function(paramPS, paramESBMessage) {
         console.log('--------------- end of new post request--------------------');
         console.log('--------------- end of new post request--------------------');
         console.log('--------------- end of new post request--------------------');
+
+
+
         var m = {
             "ns":"upm",
             "op": "updatePersonalProfile",
@@ -156,6 +213,8 @@ module.exports = function(paramPS, paramESBMessage) {
 
         esbMessage(m)
             .then(function(r) {
+
+
                 var feedback = {'status':true}
                 console.log('feedback----------',feedback);
                 console.log('feedback----------',feedback);
@@ -183,11 +242,70 @@ module.exports = function(paramPS, paramESBMessage) {
 
     });
 
+
+
+
+
+    //post workspace/profiles/v1/uplaod.json
+//    upRouter.post('/upload.json', function(paramRequest, paramResponse){
+//
+//        console.log('--------------- new post request--------------------');
+//        console.log('--------------- new post request--------------------');
+//        console.log('--------------- new post request--------------------');
+//        console.log(paramRequest);
+//
+//
+//        console.log('--------------- end of new post request--------------------');
+//        console.log('--------------- end of new post request--------------------');
+//        console.log('--------------- end of new post request--------------------');
+//        oHelpers.sendResponse(paramResponse,200,paramRequest.body);
+//
+//
+//
+//
+//
+//    });
+
+
+
+
+
+
 //put workspace/v1/profiles/:personal.json
     upRouter.put('/personal/:profileID.json', function(paramRequest, paramResponse){
         console.log ()
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //post workspace/v1/profiles/navigation.json
     upRouter.post('/navigation.json',function(paramRequest, paramResponse){
@@ -208,6 +326,8 @@ module.exports = function(paramPS, paramESBMessage) {
                 oHelpers.sendResponse(paramResponse,404,r);
             });
     });
+
+
 
 //get workspace/v1/profiles/navigation.json
     upRouter.get('/navigation.json', function(paramRequest, paramResponse){
@@ -266,34 +386,8 @@ module.exports = function(paramPS, paramESBMessage) {
 //
 //delete /workspace/v1/profiles/corporate/:corporate.json  ==> mark for delete
 
-var personalUserProfile = {
-    "pl":{
-        "basic":{
-            "avatar":"../../commons/images/bachend/backendProfilePic.png"
-            ,"userName":"Frankie"
-            ,"gender":"女"
-            ,"dateOfBirth":"1990/10/20"
-            ,"country":"中国"
-            ,"placeOfBrith":"江苏省南京市"
-            ,"currentResidence":"江苏省南京市"
 
-        }
-        ,"private":{
-            "lastestPhoto":"../../commons/images/Latest-photo.jpg"
-            ,"IDNumber":"无"
-            ,"fullName":"无"
-            ,"lanID":"无"
 
-        }
-        ,"contacts":{
-            "email":"**780183@qq.con"
-            ,"linkToPhone":"150****0157可直接使用此号码登录"
-            ,"linkToQQ":"未设置QQ绑定"
-            ,"linkToWechat":"未设置微信绑定"
-
-        }
-    }
-};
 
 var idphotos = {
     "pl": [
@@ -892,6 +986,8 @@ var idphotos = {
     ]
 }
 
+
+
 var otherphotos = {
 
     "pl": [
@@ -978,85 +1074,5 @@ var otherphotos = {
     ]
 }
 
-var personal = {
-  "pl": [{
-      "imageurl": "/commons/images/passportPhoto_other.jpg",
-      "name": "Personal name",
-      "creator": "系统创建",
-      "dateCreated": "2013/07/22",
-      "status": "正常"
-    }
-    , {
-      "imageurl": "/commons/images/passportPhoto_other.jpg",
-      "name": "Candy",
-      "creator": "Andy",
-      "dateCreated": "2013/05/10",
-      "status": "正常"
-    }, {
-      "imageurl": "/commons/images/passportPhoto_other.jpg",
-      "name": "Lsf",
-      "creator": "Andy",
-      "dateCreated": "2013/05/20",
-      "status": "正常"
-    }, {
-      "imageurl": "/commons/images/passportPhoto_other.jpg",
-      "name": "雪中情",
-      "creator": "Andy",
-      "dateCreated": "2013/06/13",
-      "status": "正常"
-    }, {
-      "imageurl": "/commons/images/passportPhoto_other.jpg",
-      "name": "漫天飞舞",
-      "creator": "雪中情",
-      "dateCreated": "2013/05/05",
-      "status": "正常"
-    }, {
-      "imageurl": "/commons/images/passportPhoto_other.jpg",
-      "name": "forever91",
-      "creator": "雪中情",
-      "dateCreated": "2013/05/22",
-      "status": "正常"
-    }]
-};
 
-var corporate = {
-  "pl": [{
-      "imageurl": "/commons/images/passportPhoto_other.jpg",
-      "name": "Corporate name",
-      "creator": "系统创建",
-      "dateCreated": "2013/07/22",
-      "status": "正常"
-    }
-    , {
-      "imageurl": "/commons/images/passportPhoto_other.jpg",
-      "name": "Candy",
-      "creator": "Andy",
-      "dateCreated": "2013/05/10",
-      "status": "正常"
-    }, {
-      "imageurl": "/commons/images/passportPhoto_other.jpg",
-      "name": "Lsf",
-      "creator": "Andy",
-      "dateCreated": "2013/05/20",
-      "status": "正常"
-    }, {
-      "imageurl": "/commons/images/passportPhoto_other.jpg",
-      "name": "雪中情",
-      "creator": "Andy",
-      "dateCreated": "2013/06/13",
-      "status": "正常"
-    }, {
-      "imageurl": "/commons/images/passportPhoto_other.jpg",
-      "name": "漫天飞舞",
-      "creator": "雪中情",
-      "dateCreated": "2013/05/05",
-      "status": "正常"
-    }, {
-      "imageurl": "/commons/images/passportPhoto_other.jpg",
-      "name": "forever91",
-      "creator": "雪中情",
-      "dateCreated": "2013/05/22",
-      "status": "正常"
-    }]
-};
 

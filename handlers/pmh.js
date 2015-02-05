@@ -25,65 +25,206 @@ module.exports = function (paramPS, esbMessage) {
         oHelpers.sendResponse(paramResponse, 200, {pl: 'get all photos by special code', er: null});
     });
 
+
     //get photo standard by standard code
     //workspace/v1/phototoservices/standards/:standardcode.json
     psRouter.get('/standards/:standardcode.json', function (paramRequest, paramResponse) {
+
+
+        console.log('  standard by code paramRequest.body' , paramRequest.body);
+
         var m = {
             "ns": "pmm",
-            "op": "readPhotoStandardByCode",
-            "pl": {sc: 'zyz'}
+            "op": "pmm_readStandardByCode",
+            "pl":{sc: paramRequest.query.sc}
         };
+
+
+
+        console.log('paramRequest.body.sc',paramRequest.body.sc);
+
+        esbMessage(m)
+            .then(function (r) {
+                oHelpers.sendResponse(paramResponse, 200, r.pl);
+
+                console.log('  standard by code returned value' ,  r.pl);
+
+            })
+            .fail(function (r) {
+                oHelpers.sendResponse(paramResponse, 401, r.er);
+            });
+    });
+
+
+    //get photo standard by standard code
+    //workspace/standards/standards.json
+    psRouter.get('/standards.json', function (paramRequest, paramResponse) {
+        var m = {
+            "ns": "pmm",
+            "op": "pmm_readAllStandards",
+            "pl":null
+        };
+
+        esbMessage(m)
+            .then(function (r) {
+                oHelpers.sendResponse(paramResponse, 200, r);
+            })
+            .fail(function (r) {
+                oHelpers.sendResponse(paramResponse, 401, r.er);
+            });
+    });
+
+    //get photo standard by standard code
+    //workspace/standards/standards.json
+    psRouter.get('/usage.json', function (paramRequest, paramResponse) {
+        var m = {
+            "ns": "pmm",
+            "op": "pmm_readAllUsages",
+            "pl": null
+        };
+        esbMessage(m)
+            .then(function (r) {
+                oHelpers.sendResponse(paramResponse, 200, r);
+            })
+            .fail(function (r) {
+                oHelpers.sendResponse(paramResponse, 401, r.er);
+            });
+    });
+
+
+
+
+    //workspace/standards/usages/:usagecode.json
+    psRouter.get('/usages/:usagecode.json', function (paramRequest, paramResponse) {
+        var m = {
+            "ns": "pmm",
+            "op": "pmm_readUsageByCode",
+            "pl": {uc:paramRequest.params.usagecode}
+        };
+
+        console.log('paramRequest.params.usagecode    : \n', paramRequest.params.usagecode);
+
+        esbMessage(m)
+            .then(function (r) {
+
+                console.log(' returned usage: ' , r);
+                oHelpers.sendResponse(paramResponse, 200, r.pl);
+            })
+            .fail(function (r) {
+                oHelpers.sendResponse(paramResponse, 401, r.er);
+            });
+    });
+
+
+
+
+    //create photo standard by standard code
+    ///workspace/standards/standards.json
+    psRouter.post('/standards.json', function (paramRequest, paramResponse) {
+
+        var m = {
+            "ns": "pmm",
+            "op": "pmm_createStandard",
+            "pl": paramRequest.body
+        };
+        m.pl.uID= paramRequest.user.id;
+        m.pl.oID= paramRequest.user.id;
+
+
+        console.log('posted message: ' , m.pl);
+
+
         esbMessage(m)
             .then(function (r) {
                 oHelpers.sendResponse(paramResponse, 200, r.pl);
             })
             .fail(function (r) {
-                oHelpers.sendResponse(paramResponse, 401, r.er);
+                console.log(r);
+                oHelpers.sendResponse(paramResponse, 501, r.er);
+            });
+    });
+
+
+
+
+
+    ///workspace/standards/usage.json
+    psRouter.post('/usage.json', function (paramRequest, paramResponse) {
+
+
+        var pl = JSON.parse(paramRequest.body.json);
+
+        var m = {
+            "ns": "pmm",
+            "op": "pmm_createUsage",
+            "pl": pl
+        };
+        m.pl.uID= paramRequest.user.id;
+        m.pl.oID= paramRequest.user.id;
+
+
+        esbMessage(m)
+            .then(function (r) {
+
+                oHelpers.sendResponse(paramResponse, 200, r.pl);
+            })
+            .fail(function (r) {
+                console.log(r);
+                oHelpers.sendResponse(paramResponse, 501, r.er);
             });
     });
 
     //update photo standard by standard code
     //workspace/v1/phototoservices/standards/:standardcode.json
-    psRouter.post('/standards/:standardcode.json', function (paramRequest, paramResponse) {
-        var m = {
-            "ns": "pmm",
-            "op": "updatePhotoStandardByCode",
-            "pl": {sc: 'zyz'}
-        };
-        esbMessage(m)
-            .then(function (r) {
-                oHelpers.sendResponse(paramResponse, 200, r.pl);
-            })
-            .fail(function (r) {
-                oHelpers.sendResponse(paramResponse, 401, r.er);
-            });
-    });
+    psRouter.put('/standards/:standardcode.json', function (paramRequest, paramResponse) {
 
-    //create photo standard by standard code
-    //workspace/v1/phototoservices/standards.json
-    psRouter.put('/standards.json', function (paramRequest, paramResponse) {
+        console.log('update stardard by code --------- :',paramRequest.body);
+
+
         var m = {
             "ns": "pmm",
-            "op": "createPhotoStandard",
-            "pl": {sc: 'zyz'}
+            "op": "pmm_updateStandardByCode",
+            "pl":  paramRequest.body
         };
+
+        m.pl.uID= paramRequest.user.id;
+        m.pl.oID= paramRequest.user.id;
+
         esbMessage(m)
             .then(function (r) {
+
+
+                console.log('pmh success callback  :  r  \n',r);
                 oHelpers.sendResponse(paramResponse, 200, r.pl);
             })
             .fail(function (r) {
+
+                console.log('pmh failure callback');
                 oHelpers.sendResponse(paramResponse, 401, r.er);
             });
     });
 
     //delete photo standard by standard code
-    //workspace/v1/phototoservices/standards/:standardcode.json
+    //workspace/standards/standards/:standardcode.json
     psRouter.delete('/standards/:standardcode.json', function (paramRequest, paramResponse) {
+
+        if(paramRequest.body.sc === paramRequest.params.standardcode){
+
+            console.log(' identified delete request: ');
+
         var m = {
             "ns": "pmm",
-            "op": "deletePhotoStandardByCode",
-            "pl": {sc: 'zyz'}
+            "op": "pmm_deleteStandardByCode",
+            "pl": paramRequest.body
         };
+
+
+
+        m.pl.uID= paramRequest.user.id;
+        m.pl.oID= paramRequest.user.id;
+
+
+
         esbMessage(m)
             .then(function (r) {
                 oHelpers.sendResponse(paramResponse, 200, r.pl);
@@ -91,6 +232,62 @@ module.exports = function (paramPS, esbMessage) {
             .fail(function (r) {
                 oHelpers.sendResponse(paramResponse, 401, r.er);
             });
+
+        }
+        else
+        {
+
+            r = {er: 'requeste unidentied!' , pl:null}
+
+            console.log(r);
+            oHelpers.sendResponse(paramResponse, 500,r );
+        }
+
+
+
+    });
+
+
+    //workspace/standards/usages/:usagecode.json
+    psRouter.delete('/usages/:usagecode.json', function (paramRequest, paramResponse) {
+
+//        if(paramRequest.body.uc === paramRequest.params.usagecode){
+//
+//            console.log(' identified usage delete request: ');
+
+            var m = {
+                "ns": "pmm",
+                "op": "pmm_deleteUsageByCode",
+                "pl": paramRequest.body
+            };
+
+
+
+            m.pl.uID= paramRequest.user.id;
+            m.pl.oID= paramRequest.user.id;
+
+
+
+            esbMessage(m)
+                .then(function (r) {
+                    oHelpers.sendResponse(paramResponse, 200, r.pl);
+                })
+                .fail(function (r) {
+                    oHelpers.sendResponse(paramResponse, 401, r.er);
+                });
+
+//        }
+//        else
+//        {
+//
+//            r = {er: 'requeste unidentied!' , pl:null}
+//
+//            console.log(r);
+//            oHelpers.sendResponse(paramResponse, 500,r );
+//        }
+
+
+
     });
 
     psRouter.post('/idphotos.json', function (req, res){
@@ -111,17 +308,21 @@ module.exports = function (paramPS, esbMessage) {
     });
     
     //fake endpoints
-    psRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
-      if (paramRequest.params.type === 'idPhotoStandard'){
-          oHelpers.sendResponse(paramResponse,200,idPhotoStandard);
-      }
-      else if(paramRequest.params.type === 'idPhotosUsage'){
-          oHelpers.sendResponse(paramResponse,200,idPhotosUsage);
-      }
-      else if(paramRequest.params.type === 'folders'){
-          oHelpers.sendResponse(paramResponse,200,folders);
-      }
-    });
+//    psRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
+//      if (paramRequest.params.type === 'idPhotoStandard'){
+//
+//
+//
+//          oHelpers.sendResponse(paramResponse,200,idPhotoStandard);
+//      }
+//      else if(paramRequest.params.type === 'idPhotosUsage'){
+//          oHelpers.sendResponse(paramResponse,200,idPhotosUsage);
+//      }
+//      else if(paramRequest.params.type === 'folders'){
+//          oHelpers.sendResponse(paramResponse,200,folders);
+//      }
+//    });
+    
 
     return psRouter;
 };
@@ -166,7 +367,6 @@ var idPhotosUsage = {
       "field2": "巴西签证；墨西哥签证；阿根廷签证；哥伦比亚签证；"
     }]
 };
-
 
 var idPhotoStandard = {
   "pl": [{
