@@ -4,17 +4,32 @@
 var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
 
-function _initRequestMessage(paramRequest,type){
+function _initRequestMessage(paramRequest,type,id){
+  console.log('1111111111 entity id is:',id)
+  var col,mod='smm',url='@todo:url to service or service point';
+  if(type==='000000000000000000000010'){
+    col='services';
+  }
+  if(type==='000000000000000000000020'){
+    col='servicepoints';
+  }
   return {
-    rdu: '000000000000000000000009'
+    rdu: paramRequest.user.id//@todo: this should be set correctly
     ,rdo: '000000000000000000000008'
     ,rc: 'code'
-    ,rt: 'title'
+    ,rt: 'Request:'+col
     ,rsu: paramRequest.user.id
     ,rso: paramRequest.user.id
-    ,rs: 'status'
+    ,rs: 10
     ,rb: 'body'
     ,rtr: type
+    ,ei:[{
+        col:col
+        ,mod:mod
+        ,ei:id
+    }]
+    ,url:url
+    
   };
 }
 
@@ -58,7 +73,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r;
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010');
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010',r.pl._id);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
@@ -67,7 +82,7 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
-      //@todo: set roll back status wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
+      //@todo: set roll back wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
       return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
       .then(function(){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
@@ -115,7 +130,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r;
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010');
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010',r.pl._id);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m)
@@ -124,8 +139,6 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
-      console.log('0000000000 in fail:',r)
-      //@todo: set roll back status wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
       return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
       .then(function(){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
@@ -263,7 +276,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r;
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000020');
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000020',r.pl._id);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
@@ -272,7 +285,6 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
-      //@todo: set roll back status wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
       return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
       .then(function(){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
@@ -311,7 +323,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r;
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000020');
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000020',r.pl._id);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
@@ -320,7 +332,7 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
-      //@todo: set roll back status wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
+      //@todo: set roll back wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
       return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
       .then(function(){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
