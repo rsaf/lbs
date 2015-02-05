@@ -94,7 +94,6 @@ module.exports = function(paramService, esbMessage){
     })
     .fail(function(r) {
       //@todo: tell the modules to roll back
-      console.log('1111111111111 now in fail',r);
       var i = mods.length,promises=[];
       var m = {pl:{transactionid:transactionid}};
       while(--i>-1){
@@ -118,7 +117,6 @@ module.exports = function(paramService, esbMessage){
   });
   requestRouter.get ('/request.json', function(paramRequest, paramResponse, paramNext){
     var query = {};
-    console.log('get request handler...')
     if(typeof paramRequest.query._id!=='undefined'){
       query._id=paramRequest.query._id;
     }
@@ -142,7 +140,6 @@ module.exports = function(paramService, esbMessage){
     });
   });
   requestRouter.get('/:requestType.json', function(paramRequest, paramResponse, paramNext){
-    //console.log('get all json called  ');
         var promise;
         if (paramRequest.params.requestType === 'all'){
             promise = _getRequestMessages(paramRequest,{});

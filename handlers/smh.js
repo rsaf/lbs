@@ -5,7 +5,6 @@ var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
 
 function _initRequestMessage(paramRequest,type,id){
-  console.log('1111111111 entity id is:',id)
   var col,mod='smm',url='@todo:url to service or service point';
   if(type==='000000000000000000000010'){
     col='services';
