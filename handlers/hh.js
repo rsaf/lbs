@@ -1,5 +1,6 @@
 
 exports.version = "0.1.0";
+var Q = require('q');
 
 module.exports = function(paramService, esbMessage){
     var homeRouter = paramService.Router();
@@ -13,49 +14,43 @@ module.exports = function(paramService, esbMessage){
         "op": 'getVerifyUserLogin',
         "pl": null
     };
+    var p1 = esbMessage(m1);
+    var m2 = {
+        "ns":'scm',
+        "op": 'getRegisterUser',
+        "pl": null
+    };
+    var p2 = esbMessage(m2);
+    var m3 = {
+        "ns":'scm',
+        "op": 'getSessionUser',
+        "pl": null
+    };
+    var p3= esbMessage(m3);
+    var m4 = {
+        "ns":'scm',
+        "op": 'getLogoutUser',
+        "pl": null
+    };
+    var p4 = esbMessage(m4);
 
-    esbMessage(m1)
-        .then(function(r1) {
-            //console.log(r1);
-            userloginVerifier = r1.pl.fn;
-            homeRouter.post('/login.json', userloginVerifier());
-            var m2 = {
-                "ns":'scm',
-                "op": 'getRegisterUser',
-                "pl": null
-            };
-            return esbMessage(m2);
-        })
-        .then(function(r2){
-            //console.log(r2);
-            registerUzer = r2.pl.fn;
-            homeRouter.post('/registration.json', registerUzer());
-            var m3 = {
-                "ns":'scm',
-                "op": 'getSessionUser',
-                "pl": null
-            };
-            return esbMessage(m3);
-        })
-        .then(function(r3){
-            sessionUser = r3.pl.fn;
-            homeRouter.get('/user.json', sessionUser());
+    //console.log('\nsch: getting security dependencies ...');
+    Q.all([p1, p2, p3, p4]).then(function (r) {
 
-            var m4 = {
-                "ns":'scm',
-                "op": 'getLogoutUser',
-                "pl": null
-            };
-            return esbMessage(m4);
+        //console.log(r);
+        userloginVerifier = r[0].pl.fn;
+        registerUzer = r[1].pl.fn;
+        sessionUser = r[2].pl.fn;
+        logoutUser = r[3].pl.fn;
 
-        })
-        .then(function(r4){
-            logoutUser = r4.pl.fn;
-            homeRouter.get('/logout.json', logoutUser());
-        })
-        .fail(function(err) {
+        homeRouter.post('/login.json', userloginVerifier());
+        homeRouter.post('/registration.json', registerUzer());
+        homeRouter.get('/user.json', sessionUser());
+        homeRouter.get('/logout.json', logoutUser());
+    })
+     .fail(function(err) {
             console.log('error: ' + err);
-        });
+     });
 
     return homeRouter;
 };

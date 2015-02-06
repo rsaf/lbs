@@ -5,9 +5,9 @@
  */
 var oHelpers= require('../utilities/helpers.js');
 
-module.exports = function(paramService, esbMessage)
-{
+module.exports = function(paramService, esbMessage) {
   var photosRouter = paramService.Router();
+
     photosRouter.get('/:userType.json', function(paramRequest, paramResponse, paramNext){
         if (paramRequest.params.userType === 'all'){
             oHelpers.sendResponse(paramResponse,200,all);
@@ -27,9 +27,9 @@ module.exports = function(paramService, esbMessage)
         else if(paramRequest.params.userType === 'interfaceUsers'){
             oHelpers.sendResponse(paramResponse,200,interfaceUsers);
         }
-  });
+    });
 
-  return photosRouter;
+    return photosRouter;
 };
 
 
