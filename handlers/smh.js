@@ -153,7 +153,6 @@ module.exports = function(paramService,  esbMessage){
     });
   });
   serviceManagementRouter.get ('/service.json', function(paramRequest, paramResponse, paramNext){
-    console.log('11111111111111 loginname',paramRequest.user.lanzheng.loginName);
     var query = {};
     if(typeof paramRequest.query._id!=='undefined'){
       query._id=paramRequest.query._id;
@@ -276,7 +275,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010',response.pl._id,r[1].pl.oID);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000020',response.pl._id,r[1].pl.oID);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
@@ -323,7 +322,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010',response.pl._id,r[1].pl.oID);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000020',response.pl._id,r[1].pl.oID);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
