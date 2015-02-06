@@ -153,6 +153,7 @@ module.exports = function(paramService,  esbMessage){
     });
   });
   serviceManagementRouter.get ('/service.json', function(paramRequest, paramResponse, paramNext){
+    console.log('11111111111111 loginname',paramRequest.user.lanzheng.loginName);
     var query = {};
     if(typeof paramRequest.query._id!=='undefined'){
       query._id=paramRequest.query._id;
