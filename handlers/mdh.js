@@ -78,44 +78,36 @@ module.exports = function(paramService, esbMessage)
         var m = {
             ns: 'mdm',
             vs: '1.0',
-            op: 'getNotificationByTo',
-            pl: {
-                viewStatus: null, // null
-                to: paramRequest.user.id,
-                pageNumber: 1,
-                pageSize: 10
-            }
+            op: 'validateUsersList',
+            pl: paramRequest.body
         };
 
-      var validatedContacts =  {
-          "pl": null
-      };
 
 
-      validatedContacts.pl = [{'status':true, loginname:'user@qq.com', 'userID':'54c876c024a7000'},
-          {'status':true, loginname:'guest', 'userID': '89c876cc24a7111'},
-          {'status':true, 'loginname':'cuser2', 'userID': '36c876c02412759'},
-      {'status':false, 'loginname':'user2@qq.com', 'userID': '36c876cc0024159'}];
+      console.log('paramRequest users-----------:', paramRequest.body);
+      console.log('paramRequest users.users-----------:', paramRequest.body.users);
+
+//      m.pl = {users: [{account:'leo@lbs.com', valid:false },
+//              {account:'leo@ibm.com', valid:false },
+//              {account:'leo@lbs.com', valid:false }]
+//            };
 
 
-      paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      //oHelpers.sendResponse(paramResponse,200,validatedContacts);
-      paramResponse.end(JSON.stringify(validatedContacts));
+        esbMessage(m)
+            .then(function(r) {
 
 
+                console.log('returned users value -------: ', JSON.stringify(r));
+                console.log('returned users value.users -------: ', r.users);
+                paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                paramResponse.end(JSON.stringify(r));
+            })
+            .fail(function(r) {
 
-//        esbMessage(m)
-//            .then(function(r) {
-//
-//                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-//                paramResponse.end(JSON.stringify(r));
-//            })
-//            .fail(function(r) {
-//
-//                console.log(r.er);
-//                var r = {pl:null, er:{ec:404,em:"could not find notification"}};
-//                oHelpers.sendResponse(paramResponse,404,r);
-//            });
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not find notification"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
 
 
     });

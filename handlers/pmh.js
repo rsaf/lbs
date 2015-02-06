@@ -214,6 +214,7 @@ module.exports = function (paramPS, esbMessage) {
 
         esbMessage(m)
             .then(function (r) {
+
                 oHelpers.sendResponse(paramResponse, 200, r.pl);
             })
             .fail(function (r) {
@@ -246,8 +247,6 @@ module.exports = function (paramPS, esbMessage) {
                 "pl": paramRequest.body
             };
 
-
-
             m.pl.uID= paramRequest.user.id;
             m.pl.oID= paramRequest.user.id;
 
@@ -255,6 +254,8 @@ module.exports = function (paramPS, esbMessage) {
 
             esbMessage(m)
                 .then(function (r) {
+
+
                     oHelpers.sendResponse(paramResponse, 200, r.pl);
                 })
                 .fail(function (r) {
