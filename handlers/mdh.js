@@ -83,16 +83,6 @@ module.exports = function(paramService, esbMessage)
         };
 
 
-
-      console.log('paramRequest users-----------:', paramRequest.body);
-      console.log('paramRequest users.users-----------:', paramRequest.body.users);
-
-//      m.pl = {users: [{account:'leo@lbs.com', valid:false },
-//              {account:'leo@ibm.com', valid:false },
-//              {account:'leo@lbs.com', valid:false }]
-//            };
-
-
         esbMessage(m)
             .then(function(r) {
 
@@ -139,23 +129,9 @@ module.exports = function(paramService, esbMessage)
         };
 
 
-//        var m = {
-//            ns: 'mdm',
-//            vs: '1.0',
-//            op: 'sendNotification',
-//            pl: {
-//                recipients:[{
-//                    inmail:{to:''+contactName},
-//                    weixin:{to:'lionleo001'},
-//                    sms:{to:'15900755434'},
-//                    email:{to:'rolland@lbsconsulting.com'}
-//                }],
-//                notification:{
-//                    subject:'事务提交成功',
-//                    body:'事务提交成功事务提交成功事务提交成功事务提交成功事务提交成功事务提交成功事务提交成功',
-//                    notificationType:'业务通知'}
-//            }
-//        };
+        m.pl.notification.from = paramRequest.user.lanzheng.loginName;
+
+        console.log('    -----------sender-------------- :  '   , m.pl.notification.from);
 
         esbMessage(m)
             .then(function(r) {
@@ -216,34 +192,3 @@ module.exports = function(paramService, esbMessage)
 
     return userNotificationRouter;
 };
-
-//
-//var all = {
-//    "pl":[{"title":"all data","type":"业务通知","time":"2014-08-05 12:29:00"},
-//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:23:16"},
-//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-//        {"title":"注册成功","type":"账户通知","time":"2014-08-05 12:35:16"},
-//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"}]
-//};
-//
-//var read = {
-//    "pl":[{"title":"read data","type":"业务通知","time":"2014-08-05 12:29:00"},
-//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:23:16"},
-//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-//        {"title":"注册成功","type":"账户通知","time":"2014-08-05 12:35:16"},
-//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-//        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"}]
-//};
-//
-//var unread ={"pl":[{"title":"unread data","type":"业务通知","time":"2014-08-05 12:23:16"},
-//    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-//    {"title":"注册成功","type":"账户通知","time":"2014-08-05 12:35:16"},
-//    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-//    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-//    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-//    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"}]
-//};
-//
