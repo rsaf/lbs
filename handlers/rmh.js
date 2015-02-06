@@ -33,11 +33,20 @@ module.exports = function(paramService, esbMessage){
     });
   }
   function _getRequestMessages(req,filter){
-    var m = {
-      op:'rmm_getRequests',
-      pl:{userid:req.user.id}//@todo: should be the id of user or organisation the req was sent to
-    }
-    return esbMessage(m)
+    //get the admin id
+    return Q().then(function(){
+      if(req.user.userType==='admin'){
+        return esbMessage({op:'getOrganization',pl:{org:'lanzheng'}});
+      }
+      return {pl:{oID:null}};
+    })
+    .then(function(msg){
+      var m = {
+        op:'rmm_getRequests',
+        pl:{userid:req.user.id,orgid:msg.pl.oID}
+      }
+      return esbMessage(m)      
+    });
   }
   requestRouter.put ('/request.json', function(paramRequest, paramResponse, paramNext){//update request
     //Update the request

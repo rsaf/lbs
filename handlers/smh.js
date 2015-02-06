@@ -4,7 +4,7 @@
 var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
 
-function _initRequestMessage(paramRequest,type,id){
+function _initRequestMessage(paramRequest,type,id,adminOrg){
   var col,mod='smm',url='@todo:url to service or service point';
   if(type==='000000000000000000000010'){
     col='services';
@@ -13,8 +13,8 @@ function _initRequestMessage(paramRequest,type,id){
     col='servicepoints';
   }
   return {
-    rdu: paramRequest.user.id//@todo: this should be set correctly
-    ,rdo: '000000000000000000000008'
+//    rdu: paramRequest.user.id//@todo: this should be set correctly
+    rdo: adminOrg
     ,rc: 'code'
     ,rt: 'Request : '+col
     ,rsu: paramRequest.user.lanzheng.loginName
@@ -49,7 +49,7 @@ module.exports = function(paramService,  esbMessage){
     return esbMessage(m);
   }
   var serviceManagementRouter = paramService.Router();
-  serviceManagementRouter.put ('/service.json', function(paramRequest, paramResponse, paramNext){
+  serviceManagementRouter.put ('/service.json', function(paramRequest, paramResponse, paramNext){//update service
     var m={};
     var response;
     q().then(function(){
@@ -67,12 +67,12 @@ module.exports = function(paramService,  esbMessage){
       service=reqMsg.pl.service;
       m.pl.service = service;
       m.op='persistService';
-      return esbMessage(m);
+      return q.all([esbMessage(m),esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})]);
     })
     .then(function(r) {
-      response=r;
+      response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010',r.pl._id);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010',response.pl._id,r[1].pl.oID);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
@@ -124,12 +124,12 @@ module.exports = function(paramService,  esbMessage){
         ,PriceList:service.PriceList
       };
       m.op='persistService';
-      return esbMessage(m);
+      return q.all([esbMessage(m),esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})]);
     })
     .then(function(r) {
-      response=r;
+      response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010',r.pl._id);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010',response.pl._id,r[1].pl.oID);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m)
@@ -271,12 +271,12 @@ module.exports = function(paramService,  esbMessage){
       servicePoint = reqMsg.pl.servicePoint;
       m.op="persistServicePoint";
       m.pl.servicePoint = servicePoint;
-      return esbMessage(m);
+      return q.all([esbMessage(m),esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})]);
     })
     .then(function(r) {
-      response=r;
+      response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000020',r.pl._id);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010',response.pl._id,r[1].pl.oID);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
@@ -318,12 +318,12 @@ module.exports = function(paramService,  esbMessage){
       servicePoint = reqMsg.pl.servicePoint;
       m.op="persistServicePoint";
       m.pl.servicePoint = servicePoint;
-      return esbMessage(m);
+      return q.all([esbMessage(m),esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})]);
     })
     .then(function(r) {
-      response=r;
+      response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000020',r.pl._id);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010',response.pl._id,r[1].pl.oID);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
