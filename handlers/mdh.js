@@ -58,12 +58,6 @@ module.exports = function(paramService, esbMessage)
 
         esbMessage(m)
          .then(function(r) {
-                console.log('returned notification--------------------------:');
-                console.log('returned notification--------------------------:');
-                console.log('returned notification--------------------------:');
-                console.log('returned notification--------------------------:');
-                console.log('returned notification--------------------------:');
-                console.log('returned notification:   ',JSON.stringify(r));
 
            paramResponse.writeHead(200, {"Content-Type": "application/json"});
            paramResponse.end(JSON.stringify(r));
@@ -134,10 +128,7 @@ module.exports = function(paramService, esbMessage)
     userNotificationRouter.post('/mailling/notifications.json', function(paramRequest, paramResponse, paramNext){
 
 
-        console.log('request sending email to  :   \n  ', paramRequest.body  );
         var contactName = paramRequest.body.recipients[0].to;
-
-        console.log('contactName  :   \n  ', contactName  );
 
 
         var m = {
@@ -197,16 +188,6 @@ module.exports = function(paramService, esbMessage)
     ///workspace/notifications/update/:viewstate.json
     userNotificationRouter.put('/update/:viewstate.json', function(paramRequest, paramResponse, paramNext){
 
-
-        console.log('request sending email to  :   \n  ', paramRequest.body.messageID  );
-        console.log('contactName  :   \n  ', paramRequest.body.messageID  );
-        console.log('viewstate  :   \n  ', paramRequest.params.viewstate );
-
-
-
-
-
-
         var m = {
     ns: 'mdm',
     vs: '1.0',
@@ -222,8 +203,6 @@ module.exports = function(paramService, esbMessage)
         esbMessage(m)
             .then(function(r) {
 
-
-                console.log('return value     -----:', r);
                 paramResponse.writeHead(200, {"Content-Type": "application/json"});
                 paramResponse.end(JSON.stringify(r));
             })
