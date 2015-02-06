@@ -16,8 +16,8 @@ function _initRequestMessage(paramRequest,type,id){
     rdu: paramRequest.user.id//@todo: this should be set correctly
     ,rdo: '000000000000000000000008'
     ,rc: 'code'
-    ,rt: 'Request:'+col
-    ,rsu: paramRequest.user.id
+    ,rt: 'Request : '+col
+    ,rsu: paramRequest.user.lanzheng.loginName
     ,rso: paramRequest.user.id
     ,rs: 10
     ,rb: 'body'
