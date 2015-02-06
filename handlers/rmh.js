@@ -47,7 +47,8 @@ module.exports = function(paramService, esbMessage){
       }
       return esbMessage(m)      
     });
-  }
+  }  
+  
   requestRouter.put ('/request.json', function(paramRequest, paramResponse, paramNext){//update request
     //Update the request
     var query = {};
