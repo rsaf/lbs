@@ -5,12 +5,15 @@ var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
 
 function _initRequestMessage(paramRequest,type,id,adminOrg){
-  var col,mod='smm',url='@todo:url to service or service point';
+  var col,mod='smm'
+  ,url;
   if(type==='000000000000000000000010'){
     col='services';
+    url='/workspace/services/view/service';
   }
   if(type==='000000000000000000000020'){
     col='servicepoints';
+    url='/workspace/services/view/servicepoint';
   }
   return {
 //    rdu: paramRequest.user.id//@todo: this should be set correctly
