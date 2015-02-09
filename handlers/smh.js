@@ -7,11 +7,11 @@ var oHelpers = require('../utilities/helpers.js');
 function _initRequestMessage(paramRequest,type,id,adminOrg){
   var col,mod='smm'
   ,url;
-  if(type==='000000000000000000000010'){
+  if(type==='Service'){
     col='services';
     url='/workspace/services/view/service';
   }
-  if(type==='000000000000000000000020'){
+  if(type==='ServicePoint'){
     col='servicepoints';
     url='/workspace/services/view/servicepoint';
   }
@@ -75,7 +75,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010',response.pl._id,r[1].pl.oID);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'Service',response.pl._id,r[1].pl.oID);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
@@ -132,7 +132,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000010',response.pl._id,r[1].pl.oID);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'Service',response.pl._id,r[1].pl.oID);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m)
@@ -278,7 +278,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000020',response.pl._id,r[1].pl.oID);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'ServicePoint',response.pl._id,r[1].pl.oID);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
@@ -325,7 +325,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'000000000000000000000020',response.pl._id,r[1].pl.oID);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'ServicePoint',response.pl._id,r[1].pl.oID);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
