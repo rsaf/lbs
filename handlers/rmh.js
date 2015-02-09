@@ -99,27 +99,23 @@ module.exports = function(paramService, esbMessage){
       return Q.all(promises);
     }).then(function(ret) {
       _commitTransaction({pl:{transactionid:transactionid}});
-      
-      
-    var m = {
-      ns: 'mdm',
-      vs: '1.0',
-      op: 'sendNotification',
-      pl: {
-           recipients:[{
-               inmail:{to:r.pl.rsu}
-           }],
-           notification:{
-           subject:'事务提交成功',
-           body:'事务提交成功事务提交成功事务提交成功事务提交成功事务提交成功事务提交成功事务提交成功',
-           notificationType:'业务通知'}
-      }};
-      esbMessage(m);
-
-      
-      
-      paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      paramResponse.end(JSON.stringify(r));
+      var m = {
+        ns: 'mdm',
+        vs: '1.0',
+        op: 'sendNotification',
+        pl: {
+             recipients:[{
+                 inmail:{to:r.pl.rsu}
+             }],
+             notification:{
+              from:paramRequest.user.lanzheng.loginName,
+              subject:r.pl.rt,
+              body:r.pl.rb,
+              notificationType:'type of notification'}
+        }};
+        esbMessage(m);
+        paramResponse.writeHead(200, {"Content-Type": "application/json"});
+        paramResponse.end(JSON.stringify(r));
     })
     .fail(function(r) {
       //@todo: tell the modules to roll back
