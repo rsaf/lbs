@@ -43,7 +43,7 @@ module.exports = function(paramService, esbMessage){
     .then(function(msg){
       var m = {
         op:'rmm_getRequests',
-        pl:{userid:req.user.id,orgid:msg.pl.oID}
+        pl:{userid:req.user.id,orgid:msg.pl.oID,filter:filter}
       }
       return esbMessage(m)      
     });
@@ -170,15 +170,15 @@ module.exports = function(paramService, esbMessage){
             promise = _getRequestMessages(paramRequest,{});
         }
         else if(paramRequest.params.requestType === 'approved'){
-            oHelpers.sendResponse(paramResponse,200,approved);
+            promise = _getRequestMessages(paramRequest,{rs:30});
         }
 
         else if(paramRequest.params.requestType === 'rejected'){
-            oHelpers.sendResponse(paramResponse,200,rejected);
+            promise = _getRequestMessages(paramRequest,{rs:40});
         }
 
         else if(paramRequest.params.requestType === 'unprocess'){
-            oHelpers.sendResponse(paramResponse,200,unprocess);
+            promise = _getRequestMessages(paramRequest,{rs:10});
         }
         if(promise){
           promise.then(function(msg) {
