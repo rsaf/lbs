@@ -8,6 +8,7 @@ var oHelpers= require('../utilities/helpers.js');
 module.exports = function(paramService, esbMessage)
 {
   var photosRouter = paramService.Router();
+
     photosRouter.get('/:photoType.json', function(paramRequest, paramResponse, paramNext){
         if (paramRequest.params.photoType === 'idphotos'){
             oHelpers.sendResponse(paramResponse,200,idphotos);
@@ -19,6 +20,63 @@ module.exports = function(paramService, esbMessage)
         else if(paramRequest.params.photoType === 'otherphotos'){
             oHelpers.sendResponse(paramResponse,200,otherphotos);
         }
+  });
+
+// /workspace/photos/upload.json
+  photosRouter.post('/upload.json', function(paramRequest, paramResponse, paramNext){
+
+
+    var m = {
+      ns: 'dmm',
+      vs: '1.0',
+      op: 'dmm_uploadPhoto',
+      pl: null
+    };
+
+
+
+        var form = new formidable.IncomingForm();
+        form.parse(paramRequest, function(err, fields, files) {
+
+
+          // `file` is the name of the <input> field of type `file`
+          var old_path = files.file.path,
+              file_size = files.file.size,
+              file_ext = files.file.name.split('.').pop(),
+              file_name = files.file.name;
+
+          console.log('real file name: '+files.file.name);
+
+          fs.readFile(old_path, function(err, data) {
+            console.log('read data----------',data);
+            m.pl = {
+              imageData: data,
+              imageExt:  file_ext,
+              ign: file_name,
+              uID: paramRequest.user.id,
+              oID:paramRequest.user.id
+            };
+
+          });
+        });
+
+
+
+
+    esbMessage(m)
+        .then(function(r) {
+
+          paramResponse.writeHead(200, {"Content-Type": "application/json"});
+          paramResponse.end(JSON.stringify(r));
+        })
+        .fail(function(r) {
+
+          console.log(r.er);
+          var r = {pl:null, er:{ec:404,em:"could not save image"}};
+          oHelpers.sendResponse(paramResponse,404,r);
+        });
+
+
   });
 
   return photosRouter;
@@ -550,7 +608,6 @@ var processing = {
       "uploadDate": "2013/07/22"
     }]
 };
-
 
 var otherphotos = {
   "pl": [{

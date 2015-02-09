@@ -1,4 +1,3 @@
-
 {
   "name" : "api",
   "description": "api server ",
@@ -12,7 +11,7 @@
     "errorhandler": "^1.1.1",
     "morgan": "^1.2.2",
     "debug": "~2.0.0",
-    "formidable": "^1.0.16"
+    "formidable": "^1.0.16",
+    "esb": "git+ssh://git@bitbucket.org:lionleo/lbs.api.esb.git#master"
   }
 }
-
