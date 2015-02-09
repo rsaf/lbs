@@ -55,7 +55,6 @@ module.exports = function(paramService, esbMessage)
             var r = {pl:null, er:{ec:404,em:"invalid notification type!"}};
             oHelpers.sendResponse(paramResponse,404,r);
         }
-
         esbMessage(m)
          .then(function(r) {
 
