@@ -104,8 +104,6 @@ module.exports = function(paramService, esbMessage)
 
 
 
-
-
     ///workspace/notifications/mailling/notifications.json
     userNotificationRouter.post('/mailling/notifications.json', function(paramRequest, paramResponse, paramNext){
 
@@ -148,9 +146,6 @@ module.exports = function(paramService, esbMessage)
 
 
     });
-
-
-
 
 
     ///workspace/notifications/update/:viewstate.json

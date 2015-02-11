@@ -297,6 +297,53 @@ module.exports = function(paramService,  esbMessage){
       }
     });
 
+
+
+
+
+  //workspace/services/photo/:photoCode.json
+  serviceManagementRouter.get('/photo/:photoCode.json', function(paramRequest, paramResponse, paramNext){
+
+
+    var serviceList = {
+      'pl':[{
+        "code": "L0121210120",
+        "name": "证照拍摄",
+        "field3": "王大力",
+        "date": "2014-08-05 12:23:16",
+        "field5": "待办"
+      },
+        {
+          "code": "L1321210121",
+          "name": "证照拍摄",
+          "field3": "王大力",
+          "date": "2014-06-05 12:20:30",
+          "field5": "待办"
+        }
+        ,{
+          "code": "L6321210109",
+          "name": "证照拍摄",
+          "field3": "王大力",
+          "date": "2013-08-12 10:43:21",
+          "field5": "待办"
+        }]
+    }
+
+    if (paramRequest.params.photoCode){
+      oHelpers.sendResponse(paramResponse,200,serviceList);
+    }
+    else{
+      var r = {pl:null, er:{ec:500,em:"invalid service id"}};
+      oHelpers.sendResponse(paramResponse,500,r);
+    }
+
+
+  });
+
+
+
+
+
         //createServicePoint
   return serviceManagementRouter;
 };
