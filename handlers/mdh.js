@@ -23,7 +23,7 @@ module.exports = function(paramService, esbMessage)
 
 //    /workspace/notifications/:notificationType.json
     userNotificationRouter.get('/:notificationType.json', function(paramRequest, paramResponse, paramNext){
-    //console.log('get all json called  ');
+
 
         var m = {
             ns: 'mdm',
@@ -31,7 +31,7 @@ module.exports = function(paramService, esbMessage)
             op: 'getNotificationByTo',
             pl: {
                 viewStatus: null, // null
-                to: paramRequest.user.id,
+                to: paramRequest.user.lanzheng.loginName,
                 pageNumber: 1,
                 pageSize: 10
             }
@@ -55,7 +55,6 @@ module.exports = function(paramService, esbMessage)
             var r = {pl:null, er:{ec:404,em:"invalid notification type!"}};
             oHelpers.sendResponse(paramResponse,404,r);
         }
-
         esbMessage(m)
          .then(function(r) {
 
@@ -64,7 +63,6 @@ module.exports = function(paramService, esbMessage)
          })
          .fail(function(r) {
 
-             console.log(r.er);
              var r = {pl:null, er:{ec:404,em:"could not find notification"}};
              oHelpers.sendResponse(paramResponse,404,r);
          });
@@ -72,36 +70,124 @@ module.exports = function(paramService, esbMessage)
 
   });
 
-  return userNotificationRouter;
+
+    //    /workspace/notifications/mailling/contacts.json
+  userNotificationRouter.post('/mailling/contacts.json', function(paramRequest, paramResponse, paramNext){
+
+        var m = {
+            ns: 'mdm',
+            vs: '1.0',
+            op: 'validateUsersList',
+            pl: paramRequest.body
+        };
+
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                console.log('returned users value -------: ', JSON.stringify(r));
+                console.log('returned users value.users -------: ', r.users);
+                paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                paramResponse.end(JSON.stringify(r));
+            })
+            .fail(function(r) {
+
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not find notification"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+
+    });
+
+
+
+
+
+    ///workspace/notifications/mailling/notifications.json
+    userNotificationRouter.post('/mailling/notifications.json', function(paramRequest, paramResponse, paramNext){
+
+
+        var contactName = paramRequest.body.recipients[0].to;
+
+
+        var m = {
+            ns: 'mdm',
+            vs: '1.0',
+            op: 'sendNotification',
+            pl: {
+                recipients: [{
+                    inmail: {to: '' + contactName},
+                    weixin: {to: 'lionleo001'},
+                    sms: {to: '15900755434'},
+                    email: {to: 'rolland@lbsconsulting.com'}
+                }],
+                notification: paramRequest.body.notification
+            }
+        };
+
+
+        m.pl.notification.from = paramRequest.user.lanzheng.loginName;
+
+        console.log('    -----------sender-------------- :  '   , m.pl.notification.from);
+
+        esbMessage(m)
+            .then(function(r) {
+
+                paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                paramResponse.end(JSON.stringify(r));
+            })
+            .fail(function(r) {
+
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not send notification"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+
+    });
+
+
+
+
+
+    ///workspace/notifications/update/:viewstate.json
+    userNotificationRouter.put('/update/:viewstate.json', function(paramRequest, paramResponse, paramNext){
+
+        var m = {
+    ns: 'mdm',
+    vs: '1.0',
+    op: 'updateViewStatus',
+   pl:{
+       messageID:paramRequest.body.messageID
+      ,viewStatus:paramRequest.params.viewstate
+   }
 };
 
 
-var all = {
-    "pl":[{"title":"all data","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:23:16"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"注册成功","type":"账户通知","time":"2014-08-05 12:35:16"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"}]
-};
 
-var read = {
-    "pl":[{"title":"read data","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:23:16"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"注册成功","type":"账户通知","time":"2014-08-05 12:35:16"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-        {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"}]
-};
+        esbMessage(m)
+            .then(function(r) {
 
-var unread ={"pl":[{"title":"unread data","type":"业务通知","time":"2014-08-05 12:23:16"},
-    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-    {"title":"注册成功","type":"账户通知","time":"2014-08-05 12:35:16"},
-    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"},
-    {"title":"事务提交成功","type":"业务通知","time":"2014-08-05 12:29:00"}]
-};
+                paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                paramResponse.end(JSON.stringify(r));
+            })
+            .fail(function(r) {
 
+                var r = {pl:null, er:{ec:404,em:"could not update view state"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+
+    });
+
+
+
+
+
+
+
+
+    return userNotificationRouter;
+};

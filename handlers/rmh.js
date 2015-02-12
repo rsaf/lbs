@@ -1,41 +1,197 @@
 //All lanID specific business logics for the user notification module (message distribution module) are handle here
 
-/*
- var m = {
- "ns":"olm",
- "op": "readOperationsLog",
- "pl": {"userAccountID": "value1", "opType":"value2", "pageNumber":"value3", "pageSize":"value4"}
- };
-
- var r = {
- "er":"value",
- "pl": "value",
- "mv": null
- }
- */
-
 var oHelpers= require('../utilities/helpers.js');
-
-module.exports = function(paramService, esbMessage)
-{
+var Q = require('q');
+module.exports = function(paramService, esbMessage){
+  function _commitTransaction(m){
+    m.pl.transaction = {
+      _id:m.pl.transactionid
+    }
+    m.op='commitTransaction';
+    return esbMessage(m);
+  }
+  function _rollBackTransaction(m){
+    m.pl.transaction = {
+      _id:m.pl.transactionid
+    }
+    m.op='wmm_rollBackTransaction';
+    return esbMessage(m);
+  }
   var requestRouter = paramService.Router();
-
-    requestRouter.get('/:requestType.json', function(paramRequest, paramResponse, paramNext){
-    //console.log('get all json called  ');
-
+  function prepareTransaction(userid,description,modules){
+    var m={};
+    return Q().then(function(){
+      m.op = "createTransaction";
+      m.pl={
+        userid:userid
+        ,transaction:{
+          description:description
+          ,modules:modules
+        }
+      };
+      return esbMessage(m)
+    });
+  }
+  function _getRequestMessages(req,filter){
+    //get the admin id
+    return Q().then(function(){
+      if(req.user.userType==='admin'){
+        return esbMessage({op:'getOrganization',pl:{org:'lanzheng'}});
+      }
+      return {pl:{oID:null}};
+    })
+    .then(function(msg){
+      var m = {
+        op:'rmm_getRequests',
+        pl:{userid:req.user.id,orgid:msg.pl.oID,filter:filter}
+      }
+      return esbMessage(m)      
+    });
+  }  
+  
+  requestRouter.put ('/request.json', function(paramRequest, paramResponse, paramNext){//update request
+    //Update the request
+    var query = {};
+    var m = {};
+    var r={};
+    var mods=['rmm'];
+    var transactionid;
+    Q().then(function(){//get the request message
+      if(typeof paramRequest.body._id!=='undefined'){
+        query._id=paramRequest.body._id;
+      }
+      m.op = "rmm_getRequest";
+      m.pl= {
+        "query":query
+        ,userid:paramRequest.user.id
+      };
+      return esbMessage(m);
+    })
+    .then(function(msg){//use the request message mod property to create a transaction (mod contains the module involved in this request and the module that handles updating the status of the entity)
+      var i = msg.pl.ei.length;
+      while(--i>-1){
+        mods.push(msg.pl.ei[i].mod);
+      }
+      return prepareTransaction(paramRequest.user.id,'Update request message and entity',mods)
+    })
+    .then(function(msg){//updte the request message
+      //msg.pl.transactionid
+      m.op= "rmm_updatRequestMessage";
+      m.pl.transactionid=msg.pl.transactionid;
+      transactionid=msg.pl.transactionid;
+      m.pl.status = paramRequest.body.status;
+      m.pl.refuseInfo = paramRequest.body.refuseInfo;
+      return esbMessage(m);
+    })
+    .then(function(ret) {
+      r=ret;m={};
+      var i = r.pl.ei.length,promises=[];
+      while(--i>-1){
+        m.op=r.pl.ei[i].mod+ '_updateStatus'
+        m.pl={
+          ei:r.pl.ei[i].ei
+          ,col:r.pl.ei[i].col
+          , status:paramRequest.body.status
+          , transactionid:transactionid
+        };
+        promises.push(esbMessage(m));
+      }
+      return Q.all(promises);
+    }).then(function(ret) {
+      _commitTransaction({pl:{transactionid:transactionid}});
+      var m = {
+        ns: 'mdm',
+        vs: '1.0',
+        op: 'sendNotification',
+        pl: {
+             recipients:[{
+                 inmail:{to:r.pl.rsu}
+             }],
+             notification:{
+              from:paramRequest.user.lanzheng.loginName,
+              subject:r.pl.rt,
+              body:r.pl.rb,
+              notificationType:'type of notification'}
+        }};
+        esbMessage(m);
+        paramResponse.writeHead(200, {"Content-Type": "application/json"});
+        paramResponse.end(JSON.stringify(r));
+    })
+    .fail(function(r) {
+      //@todo: tell the modules to roll back
+      var i = mods.length,promises=[];
+      var m = {pl:{transactionid:transactionid}};
+      while(--i>-1){
+        m.op = mods[i] + '_rollback';
+        promises.push((function(msg){
+          return esbMessage(msg);
+        }(m)));
+      }
+      Q.all(promises)
+      .then(function(){
+        _rollBackTransaction({pl:{transactionid:transactionid}});
+      })
+      .fin(function(){
+        paramResponse.writeHead(501, {"Content-Type": "application/json"});
+        if(r.er && r.er.ec && r.er.ec>1000){
+          r.er.em='Server poblem....';
+        }
+        paramResponse.end(JSON.stringify(r));
+      });
+    });
+  });
+  requestRouter.get ('/request.json', function(paramRequest, paramResponse, paramNext){
+    var query = {};
+    if(typeof paramRequest.query._id!=='undefined'){
+      query._id=paramRequest.query._id;
+    }
+    var m = {
+      "op": "rmm_getRequest",
+      "pl": {
+        "query":query
+      }
+    };
+    esbMessage(m)
+    .then(function(r) {
+      paramResponse.writeHead(200, {"Content-Type": "application/json"});
+      paramResponse.end(JSON.stringify(r));
+    })
+    .fail(function(r) {
+      paramResponse.writeHead(501, {"Content-Type": "application/json"});
+      if(r.er && r.er.ec && r.er.ec>1000){
+        r.er.em='Server poblem....';
+      }
+      paramResponse.end(JSON.stringify(r));
+    });
+  });
+  requestRouter.get('/:requestType.json', function(paramRequest, paramResponse, paramNext){
+        var promise;
         if (paramRequest.params.requestType === 'all'){
-            oHelpers.sendResponse(paramResponse,200,all);
+            promise = _getRequestMessages(paramRequest,{});
         }
         else if(paramRequest.params.requestType === 'approved'){
-            oHelpers.sendResponse(paramResponse,200,approved);
+            promise = _getRequestMessages(paramRequest,{rs:30});
         }
 
         else if(paramRequest.params.requestType === 'rejected'){
-            oHelpers.sendResponse(paramResponse,200,rejected);
+            promise = _getRequestMessages(paramRequest,{rs:40});
         }
 
         else if(paramRequest.params.requestType === 'unprocess'){
-            oHelpers.sendResponse(paramResponse,200,unprocess);
+            promise = _getRequestMessages(paramRequest,{rs:10});
+        }
+        if(promise){
+          promise.then(function(msg) {
+            paramResponse.writeHead(200, {"Content-Type": "application/json"});
+            paramResponse.end(JSON.stringify(msg));
+          })
+          .fail(function(r) {
+            paramResponse.writeHead(501, {"Content-Type": "application/json"});
+            if(r.er && r.er.ec && r.er.ec>1000){
+              r.er.em='Server poblem....';
+            }
+            paramResponse.end(JSON.stringify(r));
+          });
         }
 
 

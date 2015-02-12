@@ -4,75 +4,155 @@
 var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
 
+function _initRequestMessage(paramRequest,type,id,adminOrg){
+  var col,mod='smm'
+  ,url;
+  if(type==='Service'){
+    col='services';
+    url='/workspace/services/view/service';
+  }
+  if(type==='ServicePoint'){
+    col='servicepoints';
+    url='/workspace/services/view/servicepoint';
+  }
+  return {
+//    rdu: paramRequest.user.id//@todo: this should be set correctly
+    rdo: adminOrg
+    ,rc: 'code'
+    ,rt: 'Request : '+col
+    ,rsu: paramRequest.user.lanzheng.loginName
+    ,rso: paramRequest.user.id
+    ,rs: 10
+    ,rb: 'body'
+    ,rtr: type
+    ,ei:[{
+        col:col
+        ,mod:mod
+        ,ei:id
+    }]
+    ,url:url
+    
+  };
+}
+
+
 module.exports = function(paramService,  esbMessage){
+  function _commitTransaction(m){
+    m.pl.transaction = {
+      _id:m.pl.transactionid
+    }
+    m.op='commitTransaction';
+    return esbMessage(m);
+  }
+  function _rollBackTransaction(m){
+    m.pl.transaction = {
+      _id:m.pl.transactionid
+    }
+    m.op='wmm_rollBackTransaction';
+    return esbMessage(m);
+  }
   var serviceManagementRouter = paramService.Router();
-  serviceManagementRouter.post('/service.json', function(paramRequest, paramResponse, paramNext){
-    var m;
-    var service;
+  serviceManagementRouter.put ('/service.json', function(paramRequest, paramResponse, paramNext){//update service
+    var m={};
+    var response;
     q().then(function(){
-      service = JSON.parse(paramRequest.body.pl.service);
-      return {
-        "ns":"smm",
-        "op": "persistService",
-        "pl": {
-          "userid":paramRequest.user.id
-          ,"service":{
-            serviceName:service.serviceName
-            ,serviceType:service.serviceType
-            ,briefOverview:service.briefOverview
-            ,standardPayment:service.standardPayment
-            ,standardServicePrice:service.standardServicePrice
-            ,standardPricing:service.standardPricing
-            ,standardServiceNotes:service.standardServiceNotes
-            ,standardReservationRequest:service.standardReservationRequest
-            ,PriceList:service.PriceList
-          }
+      m.op = "createTransaction";
+      m.pl={
+        userid:paramRequest.user.id
+        ,transaction:{
+          description:'persist Service'
+          ,modules:['smm','rmm']
         }
       };
-      
+      return esbMessage(m)
     }).then(function(m){
-      return esbMessage(m);
+      var reqMsg = JSON.parse(paramRequest.body.json),
+      service=reqMsg.pl.service;
+      m.pl.service = service;
+      m.op='persistService';
+      return q.all([esbMessage(m),esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})]);
     })
     .then(function(r) {
+      response=r[0];
+      m.op="createRequestMessage";
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'Service',response.pl._id,r[1].pl.oID);
+      return esbMessage(m);
+    }).then(function() {
+      return _commitTransaction(m);
+    }).then(function() {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      paramResponse.end(JSON.stringify(r));
+      paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
-      paramResponse.writeHead(501, {"Content-Type": "application/json"});
-      if(r.er && r.er.ec && r.er.ec>1000){
-        r.er.em='Server poblem....';
-      }
-      paramResponse.end(JSON.stringify(r));
+      //@todo: set roll back wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
+      return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
+      .then(function(){
+         return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
+      })
+      .fin(function(){
+        _rollBackTransaction(m);
+        paramResponse.writeHead(501, {"Content-Type": "application/json"});
+        if(r.er && r.er.ec && r.er.ec>1000){
+          r.er.em='Server poblem....';
+        }
+        paramResponse.end(JSON.stringify(r));
+      });
     });
   });
-  serviceManagementRouter.put ('/service.json', function(paramRequest, paramResponse, paramNext){
-    var m;
-    var service;
+  serviceManagementRouter.post('/service.json', function(paramRequest, paramResponse, paramNext){
+    var m={};
+    var response;
     q().then(function(){
-      m = JSON.parse(paramRequest.body.json);
-      service = m.pl.service;
-      return {
-        "ns":"smm",
-        "op": "persistService",
-        "pl": {
-          "userid":paramRequest.user.id
-          ,service:service
+      m.op = "createTransaction";
+      m.pl={
+        userid:paramRequest.user.id
+        ,transaction:{
+          description:'persist Service'
+          ,modules:['smm','rmm']
         }
       };
-      
-    }).then(function(m){
       return esbMessage(m);
+    }).then(function(m){
+      var reqMsg = JSON.parse(paramRequest.body.json);
+      var service = reqMsg.pl.service;
+      m.pl.service = {
+        serviceName:service.serviceName
+        ,serviceType:service.serviceType
+        ,briefOverview:service.briefOverview
+        ,standardPayment:service.standardPayment
+        ,standardServicePrice:service.standardServicePrice
+        ,standardPricing:service.standardPricing
+        ,standardServiceNotes:service.standardServiceNotes
+        ,standardReservationRequest:service.standardReservationRequest
+        ,PriceList:service.PriceList
+      };
+      m.op='persistService';
+      return q.all([esbMessage(m),esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})]);
     })
     .then(function(r) {
+      response=r[0];
+      m.op="createRequestMessage";
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'Service',response.pl._id,r[1].pl.oID);
+      return esbMessage(m);
+    }).then(function() {
+      return _commitTransaction(m)
+    }).then(function() {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      paramResponse.end(JSON.stringify(r));
+      paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
-      paramResponse.writeHead(501, {"Content-Type": "application/json"});
-      if(r.er && r.er.ec && r.er.ec>1000){
-        r.er.em='Server poblem....';
-      }
-      paramResponse.end(JSON.stringify(r));
+      return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
+      .then(function(){
+         return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
+      })
+      .fin(function(){
+        _rollBackTransaction(m);
+        paramResponse.writeHead(501, {"Content-Type": "application/json"});
+        if(r.er && r.er.ec && r.er.ec>1000){
+          r.er.em='Server poblem....';
+        }
+        paramResponse.end(JSON.stringify(r));
+      });
     });
   });
   serviceManagementRouter.get ('/service.json', function(paramRequest, paramResponse, paramNext){
@@ -81,7 +161,6 @@ module.exports = function(paramService,  esbMessage){
       query._id=paramRequest.query._id;
     }
     var m = {
-      "ns":"smm",
       "op": "myservice",
       "pl": {
         "query":query
@@ -102,7 +181,6 @@ module.exports = function(paramService,  esbMessage){
   });
   serviceManagementRouter.get ('/services.json', function(paramRequest, paramResponse, paramNext){
     var m = {
-      "ns":"smm",
       "op": "servicesByCreator",
       "pl": {
         "userAccountID":paramRequest.user.id
@@ -123,7 +201,6 @@ module.exports = function(paramService,  esbMessage){
   });
   serviceManagementRouter.get('/servicenames.json', function(paramRequest, paramResponse, paramNext){
     var m = {
-      "ns":"smm",
       "op": "serviceNames",
       "pl": null
     };
@@ -161,7 +238,6 @@ module.exports = function(paramService,  esbMessage){
   });
   serviceManagementRouter.get('/servicepointtypes.json', function(paramRequest, paramResponse, paramNext){
     var m = {
-      "ns":"smm",
       "op": "servicePointTypes",
       "pl": null
     };
@@ -179,65 +255,98 @@ module.exports = function(paramService,  esbMessage){
     });
   });
   serviceManagementRouter.post('/servicepoint.json', function(paramRequest, paramResponse, paramNext){
-    var m;
-    var servicePoint;
-    q().then(function(){
-      m = JSON.parse(paramRequest.body.json);
-      servicePoint = m.pl.servicePoint;
-      return {
-        "ns":"smm",
-        "op": "persistServicePoint",
-        "pl": {
-          "userid":paramRequest.user.id
-          ,'servicePoint':servicePoint
-          ,transactionid:'54c98bd8f52b230201056cfd'
+    var m={
+      "op": "createTransaction"
+      ,"pl": {
+        "userid":paramRequest.user.id
+        ,transaction:{
+          description:'persist ServicePoint'
+          ,modules:['smm','rmm']
         }
-      };
-      
-    }).then(function(m){
+      }
+    };
+    var response;
+    q().then(function(){
       return esbMessage(m);
+    }).then(function (){
+      var reqMsg = JSON.parse(paramRequest.body.json),
+      servicePoint = reqMsg.pl.servicePoint;
+      m.op="persistServicePoint";
+      m.pl.servicePoint = servicePoint;
+      return q.all([esbMessage(m),esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})]);
     })
     .then(function(r) {
+      response=r[0];
+      m.op="createRequestMessage";
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'ServicePoint',response.pl._id,r[1].pl.oID);
+      return esbMessage(m);
+    }).then(function() {
+      return _commitTransaction(m);
+    }).then(function() {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      paramResponse.end(JSON.stringify(r));
+      paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
-      paramResponse.writeHead(501, {"Content-Type": "application/json"});
-      if(r.er && r.er.ec && r.er.ec>1000){
-        r.er.em='Server poblem....';
-      }
-      paramResponse.end(JSON.stringify(r));
+      return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
+      .then(function(){
+         return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
+      })
+      .fin(function(){
+        _rollBackTransaction(m);
+        paramResponse.writeHead(501, {"Content-Type": "application/json"});
+        if(r.er && r.er.ec && r.er.ec>1000){
+          r.er.em='Server poblem....';
+        }
+        paramResponse.end(JSON.stringify(r));
+      });
     });
   });
   serviceManagementRouter.put ('/servicepoint.json', function(paramRequest, paramResponse, paramNext){
-    var m;
-    var servicePoint;
-    q().then(function(){
-      m = JSON.parse(paramRequest.body.json);
-      servicePoint = m.pl.servicePoint;
-      return {
-        "ns":"smm",
-        "op": "persistServicePoint",
-        "pl": {
-          "userid":paramRequest.user.id
-          ,servicePoint:servicePoint
-          ,transactionid:'54c98bd8f52b230201056cfd'
+    var m={
+      "op": "createTransaction"
+      ,"pl": {
+        "userid":paramRequest.user.id
+        ,transaction:{
+          description:'persist ServicePoint'
+          ,modules:['smm','rmm']
         }
-      };
-      
-    }).then(function(m){
+      }
+    };
+    var response;
+    q().then(function(){
       return esbMessage(m);
+    }).then(function (){
+      var reqMsg = JSON.parse(paramRequest.body.json),
+      servicePoint = reqMsg.pl.servicePoint;
+      m.op="persistServicePoint";
+      m.pl.servicePoint = servicePoint;
+      return q.all([esbMessage(m),esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})]);
     })
     .then(function(r) {
+      response=r[0];
+      m.op="createRequestMessage";
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'ServicePoint',response.pl._id,r[1].pl.oID);
+      return esbMessage(m);
+    }).then(function() {
+      return _commitTransaction(m);
+    }).then(function() {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      paramResponse.end(JSON.stringify(r));
+      paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
-      paramResponse.writeHead(501, {"Content-Type": "application/json"});
-      if(r.er && r.er.ec && r.er.ec>1000){
-        r.er.em='Server poblem....';
-      }
-      paramResponse.end(JSON.stringify(r));
+      //@todo: set roll back wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
+      return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
+      .then(function(){
+         return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
+      })
+      .fin(function(){
+        _rollBackTransaction(m);
+        paramResponse.writeHead(501, {"Content-Type": "application/json"});
+        if(r.er && r.er.ec && r.er.ec>1000){
+          r.er.em='Server poblem....';
+        }
+        paramResponse.end(JSON.stringify(r));
+      });
     });
   });
   serviceManagementRouter.get ('/servicepoint.json', function(paramRequest, paramResponse, paramNext){
@@ -250,7 +359,6 @@ module.exports = function(paramService,  esbMessage){
       "op": "myservicePoint",
       "pl": {
         "query":query
-        ,transactionid:'54c98bd8f52b230201056cfd'
       }
     };
     esbMessage(m)
