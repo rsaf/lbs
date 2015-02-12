@@ -40,7 +40,6 @@ module.exports = function (paramService, esbMessage)
       oHelpers.sendResponse(paramResponse,500,r);
     }
 
-
   });
 
 
