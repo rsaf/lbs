@@ -55,6 +55,7 @@ module.exports = function(paramService, esbMessage)
             var r = {pl:null, er:{ec:404,em:"invalid notification type!"}};
             oHelpers.sendResponse(paramResponse,404,r);
         }
+
         esbMessage(m)
          .then(function(r) {
 
@@ -103,8 +104,6 @@ module.exports = function(paramService, esbMessage)
 
 
 
-
-
     ///workspace/notifications/mailling/notifications.json
     userNotificationRouter.post('/mailling/notifications.json', function(paramRequest, paramResponse, paramNext){
 
@@ -147,9 +146,6 @@ module.exports = function(paramService, esbMessage)
 
 
     });
-
-
-
 
 
     ///workspace/notifications/update/:viewstate.json
