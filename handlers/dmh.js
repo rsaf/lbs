@@ -48,12 +48,20 @@ module.exports = function (paramService, esbMessage)
   photosRouter.post('/upload.json', function (paramRequest, paramResponse, paramNext) {
 
 
-    var m = {
-              ns: 'dmm',
-              vs: '1.0',
-              op: 'dmm_uploadPhoto',
-              pl: {}
-          };
+    var m = {ns: 'dmm',op:'dmm_uploadPhoto', pl: null};
+    m.pl = {
+        uID:paramRequest.user.lanzheng.loginName,
+        oID:'54c1c79c4d754999038abf1c',
+        imageData:null,
+        imageExt: null,
+        //sg:{code:10, text:原照}, //Stage, possible values {10 'original',20 'inspection', 30 'correction', 40 'processing', 50 'activity', 60 'personal', 70 'corporate' }
+        //st:{code:100, text:等待},  //Status, possible values {100: pending, 200: success, 300: rejected }
+        //rc:'54c1c79c4d754999038abf1b', //business activity response code code
+        //tc:'54c1c79c4d754999038abf1b', // business activity transaction code
+        uri: null, // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
+        ign:null // imageName
+    };
+
 
 
 
@@ -63,28 +71,48 @@ module.exports = function (paramService, esbMessage)
         var old_path = files.file.path,
             file_size = files.file.size,
             file_ext = files.file.name.split('.').pop(),
-            index = old_path.lastIndexOf('/') + 1,
-            file_name = old_path.substr(index),
-            new_path = '/Users/rollandsafort/Desktop/testUpload/'+new Date().getTime()+files.file.name;
+            file_name =files.file.name;
 
-        console.log(' file name----', files.file.name+new Date().getTime());
 
         console.log('-------fields--------', fields);
-        console.log(' old_path----', old_path);
 
         fs.readFile(old_path, function(err, data) {
-          fs.writeFile(new_path, data, function(err) {
-            console.log('data--------', data);
-            fs.unlink(old_path, function(err) {
-              if (err) {
-                paramResponse.status(500);
-                paramResponse.json({'success': false});
-              } else {
-                paramResponse.status(200);
-                paramResponse.json({'success': true});
-              }
-            });
-          });
+            m.pl.imageData= data;
+            m.pl.imageExt = file_ext;
+            m.pl.ign = file_name;
+            console.log('-------data--------', data);
+
+         // m.pl =
+          esbMessage(m)
+              .then(function (r) {
+                paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                paramResponse.end(JSON.stringify(r));
+              })
+              .fail(function (r) {
+
+                console.log(r.er);
+                var r = {pl: null, er: {ec: 404, em: "could not save image"}};
+                oHelpers.sendResponse(paramResponse, 404, r);
+              });
+
+
+
+          //
+          //fs.writeFile(new_path, data, function(err) {
+          //  console.log('data--------', data);
+          //  fs.unlink(old_path, function(err) {
+          //    if (err) {
+          //      paramResponse.status(500);
+          //      paramResponse.json({'success': false});
+          //    } else {
+          //      paramResponse.status(200);
+          //      paramResponse.json({'success': true});
+          //    }
+          //  });
+          //});
+          //
+
+
         });
       });
 
@@ -97,19 +125,6 @@ module.exports = function (paramService, esbMessage)
 
 
 
-
-//    esbMessage(m)
-//            .then(function (r) {
-//
-//              paramResponse.writeHead(200, {"Content-Type": "application/json"});
-//              paramResponse.end(JSON.stringify(r));
-//            })
-//            .fail(function (r) {
-//
-//              console.log(r.er);
-//              var r = {pl: null, er: {ec: 404, em: "could not save image"}};
-//              oHelpers.sendResponse(paramResponse, 404, r);
-//            });
 
 
   });
