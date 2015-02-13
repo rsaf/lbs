@@ -4,6 +4,7 @@
  * returns static json for all endpoints
  */
 var oHelpers = require('../utilities/helpers.js');
+var fs  = require('fs');
 
 module.exports = function (paramService, esbMessage)
 {
@@ -48,54 +49,67 @@ module.exports = function (paramService, esbMessage)
 
 
     var m = {
-      ns: 'dmm',
-      vs: '1.0',
-      op: 'dmm_uploadPhoto',
-      pl: null
-    };
+              ns: 'dmm',
+              vs: '1.0',
+              op: 'dmm_uploadPhoto',
+              pl: {}
+          };
 
 
 
-    var form = new formidable.IncomingForm();
-    form.parse(paramRequest, function (err, fields, files) {
+      var form = new formidable.IncomingForm();
+      form.parse(paramRequest, function(err, fields, files) {
+        // `file` is the name of the <input> field of type `file`
+        var old_path = files.file.path,
+            file_size = files.file.size,
+            file_ext = files.file.name.split('.').pop(),
+            index = old_path.lastIndexOf('/') + 1,
+            file_name = old_path.substr(index),
+            new_path = '/Users/rollandsafort/Desktop/testUpload/'+new Date().getTime()+files.file.name;
 
+        console.log(' file name----', files.file.name+new Date().getTime());
 
-      // `file` is the name of the <input> field of type `file`
-      var old_path = files.file.path,
-              file_size = files.file.size,
-              file_ext = files.file.name.split('.').pop(),
-              file_name = files.file.name;
+        console.log('-------fields--------', fields);
+        console.log(' old_path----', old_path);
 
-      console.log('real file name: ' + files.file.name);
-
-      fs.readFile(old_path, function (err, data) {
-        console.log('read data----------', data);
-        m.pl = {
-          imageData: data,
-          imageExt: file_ext,
-          ign: file_name,
-          uID: paramRequest.user.id,
-          oID: paramRequest.user.id
-        };
-
-      });
-    });
-
-
-
-
-    esbMessage(m)
-            .then(function (r) {
-
-              paramResponse.writeHead(200, {"Content-Type": "application/json"});
-              paramResponse.end(JSON.stringify(r));
-            })
-            .fail(function (r) {
-
-              console.log(r.er);
-              var r = {pl: null, er: {ec: 404, em: "could not save image"}};
-              oHelpers.sendResponse(paramResponse, 404, r);
+        fs.readFile(old_path, function(err, data) {
+          fs.writeFile(new_path, data, function(err) {
+            console.log('data--------', data);
+            fs.unlink(old_path, function(err) {
+              if (err) {
+                paramResponse.status(500);
+                paramResponse.json({'success': false});
+              } else {
+                paramResponse.status(200);
+                paramResponse.json({'success': true});
+              }
             });
+          });
+        });
+      });
+
+
+
+
+
+
+
+
+
+
+
+//    esbMessage(m)
+//            .then(function (r) {
+//
+//              paramResponse.writeHead(200, {"Content-Type": "application/json"});
+//              paramResponse.end(JSON.stringify(r));
+//            })
+//            .fail(function (r) {
+//
+//              console.log(r.er);
+//              var r = {pl: null, er: {ec: 404, em: "could not save image"}};
+//              oHelpers.sendResponse(paramResponse, 404, r);
+//            });
 
 
   });
