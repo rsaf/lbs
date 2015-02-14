@@ -1,22 +1,5 @@
 var oHelpers = require('../utilities/helpers.js');
-
-
-var upload = require('jquery-file-upload-middleware');
-// configure upload middleware
-upload.configure({
-    uploadDir: __dirname + '/temp/uploads',
-    uploadUrl: '/photos',
-    imageVersions: {
-        thumbnail: {
-            width: 80,
-            height: 80
-        }
-    }
-});
-
-
-
-
+var    formidable = require('formidable');
 
 
 module.exports = function (paramPS, esbMessage) {
@@ -43,7 +26,6 @@ module.exports = function (paramPS, esbMessage) {
 
         oHelpers.sendResponse(paramResponse, 200, {pl: 'get all photos by special code', er: null});
     });
-
 
     //get photo standard by standard code
     //workspace/v1/phototoservices/standards/:standardcode.json
@@ -106,9 +88,6 @@ module.exports = function (paramPS, esbMessage) {
             });
     });
 
-
-
-
     //workspace/standards/usages/:usagecode.json
     psRouter.get('/usages/:usagecode.json', function (paramRequest, paramResponse) {
         var m = {
@@ -128,9 +107,6 @@ module.exports = function (paramPS, esbMessage) {
                 oHelpers.sendResponse(paramResponse, 401, r.er);
             });
     });
-
-
-
 
     //create photo standard by standard code
     ///workspace/standards/standards.json
@@ -156,9 +132,6 @@ module.exports = function (paramPS, esbMessage) {
                 oHelpers.sendResponse(paramResponse, 501, r.er);
             });
     });
-
-
-
 
 
     ///workspace/standards/usage.json
@@ -254,7 +227,6 @@ module.exports = function (paramPS, esbMessage) {
 
     });
 
-
     //workspace/standards/usages/:usagecode.json
     psRouter.delete('/usages/:usagecode.json', function (paramRequest, paramResponse) {
 
@@ -284,8 +256,6 @@ module.exports = function (paramPS, esbMessage) {
 
 
     });
-
-
 
     //workspace/inspection/inspection/:status/:code.json
     psRouter.post('/inspection/:status/:code.json', function (paramRequest, paramResponse) {
@@ -336,11 +306,6 @@ module.exports = function (paramPS, esbMessage) {
 
     });
 
-
-
-
-
-
     //
     //psRouter.post('/idphotos.json', function (req, res){
     //    var form = new formidable.IncomingForm();
@@ -352,54 +317,10 @@ module.exports = function (paramPS, esbMessage) {
     //    form.on('end', processForm);
     //});
 
-
-
-    psRouter.post('/idphotos.json', upload.fileHandler());
-
-    // events
-    upload.on('begin', function (fileInfo, req, res) {
-        // fileInfo structure is the same as returned to browser
-        // {
-        //     name: '3 (3).jpg',
-        //     originalName: '3.jpg',
-        //     size: 79262,
-        //     type: 'image/jpeg',
-        //     delete_type: 'DELETE',
-        //     delete_url: 'http://yourhost/upload/3%20(3).jpg',
-        //     url: 'http://yourhost/uploads/3%20(3).jpg',
-        //     thumbnail_url: 'http://youhost/uploads/thumbnail/3%20(3).jpg'
-        // }
-
-        console.log("we are in begin uploading ...")
+   ///workspace/corrections/idphotos.json
+    psRouter.get('/idphotos.json', function (paramRequest, paramResponse){
+        oHelpers.sendResponse(paramResponse, 200, idphotos);
     });
-
-    upload.on('abort', function (fileInfo, req, res) {
-        console.log("we are aborting...");
-    });
-
-    upload.on('end', function (fileInfo, req, res) {
-        console.log("we are ending ...");
-    });
-
-    upload.on('delete', function (fileInfo, req, res) {
-        console.log("we are deleting ...");
-    });
-
-    upload.on('error', function (e, req, res) {
-        console.log(e.message);
-    });
-
-
-
-
-
-// Show the upload form
-    psRouter.get('/idphotos.json', function (req, res){
-        res.writeHead(200, {'Content-Type': 'text/html' });
-        var form = '<form action="/upload" enctype="multipart/form-data" method="post"><input multiple="multiple" name="upload" type="file" /><br><br><input type="submit" value="Upload" /></form>';
-        res.end(form);
-    });
-
 
 // Show the upload form
     psRouter.get('/todo/activityname.json', function (req, paramResponse){
@@ -422,14 +343,12 @@ module.exports = function (paramPS, esbMessage) {
         res.end(form);
     });
 
-
     // Show the upload form
     psRouter.post('/done/activityname/photoname.json', function (req, res){
         res.writeHead(200, {'Content-Type': 'text/html' });
         var form = '<form action="/upload" enctype="multipart/form-data" method="post"><input multiple="multiple" name="upload" type="file" /><br><br><input type="submit" value="Upload" /></form>';
         res.end(form);
     });
-
 
     //fake endpoints
     psRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
@@ -446,7 +365,6 @@ module.exports = function (paramPS, esbMessage) {
           oHelpers.sendResponse(paramResponse,200,folders);
       }
     });
-    
 
     return psRouter;
 };

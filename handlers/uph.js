@@ -3,17 +3,10 @@
 
 var oHelpers= require('../utilities/helpers.js');
 
-
-//added
-    http = require('http'),
-    formidable = require('formidable'),
-    fs = require('fs'),
-
-
-
-
-
-
+   //added
+  var  http = require('http');
+  var  formidable = require('formidable');
+  var fs = require('fs');
 
 //API design supports standard HTTP verbs
 //PUT --> Create (Creation)
@@ -29,14 +22,9 @@ var oHelpers= require('../utilities/helpers.js');
 //post /workspace/v1/profiles/personals/p1007070990.json --> will update a particular personal profile
 //delete /workspace/v1/profiles/personals/p1007070990.json --> will delete a particular personal profile
 
-//
-
 module.exports = function(paramPS, paramESBMessage) {
     var upRouter = paramPS.Router();
     var esbMessage = paramESBMessage;
-
-
-
 
 // Upload route.
     //workspace/profiles/v1/upload
@@ -90,41 +78,6 @@ module.exports = function(paramPS, paramESBMessage) {
     });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //get workspace/profiles/v1/personal.json
     upRouter.get('/personal.json', function(paramRequest, paramResponse){
 
@@ -148,6 +101,27 @@ module.exports = function(paramPS, paramESBMessage) {
 
     });
 
+
+//get workspace/profiles/v1/personal.json
+    upRouter.get('/personals.json', function(paramRequest, paramResponse){
+
+        var m = {
+            "ns":"upm",
+            "op": "readPersonalProfileByUserID",
+            "pl":{"userAccountID":paramRequest.user.id}
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
 
 
 
@@ -246,64 +220,11 @@ module.exports = function(paramPS, paramESBMessage) {
 
 
 
-    //post workspace/profiles/v1/uplaod.json
-//    upRouter.post('/upload.json', function(paramRequest, paramResponse){
-//
-//        console.log('--------------- new post request--------------------');
-//        console.log('--------------- new post request--------------------');
-//        console.log('--------------- new post request--------------------');
-//        console.log(paramRequest);
-//
-//
-//        console.log('--------------- end of new post request--------------------');
-//        console.log('--------------- end of new post request--------------------');
-//        console.log('--------------- end of new post request--------------------');
-//        oHelpers.sendResponse(paramResponse,200,paramRequest.body);
-//
-//
-//
-//
-//
-//    });
-
-
-
-
-
-
 //put workspace/v1/profiles/:personal.json
     upRouter.put('/personal/:profileID.json', function(paramRequest, paramResponse){
         console.log ()
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -363,7 +284,92 @@ module.exports = function(paramPS, paramESBMessage) {
     return upRouter;
 };
 
-//
+
+
+var personal = {
+        "pl": [{
+            "imageurl": "/commons/images/passportPhoto_other.jpg",
+            "name": "Personal name",
+            "creator": "系统创建",
+            "dateCreated": "2013/07/22",
+            "status": "正常"
+        }
+            , {
+                "imageurl": "/commons/images/passportPhoto_other.jpg",
+                "name": "Candy",
+                "creator": "Andy",
+                "dateCreated": "2013/05/10",
+                "status": "正常"
+            }, {
+                "imageurl": "/commons/images/passportPhoto_other.jpg",
+                "name": "Lsf",
+                "creator": "Andy",
+                "dateCreated": "2013/05/20",
+                "status": "正常"
+            }, {
+                "imageurl": "/commons/images/passportPhoto_other.jpg",
+                "name": "雪中情",
+                "creator": "Andy",
+                "dateCreated": "2013/06/13",
+                "status": "正常"
+            }, {
+                "imageurl": "/commons/images/passportPhoto_other.jpg",
+                "name": "漫天飞舞",
+                "creator": "雪中情",
+                "dateCreated": "2013/05/05",
+                "status": "正常"
+            }, {
+                "imageurl": "/commons/images/passportPhoto_other.jpg",
+                "name": "forever91",
+                "creator": "雪中情",
+                "dateCreated": "2013/05/22",
+                "status": "正常"
+            }]
+    }
+    ;
+
+var corporate = {
+        "pl": [{
+            "imageurl": "/commons/images/passportPhoto_other.jpg",
+            "name": "Corporate name",
+            "creator": "系统创建",
+            "dateCreated": "2013/07/22",
+            "status": "正常"
+        }
+            , {
+                "imageurl": "/commons/images/passportPhoto_other.jpg",
+                "name": "Candy",
+                "creator": "Andy",
+                "dateCreated": "2013/05/10",
+                "status": "正常"
+            }, {
+                "imageurl": "/commons/images/passportPhoto_other.jpg",
+                "name": "Lsf",
+                "creator": "Andy",
+                "dateCreated": "2013/05/20",
+                "status": "正常"
+            }, {
+                "imageurl": "/commons/images/passportPhoto_other.jpg",
+                "name": "雪中情",
+                "creator": "Andy",
+                "dateCreated": "2013/06/13",
+                "status": "正常"
+            }, {
+                "imageurl": "/commons/images/passportPhoto_other.jpg",
+                "name": "漫天飞舞",
+                "creator": "雪中情",
+                "dateCreated": "2013/05/05",
+                "status": "正常"
+            }, {
+                "imageurl": "/commons/images/passportPhoto_other.jpg",
+                "name": "forever91",
+                "creator": "雪中情",
+                "dateCreated": "2013/05/22",
+                "status": "正常"
+            }]
+    };
+
+
 //get     /workspace/v1/profiles/personal.json ==> read
 //get     /workspace/v1/profiles/personal/:personal.json ==>   /workspace/profiles/LZ000678987.json ==> read a specific user
 //
@@ -385,7 +391,6 @@ module.exports = function(paramPS, paramESBMessage) {
 //post   /workspace/v1/profiles/corporate/:corporate.json ==> update the profile
 //
 //delete /workspace/v1/profiles/corporate/:corporate.json  ==> mark for delete
-
 
 
 
@@ -985,8 +990,6 @@ var idphotos = {
         }
     ]
 }
-
-
 
 var otherphotos = {
 
