@@ -16,10 +16,8 @@ module.exports = function(paramService, esbMessage)
             oHelpers.sendResponse(paramResponse,200,history);
         }
   });
-
   return photosRouter;
 };
-
 
 var status = {
   "pl": [{

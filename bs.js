@@ -6,7 +6,6 @@ var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
 var oHelpers= require('./utilities/helpers.js');
 
-
 var oHomeRouter ;               //  home
 var oUserNotificationRouter;    // workspace/notifications  ==>  mdh.js  mdm
 var oUserRouter;                // workspace/users          ==>  sch.js  scm ///
@@ -25,7 +24,6 @@ var oOperationsLogRouter ;      // workspace/operationslog  ==>  olh.js  olm
 
 var oPhotoServiceRouter ;       // workspace/photoservices  ==>  pmh.js  pmm
 
-
 var Q = require('q');
 
 var scmPassportObject = null;
@@ -37,7 +35,6 @@ var p0 = null;
 var p1 = null;
 var p2 = null;
 var p3 = null;
-
 
 module.exports.startBS = function(paramESBMessage){
 
