@@ -1,0 +1,83 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', '--verbose' ]
+2 info using npm@1.4.14
+3 info using node@v0.10.29
+4 verbose readDependencies using package.json deps
+5 verbose install where, deps [ '/Users/LBS006/dev/bitbucket/lbs.lanid.api.leo',
+5 verbose install   [ 'q',
+5 verbose install     'express',
+5 verbose install     'express-session',
+5 verbose install     'body-parser',
+5 verbose install     'errorhandler',
+5 verbose install     'morgan',
+5 verbose install     'debug',
+5 verbose install     'formidable',
+5 verbose install     'esb' ] ]
+6 info preinstall api@0.1.0
+7 verbose readDependencies using package.json deps
+8 verbose already installed skipping express-session@^1.8.2 /Users/LBS006/dev/bitbucket/lbs.lanid.api.leo
+9 verbose already installed skipping q@^1.0.1 /Users/LBS006/dev/bitbucket/lbs.lanid.api.leo
+10 verbose already installed skipping express@^4.8.8 /Users/LBS006/dev/bitbucket/lbs.lanid.api.leo
+11 verbose already installed skipping body-parser@^1.5.2 /Users/LBS006/dev/bitbucket/lbs.lanid.api.leo
+12 verbose already installed skipping errorhandler@^1.1.1 /Users/LBS006/dev/bitbucket/lbs.lanid.api.leo
+13 verbose already installed skipping morgan@^1.2.2 /Users/LBS006/dev/bitbucket/lbs.lanid.api.leo
+14 verbose already installed skipping formidable@^1.0.16 /Users/LBS006/dev/bitbucket/lbs.lanid.api.leo
+15 verbose already installed skipping debug@^2.0.0 /Users/LBS006/dev/bitbucket/lbs.lanid.api.leo
+16 verbose cache add [ 'esb@git+ssh://git@bitbucket.org:lionleo/lbs.api.esb.git#development',
+16 verbose cache add   null ]
+17 verbose cache add name=undefined spec="esb@git+ssh://git@bitbucket.org:lionleo/lbs.api.esb.git#development" args=["esb@git+ssh://git@bitbucket.org:lionleo/lbs.api.esb.git#development",null]
+18 verbose parsed url { protocol: null,
+18 verbose parsed url   slashes: null,
+18 verbose parsed url   auth: null,
+18 verbose parsed url   host: null,
+18 verbose parsed url   port: null,
+18 verbose parsed url   hostname: null,
+18 verbose parsed url   hash: '#development',
+18 verbose parsed url   search: null,
+18 verbose parsed url   query: null,
+18 verbose parsed url   pathname: 'esb@git+ssh://git@bitbucket.org:lionleo/lbs.api.esb.git',
+18 verbose parsed url   path: 'esb@git+ssh://git@bitbucket.org:lionleo/lbs.api.esb.git',
+18 verbose parsed url   href: 'esb@git+ssh://git@bitbucket.org:lionleo/lbs.api.esb.git#development' }
+19 verbose cache add name="esb" spec="git+ssh://git@bitbucket.org:lionleo/lbs.api.esb.git#development" args=["esb","git+ssh://git@bitbucket.org:lionleo/lbs.api.esb.git#development"]
+20 verbose parsed url { protocol: 'git+ssh:',
+20 verbose parsed url   slashes: true,
+20 verbose parsed url   auth: 'git',
+20 verbose parsed url   host: 'bitbucket.org',
+20 verbose parsed url   port: null,
+20 verbose parsed url   hostname: 'bitbucket.org',
+20 verbose parsed url   hash: '#development',
+20 verbose parsed url   search: null,
+20 verbose parsed url   query: null,
+20 verbose parsed url   pathname: '/:lionleo/lbs.api.esb.git',
+20 verbose parsed url   path: '/:lionleo/lbs.api.esb.git',
+20 verbose parsed url   href: 'git+ssh://git@bitbucket.org/:lionleo/lbs.api.esb.git#development' }
+21 silly lockFile e8586f17-cket-org-lionleo-lbs-api-esb-git git@bitbucket.org:lionleo/lbs.api.esb.git
+22 verbose lock git@bitbucket.org:lionleo/lbs.api.esb.git /Users/LBS006/.npm/e8586f17-cket-org-lionleo-lbs-api-esb-git.lock
+23 verbose addRemoteGit [ 'git@bitbucket.org:lionleo/lbs.api.esb.git', 'development' ]
+24 verbose git remote.origin.url git@bitbucket.org:lionleo/lbs.api.esb.git
+25 verbose git fetch -a origin (git@bitbucket.org:lionleo/lbs.api.esb.git) Warning: Permanently added the RSA host key for IP address '0.0.1.176' to the list of known hosts.
+26 error Failed resolving git HEAD (git@bitbucket.org:lionleo/lbs.api.esb.git) fatal: ambiguous argument 'development': unknown revision or path not in the working tree.
+26 error Failed resolving git HEAD (git@bitbucket.org:lionleo/lbs.api.esb.git) Use '--' to separate paths from revisions, like this:
+26 error Failed resolving git HEAD (git@bitbucket.org:lionleo/lbs.api.esb.git) 'git <command> [<revision>...] -- [<file>...]'
+27 silly lockFile e8586f17-cket-org-lionleo-lbs-api-esb-git git@bitbucket.org:lionleo/lbs.api.esb.git
+28 silly lockFile e8586f17-cket-org-lionleo-lbs-api-esb-git git@bitbucket.org:lionleo/lbs.api.esb.git
+29 error Error: Command failed: fatal: ambiguous argument 'development': unknown revision or path not in the working tree.
+29 error Use '--' to separate paths from revisions, like this:
+29 error 'git <command> [<revision>...] -- [<file>...]'
+29 error
+29 error     at ChildProcess.exithandler (child_process.js:647:15)
+29 error     at ChildProcess.emit (events.js:98:17)
+29 error     at maybeClose (child_process.js:755:16)
+29 error     at Socket.<anonymous> (child_process.js:968:11)
+29 error     at Socket.emit (events.js:95:17)
+29 error     at Pipe.close (net.js:465:12)
+30 error If you need help, you may report this *entire* log,
+30 error including the npm and node versions, at:
+30 error     <http://github.com/npm/npm/issues>
+31 error System Darwin 13.3.0
+32 error command "node" "/usr/local/bin/npm" "install" "--verbose"
+33 error cwd /Users/LBS006/dev/bitbucket/lbs.lanid.api.leo
+34 error node -v v0.10.29
+35 error npm -v 1.4.14
+36 error code 128
+37 verbose exit [ 1, true ]
