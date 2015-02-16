@@ -28,7 +28,7 @@ module.exports = function (paramService, esbMessage)
         };
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
-            oID:paramRequest.user.currentOrganization,
+            oID:paramRequest.user.currentOrganization
         };
         esbMessage(m)
             .then(function (r) {
@@ -42,22 +42,43 @@ module.exports = function (paramService, esbMessage)
     }
   });
 
-  ///workspace/photos/delete/:photocode.json
-  photosRouter.delete('/delete/:photocode.json', function(paramRequest, paramResponse, paramNext){
+  ///workspace/photos/:photocode.json
+  photosRouter.delete('/:photocode.json', function(paramRequest, paramResponse, paramNext){
 
 
-    var deleted = {status:true}
+
+      var m= {ns: null,op:'dmm_markPhotoForDelete', pl: null};
+      m.pl = {
+          uID:paramRequest.user.lanzheng.loginName,
+          oID:paramRequest.user.currentOrganization,
+          _id:paramRequest.params.photocode
+      };
 
 
-    if (paramRequest.params.photocode){
+
+//      var m= {ns: null,op:'dmm_markPhotoForDelete', pl: {}};
+//
+//      m.pl.uID=paramRequest.user.lanzheng.loginName;
+//      m.pl.oID=paramRequest.user.currentOrganization;
+//      m.pl._id=paramRequest.params.photocode;
 
 
-      oHelpers.sendResponse(paramResponse,200,deleted);
-    }
-    else{
-      var r = {pl:null, er:{ec:500,em:"invalid photo id"}};
-      oHelpers.sendResponse(paramResponse,500,r);
-    }
+
+      console.log("photocode: ",paramRequest.params.photocode);
+
+
+      esbMessage(m)
+          .then(function (r) {
+
+              console.log('deleted photo response: ',r)
+              oHelpers.sendResponse(paramResponse, 200, r);
+          })
+          .fail(function (r) {
+
+              console.log('error saf: ', r.er)
+
+              oHelpers.sendResponse(paramResponse, 501, r);
+          });
 
   });
 
@@ -164,146 +185,6 @@ module.exports = function (paramService, esbMessage)
 };
 
 
-var processing = {
-    "pl": [{
-        "urlm": "/commons/images/passportPhoto_ID.jpg",
-        "urls": "/commons/images/passportPhoto_ID.jpg",
-        opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-    }, {
-        "urlm": "/commons/images/passportPhoto_ID.jpg",
-        "urls": "/commons/images/passportPhoto_ID.jpg",
-        opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-    },
-        {
-            "urlm": "/commons/images/passportPhoto_other.jpg",
-            "urls": "/commons/images/passportPhoto_other.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/IDPhotoDemo10.png",
-            "urls": "/commons/images/IDPhotoDemo10.png",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/passportPhoto_ID.jpg",
-            "urls": "/commons/images/passportPhoto_ID.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        }, {
-            "urlm": "/commons/images/passportPhoto_ID.jpg",
-            "urls": "/commons/images/passportPhoto_ID.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/passportPhoto_other.jpg",
-            "urls": "/commons/images/passportPhoto_other.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/IDPhotoDemo10.png",
-            "urls": "/commons/images/IDPhotoDemo10.png",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/passportPhoto_ID.jpg",
-            "urls": "/commons/images/passportPhoto_ID.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        }, {
-            "urlm": "/commons/images/passportPhoto_ID.jpg",
-            "urls": "/commons/images/passportPhoto_ID.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/passportPhoto_other.jpg",
-            "urls": "/commons/images/passportPhoto_other.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/IDPhotoDemo10.png",
-            "urls": "/commons/images/IDPhotoDemo10.png",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        }
-    ]
-};
+var processing = {"pl":[{"urlm":"/commons/images/passportPhoto_ID.jpg","urls":"/commons/images/passportPhoto_ID.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":0}},{"urlm":"/commons/images/passportPhoto_ID.jpg","urls":"/commons/images/passportPhoto_ID.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":1}},{"urlm":"/commons/images/passportPhoto_other.jpg","urls":"/commons/images/passportPhoto_other.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":2}},{"urlm":"/commons/images/IDPhotoDemo10.png","urls":"/commons/images/IDPhotoDemo10.png","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":3}},{"urlm":"/commons/images/passportPhoto_ID.jpg","urls":"/commons/images/passportPhoto_ID.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":4}},{"urlm":"/commons/images/passportPhoto_ID.jpg","urls":"/commons/images/passportPhoto_ID.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":5}},{"urlm":"/commons/images/passportPhoto_other.jpg","urls":"/commons/images/passportPhoto_other.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":6}},{"urlm":"/commons/images/IDPhotoDemo10.png","urls":"/commons/images/IDPhotoDemo10.png","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":7}},{"urlm":"/commons/images/passportPhoto_ID.jpg","urls":"/commons/images/passportPhoto_ID.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":8}},{"urlm":"/commons/images/passportPhoto_ID.jpg","urls":"/commons/images/passportPhoto_ID.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":9}},{"urlm":"/commons/images/passportPhoto_other.jpg","urls":"/commons/images/passportPhoto_other.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":10}},{"urlm":"/commons/images/IDPhotoDemo10.png","urls":"/commons/images/IDPhotoDemo10.png","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":11}}]}
 
-var idphotos = {
-    "pl": [
-        {
-            "urlm": "/commons/images/passportPhoto_other.jpg",
-            "urls": "/commons/images/passportPhoto_other.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/IDPhotoDemo10.png",
-            "urls": "/commons/images/IDPhotoDemo10.png",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        }
-        ,
-        {
-            "urlm": "/commons/images/passportPhoto_ID.jpg",
-            "urls": "/commons/images/passportPhoto_ID.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        }, {
-            "urlm": "/commons/images/passportPhoto_ID.jpg",
-            "urls": "/commons/images/passportPhoto_ID.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/passportPhoto_other.jpg",
-            "urls": "/commons/images/passportPhoto_other.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/passportPhoto_other.jpg",
-            "urls": "/commons/images/passportPhoto_other.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/IDPhotoDemo10.png",
-            "urls": "/commons/images/IDPhotoDemo10.png",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/IDPhotoDemo10.png",
-            "urls": "/commons/images/IDPhotoDemo10.png",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/passportPhoto_ID.jpg",
-            "urls": "/commons/images/passportPhoto_ID.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        }, {
-            "urlm": "/commons/images/passportPhoto_ID.jpg",
-            "urls": "/commons/images/passportPhoto_ID.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/passportPhoto_other.jpg",
-            "urls": "/commons/images/passportPhoto_other.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/IDPhotoDemo10.png",
-            "urls": "/commons/images/IDPhotoDemo10.png",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/passportPhoto_ID.jpg",
-            "urls": "/commons/images/passportPhoto_ID.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        }, {
-            "urlm": "/commons/images/passportPhoto_ID.jpg",
-            "urls": "/commons/images/passportPhoto_ID.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/passportPhoto_other.jpg",
-            "urls": "/commons/images/passportPhoto_other.jpg",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        },
-        {
-            "urlm": "/commons/images/IDPhotoDemo10.png",
-            "urls": "/commons/images/IDPhotoDemo10.png",
-            opp: {"igt": "身份证照片", "irs": "22mmx32mm", "ofs": "120Kb", "isd": "2013/07/22", "_id": 0}
-        }
-    ]
-}
+var idphotos = {"pl":[{"urlm":"/commons/images/passportPhoto_other.jpg","urls":"/commons/images/passportPhoto_other.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":0}},{"urlm":"/commons/images/IDPhotoDemo10.png","urls":"/commons/images/IDPhotoDemo10.png","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":1}},{"urlm":"/commons/images/passportPhoto_ID.jpg","urls":"/commons/images/passportPhoto_ID.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":2}},{"urlm":"/commons/images/passportPhoto_ID.jpg","urls":"/commons/images/passportPhoto_ID.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":3}},{"urlm":"/commons/images/passportPhoto_other.jpg","urls":"/commons/images/passportPhoto_other.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":4}},{"urlm":"/commons/images/passportPhoto_other.jpg","urls":"/commons/images/passportPhoto_other.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":5}},{"urlm":"/commons/images/IDPhotoDemo10.png","urls":"/commons/images/IDPhotoDemo10.png","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":6}},{"urlm":"/commons/images/IDPhotoDemo10.png","urls":"/commons/images/IDPhotoDemo10.png","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":7}},{"urlm":"/commons/images/passportPhoto_ID.jpg","urls":"/commons/images/passportPhoto_ID.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":8}},{"urlm":"/commons/images/passportPhoto_ID.jpg","urls":"/commons/images/passportPhoto_ID.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":9}},{"urlm":"/commons/images/passportPhoto_other.jpg","urls":"/commons/images/passportPhoto_other.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":10}},{"urlm":"/commons/images/IDPhotoDemo10.png","urls":"/commons/images/IDPhotoDemo10.png","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":11}},{"urlm":"/commons/images/passportPhoto_ID.jpg","urls":"/commons/images/passportPhoto_ID.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":12}},{"urlm":"/commons/images/passportPhoto_ID.jpg","urls":"/commons/images/passportPhoto_ID.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":13}},{"urlm":"/commons/images/passportPhoto_other.jpg","urls":"/commons/images/passportPhoto_other.jpg","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":14}},{"urlm":"/commons/images/IDPhotoDemo10.png","urls":"/commons/images/IDPhotoDemo10.png","opp":{"igt":"身份证照片","irs":"22mmx32mm","ofs":"120Kb","isd":"2013/07/22","_id":15}}]}
