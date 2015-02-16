@@ -9,11 +9,11 @@ function _initRequestMessage(paramRequest,type,id,adminOrg){
   ,url;
   if(type==='Service'){
     col='services';
-    url='/workspace/services/view/service';
+    url='/workspace/services/myservices/view/service';
   }
   if(type==='ServicePoint'){
     col='servicepoints';
-    url='/workspace/services/view/servicepoint';
+    url='/workspace/services/myservices/view/servicepoint';
   }
   return {
 //    rdu: paramRequest.user.id//@todo: this should be set correctly
