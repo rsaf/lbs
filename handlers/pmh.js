@@ -281,7 +281,15 @@ module.exports = function (paramPS, esbMessage) {
         };
         m.pl.notification.subject = '照片不合格提示';
         m.pl.notification.notificationType = '事务通知';
-        m.pl.notification.body = paramRequest.body.data[0].value  + '   '  +  paramRequest.body.data[1].value ;
+
+            if(paramRequest.body.data[1]){
+                m.pl.notification.body = paramRequest.body.data[0].value  + '   '  +  paramRequest.body.data[1].value ;
+            }
+            else if(paramRequest.body.data[0]){
+                m.pl.notification.body = paramRequest.body.data[0].value ;
+            }
+
+
          m.pl.notification.from = 'rolladmin';
 
 
