@@ -102,28 +102,6 @@ module.exports = function(paramPS, paramESBMessage) {
     });
 
 
-//get workspace/profiles/v1/personal.json
-    upRouter.get('/personals.json', function(paramRequest, paramResponse){
-
-        var m = {
-            "ns":"upm",
-            "op": "readPersonalProfileByUserID",
-            "pl":{"userAccountID":paramRequest.user.id}
-        };
-
-        esbMessage(m)
-            .then(function(r) {
-                oHelpers.sendResponse(paramResponse,200,r);
-            })
-            .fail(function(r) {
-                console.log(r.er);
-                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
-                oHelpers.sendResponse(paramResponse,404,r);
-            });
-
-    });
-
-
 
     //get workspace/profiles/v1/idphotos.json
     upRouter.get('/idphotos.json', function(paramRequest, paramResponse){
@@ -273,10 +251,10 @@ module.exports = function(paramPS, paramESBMessage) {
     });
 
     upRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
-      if (paramRequest.params.type === 'personal'){
+      if (paramRequest.params.type === 'personals'){
           oHelpers.sendResponse(paramResponse,200,personal);
       }
-      else if(paramRequest.params.type === 'corporate'){
+      else if(paramRequest.params.type === 'corporates'){
           oHelpers.sendResponse(paramResponse,200,corporate);
       }
 
