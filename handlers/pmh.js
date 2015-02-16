@@ -133,7 +133,6 @@ module.exports = function (paramPS, esbMessage) {
             });
     });
 
-
     ///workspace/standards/usage.json
     psRouter.post('/usage.json', function (paramRequest, paramResponse) {
 
@@ -361,8 +360,6 @@ module.exports = function (paramPS, esbMessage) {
     //fake endpoints
     psRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
       if (paramRequest.params.type === 'idPhotoStandard'){
-
-
 
           oHelpers.sendResponse(paramResponse,200,idPhotoStandard);
       }
