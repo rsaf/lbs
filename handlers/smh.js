@@ -13,7 +13,7 @@ function _initRequestMessage(paramRequest,type,id,adminOrg){
   }
   if(type==='ServicePoint'){
     col='servicepoints';
-    url='/workspace/services/myservices/view/servicepoint';
+    url='/workspace/services/myservicepoints/view/servicepoint';
   }
   return {
 //    rdu: paramRequest.user.id//@todo: this should be set correctly
