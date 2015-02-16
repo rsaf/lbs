@@ -133,7 +133,6 @@ module.exports = function (paramPS, esbMessage) {
             });
     });
 
-
     ///workspace/standards/usage.json
     psRouter.post('/usage.json', function (paramRequest, paramResponse) {
 
@@ -281,7 +280,15 @@ module.exports = function (paramPS, esbMessage) {
         };
         m.pl.notification.subject = '照片不合格提示';
         m.pl.notification.notificationType = '事务通知';
-        m.pl.notification.body = paramRequest.body.data[0].value  + '   '  +  paramRequest.body.data[1].value ;
+
+            if(paramRequest.body.data[1]){
+                m.pl.notification.body = paramRequest.body.data[0].value  + '   '  +  paramRequest.body.data[1].value ;
+            }
+            else if(paramRequest.body.data[0]){
+                m.pl.notification.body = paramRequest.body.data[0].value ;
+            }
+
+
          m.pl.notification.from = 'rolladmin';
 
 
@@ -353,8 +360,6 @@ module.exports = function (paramPS, esbMessage) {
     //fake endpoints
     psRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
       if (paramRequest.params.type === 'idPhotoStandard'){
-
-
 
           oHelpers.sendResponse(paramResponse,200,idPhotoStandard);
       }
