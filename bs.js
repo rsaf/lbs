@@ -109,7 +109,7 @@ try {
 
         bs.use(olmRequestLoggerFunction());
 
-        bs.use('/home', oHomeRouter);
+        bs.use('/home', oHomeRouter);  // home
         console.log('BS: configuring user acl middleware...');
         bs.use(scmCheckUserFunction());
 
@@ -117,22 +117,21 @@ try {
         //REST API Interface
         //Business functions expose from here
 
-        bs.use('/workspace/notifications', oUserNotificationRouter);
-        bs.use('/workspace/users', oUserRouter);
-        bs.use('/workspace/profiles/v1',oProfileRouter);
-        bs.use('/workspace/requests', oRequestRouter);
-        bs.use('/workspace/standards', oStandardsRouter );
-        bs.use('/workspace/photos', oPhotosRouter);
-        bs.use('/workspace/inspection', oInspectionRouter);
-        bs.use('/workspace/corrections',  oCorrectionsRouter );
-        bs.use('/workspace/services', oServiceRouter);
-        bs.use('/workspace/activities', oActivitiesRouter);
-        bs.use('/workspace/responses',  oResponsesRouter);
-        bs.use('/workspace/finance',  oFinanceRouter);
-        bs.use('/workspace/interfaces',  oInterfacesRouter);
-        bs.use('/workspace/interfaces',  oInterfacesRouter);
-        bs.use('/workspace/operationslog', oOperationsLogRouter);
-        bs.use('/workspace/photoservices',   oPhotoServiceRouter);
+        bs.use('/workspace/notifications', oUserNotificationRouter);  // workspace/notifications
+        bs.use('/workspace/users', oUserRouter);                      // workspace/users
+        bs.use('/workspace/profiles/v1',oProfileRouter);              // workspace/profile
+        bs.use('/workspace/requests', oRequestRouter);                // workspace/requests
+        bs.use('/workspace/standards', oStandardsRouter );            // workspace/standards
+        bs.use('/workspace/photos', oPhotosRouter);                   // workspace/photos
+        bs.use('/workspace/inspection', oInspectionRouter);           // workspace/inspection
+        bs.use('/workspace/corrections',  oCorrectionsRouter );       // workspace/corrections
+        bs.use('/workspace/services', oServiceRouter);                // workspace/services
+        bs.use('/workspace/activities', oActivitiesRouter);           // workspace/activities
+        bs.use('/workspace/responses',  oResponsesRouter);            // workspace/responses
+        bs.use('/workspace/finance',  oFinanceRouter);                // workspace/finance
+        bs.use('/workspace/interfaces',  oInterfacesRouter);          // workspace/interfaces
+        bs.use('/workspace/operationslog', oOperationsLogRouter);     // workspace/operationslog
+        bs.use('/workspace/photoservices',   oPhotoServiceRouter);    // workspace/photoservices
 
         bs.all('*', oHelpers.four_oh_four);
 
