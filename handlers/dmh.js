@@ -106,24 +106,6 @@ module.exports = function (paramService, esbMessage)
         uri: null // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
     };
 
-      //-------fields-------- { 'imgInfo[0][name]': 'photoName',
-      //    'imgInfo[0][value]': 'testImage.jpg',
-      //    'imgInfo[1][name]': 'type',
-      //    'imgInfo[1][value]': '旅游照片',
-      //    'imgInfo[2][name]': 'shootingMethod',
-      //    'imgInfo[2][value]': '单板相机',
-      //    'imgInfo[3][name]': 'shootingAddress',
-      //    'imgInfo[3][value]': '',
-      //    'imgInfo[4][name]': 'description',
-      //    'imgInfo[4][value]': '',
-      //    'imgInfo[5][name]': 'shootingDate',
-      //    'imgInfo[5][value]': '',
-      //    'imgInfo[6][name]': 'uploadedPhotoResolutionInfo',
-      //    'imgInfo[6][value]': '84*105',
-      //    'imgInfo[7][name]': 'uploadedPhotoSizeInfo',
-      //    'imgInfo[7][value]': '86Kb' }
-      //
-      //
 
       var form = new formidable.IncomingForm();
       form.parse(paramRequest, function(err, fields, files) {
@@ -132,10 +114,6 @@ module.exports = function (paramService, esbMessage)
             file_ext = files.file.name.split('.').pop(),
             file_name =files.file.name;
 
-          //console.log('-------fields--------', fields);
-          //console.log(fields['imgInfo[0][value]']);
-          //var photoProperties = JSON.parse(fields);
-          //console.log(photoProperties);
 
         fs.readFile(old_path, function(err, data) {
             m.pl.photoData= data;
@@ -160,22 +138,6 @@ module.exports = function (paramService, esbMessage)
                 var r = {pl: null, er: {ec: 404, em: "could not save image"}};
                 oHelpers.sendResponse(paramResponse, 404, r);
               });
-
-          //
-          //fs.writeFile(new_path, data, function(err) {
-          //  console.log('data--------', data);
-          //  fs.unlink(old_path, function(err) {
-          //    if (err) {
-          //      paramResponse.status(500);
-          //      paramResponse.json({'success': false});
-          //    } else {
-          //      paramResponse.status(200);
-          //      paramResponse.json({'success': true});
-          //    }
-          //  });
-          //});
-          //
-
         });
       });
 
