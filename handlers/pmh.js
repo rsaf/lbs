@@ -1,6 +1,6 @@
 var oHelpers = require('../utilities/helpers.js');
 var    formidable = require('formidable');
-
+var fs  = require('fs');
 
 module.exports = function (paramPS, esbMessage) {
     var psRouter = paramPS.Router();
@@ -338,6 +338,7 @@ module.exports = function (paramPS, esbMessage) {
     psRouter.post('/ack/:foldername/:photoname.json', function (paramRequest, paramResponse){
         //foldername
         //photoname
+        console.log(paramRequest.body);
 
         var r = {pl: null, er: null};
         if (true){
@@ -353,7 +354,8 @@ module.exports = function (paramPS, esbMessage) {
     psRouter.post('/fail/:foldername/:photoname.json', function(paramRequest, paramResponse){
         //foldername
         //photoname
-
+        console.log('in fail function ...');
+        console.log(paramRequest.body);
         var r = {pl: null, er: null};
         if (true){
             r.pl = {rs:true};
@@ -371,7 +373,7 @@ module.exports = function (paramPS, esbMessage) {
         //folerName
         //photoName
         //photoData
-
+        console.log('in done function ...');
         var m = {ns: 'dmm',op:'dmm_uploadPhoto', pl: null};
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
@@ -395,14 +397,21 @@ module.exports = function (paramPS, esbMessage) {
 
         var form = new formidable.IncomingForm();
         form.parse(paramRequest, function(err, fields, files) {
+            console.log(fields);
+            console.log(files);
+
+
             var old_path = files.file.path,
                 file_size = files.file.size,
                 file_ext = files.file.name.split('.').pop(),
                 file_name =files.file.name;
 
+            console.log(fields);
+
             fs.readFile(old_path, function(err, data) {
+                console.log(data);
                 m.pl.photoData= data;
-                m.pl.pp.ifm = file_ext;
+                //m.pl.pp.ifm = file_ext;
                 m.pl.pp.ofs = file_size;
                 m.pl.pp.ign = file_name;
                 m.pl.pp.igt = fields['imgInfo[1][value]'];
