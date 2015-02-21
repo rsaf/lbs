@@ -142,30 +142,6 @@ module.exports = function(paramPS, paramESBMessage) {
 
 
 
-
-//get workspace/profiles/v1/corporateDetails/:profileID.json
-    upRouter.get('/corporateDetails/:profileID.json', function(paramRequest, paramResponse){
-
-        var m = {
-            "ns":"upm",
-            "op": "readCorporateDetailPageByID",
-            "pl":{userAccountID:paramRequest.user.id}
-        };
-
-        esbMessage(m)
-            .then(function(r) {
-                //console.log(r.pl);
-                oHelpers.sendResponse(paramResponse,200,r);
-            })
-            .fail(function(r) {
-                console.log(r.er);
-                var r = {pl:null, er:{ec:404,em:"could not find detail page"}};
-                oHelpers.sendResponse(paramResponse,404,r);
-            });
-
-    });
-
-
 //post workspace/profiles/v1/personal.json
     upRouter.post('/personal.json', function(paramRequest, paramResponse){
 
@@ -188,6 +164,67 @@ module.exports = function(paramPS, paramESBMessage) {
            console.log('errorror'+r);
                 console.log(r.er);
                 var r = {pl:null, er:{ec:404,em:"could not update profile"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+
+
+
+//get workspace/profiles/v1/corporateDetails/:profileID.json
+    upRouter.get('/corporateDetails/:profileID.json', function(paramRequest, paramResponse){
+
+        var m = {
+            "ns":"upm",
+            "op": "readCorporateDetailPageByID",
+            "pl":{_id:paramRequest.user.id}
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+                //console.log(r.pl);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not find detail page"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+
+
+
+    //post workspace/profiles/v1/personal.json
+    upRouter.put('/corporateDetails/:profile_id.json', function(paramRequest, paramResponse){
+
+        console.log('paramRequest.params.profile_id',paramRequest.params.profile_id);
+        console.log('paramRequest.body',paramRequest.body);
+
+
+        var m = {
+            "ns":"upm",
+            "op": "updateCorporateDetailProfile",
+            "pl":paramRequest.body
+        };
+
+
+        m.pl.uID = paramRequest.user.lanzheng.loginName;
+        m.pl.oID = paramRequest.user.currentOrganization;
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                console.log('r',r);
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('uph error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"uph error: could not update corporate details"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
