@@ -4,45 +4,65 @@
  * returns static json for all endpoints
  */
 var oHelpers= require('../utilities/helpers.js');
+var Q = require('q');
 
 module.exports = function(paramService, esbMessage)
 {
+  function _persistForm(paramRequest, paramResponse, paramNext){
+    var m = {};
+    //formHtml
+    Q().then(function(){
+      m.pl=JSON.parse(paramRequest.body.json);
+      m.pl.userid=paramRequest.user.id;
+      m.op='bmm_persistForm';
+      return esbMessage(m);
+    }).then(function(msg){
+      console.log('1111 success:',msg)
+      oHelpers.sendResponse(paramResponse,200,msg);
+    }).fail(function(er){
+      console.log('why a fail:',er)
+      oHelpers.sendResponse(paramResponse,501,er);      
+    });    
+  }
   var photosRouter = paramService.Router();
-    photosRouter.get('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
-        if (paramRequest.params.activitiesType === 'activitieslist'){
-            oHelpers.sendResponse(paramResponse,200,activitieslist);
-        }
-        else if(paramRequest.params.activitiesType === 'nameslist'){
-            oHelpers.sendResponse(paramResponse,200,nameslist);
-        }
-        else if(paramRequest.params.activitiesType === 'activitiesforms'){
-            oHelpers.sendResponse(paramResponse,200,activitiesforms);
-        }
-        else if(paramRequest.params.activitiesType === 'publicforms'){
-            oHelpers.sendResponse(paramResponse,200,publicforms);
-        }
-        else if(paramRequest.params.activitiesType === 'serviceslist'){
-            oHelpers.sendResponse(paramResponse,200,serviceslist);
-        }
-        else if(paramRequest.params.activitiesType === 'all'){
-            oHelpers.sendResponse(paramResponse,200,all);
-        }
-        else if(paramRequest.params.activitiesType === 'conventional'){
-            oHelpers.sendResponse(paramResponse,200,conventional);
-        }
-        else if(paramRequest.params.activitiesType === 'favorite'){
-            oHelpers.sendResponse(paramResponse,200,favorite);
-        }
-        else if(paramRequest.params.activitiesType === 'agent'){
-            oHelpers.sendResponse(paramResponse,200,agent);
-        }
-        else if(paramRequest.params.activitiesType === 'delegated'){
-            oHelpers.sendResponse(paramResponse,200,delegated);
-        }
-        else if(paramRequest.params.activitiesType === 'agentsettings'){
-            oHelpers.sendResponse(paramResponse,200,agentsettings);
-        }
-    });
+  photosRouter.get('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
+      if (paramRequest.params.activitiesType === 'activitieslist'){
+          oHelpers.sendResponse(paramResponse,200,activitieslist);
+      }
+      else if(paramRequest.params.activitiesType === 'nameslist'){
+          oHelpers.sendResponse(paramResponse,200,nameslist);
+      }
+      else if(paramRequest.params.activitiesType === 'activitiesforms'){
+          oHelpers.sendResponse(paramResponse,200,activitiesforms);
+      }
+      else if(paramRequest.params.activitiesType === 'publicforms'){
+          oHelpers.sendResponse(paramResponse,200,publicforms);
+      }
+      else if(paramRequest.params.activitiesType === 'serviceslist'){
+          oHelpers.sendResponse(paramResponse,200,serviceslist);
+      }
+      else if(paramRequest.params.activitiesType === 'all'){
+          oHelpers.sendResponse(paramResponse,200,all);
+      }
+      else if(paramRequest.params.activitiesType === 'conventional'){
+          oHelpers.sendResponse(paramResponse,200,conventional);
+      }
+      else if(paramRequest.params.activitiesType === 'favorite'){
+          oHelpers.sendResponse(paramResponse,200,favorite);
+      }
+      else if(paramRequest.params.activitiesType === 'agent'){
+          oHelpers.sendResponse(paramResponse,200,agent);
+      }
+      else if(paramRequest.params.activitiesType === 'delegated'){
+          oHelpers.sendResponse(paramResponse,200,delegated);
+      }
+  });
+  photosRouter.post('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
+    _persistForm(paramRequest, paramResponse, paramNext)
+  });
+  photosRouter.put('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
+    _persistForm(paramRequest, paramResponse, paramNext)
+  });
 
 
 
