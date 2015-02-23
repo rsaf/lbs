@@ -231,6 +231,62 @@ module.exports = function(paramPS, paramESBMessage) {
     });
 
 
+    //  workspace/profiles/v1/corporateDetails/attachment/upload.json
+    upRouter.post('/corporateDetails/attachment/upload.json', function(paramRequest, paramResponse){
+
+
+        console.log('-----attachement bingo-----');
+
+
+        var m = {ns: 'upm',op:'upm_uploadCorporationDetailsLogo', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            photoData:null,
+            ifm:null,
+            profileData:null
+        };
+
+
+        var form = new formidable.IncomingForm();
+        form.parse(paramRequest, function(err, fields, files) {
+            var old_path = files.file.path,
+                file_ext = files.file.name.split('.').pop();
+
+
+            console.log('files :----- ', files);
+            console.log('file.file:----- ', files.file);
+            console.log('file name:----- ', files.file.name);
+            console.log('fields----',fields);
+
+            var profileToUpdate = JSON.parse(fields.json);
+
+            fs.readFile(old_path, function(err, data) {
+
+
+                console.log('data-------',data )
+
+                m.pl.photoData= data;
+                m.pl.ifm = file_ext;
+                m.pl.profileData = profileToUpdate;
+
+                //esbMessage(m)
+                //    .then(function(r) {
+                //        console.log('update successfull');
+                //        oHelpers.sendResponse(paramResponse,200,r);
+                //    })
+                //    .fail(function(r) {
+                //        console.log('uph error:-----');
+                //        console.log(r.er);
+                //        var r = {pl:null, er:{ec:404,em:"could not save logo and update profile"}};
+                //        oHelpers.sendResponse(paramResponse,404,r);
+                //    });
+
+            })
+
+        });
+
+    });
 
 
 
@@ -240,9 +296,6 @@ module.exports = function(paramPS, paramESBMessage) {
 
     //workspace/profiles/v1/upload
     upRouter.post('/corporateDetails/upload.json', function(paramRequest, paramResponse){
-
-
-        console.log('bingo-----');
 
 
         var m = {ns: 'upm',op:'upm_uploadCorporationDetailsLogo', pl: null};
