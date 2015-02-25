@@ -8,7 +8,7 @@ var Q = require('q');
 
 module.exports = function(paramService, esbMessage)
 {
-  function _persistForm(paramRequest, paramResponse, paramNext){
+  function _persistForm(paramRequest, paramResponse){
     var m = {};
     //formHtml
     Q().then(function(){
@@ -17,14 +17,59 @@ module.exports = function(paramService, esbMessage)
       m.op='bmm_persistForm';
       return esbMessage(m);
     }).then(function(msg){
-      console.log('1111 success:',msg)
       oHelpers.sendResponse(paramResponse,200,msg);
     }).fail(function(er){
-      console.log('why a fail:',er)
       oHelpers.sendResponse(paramResponse,501,er);      
     });    
   }
+  function _persistActivity(paramRequest, paramResponse){
+    var m = {};
+    //formHtml
+    Q().then(function(){
+      m.pl=JSON.parse(paramRequest.body.json);
+      m.pl.userid=paramRequest.user.id;
+      m.op='bmm_persistActivity';
+      return esbMessage(m);
+    }).then(function(msg){
+      oHelpers.sendResponse(paramResponse,200,msg);
+    }).fail(function(er){
+      oHelpers.sendResponse(paramResponse,501,er);      
+    });    
+  }
+
+
+
+
   var photosRouter = paramService.Router();
+  photosRouter.post('/form.json', function(paramRequest, paramResponse, paramNext){
+    _persistForm(paramRequest, paramResponse, paramNext)
+  });
+  photosRouter.put('/form.json', function(paramRequest, paramResponse, paramNext){
+    _persistForm(paramRequest, paramResponse, paramNext)
+  });
+  photosRouter.post('/activity.json', function(paramRequest, paramResponse, paramNext){
+    _persistActivity(paramRequest, paramResponse, paramNext)
+  });
+  photosRouter.put('/activity.json', function(paramRequest, paramResponse, paramNext){
+    _persistActivity(paramRequest, paramResponse, paramNext)
+  });
+  photosRouter.get('/activity.json', function(paramRequest, paramResponse, paramNext){
+    var m = {};
+    //formHtml
+    Q().then(function(){
+      m.pl={code:paramRequest.query.code}
+      m.op='bmm_getActivity';
+      return esbMessage(m);
+    }).then(function(msg){
+      oHelpers.sendResponse(paramResponse,200,{pl:msg});
+    }).fail(function(er){
+      oHelpers.sendResponse(paramResponse,501,er);      
+    });    
+  });
+
+  
+  
+  
   photosRouter.get('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
       if (paramRequest.params.activitiesType === 'activitieslist'){
           oHelpers.sendResponse(paramResponse,200,activitieslist);
@@ -56,12 +101,6 @@ module.exports = function(paramService, esbMessage)
       else if(paramRequest.params.activitiesType === 'delegated'){
           oHelpers.sendResponse(paramResponse,200,delegated);
       }
-  });
-  photosRouter.post('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
-    _persistForm(paramRequest, paramResponse, paramNext)
-  });
-  photosRouter.put('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
-    _persistForm(paramRequest, paramResponse, paramNext)
   });
 
 
