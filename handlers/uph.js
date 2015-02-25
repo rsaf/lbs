@@ -236,13 +236,14 @@ module.exports = function(paramPS, paramESBMessage) {
         var m = {
             "ns":"upm",
             "op": "upm_updateCorporationDetailsFAQ",
-            "pl":paramRequest.body
+            "pl":{}
         };
 
 
         m.pl.uID = paramRequest.user.lanzheng.loginName;
         m.pl.oID = paramRequest.user.currentOrganization;
         m.pl.op = 'create';
+        m.pl.profileData = paramRequest.body;
 
         esbMessage(m)
             .then(function(r) {
