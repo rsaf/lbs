@@ -99,6 +99,7 @@ try {
         bs.use(exp.static('./static')); //use for local testing only
         bs.use('/photos', exp.static('./photos')); //use for local testing only
         bs.use('/forms', exp.static('./forms')); //use for local testing only
+        bs.use('/files', exp.static('./files')); //use for local testing only
 
         bs.use(errorHandler());
         bs.use(logger('dev'));
