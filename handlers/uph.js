@@ -260,11 +260,10 @@ module.exports = function(paramPS, paramESBMessage) {
 
     });
 
-
     //post workspace/profiles/v1/personal.json
     upRouter.delete('/corporateDetails/faq/:profile_id/:faq_uuid.json', function(paramRequest, paramResponse){
 
-        console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_id);
+        console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_uuid);
 
 
         var m = {
@@ -273,8 +272,7 @@ module.exports = function(paramPS, paramESBMessage) {
             "pl":{
               uID:paramRequest.user.lanzheng.loginName,
             oID :paramRequest.user.currentOrganization,
-            uuid : paramRequest.params.faq_uuid,
-            _id :paramRequest.params.profile_id,
+           profileData:{uuid:paramRequest.params.faq_uuid, _id:paramRequest.params.profile_id},
             op :'delete'
 
             }
@@ -308,8 +306,6 @@ module.exports = function(paramPS, paramESBMessage) {
 
         m.pl.uID = paramRequest.user.lanzheng.loginName;
         m.pl.oID = paramRequest.user.currentOrganization;
-        m.pl.uuid = paramRequest.params.faq_uuid;
-        m.pl._id = paramRequest.params.profile_id;
         m.pl.op = 'update';
         m.pl.profileData = paramRequest.body;
 
@@ -350,18 +346,12 @@ module.exports = function(paramPS, paramESBMessage) {
             var old_path = files.file.path,
                 file_ext = files.file.name.split('.').pop();
 
-
-            console.log('files :----- ', files);
-            console.log('file.file:----- ', files.file);
             console.log('file name:----- ', files.file.name);
-            console.log('fields----',fields);
 
             var profileToUpdate = JSON.parse(fields.json);
 
             fs.readFile(old_path, function(err, data) {
 
-
-                console.log('data-------',data )
 
                 m.pl.profileData = profileToUpdate;
                 var attachment = {};
@@ -432,8 +422,7 @@ module.exports = function(paramPS, paramESBMessage) {
             oID:paramRequest.user.currentOrganization,
             ifm:null,
             op : 'delete',
-           uuid:paramRequest.params.attch_id,
-           _id : paramRequest.params.profile_id
+            profileData:{uuid:paramRequest.params.attch_id, _id:paramRequest.params.profile_id}
         };
 
         esbMessage(m)
@@ -503,8 +492,9 @@ module.exports = function(paramPS, paramESBMessage) {
     });
 
     //workspace/profiles/v1/upload
-    upRouter.post('/corporateDetails/images/upload.json', function(paramRequest, paramResponse){
+    upRouter.post('/corporateDetails/images.json', function(paramRequest, paramResponse){
 
+        console.log('uph post new image')
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsImages', pl: null};
         m.pl = {
@@ -560,14 +550,17 @@ module.exports = function(paramPS, paramESBMessage) {
         console.log('paramRequest.params.attch_id\n',paramRequest.params.attch_id);
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsImages', pl: null};
+
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
-            ifm:null,
             op : 'delete',
-            uuid:paramRequest.params.img_id,
-            _id : paramRequest.params.profile_id
+            profileData:{uuid:paramRequest.params.img_id, _id:paramRequest.params.profile_id}
         };
+
+
+
+
 
         esbMessage(m)
             .then(function(r) {
@@ -583,11 +576,9 @@ module.exports = function(paramPS, paramESBMessage) {
 
 
     //post workspace/profiles/v1/personal.json
-    upRouter.post('/corporateDetails/videos/:profile_id.json', function(paramRequest, paramResponse){
+    upRouter.post('/corporateDetails/videos.json', function(paramRequest, paramResponse){
 
-        console.log('paramRequest.params.profile_id',paramRequest.params.profile_id);
-        console.log('paramRequest.body',paramRequest.body);
-
+        console.log('uph post new video')
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsVideos', pl: null};
         m.pl = {
@@ -619,18 +610,15 @@ module.exports = function(paramPS, paramESBMessage) {
     //post workspace/profiles/v1/personal.json
     upRouter.delete('/corporateDetails/videos/:profile_id/:vid_id.json', function(paramRequest, paramResponse){
 
-        console.log('paramRequest.params.vid_id\n',paramRequest.params.vid_id);
+        console.log('uph ---delete video\n',paramRequest.params.vid_id);
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsVideos', pl: null};
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
             op : 'delete',
-            uuid:paramRequest.params.vid_id,
-            _id : paramRequest.params.profile_id
-        };
-
-
+            profileData:{uuid:paramRequest.params.vid_id, _id:paramRequest.params.profile_id}
+           };
 
         esbMessage(m)
             .then(function(r) {
@@ -648,13 +636,11 @@ module.exports = function(paramPS, paramESBMessage) {
 
     });
 
-
-
     //post workspace/profiles/v1/personal.json
-    upRouter.post('/corporateDetails/audios/:profile_id.json', function(paramRequest, paramResponse){
+    upRouter.post('/corporateDetails/audios.json', function(paramRequest, paramResponse){
 
-        console.log('paramRequest.params.profile_id',paramRequest.params.profile_id);
-        console.log('paramRequest.body',paramRequest.body);
+
+        console.log('uph post new audio')
 
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsAudios', pl: null};
@@ -685,24 +671,22 @@ module.exports = function(paramPS, paramESBMessage) {
     //post workspace/profiles/v1/personal.json
     upRouter.delete('/corporateDetails/audios/:profile_id/:audio_id.json', function(paramRequest, paramResponse){
 
-        console.log('paramRequest.params.audio_id\n',paramRequest.params.audio_id);
+        console.log('uph ---delete audio\n',paramRequest.params.audio_id);
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsAudios', pl: null};
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
             op : 'delete',
-            uuid:paramRequest.params.audio_id,
-            _id : paramRequest.params.profile_id
+            profileData:{uuid:paramRequest.params.audio_id, _id:paramRequest.params.profile_id}
         };
-
 
 
         esbMessage(m)
             .then(function(r) {
 
 
-                console.log('r',r);
+                console.log('r--',r);
 
                 oHelpers.sendResponse(paramResponse,200,r);
             })
