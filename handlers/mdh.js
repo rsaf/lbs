@@ -89,7 +89,7 @@ module.exports = function (paramService, esbMessage)
 
 
               console.log('returned users value -------: ', JSON.stringify(r));
-              console.log('returned users value.users -------: ', r.users);
+              //console.log('returned users value.users -------: ', r.users);
               paramResponse.writeHead(200, {"Content-Type": "application/json"});
               paramResponse.end(JSON.stringify(r));
             })
@@ -103,51 +103,52 @@ module.exports = function (paramService, esbMessage)
 
   });
 
-
-
   ///workspace/notifications/mailling/notifications.json
   userNotificationRouter.post('/mailling/notifications.json', function (paramRequest, paramResponse, paramNext) {
 
+    var inMailContacts  = paramRequest.body.recipients;
+    var inMailRecipients = [];
 
-    var contactName = paramRequest.body.recipients[0].to;
+    console.log(inMailContacts);
 
+    for (i in inMailContacts ){
+      if(!(inMailContacts[i])) continue ;
+       inMailRecipients.push({
+        inmail: {to: inMailContacts[i].to},
+        weixin: {to:null},
+        sms: {to: null},
+        email: {to: null}
+       });
 
+    }
     var m = {
       ns: 'mdm',
       vs: '1.0',
       op: 'sendNotification',
       pl: {
-        recipients: [{
-            inmail: {to: '' + contactName},
-            weixin: {to: 'lionleo001'},
-            sms: {to: '15900755434'},
-            email: {to: 'rolland@lbsconsulting.com'}
-          }],
+        recipients:inMailRecipients,
         notification: paramRequest.body.notification
       }
     };
-
+    //console.log(m.pl.recipients);
+    //console.log(m.pl);
 
     m.pl.notification.from = paramRequest.user.lanzheng.loginName;
-
     console.log('    -----------sender-------------- :  ', m.pl.notification.from);
+
+    //console.log(m.pl);
 
     esbMessage(m)
             .then(function (r) {
-
               paramResponse.writeHead(200, {"Content-Type": "application/json"});
               paramResponse.end(JSON.stringify(r));
             })
             .fail(function (r) {
-
               console.log(r.er);
               var r = {pl: null, er: {ec: 404, em: "could not send notification"}};
               oHelpers.sendResponse(paramResponse, 404, r);
             });
-
-
   });
-
 
   ///workspace/notifications/update/:viewstate.json
   userNotificationRouter.put('/update/:viewstate.json', function (paramRequest, paramResponse, paramNext) {
