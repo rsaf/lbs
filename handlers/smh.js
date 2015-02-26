@@ -5,21 +5,23 @@ var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
 
 function _initRequestMessage(paramRequest,type,id,adminOrg){
-  var col,mod='smm'
-  ,url;
+  var col,mod='smm',
+    message,url;
   if(type==='Service'){
-    col='服务';
+    col='services';
     url='/workspace/services/myservices/view/service';
+    message="服务"
   }
   if(type==='ServicePoint'){
-    col='网点';
+    col='servicepoints';
     url='/workspace/services/myservicepoints/view/servicepoint';
+    message="网点"
   }
   return {
 //    rdu: paramRequest.user.id//@todo: this should be set correctly
     rdo: adminOrg
     ,rc: 'code'
-    ,rt: col + '申请'
+    ,rt: message + '申请'
     ,rsu: paramRequest.user.lanzheng.loginName
     ,rso: paramRequest.user.id
     ,rs: 10
