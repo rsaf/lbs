@@ -74,6 +74,7 @@ module.exports = function(paramService, esbMessage)
     Q().then(function(){
       m.pl={loginName:paramRequest.user.lanzheng.loginName}//@todo: add company id as well
       m.op='bmm_getActivities';
+      console.log('executing esb message')
       return esbMessage(m);
     }).then(function resolve(msg){
       oHelpers.sendResponse(paramResponse,200,{pl:msg});
