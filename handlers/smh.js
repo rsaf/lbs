@@ -8,22 +8,22 @@ function _initRequestMessage(paramRequest,type,id,adminOrg){
   var col,mod='smm'
   ,url;
   if(type==='Service'){
-    col='services';
+    col='服务';
     url='/workspace/services/myservices/view/service';
   }
   if(type==='ServicePoint'){
-    col='servicepoints';
+    col='网点';
     url='/workspace/services/myservicepoints/view/servicepoint';
   }
   return {
 //    rdu: paramRequest.user.id//@todo: this should be set correctly
     rdo: adminOrg
     ,rc: 'code'
-    ,rt: 'Request : '+col
+    ,rt: col + '申请'
     ,rsu: paramRequest.user.lanzheng.loginName
     ,rso: paramRequest.user.id
     ,rs: 10
-    ,rb: 'body'
+    ,rb: '请审核用户申请，拼同意或者拒绝 '
     ,rtr: type
     ,ei:[{
         col:col
