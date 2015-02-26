@@ -13,21 +13,23 @@ module.exports = function(paramService, esbMessage)
     //formHtml
     Q().then(function(){
       m.pl=JSON.parse(paramRequest.body.json);
-      m.pl.userid=paramRequest.user.id;
+      m.pl.loginName=paramRequest.user.lanzheng.loginName;
+      m.pl.currentOrganization=paramRequest.user.currentOrganization;
       m.op='bmm_persistForm';
       return esbMessage(m);
     }).then(function(msg){
       oHelpers.sendResponse(paramResponse,200,msg);
     }).fail(function(er){
       oHelpers.sendResponse(paramResponse,501,er);      
-    });    
+    });
   }
   function _persistActivity(paramRequest, paramResponse){
     var m = {};
     //formHtml
     Q().then(function(){
       m.pl=JSON.parse(paramRequest.body.json);
-      m.pl.userid=paramRequest.user.id;
+      m.pl.loginName=paramRequest.user.lanzheng.loginName;
+      m.pl.currentOrganization=paramRequest.user.currentOrganization;
       m.op='bmm_persistActivity';
       return esbMessage(m);
     }).then(function(msg){
@@ -65,6 +67,20 @@ module.exports = function(paramService, esbMessage)
     }).fail(function(er){
       oHelpers.sendResponse(paramResponse,501,er);      
     });    
+  });
+  photosRouter.get('/activities.json', function(paramRequest, paramResponse, paramNext){
+    var m = {};
+    //formHtml
+    Q().then(function(){
+      m.pl={loginName:paramRequest.user.lanzheng.loginName}//@todo: add company id as well
+      m.op='bmm_getActivities';
+      return esbMessage(m);
+    }).then(function resolve(msg){
+      oHelpers.sendResponse(paramResponse,200,{pl:msg});
+    },function reject(er){
+      console.log(er);
+      oHelpers.sendResponse(paramResponse,501,er);      
+    });
   });
 
   
