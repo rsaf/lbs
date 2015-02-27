@@ -5,6 +5,7 @@
  */
 var oHelpers = require('../utilities/helpers.js');
 var fs  = require('fs');
+var    formidable = require('formidable');
 
 module.exports = function (paramService, esbMessage)
 {
