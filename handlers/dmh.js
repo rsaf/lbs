@@ -5,8 +5,6 @@
  */
 var oHelpers = require('../utilities/helpers.js');
 var fs  = require('fs');
-var formidable = require('formidable');
-
 
 module.exports = function (paramService, esbMessage)
 {
@@ -126,7 +124,7 @@ module.exports = function (paramService, esbMessage)
             m.pl.opp.rm  = fields['imgInfo[4][value]'];
             //m.pl.opp.isd = fields['imgInfo[5][value]'];  // the date from the user input needs to be validated
             m.pl.opp.isd = Date.now();
-            m.pl.opp.irs = fields['imgInfo[6][value]'];
+            m.pl.opp.irs = fields['imgInfo[6][value]'];;
 
           esbMessage(m)
               .then(function (r) {
