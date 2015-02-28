@@ -170,12 +170,12 @@ module.exports = function(paramPS, paramESBMessage) {
     });
 
 
-//get workspace/profiles/v1/corporateDetails/:profileID.json
-    upRouter.get('/corporateDetails/:profileID.json', function(paramRequest, paramResponse){
+//get workspace/profiles/v1/commonDetails/:profileID.json
+    upRouter.get('/commonDetails/:profileID.json', function(paramRequest, paramResponse){
 
         var m = {
             "ns":"upm",
-            "op": "readCorporateDetailPageByID",
+            "op": "readCommonDetailPageByID",
             "pl":{_id:paramRequest.user.id}
         };
 
@@ -194,7 +194,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
 
     //post workspace/profiles/v1/personal.json
-    upRouter.put('/corporateDetails/:profile_id.json', function(paramRequest, paramResponse){
+    upRouter.put('/commonDetails/:profile_id.json', function(paramRequest, paramResponse){
 
         console.log('paramRequest.params.profile_id',paramRequest.params.profile_id);
         console.log('paramRequest.body',paramRequest.body);
@@ -202,7 +202,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
         var m = {
             "ns":"upm",
-            "op": "updateCorporateDetailProfile",
+            "op": "updateCommonDetailProfile",
             "pl":paramRequest.body
         };
 
@@ -220,14 +220,14 @@ module.exports = function(paramPS, paramESBMessage) {
             })
             .fail(function(r) {
                 console.log('uph error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"uph error: could not update corporate details"}};
+                var r = {pl:null, er:{ec:404,em:"uph error: could not update common details"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
 
     //post workspace/profiles/v1/personal.json
-    upRouter.post('/corporateDetails/faq.json', function(paramRequest, paramResponse){
+    upRouter.post('/commonDetails/faq.json', function(paramRequest, paramResponse){
 
         console.log('paramRequest.params.profile_id',paramRequest.params.profile_id);
         console.log('paramRequest.body',paramRequest.body);
@@ -235,7 +235,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
         var m = {
             "ns":"upm",
-            "op": "upm_updateCorporationDetailsFAQ",
+            "op": "upm_updateCommonDetailsFAQ",
             "pl":{}
         };
 
@@ -254,21 +254,21 @@ module.exports = function(paramPS, paramESBMessage) {
             })
             .fail(function(r) {
                 console.log('uph error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"uph error: could not update corporate details"}};
+                var r = {pl:null, er:{ec:404,em:"uph error: could not update common details"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
 
     //post workspace/profiles/v1/personal.json
-    upRouter.delete('/corporateDetails/faq/:profile_id/:faq_uuid.json', function(paramRequest, paramResponse){
+    upRouter.delete('/commonDetails/faq/:profile_id/:faq_uuid.json', function(paramRequest, paramResponse){
 
         console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_uuid);
 
 
         var m = {
             "ns":"upm",
-            "op": "upm_updateCorporationDetailsFAQ",
+            "op": "upm_updateCommonDetailsFAQ",
             "pl":{
               uID:paramRequest.user.lanzheng.loginName,
             oID :paramRequest.user.currentOrganization,
@@ -285,14 +285,14 @@ module.exports = function(paramPS, paramESBMessage) {
             })
             .fail(function(r) {
                 console.log('uph error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"uph error: could not delete corporate details faq"}};
+                var r = {pl:null, er:{ec:404,em:"uph error: could not delete common details faq"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
 
     //post workspace/profiles/v1/personal.json
-    upRouter.put('/corporateDetails/faq/:profile_id/:faq_uuid.json', function(paramRequest, paramResponse){
+    upRouter.put('/commonDetails/faq/:profile_id/:faq_uuid.json', function(paramRequest, paramResponse){
 
         console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_id);
         console.log('paramRequest.body\n',paramRequest.body);
@@ -300,7 +300,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
         var m = {
             "ns":"upm",
-            "op": "upm_updateCorporationDetailsFAQ",
+            "op": "upm_updateCommonDetailsFAQ",
             "pl":{}
         };
 
@@ -316,20 +316,20 @@ module.exports = function(paramPS, paramESBMessage) {
             })
             .fail(function(r) {
                 console.log('uph error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"uph error: could not update corporate details faq"}};
+                var r = {pl:null, er:{ec:404,em:"uph error: could not update common details faq"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
 
-    //  workspace/profiles/v1/corporateDetails/attachment/upload.json
-    upRouter.post('/corporateDetails/description/attachment.json', function(paramRequest, paramResponse){
+    //  workspace/profiles/v1/commonDetails/attachment/upload.json
+    upRouter.post('/commonDetails/description/attachment.json', function(paramRequest, paramResponse){
 
 
         console.log('-----attachement bingo-----');
 
 
-        var m = {ns: 'upm',op:'upm_updateCorporationDetailsDescription', pl: null};
+        var m = {ns: 'upm',op:'upm_updateCommonDetailsDescription', pl: null};
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
@@ -380,14 +380,14 @@ module.exports = function(paramPS, paramESBMessage) {
 
 
 
-    //  workspace/profiles/v1/corporateDetails/attachment/upload.json
-    upRouter.put('/corporateDetails/description/:profile_id.json', function(paramRequest, paramResponse){
+    //  workspace/profiles/v1/commonDetails/attachment/upload.json
+    upRouter.put('/commonDetails/description/:profile_id.json', function(paramRequest, paramResponse){
 
 
         console.log('-----attachement bingo-----');
 
 
-        var m = {ns: 'upm',op:'upm_updateCorporationDetailsDescription', pl: null};
+        var m = {ns: 'upm',op:'upm_updateCommonDetailsDescription', pl: null};
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
@@ -404,19 +404,19 @@ module.exports = function(paramPS, paramESBMessage) {
             })
             .fail(function(r) {
                 console.log('uph error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"uph error: could not update corporate details description"}};
+                var r = {pl:null, er:{ec:404,em:"uph error: could not update common details description"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
 
 
-    upRouter.delete('/corporateDetails/description/attachment/:profile_id/:attch_id.json', function(paramRequest, paramResponse){
+    upRouter.delete('/commonDetails/description/attachment/:profile_id/:attch_id.json', function(paramRequest, paramResponse){
 
 
         console.log('paramRequest.params.attch_id\n',paramRequest.params.attch_id);
 
-        var m = {ns: 'upm',op:'upm_updateCorporationDetailsDescription', pl: null};
+        var m = {ns: 'upm',op:'upm_updateCommonDetailsDescription', pl: null};
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
@@ -432,7 +432,7 @@ module.exports = function(paramPS, paramESBMessage) {
             })
             .fail(function(r) {
                 console.log('uph error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"uph error: could not delete corporate details attachment"}};
+                var r = {pl:null, er:{ec:404,em:"uph error: could not delete common details attachment"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
@@ -442,10 +442,10 @@ module.exports = function(paramPS, paramESBMessage) {
     });
 
     //workspace/profiles/v1/upload
-    upRouter.post('/corporateDetails/upload.json', function(paramRequest, paramResponse){
+    upRouter.post('/commonDetails/upload.json', function(paramRequest, paramResponse){
 
 
-        var m = {ns: 'upm',op:'upm_uploadCorporationDetailsLogo', pl: null};
+        var m = {ns: 'upm',op:'upm_uploadCommonDetailsLogo', pl: null};
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
@@ -492,11 +492,11 @@ module.exports = function(paramPS, paramESBMessage) {
     });
 
     //workspace/profiles/v1/upload
-    upRouter.post('/corporateDetails/images.json', function(paramRequest, paramResponse){
+    upRouter.post('/commonDetails/images.json', function(paramRequest, paramResponse){
 
         console.log('uph post new image')
 
-        var m = {ns: 'upm',op:'upm_updateCorporationDetailsImages', pl: null};
+        var m = {ns: 'upm',op:'upm_updateCommonDetailsImages', pl: null};
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
@@ -545,11 +545,11 @@ module.exports = function(paramPS, paramESBMessage) {
 
     });
 
-    upRouter.delete('/corporateDetails/images/:profile_id/:img_id.json', function(paramRequest, paramResponse){
+    upRouter.delete('/commonDetails/images/:profile_id/:img_id.json', function(paramRequest, paramResponse){
 
         console.log('paramRequest.params.attch_id\n',paramRequest.params.attch_id);
 
-        var m = {ns: 'upm',op:'upm_updateCorporationDetailsImages', pl: null};
+        var m = {ns: 'upm',op:'upm_updateCommonDetailsImages', pl: null};
 
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
@@ -569,18 +569,18 @@ module.exports = function(paramPS, paramESBMessage) {
             })
             .fail(function(r) {
                 console.log('uph error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"uph error: could not delete corporate details image"}};
+                var r = {pl:null, er:{ec:404,em:"uph error: could not delete common details image"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
     });
 
 
     //post workspace/profiles/v1/personal.json
-    upRouter.post('/corporateDetails/videos.json', function(paramRequest, paramResponse){
+    upRouter.post('/commonDetails/videos.json', function(paramRequest, paramResponse){
 
         console.log('uph post new video')
 
-        var m = {ns: 'upm',op:'upm_updateCorporationDetailsVideos', pl: null};
+        var m = {ns: 'upm',op:'upm_updateCommonDetailsVideos', pl: null};
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
@@ -600,7 +600,7 @@ module.exports = function(paramPS, paramESBMessage) {
             })
             .fail(function(r) {
                 console.log('uph error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"uph error: could not update corporate details"}};
+                var r = {pl:null, er:{ec:404,em:"uph error: could not update common details"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
@@ -608,11 +608,11 @@ module.exports = function(paramPS, paramESBMessage) {
 
 
     //post workspace/profiles/v1/personal.json
-    upRouter.delete('/corporateDetails/videos/:profile_id/:vid_id.json', function(paramRequest, paramResponse){
+    upRouter.delete('/commonDetails/videos/:profile_id/:vid_id.json', function(paramRequest, paramResponse){
 
         console.log('uph ---delete video\n',paramRequest.params.vid_id);
 
-        var m = {ns: 'upm',op:'upm_updateCorporationDetailsVideos', pl: null};
+        var m = {ns: 'upm',op:'upm_updateCommonDetailsVideos', pl: null};
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
@@ -630,20 +630,20 @@ module.exports = function(paramPS, paramESBMessage) {
             })
             .fail(function(r) {
                 console.log('uph error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"uph error: could not delete corporate video"}};
+                var r = {pl:null, er:{ec:404,em:"uph error: could not delete common video"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
 
     //post workspace/profiles/v1/personal.json
-    upRouter.post('/corporateDetails/audios.json', function(paramRequest, paramResponse){
+    upRouter.post('/commonDetails/audios.json', function(paramRequest, paramResponse){
 
 
         console.log('uph post new audio')
 
 
-        var m = {ns: 'upm',op:'upm_updateCorporationDetailsAudios', pl: null};
+        var m = {ns: 'upm',op:'upm_updateCommonDetailsAudios', pl: null};
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
@@ -663,17 +663,17 @@ module.exports = function(paramPS, paramESBMessage) {
             })
             .fail(function(r) {
                 console.log('uph error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"uph error: could not update corporate details"}};
+                var r = {pl:null, er:{ec:404,em:"uph error: could not update common details"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
     //post workspace/profiles/v1/personal.json
-    upRouter.delete('/corporateDetails/audios/:profile_id/:audio_id.json', function(paramRequest, paramResponse){
+    upRouter.delete('/commonDetails/audios/:profile_id/:audio_id.json', function(paramRequest, paramResponse){
 
         console.log('uph ---delete audio\n',paramRequest.params.audio_id);
 
-        var m = {ns: 'upm',op:'upm_updateCorporationDetailsAudios', pl: null};
+        var m = {ns: 'upm',op:'upm_updateCommonDetailsAudios', pl: null};
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
@@ -692,12 +692,11 @@ module.exports = function(paramPS, paramESBMessage) {
             })
             .fail(function(r) {
                 console.log('uph error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"uph error: could not delete corporate audio"}};
+                var r = {pl:null, er:{ec:404,em:"uph error: could not delete common audio"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
-
 
 
 //put workspace/v1/profiles/:personal.json
@@ -763,7 +762,6 @@ module.exports = function(paramPS, paramESBMessage) {
     });
     return upRouter;
 };
-
 
 
 var personal = {
@@ -848,30 +846,6 @@ var corporate = {
                 "status": "正常"
             }]
     };
-
-
-//get     /workspace/v1/profiles/personal.json ==> read
-//get     /workspace/v1/profiles/personal/:personal.json ==>   /workspace/profiles/LZ000678987.json ==> read a specific user
-//
-//create (put)
-//put    /workspace/v1/profile/personal.json  ==> creates a new profile
-//
-//update (delete)
-//post   /workspace/v1/profile/personal/:personal.json  ==> update the profile
-//
-//delete /workspace/v1/profile/personal/:personal.json  ==> mark for delete
-//
-//get     /workspace/v1/profiles/corporate.json ==> read
-//get     /workspace/v1/profiles/corporate/:corporate.json ==>   /workspace/profiles/LZ000678987.json ==> read a specific user
-//
-//create (put)
-//put    /workspace/v1/profile/corporate.json  ==> creates a new profile
-//
-//update (delete)
-//post   /workspace/v1/profiles/corporate/:corporate.json ==> update the profile
-//
-//delete /workspace/v1/profiles/corporate/:corporate.json  ==> mark for delete
-
 
 
 var idphotos = {
