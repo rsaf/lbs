@@ -559,9 +559,6 @@ module.exports = function(paramPS, paramESBMessage) {
         };
 
 
-
-
-
         esbMessage(m)
             .then(function(r) {
                 console.log('r',r);
@@ -849,28 +846,6 @@ var corporate = {
             }]
     };
 
-
-//get     /workspace/v1/profiles/personal.json ==> read
-//get     /workspace/v1/profiles/personal/:personal.json ==>   /workspace/profiles/LZ000678987.json ==> read a specific user
-//
-//create (put)
-//put    /workspace/v1/profile/personal.json  ==> creates a new profile
-//
-//update (delete)
-//post   /workspace/v1/profile/personal/:personal.json  ==> update the profile
-//
-//delete /workspace/v1/profile/personal/:personal.json  ==> mark for delete
-//
-//get     /workspace/v1/profiles/corporate.json ==> read
-//get     /workspace/v1/profiles/corporate/:corporate.json ==>   /workspace/profiles/LZ000678987.json ==> read a specific user
-//
-//create (put)
-//put    /workspace/v1/profile/corporate.json  ==> creates a new profile
-//
-//update (delete)
-//post   /workspace/v1/profiles/corporate/:corporate.json ==> update the profile
-//
-//delete /workspace/v1/profiles/corporate/:corporate.json  ==> mark for delete
 
 
 
