@@ -6,8 +6,7 @@
 var oHelpers= require('../utilities/helpers.js');
 var Q = require('q');
 
-module.exports = function(paramService, esbMessage)
-{
+module.exports = function(paramService, esbMessage){
   function _persistForm(paramRequest, paramResponse){
     var m = {};
     //formHtml
