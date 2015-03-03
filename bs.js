@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
 var oHelpers= require('./utilities/helpers.js');
 var cookieParser = require('cookie-parser');
+var cluster = require('cluster2');
 var Q = require('q');
 
 var oHomeRouter ;               // home
@@ -69,9 +70,9 @@ try {
         pl: {dn:'redis'}
     });
 
-    console.log('\nBS: getting BS dependencies ...');
-    return Q.all([p0, p1, p2, p3,p4]).then(function (r) {
 
+    return Q.all([p0, p1, p2, p3,p4]).then(function (r) {
+        console.log('\nBS: getting BS dependencies ...');
         //console.log(r);
         bsPort = r[0].pl.fn;
         scmPassportObject = r[1].pl.fn;
@@ -98,7 +99,7 @@ try {
         oPhotoServiceRouter = require('./handlers/pmh.js')(exp, paramESBMessage);       // workspace/photoservices
 
         console.log('BS: self configuring with injected dependencies ....');
-        bs.set('port', bsPort);
+        //bs.set('port', bsPort);
         //bs.use(expressSession({resave: true, saveUninitialized: true, secret: 'uwotm8'}));
         bs.use(cookieParser('uwotm8'));
         bs.use(expressSession(
@@ -156,10 +157,18 @@ try {
 
         bs.all('*', oHelpers.four_oh_four);
 
-        var bsInstance =  bs.listen(bs.get('port'));
+        //var bsInstance =  bs.listen(bs.get('port'));
+        var bsCluster = new cluster({
+            port: bsPort
+        });
 
-        console.log('BS: bs is fully configured ...');
-        return Q({pl: {fn: bsInstance}, er: null});
+        bsCluster.listen(function(callback) {
+            callback(bs);
+            console.log('BS: bs is fully configured...');
+            return Q({pl: {fn: bsCluster}, er: null});
+        });
+
+
     })
     .fail(function (r) {
         console.log('BS: starting bs failed with failure message: ' + r);
