@@ -41,20 +41,20 @@ module.exports = function(paramService, esbMessage){
 
 
 
-  var photosRouter = paramService.Router();
-  photosRouter.post('/form.json', function(paramRequest, paramResponse, paramNext){
+  var bmRouter = paramService.Router();
+  bmRouter.post('/form.json', function(paramRequest, paramResponse, paramNext){
     _persistForm(paramRequest, paramResponse, paramNext)
   });
-  photosRouter.put('/form.json', function(paramRequest, paramResponse, paramNext){
+  bmRouter.put('/form.json', function(paramRequest, paramResponse, paramNext){
     _persistForm(paramRequest, paramResponse, paramNext)
   });
-  photosRouter.post('/activity.json', function(paramRequest, paramResponse, paramNext){
+  bmRouter.post('/activity.json', function(paramRequest, paramResponse, paramNext){
     _persistActivity(paramRequest, paramResponse, paramNext)
   });
-  photosRouter.put('/activity.json', function(paramRequest, paramResponse, paramNext){
+  bmRouter.put('/activity.json', function(paramRequest, paramResponse, paramNext){
     _persistActivity(paramRequest, paramResponse, paramNext)
   });
-  photosRouter.get('/activity.json', function(paramRequest, paramResponse, paramNext){
+  bmRouter.get('/activity.json', function(paramRequest, paramResponse, paramNext){
     var m = {};
     //formHtml
     Q().then(function(){
@@ -67,7 +67,7 @@ module.exports = function(paramService, esbMessage){
       oHelpers.sendResponse(paramResponse,501,er);      
     });    
   });
-  photosRouter.get('/activities.json', function(paramRequest, paramResponse, paramNext){
+  bmRouter.get('/activities.json', function(paramRequest, paramResponse, paramNext){
     var m = {};
     //formHtml
     Q().then(function(){
@@ -82,11 +82,7 @@ module.exports = function(paramService, esbMessage){
       oHelpers.sendResponse(paramResponse,501,er);      
     });
   });
-
-  
-  
-  
-  photosRouter.get('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
+  bmRouter.get('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
       if (paramRequest.params.activitiesType === 'activitieslist'){
           oHelpers.sendResponse(paramResponse,200,activitieslist);
       }
@@ -127,7 +123,523 @@ module.exports = function(paramService, esbMessage){
 
 
 
-  return photosRouter;
+    bmRouter.get('/activityDetails/:activityDetail_id.json', function(paramRequest, paramResponse){
+
+        var m = {
+            "ns":"bmm",
+            "op": "bmm_readActivityDetailByID",
+            "pl":{_id:paramRequest.user.id}
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+                //console.log(r.pl);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not find activity detail page"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+
+    bmRouter.put('/activityDetails/:activityDetail_id.json', function(paramRequest, paramResponse){
+
+        console.log('paramRequest.params.activityDetail_id',paramRequest.params.activityDetail_id);
+        console.log('paramRequest.body',paramRequest.body);
+
+
+        var m = {
+            "ns":"bmm",
+            "op": "bmm_updateActivityDetail",
+            "pl":paramRequest.body
+        };
+
+
+        m.pl.uID = paramRequest.user.lanzheng.loginName;
+        m.pl.oID = paramRequest.user.currentOrganization;
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                console.log('r',r);
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('bmh error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail "}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+    bmRouter.post('/activityDetails/faq.json', function(paramRequest, paramResponse){
+
+        console.log('paramRequest.params.activityDetail_id',paramRequest.params.activityDetail_id);
+        console.log('paramRequest.body',paramRequest.body);
+
+
+        var m = {
+            "ns":"bmm",
+            "op": "bmm_updateActivityDetailFAQ",
+            "pl":{}
+        };
+
+
+        m.pl.uID = paramRequest.user.lanzheng.loginName;
+        m.pl.oID = paramRequest.user.currentOrganization;
+        m.pl.op = 'create';
+        m.pl.jsonData = paramRequest.body;
+
+        esbMessage(m)
+            .then(function(r) {
+
+                console.log('r',r);
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('bmh error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail "}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+    bmRouter.delete('/activityDetails/faq/:activityDetail_id/:faq_uuid.json', function(paramRequest, paramResponse){
+
+        console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_uuid);
+
+
+        var m = {
+            "ns":"bmm",
+            "op": "bmm_updateActivityDetailFAQ",
+            "pl":{
+                uID:paramRequest.user.lanzheng.loginName,
+                oID :paramRequest.user.currentOrganization,
+                jsonData:{uuid:paramRequest.params.faq_uuid, _id:paramRequest.params.activityDetail_id},
+                op :'delete'
+
+            }
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+                console.log('r',r);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('bmh error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"bmh error: could not delete activityDetail  faq"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+    bmRouter.put('/activityDetails/faq/:activityDetail_id/:faq_uuid.json', function(paramRequest, paramResponse){
+
+        console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_id);
+        console.log('paramRequest.body\n',paramRequest.body);
+
+
+        var m = {
+            "ns":"bmm",
+            "op": "bmm_updateActivityDetailFAQ",
+            "pl":{}
+        };
+
+        m.pl.uID = paramRequest.user.lanzheng.loginName;
+        m.pl.oID = paramRequest.user.currentOrganization;
+        m.pl.op = 'update';
+        m.pl.jsonData = paramRequest.body;
+
+        esbMessage(m)
+            .then(function(r) {
+                console.log('r',r);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('bmh error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail  faq"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+    bmRouter.post('/activityDetails/description/attachment.json', function(paramRequest, paramResponse){
+
+
+        console.log('-----attachement bingo-----');
+
+
+        var m = {ns: 'bmm',op:'bmm_updateActivityDetailDescription', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            photoData:null,
+            ifm:null,
+            op : 'create',
+            jsonData:null
+        };
+
+
+
+        var form = new formidable.IncomingForm();
+        form.parse(paramRequest, function(err, fields, files) {
+            var old_path = files.file.path,
+                file_ext = files.file.name.split('.').pop();
+
+            console.log('file name:----- ', files.file.name);
+
+            var jsonToUpdate = JSON.parse(fields.json);
+
+            fs.readFile(old_path, function(err, data) {
+
+
+                m.pl.jsonData = jsonToUpdate;
+                var attachment = {};
+                attachment.fm = file_ext;
+                attachment.fd = data;
+                attachment.nm = files.file.name;
+                m.pl.jsonData.description.attachment.push(attachment);
+
+                esbMessage(m)
+                    .then(function(r) {
+                        console.log('update successfull');
+                        oHelpers.sendResponse(paramResponse,200,r);
+                    })
+                    .fail(function(r) {
+                        console.log('bmh error:-----');
+                        console.log(r.er);
+                        var r = {pl:null, er:{ec:404,em:"could not save attachment and update profile"}};
+                        oHelpers.sendResponse(paramResponse,404,r);
+                    });
+
+            })
+
+        });
+
+    });
+
+    bmRouter.put('/activityDetails/description/:activityDetail_id.json', function(paramRequest, paramResponse){
+
+
+        console.log('-----attachement -----');
+
+
+        var m = {ns: 'bmm',op:'bmm_updateActivityDetailDescription', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            op : 'update',
+            _id: paramRequest.params.activityDetail_id,
+            jsonData:paramRequest.body
+        };
+
+
+        esbMessage(m)
+            .then(function(r) {
+                console.log('r',r);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('bmh error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail  description"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+
+    bmRouter.delete('/activityDetails/description/attachment/:activityDetail_id/:attch_id.json', function(paramRequest, paramResponse){
+
+
+        console.log('paramRequest.params.attch_id\n',paramRequest.params.attch_id);
+
+        var m = {ns: 'bmm',op:'bmm_updateActivityDetailDescription', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            ifm:null,
+            op : 'delete',
+            jsonData:{uuid:paramRequest.params.attch_id, _id:paramRequest.params.activityDetail_id}
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+                console.log('r',r);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('bmh error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"bmh error: could not delete activityDetail  attachment"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+
+
+
+    });
+
+
+    bmRouter.post('/activityDetails/upload.json', function(paramRequest, paramResponse){
+
+
+        var m = {ns: 'bmm',op:'bmm_uploadActivityDetailLogo', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            photoData:null,
+            ifm:null,
+            jsonData:null
+        };
+
+
+        var form = new formidable.IncomingForm();
+        form.parse(paramRequest, function(err, fields, files) {
+            var old_path = files.file.path,
+                file_ext = files.file.name.split('.').pop();
+
+
+            console.log('file name:----- ', files.file.name);
+
+            var jsonToUpdate = JSON.parse(fields.json);
+
+            fs.readFile(old_path, function(err, data) {
+
+
+                console.log('data-------',data )
+
+                m.pl.photoData= data;
+                m.pl.ifm = file_ext;
+                m.pl.jsonData = jsonToUpdate;
+
+                esbMessage(m)
+                    .then(function(r) {
+                        console.log('update successfull');
+                        oHelpers.sendResponse(paramResponse,200,r);
+                    })
+                    .fail(function(r) {
+                        console.log('bmh error:-----');
+                        console.log(r.er);
+                        var r = {pl:null, er:{ec:404,em:"could not save image and update profile"}};
+                        oHelpers.sendResponse(paramResponse,404,r);
+                    });
+            })
+
+        });
+
+    });
+
+
+    bmRouter.post('/activityDetails/images.json', function(paramRequest, paramResponse){
+
+        console.log('bmh post new image')
+
+        var m = {ns: 'bmm',op:'bmm_updateActivityDetailImages', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            photoData:null,
+            ifm:null,
+            op : 'create',
+            jsonData:null
+        };
+
+
+        var form = new formidable.IncomingForm();
+        form.parse(paramRequest, function(err, fields, files) {
+            var old_path = files.file.path,
+                file_ext = files.file.name.split('.').pop();
+
+
+            console.log('file name:----- ', files.file.name);
+
+            var jsonToUpdate = JSON.parse(fields.json);
+
+            fs.readFile(old_path, function(err, data) {
+
+
+                console.log('data-------',data )
+
+                m.pl.photoData= data;
+                m.pl.ifm = file_ext;
+                m.pl.jsonData = jsonToUpdate;
+
+                esbMessage(m)
+                    .then(function(r) {
+                        console.log('update successfull');
+                        oHelpers.sendResponse(paramResponse,200,r);
+                    })
+                    .fail(function(r) {
+                        console.log('bmh error:-----');
+                        console.log(r.er);
+                        var r = {pl:null, er:{ec:404,em:"could not save image and update profile"}};
+                        oHelpers.sendResponse(paramResponse,404,r);
+                    });
+
+            })
+
+        });
+
+
+    });
+
+    bmRouter.delete('/activityDetails/images/:activityDetail_id/:img_id.json', function(paramRequest, paramResponse){
+
+        console.log('paramRequest.params.attch_id\n',paramRequest.params.attch_id);
+
+        var m = {ns: 'bmm',op:'bmm_updateActivityDetailImages', pl: null};
+
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            op : 'delete',
+            jsonData:{uuid:paramRequest.params.img_id, _id:paramRequest.params.activityDetail_id}
+        };
+
+
+        esbMessage(m)
+            .then(function(r) {
+                console.log('r',r);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('bmh error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"bmh error: could not delete activityDetail  image"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+    });
+
+
+    bmRouter.post('/activityDetails/videos.json', function(paramRequest, paramResponse){
+
+        console.log('bmh post new video')
+
+        var m = {ns: 'bmm',op:'bmm_updateActivityDetailVideos', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            ifm:null,
+            op : 'create',
+            jsonData:paramRequest.body
+        };
+
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                console.log('r',r);
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('bmh error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail "}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+
+    bmRouter.delete('/activityDetails/videos/:activityDetail_id/:vid_id.json', function(paramRequest, paramResponse){
+
+        console.log('bmh ---delete video\n',paramRequest.params.vid_id);
+
+        var m = {ns: 'bmm',op:'bmm_updateActivityDetailVideos', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            op : 'delete',
+            jsonData:{uuid:paramRequest.params.vid_id, _id:paramRequest.params.activityDetail_id}
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                console.log('r',r);
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('bmh error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"bmh error: could not delete activityDetail video"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+    bmRouter.post('/activityDetails/audios.json', function(paramRequest, paramResponse){
+
+
+        console.log('bmh post new audio')
+
+
+        var m = {ns: 'bmm',op:'bmm_updateActivityDetailAudios', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            ifm:null,
+            op : 'create',
+            jsonData:paramRequest.body
+        };
+
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                console.log('r',r);
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('bmm error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"bmm error: could not update activityDetail "}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+    bmRouter.delete('/activityDetails/audios/:activityDetail_id/:audio_id.json', function(paramRequest, paramResponse){
+
+        console.log('bmm ---delete audio\n',paramRequest.params.audio_id);
+
+        var m = {ns: 'bmm',op:'bmm_updateActivityDetailAudios', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            op : 'delete',
+            jsonData:{uuid:paramRequest.params.audio_id, _id:paramRequest.params.activityDetail_id}
+        };
+
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                console.log('r--',r);
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('bmm error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"bmm error: could not delete activityDetail audio"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+
+
+
+    return bmRouter;
 };
 
 
