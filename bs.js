@@ -2,11 +2,14 @@ var exp = require('express');
 var bs = exp();
 var logger = require('morgan');
 var expressSession = require('express-session');
+var redisStore = require('connect-redis')(expressSession);
 var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
 var oHelpers= require('./utilities/helpers.js');
+var cookieParser = require('cookie-parser');
+var Q = require('q');
 
-var oHomeRouter ;               //  home
+var oHomeRouter ;               // home
 var oUserNotificationRouter;    // workspace/notifications  ==>  mdh.js  mdm
 var oUserRouter;                // workspace/users          ==>  sch.js  scm ///
 var oProfileRouter;             // workspace/profile        ==>  uph.js  upm
@@ -24,13 +27,12 @@ var oOperationsLogRouter ;      // workspace/operationslog  ==>  olh.js  olm
 
 var oPhotoServiceRouter ;       // workspace/photoservices  ==>  pmh.js  pmm
 
-var Q = require('q');
-
 var scmPassportObject = null;
 var olmRequestLoggerFunction = null;
 var scmCheckUserFunction = null;
 var esbMessageFunction = null;
 var bsPort = null;
+var redisClient = null;
 var p0 = null;
 var p1 = null;
 var p2 = null;
@@ -61,14 +63,21 @@ try {
         op: 'getUserIsAuthorizedChecker'
     });
 
+    p4 = esbMessageFunction({
+        op: 'dependency',
+        ns:  'bs',
+        pl: {dn:'redis'}
+    });
+
     console.log('\nBS: getting BS dependencies ...');
-    return Q.all([p0, p1, p2, p3]).then(function (r) {
+    return Q.all([p0, p1, p2, p3,p4]).then(function (r) {
 
         //console.log(r);
         bsPort = r[0].pl.fn;
         scmPassportObject = r[1].pl.fn;
         olmRequestLoggerFunction = r[2].pl.fn;
         scmCheckUserFunction = r[3].pl.fn;
+        redisClient = r[4].pl.fn;
 
         oHomeRouter = require('./handlers/hh.js')(exp, paramESBMessage);                // home
         oUserNotificationRouter = require('./handlers/mdh.js')(exp, paramESBMessage);   // workspace/notifications
@@ -90,7 +99,17 @@ try {
 
         console.log('BS: self configuring with injected dependencies ....');
         bs.set('port', bsPort);
-        bs.use(expressSession({resave: true, saveUninitialized: true, secret: 'uwotm8'}));
+        //bs.use(expressSession({resave: true, saveUninitialized: true, secret: 'uwotm8'}));
+        bs.use(cookieParser('uwotm8'));
+        bs.use(expressSession(
+            {
+                secret: 'uwotm8',
+                store: new redisStore({client: redisClient}),
+                saveUninitialized: false, // don't create session until something stored,
+                resave: false // don't save session if unmodified
+            }
+        ));
+
         bs.use(bodyParser.json());
         bs.use(bodyParser.urlencoded({extended: true}));
 
