@@ -3,6 +3,8 @@
  * created by harmmeiier@gmail.com
  * returns static json for all endpoints
  */
+
+// workspace/activities
 var oHelpers= require('../utilities/helpers.js');
 var Q = require('q');
 
@@ -131,13 +133,16 @@ module.exports = function(paramService, esbMessage){
             "pl":{_id:paramRequest.user.id}
         };
 
+        console.log('paramRequest.user.id-----------',paramRequest.user.id);
+
+
         esbMessage(m)
             .then(function(r) {
                 //console.log(r.pl);
                 oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
-                console.log(r.er);
+                console.log('bmh----',r.er);
                 var r = {pl:null, er:{ec:404,em:"could not find activity detail page"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
