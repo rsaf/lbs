@@ -151,7 +151,6 @@ module.exports = function(paramService, esbMessage){
 
     });
 
-
     bmRouter.put('/activityDetails/:activityDetail_id.json', function(paramRequest, paramResponse){
 
         console.log('paramRequest.params.activityDetail_id',paramRequest.params.activityDetail_id);
