@@ -30,7 +30,7 @@ module.exports = function(paramService, esbMessage){
     var m = {};
     //formHtml
     Q().then(function(){
-      m.pl=JSON.parse(paramRequest.body.json);
+      m.pl=JSON.parse(paramRequest.body.json).pl;
       m.pl.loginName=paramRequest.user.lanzheng.loginName;
       m.pl.currentOrganization=paramRequest.user.currentOrganization;
       m.op='bmm_persistActivity';
@@ -75,7 +75,7 @@ module.exports = function(paramService, esbMessage){
     var m = {};
     //formHtml
     Q().then(function(){
-      m.pl={loginName:paramRequest.user.lanzheng.loginName}//@todo: add company id as well
+      m.pl={loginName:paramRequest.user.lanzheng.loginName,currentOrganization:paramRequest.user.currentOrganization}
       m.op='bmm_getActivities';
       console.log('executing esb message')
       return esbMessage(m);
