@@ -77,8 +77,6 @@ module.exports = function(paramPS, paramESBMessage) {
         });
 
 
-
-
 //get workspace/profiles/v1/personal.json
     upRouter.get('/personal.json', function(paramRequest, paramResponse){
 
