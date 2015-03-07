@@ -211,5 +211,130 @@ module.exports = function (paramService, esbMessage)
   });
 
 
+
+
+
+  ///workspace/notifications/comments/comment.json
+  userNotificationRouter.get('/comments/:targetId.json', function (paramRequest, paramResponse, paramNext) {
+
+    var m = {
+      ns: 'mdm',
+      vs: '1.0',
+      op: 'mdm_readComment',
+      pl:{tguid:paramRequest.params.targetId}
+    };
+
+
+    esbMessage(m)
+        .then(function (r) {
+
+          paramResponse.writeHead(200, {"Content-Type": "application/json"});
+          paramResponse.end(JSON.stringify(r));
+        })
+        .fail(function (r) {
+
+          console.log(r.er);
+          var r = {pl: null, er: {ec: 404, em: "could not find comment"}};
+          oHelpers.sendResponse(paramResponse, 404, r);
+        });
+
+
+  });
+
+
+
+  ///workspace/notifications/comments/comment.json
+  userNotificationRouter.post('/comments/comment.json', function (paramRequest, paramResponse, paramNext) {
+
+    var m = {
+      ns: 'mdm',
+      vs: '1.0',
+      op: 'mdm_createComment',
+      pl: paramRequest.body
+    };
+
+
+    esbMessage(m)
+        .then(function (r) {
+
+          paramResponse.writeHead(200, {"Content-Type": "application/json"});
+          paramResponse.end(JSON.stringify(r));
+        })
+        .fail(function (r) {
+
+          console.log(r.er);
+          var r = {pl: null, er: {ec: 404, em: " mdh could save comment"}};
+          oHelpers.sendResponse(paramResponse, 404, r);
+        });
+
+
+  });
+
+
+
+  ///workspace/notifications/comments/comment.json
+  userNotificationRouter.put('/comments/comments/:commentID.json', function (paramRequest, paramResponse, paramNext) {
+
+        console.log('liked----');
+
+    var m = {
+      ns: 'mdm',
+      vs: '1.0',
+      op: 'mdm_markCommentAsLiked',
+      pl: paramRequest.body
+    };
+
+
+    esbMessage(m)
+        .then(function (r) {
+
+          paramResponse.writeHead(200, {"Content-Type": "application/json"});
+          paramResponse.end(JSON.stringify(r));
+        })
+        .fail(function (r) {
+
+          console.log(r.er);
+          var r = {pl: null, er: {ec: 404, em: " mdh could not update comment likes"}};
+          oHelpers.sendResponse(paramResponse, 404, r);
+        });
+
+
+  });
+
+
+  userNotificationRouter.put('/comments/delete/:commentID.json', function (paramRequest, paramResponse, paramNext) {
+
+    console.log('  for delete----');
+
+    var itemToDelete = JSON.parse(paramRequest.body.json);
+
+    console.log('itemToDelete----',itemToDelete.pl);
+
+
+    var m = {
+      ns: 'mdm',
+      vs: '1.0',
+      op: 'mdm_markCommentForDelete',
+      pl: itemToDelete.pl.comment
+    };
+
+
+    esbMessage(m)
+        .then(function (r) {
+
+          paramResponse.writeHead(200, {"Content-Type": "application/json"});
+          paramResponse.end(JSON.stringify(r));
+        })
+        .fail(function (r) {
+
+          console.log(r.er);
+          var r = {pl: null, er: {ec: 404, em: " mdh could not delete comment "}};
+          oHelpers.sendResponse(paramResponse, 404, r);
+        });
+
+
+  });
+
+
   return userNotificationRouter;
 };
