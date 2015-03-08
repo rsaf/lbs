@@ -302,20 +302,14 @@ module.exports = function (paramService, esbMessage)
   });
 
 
-  userNotificationRouter.put('/comments/delete/:commentID.json', function (paramRequest, paramResponse, paramNext) {
-
-    console.log('  for delete----');
-
-    var itemToDelete = JSON.parse(paramRequest.body.json);
-
-    console.log('itemToDelete----',itemToDelete.pl);
+  userNotificationRouter.delete('/comments/:commentID.json', function (paramRequest, paramResponse, paramNext) {
 
 
     var m = {
       ns: 'mdm',
       vs: '1.0',
       op: 'mdm_markCommentForDelete',
-      pl: itemToDelete.pl.comment
+      pl:{_id:paramRequest.params.commentID, ds:true,ln:paramRequest.user.lanzheng.loginName}
     };
 
 
