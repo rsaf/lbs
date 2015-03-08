@@ -28,54 +28,53 @@ module.exports = function(paramPS, paramESBMessage) {
 
 // Upload route.
     //workspace/profiles/v1/upload
-    upRouter.post('/upload.json', function(req, res){
+    upRouter.post('/upload.json', function(paramRequest, paramResponse){
 
-        var m = {
-            "ns":"dmm",
-            "op": "uploadImage",
-            "pl": null
+
+        var m = {ns: 'upm',op:'upm_uploadAvatar', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            photoData:null,
+            ifm:null,
+            profileData:null
         };
 
 
-
         var form = new formidable.IncomingForm();
-        form.parse(req, function(err, fields, files) {
-
-
-            // `file` is the name of the <input> field of type `file`
+        form.parse(paramRequest, function(err, fields, files) {
             var old_path = files.file.path,
-                file_size = files.file.size,
-                file_ext = files.file.name.split('.').pop(),
-                index = old_path.lastIndexOf('/') + 1,
-                file_name = old_path.substr(index),
-               // new_path = path.join(process.env.PWD, '/uploads/', file_name + '.' + file_ext);
-               new_path =  '/Users/rollandsafort/Desktop/test/'+ file_name + '2.' + file_ext;
-              console.log('real file name: '+files.file.name);
+                file_ext = files.file.name.split('.').pop();
 
-            console.log('---------------old_path',old_path,'---------------------');
+
+            console.log('file name:----- ', files.file.name);
+
+            var profileToUpdate = JSON.parse(fields.json);
 
             fs.readFile(old_path, function(err, data) {
 
+                m.pl.photoData= data;
+                m.pl.ifm = file_ext;
+                m.pl.profileData = profileToUpdate;
 
-                console.log('---------------data :',data,'---------------------');
-                console.log('---------------file_size :',file_size,'---------------------');
-                console.log('--------------- file_name: ', file_name,'---------------------');
-                console.log('--------------- new_path: ', new_path,'---------------------');
+                        esbMessage(m)
+                            .then(function(r) {
+                                    console.log('update successfull');
+                                oHelpers.sendResponse(paramResponse,200,r);
+                            })
+                            .fail(function(r) {
+                                console.log('errorror:');
+                                console.log(r.er);
+                                var r = {pl:null, er:{ec:404,em:"could not save avatar and update profile"}};
+                                oHelpers.sendResponse(paramResponse,404,r);
+                            });
 
-                fs.writeFile(new_path, data, function(err) {
-                    fs.unlink(old_path, function(err) {
-                        if (err) {
-                            res.status(500);
-                            res.json({'success': false});
-                        } else {
-                            res.status(200);
-                            res.json({'success': true});
-                        }
-                    });
-                });
+                    })
+
             });
+
+
         });
-    });
 
 
 //get workspace/profiles/v1/personal.json
@@ -133,24 +132,16 @@ module.exports = function(paramPS, paramESBMessage) {
             })
             .fail(function(r) {
                 console.log(r.er);
-                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                var r = {pl:null, er:{ec:404,em:"could not find profile"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
 
+
+
 //post workspace/profiles/v1/personal.json
     upRouter.post('/personal.json', function(paramRequest, paramResponse){
-
-        console.log('--------------- new post request--------------------');
-        console.log('--------------- new post request--------------------');
-        console.log('--------------- new post request--------------------');
-        console.log('------------------post body--------------------:');
-        console.log(paramRequest.body);
-        console.log('--------------- end of new post request--------------------');
-        console.log('--------------- end of new post request--------------------');
-        console.log('--------------- end of new post request--------------------');
-
 
 
         var m = {
@@ -159,42 +150,548 @@ module.exports = function(paramPS, paramESBMessage) {
             "pl":paramRequest.body
         };
 
-//        m.pl.userAccountID="54c1c79c4d754999038abf1b";
-//        m.pl.lzID = "642d0eff3748330000dc5631";
-//        m.pl.lzID.completion = 10;
+
+        console.log('paramRequest.body----',paramRequest.body);
 
         esbMessage(m)
             .then(function(r) {
-
-
-                var feedback = {'status':true}
-                console.log('feedback----------',feedback);
-                console.log('feedback----------',feedback);
-                console.log('feedback----------',feedback);
-                console.log('feedback----------',feedback);
-                console.log('feedback----------',feedback);
-                console.log('feedback----------',feedback);
 
                 oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
            console.log('errorror'+r);
-
-                var feedback = {'status':false}
-                console.log('feedback----------',feedback);
-                console.log('feedback----------',feedback);
-                console.log('feedback----------',feedback);
-                console.log('feedback----------',feedback);
-                console.log('feedback----------',feedback);
-                console.log('feedback----------',feedback);
                 console.log(r.er);
-                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                var r = {pl:null, er:{ec:404,em:"could not update profile"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
 
 
+//get workspace/profiles/v1/corporateDetails/:profileID.json
+    upRouter.get('/corporateDetails/:profileID.json', function(paramRequest, paramResponse){
+
+        var m = {
+            "ns":"upm",
+            "op": "readCorporateDetailPageByID",
+            "pl":{_id:paramRequest.user.id}
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+                //console.log(r.pl);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not find detail page"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+
+    //post workspace/profiles/v1/personal.json
+    upRouter.put('/corporateDetails/:profile_id.json', function(paramRequest, paramResponse){
+
+        console.log('paramRequest.params.profile_id',paramRequest.params.profile_id);
+        console.log('paramRequest.body',paramRequest.body);
+
+
+        var m = {
+            "ns":"upm",
+            "op": "updateCorporateDetailProfile",
+            "pl":paramRequest.body
+        };
+
+
+        m.pl.uID = paramRequest.user.lanzheng.loginName;
+        m.pl.oID = paramRequest.user.currentOrganization;
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                console.log('r',r);
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('uph error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"uph error: could not update corporate details"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+    //post workspace/profiles/v1/personal.json
+    upRouter.post('/corporateDetails/faq.json', function(paramRequest, paramResponse){
+
+        console.log('paramRequest.params.profile_id',paramRequest.params.profile_id);
+        console.log('paramRequest.body',paramRequest.body);
+
+
+        var m = {
+            "ns":"upm",
+            "op": "upm_updateCorporationDetailsFAQ",
+            "pl":{}
+        };
+
+
+        m.pl.uID = paramRequest.user.lanzheng.loginName;
+        m.pl.oID = paramRequest.user.currentOrganization;
+        m.pl.op = 'create';
+        m.pl.profileData = paramRequest.body;
+
+        esbMessage(m)
+            .then(function(r) {
+
+                console.log('r',r);
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('uph error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"uph error: could not update corporate details"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+    //post workspace/profiles/v1/personal.json
+    upRouter.delete('/corporateDetails/faq/:profile_id/:faq_uuid.json', function(paramRequest, paramResponse){
+
+        console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_uuid);
+
+
+        var m = {
+            "ns":"upm",
+            "op": "upm_updateCorporationDetailsFAQ",
+            "pl":{
+              uID:paramRequest.user.lanzheng.loginName,
+            oID :paramRequest.user.currentOrganization,
+           profileData:{uuid:paramRequest.params.faq_uuid, _id:paramRequest.params.profile_id},
+            op :'delete'
+
+            }
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+                console.log('r',r);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('uph error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"uph error: could not delete corporate details faq"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+    //post workspace/profiles/v1/personal.json
+    upRouter.put('/corporateDetails/faq/:profile_id/:faq_uuid.json', function(paramRequest, paramResponse){
+
+        console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_id);
+        console.log('paramRequest.body\n',paramRequest.body);
+
+
+        var m = {
+            "ns":"upm",
+            "op": "upm_updateCorporationDetailsFAQ",
+            "pl":{}
+        };
+
+        m.pl.uID = paramRequest.user.lanzheng.loginName;
+        m.pl.oID = paramRequest.user.currentOrganization;
+        m.pl.op = 'update';
+        m.pl.profileData = paramRequest.body;
+
+        esbMessage(m)
+            .then(function(r) {
+                console.log('r',r);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('uph error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"uph error: could not update corporate details faq"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+    //  workspace/profiles/v1/corporateDetails/attachment/upload.json
+    upRouter.post('/corporateDetails/description/attachment.json', function(paramRequest, paramResponse){
+
+
+        console.log('-----attachement bingo-----');
+
+
+        var m = {ns: 'upm',op:'upm_updateCorporationDetailsDescription', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            photoData:null,
+            ifm:null,
+            op : 'create',
+            profileData:null
+        };
+
+
+
+        var form = new formidable.IncomingForm();
+        form.parse(paramRequest, function(err, fields, files) {
+            var old_path = files.file.path,
+                file_ext = files.file.name.split('.').pop();
+
+            console.log('file name:----- ', files.file.name);
+
+            var profileToUpdate = JSON.parse(fields.json);
+
+            fs.readFile(old_path, function(err, data) {
+
+
+                m.pl.profileData = profileToUpdate;
+                var attachment = {};
+                        attachment.fm = file_ext;
+                        attachment.fd = data;
+                        attachment.nm = files.file.name;
+                m.pl.profileData.description.attachment.push(attachment);
+
+                esbMessage(m)
+                    .then(function(r) {
+                        console.log('update successfull');
+                        oHelpers.sendResponse(paramResponse,200,r);
+                    })
+                    .fail(function(r) {
+                        console.log('uph error:-----');
+                        console.log(r.er);
+                        var r = {pl:null, er:{ec:404,em:"could not save attachment and update profile"}};
+                        oHelpers.sendResponse(paramResponse,404,r);
+                    });
+
+            })
+
+        });
+
+    });
+
+
+
+    //  workspace/profiles/v1/corporateDetails/attachment/upload.json
+    upRouter.put('/corporateDetails/description/:profile_id.json', function(paramRequest, paramResponse){
+
+
+        console.log('-----attachement bingo-----');
+
+
+        var m = {ns: 'upm',op:'upm_updateCorporationDetailsDescription', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            op : 'update',
+           _id: paramRequest.params.profile_id,
+            profileData:paramRequest.body
+        };
+
+
+        esbMessage(m)
+            .then(function(r) {
+                console.log('r',r);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('uph error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"uph error: could not update corporate details description"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+
+    upRouter.delete('/corporateDetails/description/attachment/:profile_id/:attch_id.json', function(paramRequest, paramResponse){
+
+
+        console.log('paramRequest.params.attch_id\n',paramRequest.params.attch_id);
+
+        var m = {ns: 'upm',op:'upm_updateCorporationDetailsDescription', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            ifm:null,
+            op : 'delete',
+            profileData:{uuid:paramRequest.params.attch_id, _id:paramRequest.params.profile_id}
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+                console.log('r',r);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('uph error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"uph error: could not delete corporate details attachment"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+
+
+
+    });
+
+    //workspace/profiles/v1/upload
+    upRouter.post('/corporateDetails/upload.json', function(paramRequest, paramResponse){
+
+
+        var m = {ns: 'upm',op:'upm_uploadCorporationDetailsLogo', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            photoData:null,
+            ifm:null,
+            profileData:null
+        };
+
+
+        var form = new formidable.IncomingForm();
+        form.parse(paramRequest, function(err, fields, files) {
+            var old_path = files.file.path,
+                file_ext = files.file.name.split('.').pop();
+
+
+            console.log('file name:----- ', files.file.name);
+
+            var profileToUpdate = JSON.parse(fields.json);
+
+            fs.readFile(old_path, function(err, data) {
+
+
+                console.log('data-------',data )
+
+                m.pl.photoData= data;
+                m.pl.ifm = file_ext;
+                m.pl.profileData = profileToUpdate;
+
+                esbMessage(m)
+                    .then(function(r) {
+                        console.log('update successfull');
+                        oHelpers.sendResponse(paramResponse,200,r);
+                    })
+                    .fail(function(r) {
+                        console.log('uph error:-----');
+                        console.log(r.er);
+                        var r = {pl:null, er:{ec:404,em:"could not save image and update profile"}};
+                        oHelpers.sendResponse(paramResponse,404,r);
+                    });
+            })
+
+        });
+
+    });
+
+    //workspace/profiles/v1/upload
+    upRouter.post('/corporateDetails/images.json', function(paramRequest, paramResponse){
+
+        console.log('uph post new image')
+
+        var m = {ns: 'upm',op:'upm_updateCorporationDetailsImages', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            photoData:null,
+            ifm:null,
+            op : 'create',
+            profileData:null
+        };
+
+
+        var form = new formidable.IncomingForm();
+        form.parse(paramRequest, function(err, fields, files) {
+            var old_path = files.file.path,
+                file_ext = files.file.name.split('.').pop();
+
+
+            console.log('file name:----- ', files.file.name);
+
+            var profileToUpdate = JSON.parse(fields.json);
+
+            fs.readFile(old_path, function(err, data) {
+
+
+                console.log('data-------',data )
+
+                m.pl.photoData= data;
+                m.pl.ifm = file_ext;
+                m.pl.profileData = profileToUpdate;
+
+                esbMessage(m)
+                    .then(function(r) {
+                        console.log('update successfull');
+                        oHelpers.sendResponse(paramResponse,200,r);
+                    })
+                    .fail(function(r) {
+                        console.log('uph error:-----');
+                        console.log(r.er);
+                        var r = {pl:null, er:{ec:404,em:"could not save image and update profile"}};
+                        oHelpers.sendResponse(paramResponse,404,r);
+                    });
+
+            })
+
+        });
+
+
+    });
+
+    upRouter.delete('/corporateDetails/images/:profile_id/:img_id.json', function(paramRequest, paramResponse){
+
+        console.log('paramRequest.params.attch_id\n',paramRequest.params.attch_id);
+
+        var m = {ns: 'upm',op:'upm_updateCorporationDetailsImages', pl: null};
+
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            op : 'delete',
+            profileData:{uuid:paramRequest.params.img_id, _id:paramRequest.params.profile_id}
+        };
+
+
+        esbMessage(m)
+            .then(function(r) {
+                console.log('r',r);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('uph error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"uph error: could not delete corporate details image"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+    });
+
+
+    //post workspace/profiles/v1/personal.json
+    upRouter.post('/corporateDetails/videos.json', function(paramRequest, paramResponse){
+
+        console.log('uph post new video')
+
+        var m = {ns: 'upm',op:'upm_updateCorporationDetailsVideos', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            ifm:null,
+            op : 'create',
+            profileData:paramRequest.body
+        };
+
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                console.log('r',r);
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('uph error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"uph error: could not update corporate details"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+
+    //post workspace/profiles/v1/personal.json
+    upRouter.delete('/corporateDetails/videos/:profile_id/:vid_id.json', function(paramRequest, paramResponse){
+
+        console.log('uph ---delete video\n',paramRequest.params.vid_id);
+
+        var m = {ns: 'upm',op:'upm_updateCorporationDetailsVideos', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            op : 'delete',
+            profileData:{uuid:paramRequest.params.vid_id, _id:paramRequest.params.profile_id}
+           };
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                console.log('r',r);
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('uph error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"uph error: could not delete corporate video"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+    //post workspace/profiles/v1/personal.json
+    upRouter.post('/corporateDetails/audios.json', function(paramRequest, paramResponse){
+
+
+        console.log('uph post new audio')
+
+
+        var m = {ns: 'upm',op:'upm_updateCorporationDetailsAudios', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            ifm:null,
+            op : 'create',
+            profileData:paramRequest.body
+        };
+
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                console.log('r',r);
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('uph error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"uph error: could not update corporate details"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+    //post workspace/profiles/v1/personal.json
+    upRouter.delete('/corporateDetails/audios/:profile_id/:audio_id.json', function(paramRequest, paramResponse){
+
+        console.log('uph ---delete audio\n',paramRequest.params.audio_id);
+
+        var m = {ns: 'upm',op:'upm_updateCorporationDetailsAudios', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            op : 'delete',
+            profileData:{uuid:paramRequest.params.audio_id, _id:paramRequest.params.profile_id}
+        };
+
+
+        esbMessage(m)
+            .then(function(r) {
+
+
+                console.log('r--',r);
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('uph error:----- ', r);
+                var r = {pl:null, er:{ec:404,em:"uph error: could not delete corporate audio"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
 
 
 
@@ -347,28 +844,6 @@ var corporate = {
             }]
     };
 
-
-//get     /workspace/v1/profiles/personal.json ==> read
-//get     /workspace/v1/profiles/personal/:personal.json ==>   /workspace/profiles/LZ000678987.json ==> read a specific user
-//
-//create (put)
-//put    /workspace/v1/profile/personal.json  ==> creates a new profile
-//
-//update (delete)
-//post   /workspace/v1/profile/personal/:personal.json  ==> update the profile
-//
-//delete /workspace/v1/profile/personal/:personal.json  ==> mark for delete
-//
-//get     /workspace/v1/profiles/corporate.json ==> read
-//get     /workspace/v1/profiles/corporate/:corporate.json ==>   /workspace/profiles/LZ000678987.json ==> read a specific user
-//
-//create (put)
-//put    /workspace/v1/profile/corporate.json  ==> creates a new profile
-//
-//update (delete)
-//post   /workspace/v1/profiles/corporate/:corporate.json ==> update the profile
-//
-//delete /workspace/v1/profiles/corporate/:corporate.json  ==> mark for delete
 
 
 

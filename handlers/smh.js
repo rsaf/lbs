@@ -5,25 +5,27 @@ var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
 
 function _initRequestMessage(paramRequest,type,id,adminOrg){
-  var col,mod='smm'
-  ,url;
+  var col,mod='smm',
+    message,url;
   if(type==='Service'){
     col='services';
     url='/workspace/services/myservices/view/service';
+    message="服务"
   }
   if(type==='ServicePoint'){
     col='servicepoints';
     url='/workspace/services/myservicepoints/view/servicepoint';
+    message="网点"
   }
   return {
 //    rdu: paramRequest.user.id//@todo: this should be set correctly
     rdo: adminOrg
     ,rc: 'code'
-    ,rt: 'Request : '+col
+    ,rt: message + '申请'
     ,rsu: paramRequest.user.lanzheng.loginName
     ,rso: paramRequest.user.id
     ,rs: 10
-    ,rb: 'body'
+    ,rb: '请审核用户申请，拼同意或者拒绝 '
     ,rtr: type
     ,ei:[{
         col:col
@@ -58,28 +60,32 @@ module.exports = function(paramService,  esbMessage){
     q().then(function(){
       m.op = "createTransaction";
       m.pl={
-        userid:paramRequest.user.id
-        ,transaction:{
+        transaction:{
           description:'persist Service'
           ,modules:['smm','rmm']
         }
       };
+      m.pl.loginName=paramRequest.user.lanzheng.loginName;
+      m.pl.currentOrganization=paramRequest.user.currentOrganization;
       return esbMessage(m)
-    }).then(function(m){
+    })
+    .then(function(m){
       var reqMsg = JSON.parse(paramRequest.body.json),
       service=reqMsg.pl.service;
       m.pl.service = service;
       m.op='persistService';
-      return q.all([esbMessage(m),esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})]);
+      return esbMessage(m);
     })
     .then(function(r) {
-      response=r[0];
+      response=r;
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'Service',response.pl._id,r[1].pl.oID);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'Service',r.pl._id,m.pl.currentOrganization);
       return esbMessage(m);
-    }).then(function() {
+    })
+    .then(function() {
       return _commitTransaction(m);
-    }).then(function() {
+    })
+    .then(function() {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
       paramResponse.end(JSON.stringify(response));
     })
@@ -105,12 +111,13 @@ module.exports = function(paramService,  esbMessage){
     q().then(function(){
       m.op = "createTransaction";
       m.pl={
-        userid:paramRequest.user.id
-        ,transaction:{
+        transaction:{
           description:'persist Service'
           ,modules:['smm','rmm']
         }
       };
+      m.pl.loginName=paramRequest.user.lanzheng.loginName;
+      m.pl.currentOrganization=paramRequest.user.currentOrganization;
       return esbMessage(m);
     }).then(function(m){
       var reqMsg = JSON.parse(paramRequest.body.json);
@@ -182,10 +189,10 @@ module.exports = function(paramService,  esbMessage){
   serviceManagementRouter.get ('/services.json', function(paramRequest, paramResponse, paramNext){
     var m = {
       "op": "servicesByCreator",
-      "pl": {
-        "userAccountID":paramRequest.user.id
-      }
+      "pl": {}
     };
+    m.pl.loginName=paramRequest.user.lanzheng.loginName;
+    m.pl.currentOrganization=paramRequest.user.currentOrganization;
     esbMessage(m)
     .then(function(r) {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
@@ -258,13 +265,14 @@ module.exports = function(paramService,  esbMessage){
     var m={
       "op": "createTransaction"
       ,"pl": {
-        "userid":paramRequest.user.id
-        ,transaction:{
+        transaction:{
           description:'persist ServicePoint'
           ,modules:['smm','rmm']
         }
       }
     };
+    m.pl.loginName=paramRequest.user.lanzheng.loginName;
+    m.pl.currentOrganization=paramRequest.user.currentOrganization;
     var response;
     q().then(function(){
       return esbMessage(m);
@@ -305,13 +313,14 @@ module.exports = function(paramService,  esbMessage){
     var m={
       "op": "createTransaction"
       ,"pl": {
-        "userid":paramRequest.user.id
-        ,transaction:{
+        transaction:{
           description:'persist ServicePoint'
           ,modules:['smm','rmm']
         }
       }
     };
+    m.pl.loginName=paramRequest.user.lanzheng.loginName;
+    m.pl.currentOrganization=paramRequest.user.currentOrganization;
     var response;
     q().then(function(){
       return esbMessage(m);
@@ -378,10 +387,10 @@ module.exports = function(paramService,  esbMessage){
     var m = {
       "ns":"smm",
       "op": "servicePointsByCreator",
-      "pl": {
-        "userAccountID":paramRequest.user.id
-      }
+      "pl": {}
     };
+    m.pl.loginName=paramRequest.user.lanzheng.loginName;
+    m.pl.currentOrganization=paramRequest.user.currentOrganization;
     esbMessage(m)
     .then(function(r) {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});

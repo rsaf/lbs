@@ -180,7 +180,7 @@ module.exports = function (paramService, esbMessage)
       var m = {
         ns: 'mdm',
         vs: '1.0',
-        op: 'commitNotification',
+        op: 'persistNotification',
         pl: {
           notification: reqMessage.pl.notification
         }
