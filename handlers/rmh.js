@@ -18,12 +18,13 @@ module.exports = function(paramService, esbMessage){
     return esbMessage(m);
   }
   var requestRouter = paramService.Router();
-  function prepareTransaction(userid,description,modules){
+  function prepareTransaction(loginName,orgid,description,modules){
     var m={};
     return Q().then(function(){
       m.op = "createTransaction";
       m.pl={
-        userid:userid
+        loginName:loginName
+        ,currentOrganization:orgid
         ,transaction:{
           description:description
           ,modules:modules
@@ -63,8 +64,9 @@ module.exports = function(paramService, esbMessage){
       m.op = "rmm_getRequest";
       m.pl= {
         "query":query
-        ,userid:paramRequest.user.id
       };
+      m.pl.loginName=paramRequest.user.lanzheng.loginName;
+      m.pl.currentOrganization=paramRequest.user.currentOrganization;
       return esbMessage(m);
     })
     .then(function(msg){//use the request message mod property to create a transaction (mod contains the module involved in this request and the module that handles updating the status of the entity)
@@ -72,13 +74,12 @@ module.exports = function(paramService, esbMessage){
       while(--i>-1){
         mods.push(msg.pl.ei[i].mod);
       }
-      return prepareTransaction(paramRequest.user.id,'Update request message and entity',mods)
+      return prepareTransaction(paramRequest.user.lanzheng.loginName,paramRequest.user.currentOrganization,'Update request message and entity',mods)
     })
     .then(function(msg){//updte the request message
-      //msg.pl.transactionid
       m.op= "rmm_updatRequestMessage";
-      m.pl.transactionid=msg.pl.transactionid;
-      transactionid=msg.pl.transactionid;
+      m.pl.transactionid=msg.pl.transaction._id;
+      transactionid=msg.pl.transaction._id;
       m.pl.status = paramRequest.body.status;
       m.pl.refuseInfo = paramRequest.body.refuseInfo;
       return esbMessage(m);

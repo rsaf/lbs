@@ -69,7 +69,9 @@ module.exports = function(paramService,  esbMessage){
       m.pl.currentOrganization=paramRequest.user.currentOrganization;
       return esbMessage(m)
     })
-    .then(function(m){
+    .then(function(msg){
+      m.pl.transactionid=msg.pl.transaction._id;
+      m.pl.transaction=msg.pl.transacton;
       var reqMsg = JSON.parse(paramRequest.body.json),
       service=reqMsg.pl.service;
       m.pl.service = service;
@@ -119,7 +121,9 @@ module.exports = function(paramService,  esbMessage){
       m.pl.loginName=paramRequest.user.lanzheng.loginName;
       m.pl.currentOrganization=paramRequest.user.currentOrganization;
       return esbMessage(m);
-    }).then(function(m){
+    }).then(function(msg){
+      m.pl.transactionid=msg.pl.transaction._id;
+      m.pl.transaction=msg.pl.transacton;
       var reqMsg = JSON.parse(paramRequest.body.json);
       var service = reqMsg.pl.service;
       m.pl.service = {
@@ -150,7 +154,6 @@ module.exports = function(paramService,  esbMessage){
     .fail(function(r) {
       return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
       .then(function(){
-         return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
       })
       .fin(function(){
         _rollBackTransaction(m);
@@ -276,7 +279,8 @@ module.exports = function(paramService,  esbMessage){
     var response;
     q().then(function(){
       return esbMessage(m);
-    }).then(function (){
+    }).then(function (msg){
+      m.pl.transactionid=msg.pl.transaction._id;
       var reqMsg = JSON.parse(paramRequest.body.json),
       servicePoint = reqMsg.pl.servicePoint;
       m.op="persistServicePoint";
@@ -324,7 +328,9 @@ module.exports = function(paramService,  esbMessage){
     var response;
     q().then(function(){
       return esbMessage(m);
-    }).then(function (){
+    }).then(function (msg){
+      m.pl.transactionid=msg.pl.transaction._id;
+      m.pl.transaction=msg.pl.transaction;
       var reqMsg = JSON.parse(paramRequest.body.json),
       servicePoint = reqMsg.pl.servicePoint;
       m.op="persistServicePoint";
