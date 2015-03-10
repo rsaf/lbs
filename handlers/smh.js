@@ -209,6 +209,27 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(r));
     });
   });
+  serviceManagementRouter.post ('/services.json', function(paramRequest, paramResponse, paramNext){
+    var m = {
+      "op": "smm_queryServices",
+      "pl": {}
+    };
+    q().then(function(){
+      m.pl.query=JSON.parse(paramRequest.body.json);
+      return esbMessage(m);
+    })
+    .then(function(r) {
+      paramResponse.writeHead(200, {"Content-Type": "application/json"});
+      paramResponse.end(JSON.stringify(r));
+    })
+    .fail(function(r) {
+      paramResponse.writeHead(501, {"Content-Type": "application/json"});
+      if(r.er && r.er.ec && r.er.ec>1000){
+        r.er.em='Server poblem....';
+      }
+      paramResponse.end(JSON.stringify(r));
+    });
+  });
   serviceManagementRouter.get('/servicenames.json', function(paramRequest, paramResponse, paramNext){
     var m = {
       "op": "serviceNames",
