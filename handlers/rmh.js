@@ -35,13 +35,8 @@ module.exports = function(paramService, esbMessage){
   }
   function _getRequestMessages(req,filter){
     //get the admin id
+    console.log('getting for org:',req.user.currentOrganization);
     return Q().then(function(){
-      if(req.user.userType==='admin'){
-        return esbMessage({op:'getOrganization',pl:{org:'lanzheng'}});
-      }
-      return {pl:{oID:null}};
-    })
-    .then(function(msg){
       var m = {
         op:'rmm_getRequests',
         pl:{loginName:req.user.lanzheng.loginName,orgid:req.user.currentOrganization,filter:filter}
@@ -119,7 +114,7 @@ module.exports = function(paramService, esbMessage){
         paramResponse.end(JSON.stringify(r));
     })
     .fail(function(r) {
-      //@todo: tell the modules to roll back
+      //tell the modules to roll back
       var i = mods.length,promises=[];
       var m = {pl:{transactionid:transactionid}};
       while(--i>-1){
