@@ -4,11 +4,39 @@
  * returns static json for all endpoints
  */
 
-// workspace/activities
+// workspace/activities.old
 var oHelpers= require('../utilities/helpers.js');
 var formidable = require('formidable');
 var fs = require('fs');
 var Q = require('q');
+
+function _initRequestMessage(paramRequest,type,id,adminOrg){
+  console.log('crashing here on r is undef.....')
+  var col,mod='bmm',
+    message,url;
+  if(type==='Activity'){
+    col='activities';
+    url='/workspace/publishing/activities/';
+    message="事务"
+  }
+  return {
+    rdo: adminOrg
+    ,rc: 'code'
+    ,rt: message + '申请'
+    ,rsu: paramRequest.user.lanzheng.loginName
+    ,rso: paramRequest.user.id
+    ,rs: 40
+    ,rb: 'message'
+    ,rtr: type
+    ,ei:[{
+        col:col
+        ,mod:mod
+        ,ei:id
+    }]
+    ,url:url
+  };
+}
+
 
 module.exports = function(paramService, esbMessage){
   function _persistForm(paramRequest, paramResponse){
@@ -27,12 +55,45 @@ module.exports = function(paramService, esbMessage){
     });
   }
   function _persistActivity(paramRequest, paramResponse){
-    var m = {};
+    var m = {},transactionid=false;
     //formHtml
     Q().then(function(){
       m.pl=JSON.parse(paramRequest.body.json).pl;
       m.pl.loginName=paramRequest.user.lanzheng.loginName;
       m.pl.currentOrganization=paramRequest.user.currentOrganization;
+      console.log('updating activity...',m.pl);//if abd.aps === 40
+      //@todo: better way to see if activity status is 40 and if so update in a transaction and request message
+      if(m.pl.activity && m.pl.activity.abd && m.pl.activity.abd.aps && m.pl.activity.abd.aps===40){
+        console.log('need to start a transaction and send a request message')
+        // create a transaction
+        m.op = "createTransaction";
+        m.pl.transaction={
+          description:'publish Activity request'
+          ,modules:['bmm','rmm']
+        };
+        return esbMessage(m)
+        .then(function(msg){
+          console.log('created transaction:',msg);
+          m.pl.transactionid=msg.pl.transaction._id;
+          m.op="createRequestMessage";
+          console.log('before init request')
+          m.pl.requestMessage = _initRequestMessage(paramRequest,'Activity',m.pl.activity._id,paramRequest.user.currentOrganization);//org should be admin org
+          console.log('after init request')
+          return esbMessage(m);
+        })
+        .then(function(msg){
+            console.log('got a request message:',msg);
+          },function reject(err){
+            console.log('rejected... ',err);
+        })
+
+      
+      //  create a request messgage
+      }
+      return false;
+    })
+    .then(function(){      
+      
       m.op='bmm_persistActivity';
       return esbMessage(m);
     }).then(function(msg){
