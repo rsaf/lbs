@@ -4,8 +4,10 @@
  * returns static json for all endpoints
  */
 
-// workspace/activities
+// workspace/activities.old
 var oHelpers= require('../utilities/helpers.js');
+var formidable = require('formidable');
+var fs = require('fs');
 var Q = require('q');
 
 function _initRequestMessage(paramRequest,type,id,adminOrg){
@@ -191,10 +193,10 @@ module.exports = function(paramService, esbMessage){
         var m = {
             "ns":"bmm",
             "op": "bmm_readActivityDetailByID",
-            "pl":{_id:paramRequest.user.id}
+            "pl":{ac:paramRequest.params.activityDetail_id}
         };
 
-        console.log('paramRequest.user.id-----------',paramRequest.user.id);
+        console.log('paramRequest.params.activity_id-----------',paramRequest.params.activityDetail_id);
 
 
         esbMessage(m)
@@ -209,7 +211,6 @@ module.exports = function(paramService, esbMessage){
             });
 
     });
-
 
     bmRouter.put('/activityDetails/:activityDetail_id.json', function(paramRequest, paramResponse){
 
@@ -337,6 +338,8 @@ module.exports = function(paramService, esbMessage){
     });
 
     bmRouter.post('/activityDetails/description/attachment.json', function(paramRequest, paramResponse){
+
+
 
 
         console.log('-----attachement bingo-----');
