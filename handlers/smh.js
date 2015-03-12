@@ -66,7 +66,7 @@ module.exports = function(paramService,  esbMessage){
         }
       };
       m.pl.loginName=paramRequest.user.lanzheng.loginName;
-      m.pl.currentOrganization=paramRequest.user.currentOrganization;
+      m.pl.currentOrganization=paramRequest.user.currentOrganization;//@todo: this should be the admin org
       return esbMessage(m)
     })
     .then(function(msg){
