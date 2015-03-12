@@ -23,7 +23,7 @@ function _initRequestMessage(paramRequest,type,id,adminOrg){
     ,rc: 'code'
     ,rt: message + '申请'
     ,rsu: paramRequest.user.lanzheng.loginName
-    ,rso: paramRequest.user.id
+    ,rso: paramRequest.user.currentOrganization
     ,rs: 10
     ,rb: '请审核用户申请，拼同意或者拒绝 '
     ,rtr: type
@@ -76,12 +76,15 @@ module.exports = function(paramService,  esbMessage){
       service=reqMsg.pl.service;
       m.pl.service = service;
       m.op='persistService';
-      return esbMessage(m);
+      return Q.all([
+        esbMessage(m)
+        ,esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})
+      ])
     })
     .then(function(r) {
-      response=r;
+      response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'Service',r.pl._id,m.pl.currentOrganization);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'Service',response.pl._id,r[1].pl.oID);
       return esbMessage(m);
     })
     .then(function() {
@@ -514,7 +517,4 @@ var busnessrecords = {
       "field5": "周林"
     }]
 };
-
-
-        
-        
+                        
