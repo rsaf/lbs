@@ -23,7 +23,7 @@ function _initRequestMessage(paramRequest,type,id,adminOrg){
     ,rc: 'code'
     ,rt: message + '申请'
     ,rsu: paramRequest.user.lanzheng.loginName
-    ,rso: paramRequest.user.id
+    ,rso: paramRequest.user.currentOrganization
     ,rs: 10
     ,rb: '请审核用户申请，拼同意或者拒绝 '
     ,rtr: type
@@ -66,20 +66,25 @@ module.exports = function(paramService,  esbMessage){
         }
       };
       m.pl.loginName=paramRequest.user.lanzheng.loginName;
-      m.pl.currentOrganization=paramRequest.user.currentOrganization;
+      m.pl.currentOrganization=paramRequest.user.currentOrganization;//@todo: this should be the admin org
       return esbMessage(m)
     })
-    .then(function(m){
+    .then(function(msg){
+      m.pl.transactionid=msg.pl.transaction._id;
+      m.pl.transaction=msg.pl.transacton;
       var reqMsg = JSON.parse(paramRequest.body.json),
       service=reqMsg.pl.service;
       m.pl.service = service;
       m.op='persistService';
-      return esbMessage(m);
+      return Q.all([
+        esbMessage(m)
+        ,esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})
+      ])
     })
     .then(function(r) {
-      response=r;
+      response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'Service',r.pl._id,m.pl.currentOrganization);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'Service',response.pl._id,r[1].pl.oID);
       return esbMessage(m);
     })
     .then(function() {
@@ -119,7 +124,9 @@ module.exports = function(paramService,  esbMessage){
       m.pl.loginName=paramRequest.user.lanzheng.loginName;
       m.pl.currentOrganization=paramRequest.user.currentOrganization;
       return esbMessage(m);
-    }).then(function(m){
+    }).then(function(msg){
+      m.pl.transactionid=msg.pl.transaction._id;
+      m.pl.transaction=msg.pl.transacton;
       var reqMsg = JSON.parse(paramRequest.body.json);
       var service = reqMsg.pl.service;
       m.pl.service = {
@@ -150,7 +157,6 @@ module.exports = function(paramService,  esbMessage){
     .fail(function(r) {
       return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
       .then(function(){
-         return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
       })
       .fin(function(){
         _rollBackTransaction(m);
@@ -194,6 +200,27 @@ module.exports = function(paramService,  esbMessage){
     m.pl.loginName=paramRequest.user.lanzheng.loginName;
     m.pl.currentOrganization=paramRequest.user.currentOrganization;
     esbMessage(m)
+    .then(function(r) {
+      paramResponse.writeHead(200, {"Content-Type": "application/json"});
+      paramResponse.end(JSON.stringify(r));
+    })
+    .fail(function(r) {
+      paramResponse.writeHead(501, {"Content-Type": "application/json"});
+      if(r.er && r.er.ec && r.er.ec>1000){
+        r.er.em='Server poblem....';
+      }
+      paramResponse.end(JSON.stringify(r));
+    });
+  });
+  serviceManagementRouter.post ('/services.json', function(paramRequest, paramResponse, paramNext){
+    var m = {
+      "op": "smm_queryServices",
+      "pl": {}
+    };
+    q().then(function(){
+      m.pl.query=JSON.parse(paramRequest.body.json);
+      return esbMessage(m);
+    })
     .then(function(r) {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
       paramResponse.end(JSON.stringify(r));
@@ -276,7 +303,8 @@ module.exports = function(paramService,  esbMessage){
     var response;
     q().then(function(){
       return esbMessage(m);
-    }).then(function (){
+    }).then(function (msg){
+      m.pl.transactionid=msg.pl.transaction._id;
       var reqMsg = JSON.parse(paramRequest.body.json),
       servicePoint = reqMsg.pl.servicePoint;
       m.op="persistServicePoint";
@@ -324,7 +352,9 @@ module.exports = function(paramService,  esbMessage){
     var response;
     q().then(function(){
       return esbMessage(m);
-    }).then(function (){
+    }).then(function (msg){
+      m.pl.transactionid=msg.pl.transaction._id;
+      m.pl.transaction=msg.pl.transaction;
       var reqMsg = JSON.parse(paramRequest.body.json),
       servicePoint = reqMsg.pl.servicePoint;
       m.op="persistServicePoint";
@@ -487,7 +517,4 @@ var busnessrecords = {
       "field5": "周林"
     }]
 };
-
-
-        
-        
+                        
