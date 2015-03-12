@@ -23,7 +23,7 @@ module.exports.startBS = function(){
     var oInspectionRouter;          // workspace/inspection     ==>  pmh.js  pmm //
     var oCorrectionsRouter;         // workspace/corrections    ==>  pmh.js  pmm //
     var oServiceRouter ;            // workspace/services       ==>  smh.js  smm //
-    var oActivitiesRouter;          // workspace/activities     ==>  bmh.js  bmm ///
+    var oActivitiesRouter;          // workspace/activities.old     ==>  bmh.js  bmm ///
     var oResponsesRouter;           // workspace/responses      ==>  bmh.js  bmm ///
     var oFinanceRouter;             // workspace/finance        ==>  fmh.js  fmm
     var oInterfacesRouter           // workspace/interfaces     ==>  sch.js  scm
@@ -88,7 +88,7 @@ module.exports.startBS = function(){
             oInspectionRouter = require('./handlers/pmh.js')(exp, esbMessageFunction);         // workspace/inspection
             oCorrectionsRouter = require('./handlers/pmh.js')(exp, esbMessageFunction);        // workspace/corrections
             oServiceRouter = require('./handlers/smh.js')(exp, esbMessageFunction);            // workspace/services
-            oActivitiesRouter = require('./handlers/bmh.js')(exp, esbMessageFunction);         // workspace/activities
+            oActivitiesRouter = require('./handlers/bmh.js')(exp, esbMessageFunction);         // workspace/activities.old
             oResponsesRouter  =  require('./handlers/bmh.js')(exp, esbMessageFunction);        // workspace/responses
             oFinanceRouter = require('./handlers/fmh.js')(exp, esbMessageFunction);            // workspace/finance
             oInterfacesRouter = require('./handlers/sch.js')(exp, esbMessageFunction);         // workspace/interfaces
@@ -148,7 +148,7 @@ module.exports.startBS = function(){
             bs.use('/workspace/inspection', oInspectionRouter);           // workspace/inspection
             bs.use('/workspace/corrections',  oCorrectionsRouter );       // workspace/corrections
             bs.use('/workspace/services', oServiceRouter);                // workspace/services
-            bs.use('/workspace/activities', oActivitiesRouter);           // workspace/activities
+            bs.use('/workspace/activities', oActivitiesRouter);           // workspace/activities.old
             bs.use('/workspace/responses',  oResponsesRouter);            // workspace/responses
             bs.use('/workspace/finance',  oFinanceRouter);                // workspace/finance
             bs.use('/workspace/interfaces',  oInterfacesRouter);          // workspace/interfaces

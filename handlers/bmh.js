@@ -4,7 +4,7 @@
  * returns static json for all endpoints
  */
 
-// workspace/activities
+// workspace/activities.old
 var oHelpers= require('../utilities/helpers.js');
 var formidable = require('formidable');
 var fs = require('fs');
