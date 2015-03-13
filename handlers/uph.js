@@ -171,11 +171,19 @@ module.exports = function(paramPS, paramESBMessage) {
 //get workspace/profiles/v1/corporateDetails/:profileID.json
     upRouter.get('/corporateDetails/:profileID.json', function(paramRequest, paramResponse){
 
+
+        console.log('uph read corporate detail---');
+
         var m = {
             "ns":"upm",
             "op": "readCorporateDetailPageByID",
-            "pl":{_id:paramRequest.user.id}
+            "pl":{oID:paramRequest.user.currentOrganization
+                ,uID: paramRequest.user.lanzheng.loginName
+                ,cdc:null//@todo this is the corporate detail code that will be used on the url when the user acces the page from ouside the workspace
+            }
         };
+
+        console.log('upm m.pl----', m.pl);
 
         esbMessage(m)
             .then(function(r) {
@@ -189,6 +197,36 @@ module.exports = function(paramPS, paramESBMessage) {
             });
 
     });
+
+//get workspace/profiles/v1/corporateDetails/:profileID.json
+    upRouter.get('/corporate/:profileID.json', function(paramRequest, paramResponse){
+
+
+        console.log('uph read corporate info---');
+
+        var m = {
+            "ns":"upm",
+            "op": "upm_readCorporateInfo",
+            "pl":{oID:paramRequest.user.currentOrganization
+                ,uID: paramRequest.user.lanzheng.loginName
+            }
+        };
+
+
+        esbMessage(m)
+            .then(function(r) {
+                //console.log(r.pl);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not find corporate info"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+
 
 
     //post workspace/profiles/v1/personal.json
