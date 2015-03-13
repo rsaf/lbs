@@ -23,7 +23,7 @@ function _initRequestMessage(paramRequest,type,id,adminOrg){
     ,rc: 'code'
     ,rt: message + '申请'
     ,rsu: paramRequest.user.lanzheng.loginName
-    ,rso: paramRequest.user.id
+    ,rso: paramRequest.user.currentOrganization
     ,rs: 40
     ,rb: 'message'
     ,rtr: type
@@ -82,11 +82,12 @@ module.exports = function(paramService, esbMessage){
           description:'publish Activity request'
           ,modules:['bmm','rmm']
         };
-        return esbMessage(m)
+        return Q.all([esbMessage(m), esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})])
         .then(function(msg){
-          m.pl.transactionid=msg.pl.transaction._id;
+          console.log('got message:',msg);
+          m.pl.transactionid=msg[0].pl.transaction._id;
           m.op="createRequestMessage";
-          m.pl.requestMessage = _initRequestMessage(paramRequest,'Activity',m.pl.activity._id,paramRequest.user.currentOrganization);//org should be admin org
+          m.pl.requestMessage = _initRequestMessage(paramRequest,'Activity',m.pl.activity._id,msg[1].pl.oID);//org should be admin org
           return esbMessage(m);
         })
       }

@@ -76,7 +76,7 @@ module.exports = function(paramService,  esbMessage){
       service=reqMsg.pl.service;
       m.pl.service = service;
       m.op='persistService';
-      return Q.all([
+      return q.all([
         esbMessage(m)
         ,esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})
       ])
@@ -95,7 +95,7 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
-      //@todo: set roll back wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
+      //@todo: set roll back wmm (not sure why q.all don't want to play nice. fin is never called when I tried that
       return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
       .then(function(){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
@@ -373,7 +373,7 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(response));
     })
     .fail(function(r) {
-      //@todo: set roll back wmm (not sure why Q.all don't want to play nice. fin is never called when I tried that
+      //@todo: set roll back wmm (not sure why q.all don't want to play nice. fin is never called when I tried that
       return esbMessage({pl:{transactionid:m.pl.transactionid},op:'smm_rollback'})
       .then(function(){
          return esbMessage({pl:{transactionid:m.pl.transactionid},op:'rmm_rollback'});
