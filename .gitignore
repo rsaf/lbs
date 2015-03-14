@@ -4,4 +4,7 @@ static
 photos
 /.project
 .idea/workspace.xml
-/node_modules_local
+node_modules_local
+forms
+files
+qrcodes
