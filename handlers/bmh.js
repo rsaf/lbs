@@ -84,7 +84,6 @@ module.exports = function(paramService, esbMessage){
         };
         return Q.all([esbMessage(m), esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})])
         .then(function(msg){
-          console.log('got message:',msg);
           m.pl.transactionid=msg[0].pl.transaction._id;
           m.op="createRequestMessage";
           m.pl.requestMessage = _initRequestMessage(paramRequest,'Activity',m.pl.activity._id,msg[1].pl.oID);//org should be admin org
@@ -120,6 +119,25 @@ module.exports = function(paramService, esbMessage){
       });      
     });    
   }
+  function _persistRespose(req, res,pnext){
+    var m = {},transactionid=false,response={};
+    //formHtml
+    Q().then(function(){
+      m.pl=JSON.parse(req.body.json).pl;
+      //@todo: is user not set then use req.sessionID
+      m.pl.loginName=(req.user&&req.user.lanzheng&&req.user.lanzheng.loginName)||req.sessionID;
+      m.pl.currentOrganization=(req.user&&req.user.currentOrganization)||false;
+      m.op='bmm_persistResponse';
+      return esbMessage(m);
+    })
+    .then(
+      function resolve(msg){
+        oHelpers.sendResponse(res,200,msg); 
+      },function fail(er){
+        oHelpers.sendResponse(res,501,er);
+      }
+    );
+  }
 
 
 
@@ -136,6 +154,12 @@ module.exports = function(paramService, esbMessage){
   });
   bmRouter.put('/activity.json', function(paramRequest, paramResponse, paramNext){
     _persistActivity(paramRequest, paramResponse, paramNext)
+  });
+  bmRouter.post('/response.json',function(req,res,pnext){
+    _persistRespose(req,res,pnext);
+  });
+  bmRouter.put('/response.json',function(req,res,pnext){
+    _persistRespose(req,res,pnext);
   });
   bmRouter.get('/activity.json', function(paramRequest, paramResponse, paramNext){
     var m = {};
