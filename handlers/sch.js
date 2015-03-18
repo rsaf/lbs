@@ -29,6 +29,22 @@ module.exports = function(paramService, esbMessage) {
         }
     });
 
+
+
+
+
+    photosRouter.post('/user.json', function(paramRequest, paramResponse, paramNext){
+
+        console.log('posted new user');
+
+
+            oHelpers.sendResponse(paramResponse,200,{pl:{'status':true}});
+
+
+    });
+
+
+
     return photosRouter;
 };
 
