@@ -218,7 +218,7 @@ module.exports = function(paramService,  esbMessage){
       "pl": {}
     };
     q().then(function(){
-      m.pl.query=JSON.parse(paramRequest.body.json);
+      m.pl=JSON.parse(paramRequest.body.json);
       return esbMessage(m);
     })
     .then(function(r) {
