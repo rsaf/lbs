@@ -149,11 +149,20 @@ module.exports = function(paramService, esbMessage){
   bmRouter.put('/form.json', function(paramRequest, paramResponse, paramNext){
     _persistForm(paramRequest, paramResponse, paramNext)
   });
-  bmRouter.post('/activity.json', function(paramRequest, paramResponse, paramNext){
-    _persistActivity(paramRequest, paramResponse, paramNext)
-  });
-  bmRouter.put('/activity.json', function(paramRequest, paramResponse, paramNext){
-    _persistActivity(paramRequest, paramResponse, paramNext)
+  bmRouter.get('/response.json', function(paramRequest, paramResponse, paramNext){
+    var m = {};
+    //formHtml
+    Q().then(function(){
+      m.pl={code:paramRequest.query.code};
+      m.pl._id=paramRequest.query._id;
+      m.op='bmm_getResponse';
+      return esbMessage(m);
+    }).then(function(msg){
+      oHelpers.sendResponse(paramResponse,200,{pl:msg});
+    }).fail(function(er){
+      console.log('got a failure...',er);
+      oHelpers.sendResponse(paramResponse,501,er);      
+    });    
   });
   bmRouter.post('/response.json',function(req,res,pnext){
     _persistRespose(req,res,pnext);
@@ -186,6 +195,12 @@ module.exports = function(paramService, esbMessage){
     },function reject(er){
       oHelpers.sendResponse(paramResponse,501,er);      
     });
+  });
+  bmRouter.post('/activity.json', function(paramRequest, paramResponse, paramNext){
+    _persistActivity(paramRequest, paramResponse, paramNext)
+  });
+  bmRouter.put('/activity.json', function(paramRequest, paramResponse, paramNext){
+    _persistActivity(paramRequest, paramResponse, paramNext)
   });
   bmRouter.get('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
       if (paramRequest.params.activitiesType === 'activitieslist'){
