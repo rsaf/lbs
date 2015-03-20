@@ -24,7 +24,7 @@ function _initRequestMessage(paramRequest,type,id,adminOrg){
     ,rt: message + '申请'
     ,rsu: paramRequest.user.lanzheng.loginName
     ,rso: paramRequest.user.currentOrganization
-    ,rs: 40
+    ,rs: 10
     ,rb: 'message'
     ,rtr: type
     ,ei:[{
@@ -75,7 +75,7 @@ module.exports = function(paramService, esbMessage){
       m.pl=JSON.parse(paramRequest.body.json).pl;
       m.pl.loginName=paramRequest.user.lanzheng.loginName;
       m.pl.currentOrganization=paramRequest.user.currentOrganization;
-      if(m.pl.activity && m.pl.activity.abd && m.pl.activity.abd.aps && parseInt(m.pl.activity.abd.aps)===40){
+      if(m.pl.activity && m.pl.activity.abd && m.pl.activity.abd.aps && parseInt(m.pl.activity.abd.aps)===10){
         // create a transaction
         m.op = "createTransaction";
         m.pl.transaction={
