@@ -1,10 +1,8 @@
 static/home/home.js
 node_modules
+node_modules_local
 static
 photos
 /.project
 .idea/workspace.xml
-node_modules_local
-forms
-files
-qrcodes
+
