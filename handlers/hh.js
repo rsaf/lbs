@@ -51,6 +51,7 @@ module.exports = function(paramService, esbMessage){
     var logoutUser = null;
     var createUser =  null;
     var APILoginVerifier =  null;
+    var organizationUsers = null;
 
     var m1 = {
         "ns":'scm',
@@ -92,8 +93,16 @@ module.exports = function(paramService, esbMessage){
     var p6 = esbMessage(m6);
 
 
+    var m7 = {
+        "ns":'scm',
+        "op": 'getOrganizationUsers',
+        "pl": null
+    };
+    var p7 = esbMessage(m7);
+
+
     //console.log('\nsch: getting security dependencies ...');
-    Q.all([p1, p2, p3, p4, p5, p6]).then(function (r) {
+    Q.all([p1, p2, p3, p4, p5, p6,p7]).then(function (r) {
 
         //console.log(r);
         userloginVerifier = r[0].pl.fn;
@@ -102,6 +111,7 @@ module.exports = function(paramService, esbMessage){
         logoutUser = r[3].pl.fn;
         createUser =  r[4].pl.fn;
         APILoginVerifier =  r[5].pl.fn;
+        organizationUsers = r[6].pl.fn;
 
         homeRouter.post('/login.json', userloginVerifier());
         homeRouter.post('/registration.json', registerUzer());
@@ -109,6 +119,7 @@ module.exports = function(paramService, esbMessage){
         homeRouter.get('/logout.json', logoutUser());
         homeRouter.post('/user.json', createUser());
         homeRouter.post('/apilogin.json', APILoginVerifier());
+        homeRouter.get('/users.json', organizationUsers());
 
     })
      .fail(function(err) {
