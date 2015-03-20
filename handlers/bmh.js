@@ -164,6 +164,22 @@ module.exports = function(paramService, esbMessage){
       oHelpers.sendResponse(paramResponse,501,er);      
     });    
   });
+  //query for responses (default where response.ow.uid = login user or ow.oid = the current organisation of user
+  bmRouter.post('/responses.json', function(paramRequest, paramResponse, paramNext){
+    var m = {pl:{}};
+    //formHtml
+    Q().then(function(){
+      m.pl.loginName=(paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID;
+      m.pl.currentOrganization=(paramRequest.user&&paramRequest.user.currentOrganization)||false;
+      m.op='bmm_getResponses';
+      return esbMessage(m);
+    }).then(function(msg){
+      oHelpers.sendResponse(paramResponse,200,{pl:msg});
+    }).fail(function(er){
+      console.log('got a failure...',er);
+      oHelpers.sendResponse(paramResponse,501,er);      
+    });    
+  });
   bmRouter.post('/response.json',function(req,res,pnext){
     _persistRespose(req,res,pnext);
   });
