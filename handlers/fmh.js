@@ -8,16 +8,63 @@ var oHelpers= require('../utilities/helpers.js');
 module.exports = function(paramService, esbMessage)
 {
   var photosRouter = paramService.Router();
-    photosRouter.get('/:financeType.json', function(paramRequest, paramResponse, paramNext){
-        if (paramRequest.params.financeType === 'status'){
-            oHelpers.sendResponse(paramResponse,200,status);
-        }
-        else if(paramRequest.params.financeType === 'history'){
-            oHelpers.sendResponse(paramResponse,200,history);
-        }
-  });
+
+     photosRouter.get('/history.json', function(paramRequest, paramResponse, paramNext){
+         /*
+          * fmm_getTransactionHistory
+          * Queries the transactionHistory table for all the transactions of a given accountId.
+          * @param {type} m {filter (optional)}
+          * @returns {Q@call;defer.promise} r[] {transactionId,transactionAmount,paymentOrderId,sourceAccountId,destinationAccountId,accountBalance}
+          */
+
+         var m = {
+             "ns":"fmm",
+             "op": "fmm_getTransactionHistory",
+             "pl": {"accountId": paramRequest.user.lanzheng.loginName}
+         };
+         console.log(m);
+         esbMessage(m)
+             .then(function(r) {
+                 console.log('success return: ', r);
+                 oHelpers.sendResponse(paramResponse, 200,r);
+             })
+             .fail(function(rv) {
+                 var r = {pl:null, er:{ec:404,em:"could not get user balance"}};
+                 oHelpers.sendResponse(paramResponse,404,r);
+                 console.log('failure return',rv.er);
+             });
+    });
+
+    //fmm_getUserBalance
+    //workspace/finance/balance.json
+    photosRouter.get('/balance.json', function(paramRequest, paramResponse, paramNext){
+        //* @param {type} m {accountId(required), accountType(optional)}
+        //* @returns {Q@call;defer.promise} r{pl:{accountId , accountBalance},er:error}
+        //userType
+        var m = {
+            "ns":"fmm",
+            "op": "fmm_getUserBalance",
+            "pl": {"accountId": paramRequest.user.lanzheng.loginName, "accountType":paramRequest.user.userType}
+        };
+        console.log(m);
+        esbMessage(m)
+            .then(function(r) {
+                console.log('success return: ', r);
+                oHelpers.sendResponse(paramResponse, 200,r);
+            })
+            .fail(function(rv) {
+                var r = {pl:null, er:{ec:404,em:"could not get user balance"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+                console.log('failure return',rv.er);
+            });
+    });
+
   return photosRouter;
 };
+
+
+
+
 
 var status = {
   "pl": [{

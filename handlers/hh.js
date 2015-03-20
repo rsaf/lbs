@@ -1,9 +1,50 @@
 
-exports.version = "0.1.0";
 var Q = require('q');
+var oHelpers= require('../utilities/helpers.js');
 
 module.exports = function(paramService, esbMessage){
     var homeRouter = paramService.Router();
+
+    homeRouter.get('/search/:keyword.json', function(paramRequest, paramResponse, paramNext){
+
+       var keyword =  paramRequest.params.keyword;
+
+        var promiseAD = esbMessage({
+            "ns": "bmm",
+            "op": "bmm_searchActivityDetail",
+            "pl": {"keyword": keyword}
+        });
+
+        var promiseCD = esbMessage({
+            "ns": "upm",
+            "op": "upm_searchCorporateDetail",
+            "pl": {"keyword": keyword}
+        });
+
+
+        Q.all([promiseAD, promiseCD]).then(function(r){
+            var results = [];
+            results.push(r[0].pl);
+            results.push(r[1].pl);
+
+            console.log('success return:', results);
+
+            oHelpers.sendResponse(paramResponse, 200,results);
+
+        }).fail(function(rv){
+
+            var r = {pl:null, er:{ec:404,em:"search is temporary unavailable"}};
+
+            oHelpers.sendResponse(paramResponse,404,r);
+
+            console.log('failure return',rv);
+        });
+
+    });
+
+
+
+
     var userloginVerifier = null;
     var registerUzer = null;
     var sessionUser = null;
