@@ -24,7 +24,7 @@ function _initRequestMessage(paramRequest,type,id,adminOrg){
     ,rt: message + '申请'
     ,rsu: paramRequest.user.lanzheng.loginName
     ,rso: paramRequest.user.currentOrganization
-    ,rs: 40
+    ,rs: 10
     ,rb: 'message'
     ,rtr: type
     ,ei:[{
@@ -75,7 +75,7 @@ module.exports = function(paramService, esbMessage){
       m.pl=JSON.parse(paramRequest.body.json).pl;
       m.pl.loginName=paramRequest.user.lanzheng.loginName;
       m.pl.currentOrganization=paramRequest.user.currentOrganization;
-      if(m.pl.activity && m.pl.activity.abd && m.pl.activity.abd.aps && parseInt(m.pl.activity.abd.aps)===40){
+      if(m.pl.activity && m.pl.activity.abd && m.pl.activity.abd.aps && parseInt(m.pl.activity.abd.aps)===10){
         // create a transaction
         m.op = "createTransaction";
         m.pl.transaction={
@@ -149,11 +149,36 @@ module.exports = function(paramService, esbMessage){
   bmRouter.put('/form.json', function(paramRequest, paramResponse, paramNext){
     _persistForm(paramRequest, paramResponse, paramNext)
   });
-  bmRouter.post('/activity.json', function(paramRequest, paramResponse, paramNext){
-    _persistActivity(paramRequest, paramResponse, paramNext)
+  bmRouter.get('/response.json', function(paramRequest, paramResponse, paramNext){
+    var m = {};
+    //formHtml
+    Q().then(function(){
+      m.pl={code:paramRequest.query.code};
+      m.pl._id=paramRequest.query._id;
+      m.op='bmm_getResponse';
+      return esbMessage(m);
+    }).then(function(msg){
+      oHelpers.sendResponse(paramResponse,200,{pl:msg});
+    }).fail(function(er){
+      console.log('got a failure...',er);
+      oHelpers.sendResponse(paramResponse,501,er);      
+    });    
   });
-  bmRouter.put('/activity.json', function(paramRequest, paramResponse, paramNext){
-    _persistActivity(paramRequest, paramResponse, paramNext)
+  //query for responses (default where response.ow.uid = login user or ow.oid = the current organisation of user
+  bmRouter.post('/responses.json', function(paramRequest, paramResponse, paramNext){
+    var m = {pl:{}};
+    //formHtml
+    Q().then(function(){
+      m.pl.loginName=(paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID;
+      m.pl.currentOrganization=(paramRequest.user&&paramRequest.user.currentOrganization)||false;
+      m.op='bmm_getResponses';
+      return esbMessage(m);
+    }).then(function(msg){
+      oHelpers.sendResponse(paramResponse,200,{pl:msg});
+    }).fail(function(er){
+      console.log('got a failure...',er);
+      oHelpers.sendResponse(paramResponse,501,er);      
+    });    
   });
   bmRouter.post('/response.json',function(req,res,pnext){
     _persistRespose(req,res,pnext);
@@ -186,6 +211,12 @@ module.exports = function(paramService, esbMessage){
     },function reject(er){
       oHelpers.sendResponse(paramResponse,501,er);      
     });
+  });
+  bmRouter.post('/activity.json', function(paramRequest, paramResponse, paramNext){
+    _persistActivity(paramRequest, paramResponse, paramNext)
+  });
+  bmRouter.put('/activity.json', function(paramRequest, paramResponse, paramNext){
+    _persistActivity(paramRequest, paramResponse, paramNext)
   });
   bmRouter.get('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
       if (paramRequest.params.activitiesType === 'activitieslist'){
