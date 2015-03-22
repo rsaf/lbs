@@ -22,16 +22,16 @@ module.exports = function(paramService, esbMessage)
              "op": "fmm_getTransactionHistory",
              "pl": {"accountId": paramRequest.user.lanzheng.loginName}
          };
-         console.log(m);
+        // console.log(m);
          esbMessage(m)
              .then(function(r) {
-                 console.log('success return: ', r);
+                 //console.log('success return: ', r);
                  oHelpers.sendResponse(paramResponse, 200,r);
              })
              .fail(function(rv) {
                  var r = {pl:null, er:{ec:404,em:"could not get user balance"}};
                  oHelpers.sendResponse(paramResponse,404,r);
-                 console.log('failure return',rv.er);
+                 //console.log('failure return',rv.er);
              });
     });
 
@@ -46,10 +46,10 @@ module.exports = function(paramService, esbMessage)
             "op": "fmm_getUserBalance",
             "pl": {"accountId": paramRequest.user.lanzheng.loginName, "accountType":paramRequest.user.userType}
         };
-        console.log(m);
+       // console.log(m);
         esbMessage(m)
             .then(function(r) {
-                console.log('success return: ', r);
+               // console.log('success return: ', r);
                 oHelpers.sendResponse(paramResponse, 200,r);
             })
             .fail(function(rv) {
