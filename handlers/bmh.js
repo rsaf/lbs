@@ -96,8 +96,8 @@ module.exports = function(paramService, esbMessage){
     .then(function(msg){
       activity = msg;
       if(m.pl.transactionid){
-        m.op="createRequestMessage";
-        m.pl.requestMessage = _initRequestMessage(paramRequest,'Activity',activity.abd.ac,adminid);//org should be admin org
+        m.op="rmm_persistRequestMessage";
+        m.pl.request = _initRequestMessage(paramRequest,'Activity',activity.abd.ac,adminid);//org should be admin org
         return esbMessage(m);
       }
       return false;
