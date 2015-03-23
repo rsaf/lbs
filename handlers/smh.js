@@ -84,7 +84,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'Service',response.pl._id,r[1].pl.oID);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'Service',response.pl.serviceCode,r[1].pl.oID);
       return esbMessage(m);
     })
     .then(function() {
@@ -146,7 +146,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'Service',response.pl._id,r[1].pl.oID);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'Service',response.pl.serviceCode,r[1].pl.oID);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m)
@@ -314,7 +314,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'ServicePoint',response.pl._id,r[1].pl.oID);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'ServicePoint',response.pl.servicePointCode,r[1].pl.oID);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
@@ -364,7 +364,7 @@ module.exports = function(paramService,  esbMessage){
     .then(function(r) {
       response=r[0];
       m.op="createRequestMessage";
-      m.pl.requestMessage = _initRequestMessage(paramRequest,'ServicePoint',response.pl._id,r[1].pl.oID);
+      m.pl.requestMessage = _initRequestMessage(paramRequest,'ServicePoint',response.pl.servicePointCode,r[1].pl.oID);
       return esbMessage(m);
     }).then(function() {
       return _commitTransaction(m);
