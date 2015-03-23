@@ -69,7 +69,8 @@ module.exports = function(paramService, esbMessage){
     });
   }
   function _persistActivity(paramRequest, paramResponse){
-    var m = {},transactionid=false,response={};
+    var m = {},response={}
+      ,activity,adminid;
     //formHtml
     Q().then(function(){
       m.pl=JSON.parse(paramRequest.body.json).pl;
@@ -83,28 +84,31 @@ module.exports = function(paramService, esbMessage){
           ,modules:['bmm','rmm']
         };
         return Q.all([esbMessage(m), esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})])
-        .then(function(msg){
-          m.pl.transactionid=msg[0].pl.transaction._id;
-          m.op="createRequestMessage";
-          m.pl.requestMessage = _initRequestMessage(paramRequest,'Activity',m.pl.activity._id,msg[1].pl.oID);//org should be admin org
-          return esbMessage(m);
-        })
       }
-      return false;
+      return [false,false];
     })
-    .then(function(){      
+    .then(function(msg){
+      m.pl.transactionid=(msg[0]===false)?false:msg[0].pl.transaction._id;
+      adminid=(msg[1]===false)?false:msg[1].pl.oID;
       m.op='bmm_persistActivity';
       return esbMessage(m);
     })
     .then(function(msg){
-      var sendRes = function sendRes(){
-        oHelpers.sendResponse(paramResponse,200,msg); 
-      };
-      response = msg;
+      activity = msg;
       if(m.pl.transactionid){
-        return _commitTransaction(m).then(sendRes);
+        m.op="rmm_persistRequestMessage";
+        m.pl.request = _initRequestMessage(paramRequest,'Activity',activity.abd.ac,adminid);//org should be admin org
+        return esbMessage(m);
       }
-      sendRes();
+      return false;
+    })
+    .then(function(){
+      if(m.pl.transactionid){
+        return _commitTransaction(m);
+      }
+    })
+    .then(function(){      
+      oHelpers.sendResponse(paramResponse,200,{pl:activity}); 
     })
     .fail(function(er){
       var trans=Q();
@@ -160,7 +164,6 @@ module.exports = function(paramService, esbMessage){
     }).then(function(msg){
       oHelpers.sendResponse(paramResponse,200,{pl:msg});
     }).fail(function(er){
-      console.log('got a failure...',er);
       oHelpers.sendResponse(paramResponse,501,er);      
     });    
   });
@@ -176,7 +179,6 @@ module.exports = function(paramService, esbMessage){
     }).then(function(msg){
       oHelpers.sendResponse(paramResponse,200,{pl:msg});
     }).fail(function(er){
-      console.log('got a failure...',er);
       oHelpers.sendResponse(paramResponse,501,er);      
     });    
   });
