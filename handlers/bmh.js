@@ -46,11 +46,20 @@ module.exports = function(paramService, esbMessage){
     return esbMessage(m);
   }
   function _rollBackTransaction(m){
-    m.pl.transaction = {
-      _id:m.pl.transactionid
-    }
-    m.op='wmm_rollBackTransaction';
-    return esbMessage(m);
+    return Q()
+    .then(function(){
+        return Q.all([
+          esbMessage({op:'wmm_rollBackTransaction',pl:{transaction:{_id:m.pl.transactionid}}})
+          ,esbMessage({op:'rmm_rollback',pl:{transactionid:m.pl.transactionid}})
+          ,esbMessage({op:'bmm_rollback',pl:{transactionid:m.pl.transactionid}})
+        ]);
+    })
+    .then(function(){
+      return Q.resolve('ok');
+    })
+    .then(null,function reject(err){
+      return Q.reject('In bmh _rollBackTransaction:',err);
+    });
   }
 
   function _persistForm(paramRequest, paramResponse){
@@ -113,10 +122,7 @@ module.exports = function(paramService, esbMessage){
     .fail(function(er){
       var trans=Q();
       if(m.pl.transactionid){
-        trans = Q.all([
-          _rollBackTransaction(m)
-          //@todo: rollback rmm and bmm as well
-        ]);
+        trans = _rollBackTransaction(m);
       }
       trans.fin(function(){
         oHelpers.sendResponse(paramResponse,501,er);
@@ -209,7 +215,20 @@ module.exports = function(paramService, esbMessage){
       m.op='bmm_getActivities';
       return esbMessage(m);
     }).then(function resolve(msg){
-      oHelpers.sendResponse(paramResponse,200,{pl:msg});
+      oHelpers.sendResponse(paramResponse,200,msg);
+    },function reject(er){
+      oHelpers.sendResponse(paramResponse,501,er);      
+    });
+  });
+  bmRouter.get('/public/activities.json', function(paramRequest, paramResponse, paramNext){
+    var m = {};
+    //formHtml
+    Q().then(function(){
+      m.pl={}
+      m.op='bmm_getActivities';
+      return esbMessage(m);
+    }).then(function resolve(msg){
+      oHelpers.sendResponse(paramResponse,200,msg);
     },function reject(er){
       oHelpers.sendResponse(paramResponse,501,er);      
     });

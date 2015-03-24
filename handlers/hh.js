@@ -1,57 +1,15 @@
 
+exports.version = "0.1.0";
 var Q = require('q');
-var oHelpers= require('../utilities/helpers.js');
 
 module.exports = function(paramService, esbMessage){
     var homeRouter = paramService.Router();
-
-    homeRouter.get('/search/:keyword.json', function(paramRequest, paramResponse, paramNext){
-
-       var keyword =  paramRequest.params.keyword;
-
-        var promiseAD = esbMessage({
-            "ns": "bmm",
-            "op": "bmm_searchActivityDetail",
-            "pl": {"keyword": keyword}
-        });
-
-        var promiseCD = esbMessage({
-            "ns": "upm",
-            "op": "upm_searchCorporateDetail",
-            "pl": {"keyword": keyword}
-        });
-
-
-        Q.all([promiseAD, promiseCD]).then(function(r){
-            var results = [];
-            results.push(r[0].pl);
-            results.push(r[1].pl);
-
-            console.log('success return:', results);
-
-            oHelpers.sendResponse(paramResponse, 200,results);
-
-        }).fail(function(rv){
-
-            var r = {pl:null, er:{ec:404,em:"search is temporary unavailable"}};
-
-            oHelpers.sendResponse(paramResponse,404,r);
-
-            console.log('failure return',rv);
-        });
-
-    });
-
-
-
-
     var userloginVerifier = null;
     var registerUzer = null;
     var sessionUser = null;
     var logoutUser = null;
     var createUser =  null;
     var APILoginVerifier =  null;
-    var organizationUsers = null;
 
     var m1 = {
         "ns":'scm',
@@ -93,16 +51,8 @@ module.exports = function(paramService, esbMessage){
     var p6 = esbMessage(m6);
 
 
-    var m7 = {
-        "ns":'scm',
-        "op": 'getOrganizationUsers',
-        "pl": null
-    };
-    var p7 = esbMessage(m7);
-
-
     //console.log('\nsch: getting security dependencies ...');
-    Q.all([p1, p2, p3, p4, p5, p6,p7]).then(function (r) {
+    Q.all([p1, p2, p3, p4, p5, p6]).then(function (r) {
 
         //console.log(r);
         userloginVerifier = r[0].pl.fn;
@@ -111,7 +61,6 @@ module.exports = function(paramService, esbMessage){
         logoutUser = r[3].pl.fn;
         createUser =  r[4].pl.fn;
         APILoginVerifier =  r[5].pl.fn;
-        organizationUsers = r[6].pl.fn;
 
         homeRouter.post('/login.json', userloginVerifier());
         homeRouter.post('/registration.json', registerUzer());
@@ -119,7 +68,21 @@ module.exports = function(paramService, esbMessage){
         homeRouter.get('/logout.json', logoutUser());
         homeRouter.post('/user.json', createUser());
         homeRouter.post('/apilogin.json', APILoginVerifier());
-        homeRouter.get('/users.json', organizationUsers());
+        homeRouter.get('/act.json', function(paramRequest, paramResponse, paramNext){
+          var m = {};
+          //formHtml
+          Q().then(function(){
+            m.pl={}
+            m.op='bmm_getActivities';
+            return esbMessage(m);
+          }).then(function resolve(msg){
+            paramResponse.writeHead(200, {"Content-Type": "application/json"});
+            paramResponse.end(JSON.stringify(msg));
+          },function reject(er){
+            paramResponse.writeHead(501, {"Content-Type": "application/json"});
+            paramResponse.end(JSON.stringify(er));
+          });
+        });
 
     })
      .fail(function(err) {
