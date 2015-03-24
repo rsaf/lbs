@@ -68,6 +68,21 @@ module.exports = function(paramService, esbMessage){
         homeRouter.get('/logout.json', logoutUser());
         homeRouter.post('/user.json', createUser());
         homeRouter.post('/apilogin.json', APILoginVerifier());
+        homeRouter.get('/act.json', function(paramRequest, paramResponse, paramNext){
+          var m = {};
+          //formHtml
+          Q().then(function(){
+            m.pl={}
+            m.op='bmm_getActivities';
+            return esbMessage(m);
+          }).then(function resolve(msg){
+            paramResponse.writeHead(200, {"Content-Type": "application/json"});
+            paramResponse.end(JSON.stringify(msg));
+          },function reject(er){
+            paramResponse.writeHead(501, {"Content-Type": "application/json"});
+            paramResponse.end(JSON.stringify(er));
+          });
+        });
 
     })
      .fail(function(err) {
