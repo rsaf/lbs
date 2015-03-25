@@ -4,7 +4,7 @@
 var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
 
-function _initRequestMessage(paramRequest,type,id,adminOrg){
+function _initRequestMessage(paramRequest,type,code,adminOrg){
   var col,mod='smm',
     message,url;
   if(type==='Service'){
@@ -21,7 +21,7 @@ function _initRequestMessage(paramRequest,type,id,adminOrg){
 //    rdu: paramRequest.user.id//@todo: this should be set correctly
     rdo: adminOrg
     ,rc: 'code'
-    ,rt: message + '申请'
+    ,rt: message + '申请 ' + code
     ,rsu: paramRequest.user.lanzheng.loginName
     ,rso: paramRequest.user.currentOrganization
     ,rs: 10
@@ -30,7 +30,7 @@ function _initRequestMessage(paramRequest,type,id,adminOrg){
     ,ei:[{
         col:col
         ,mod:mod
-        ,ei:id
+        ,ei:code
     }]
     ,url:url
     
