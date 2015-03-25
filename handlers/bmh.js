@@ -10,7 +10,7 @@ var formidable = require('formidable');
 var fs = require('fs');
 var Q = require('q');
 
-function _initRequestMessage(paramRequest,type,id,adminOrg){
+function _initRequestMessage(paramRequest,type,code,adminOrg){
   var col,mod='bmm',
     message,url;
   if(type==='Activity'){
@@ -21,7 +21,7 @@ function _initRequestMessage(paramRequest,type,id,adminOrg){
   return {
     rdo: adminOrg
     ,rc: 'code'
-    ,rt: message + '申请'
+    ,rt: message + '申请 ' + code
     ,rsu: paramRequest.user.lanzheng.loginName
     ,rso: paramRequest.user.currentOrganization
     ,rs: 10
@@ -30,7 +30,7 @@ function _initRequestMessage(paramRequest,type,id,adminOrg){
     ,ei:[{
         col:col
         ,mod:mod
-        ,ei:id
+        ,ei:code
     }]
     ,url:url
   };
