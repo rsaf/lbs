@@ -134,6 +134,84 @@ module.exports = function(paramService, esbMessage){
             paramResponse.end(JSON.stringify(er));
           });
         });
+        
+        //response routes preventing the login popup
+        function _persistRespose(req, res,pnext){
+    var m = {},transactionid=false,response={};
+    //formHtml
+    Q().then(function(){
+      m.pl=JSON.parse(req.body.json).pl;
+      //@todo: is user not set then use req.sessionID
+      m.pl.loginName=(req.user&&req.user.lanzheng&&req.user.lanzheng.loginName)||req.sessionID;
+      m.pl.currentOrganization=(req.user&&req.user.currentOrganization)||false;
+      m.op='bmm_persistResponse';
+      return esbMessage(m);
+    })
+    .then(
+      function resolve(msg){
+        oHelpers.sendResponse(res,200,msg); 
+      },function fail(er){
+        oHelpers.sendResponse(res,501,er);
+      }
+    );
+  }
+        //gets a list of responses (based on login or session id)
+        homeRouter.post('/responses.json', function(paramRequest, paramResponse, paramNext){
+          var m = {pl:{}};
+          //formHtml
+          Q().then(function(){
+            m.pl.loginName=(paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID;
+            m.pl.currentOrganization=(paramRequest.user&&paramRequest.user.currentOrganization)||false;
+            m.op='bmm_getResponses';
+            return esbMessage(m);
+          }).then(function(msg){
+            oHelpers.sendResponse(paramResponse,200,{pl:msg});
+          }).fail(function(er){
+            oHelpers.sendResponse(paramResponse,501,er);      
+          });    
+        });
+        homeRouter.get('/response.json', function(paramRequest, paramResponse, paramNext){
+          var m = {};
+          //formHtml
+          Q().then(function(){
+            m.pl={code:paramRequest.query.code};
+            m.pl._id=paramRequest.query._id;
+            m.op='bmm_getResponse';
+            return esbMessage(m);
+          }).then(function(msg){
+            oHelpers.sendResponse(paramResponse,200,{pl:msg});
+          }).fail(function(er){
+            oHelpers.sendResponse(paramResponse,501,er);      
+          });    
+        });
+        homeRouter.post('/response.json',function(req,res,pnext){
+          _persistRespose(req,res,pnext);
+        });
+        homeRouter.put('/response.json',function(req,res,pnext){
+          _persistRespose(req,res,pnext);
+        });
+        //query for services used in a response, put here to prevent login popup
+        homeRouter.post ('/services.json', function(paramRequest, paramResponse, paramNext){
+          var m = {
+            "op": "smm_queryServices",
+            "pl": {}
+          };
+          Q().then(function(){
+            m.pl=JSON.parse(paramRequest.body.json);
+            return esbMessage(m);
+          })
+          .then(function(r) {
+            paramResponse.writeHead(200, {"Content-Type": "application/json"});
+            paramResponse.end(JSON.stringify(r));
+          })
+          .fail(function(r) {
+            paramResponse.writeHead(501, {"Content-Type": "application/json"});
+            if(r.er && r.er.ec && r.er.ec>1000){
+              r.er.em='Server poblem....';
+            }
+            paramResponse.end(JSON.stringify(r));
+          });
+        });
 
     })
      .fail(function(err) {
