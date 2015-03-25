@@ -159,6 +159,7 @@ module.exports = function(paramService, esbMessage){
   bmRouter.put('/form.json', function(paramRequest, paramResponse, paramNext){
     _persistForm(paramRequest, paramResponse, paramNext)
   });
+  //query for responses (default where response.ow.uid = login user or ow.oid = the current organisation of user
   bmRouter.get('/response.json', function(paramRequest, paramResponse, paramNext){
     var m = {};
     //formHtml
@@ -173,7 +174,6 @@ module.exports = function(paramService, esbMessage){
       oHelpers.sendResponse(paramResponse,501,er);      
     });    
   });
-  //query for responses (default where response.ow.uid = login user or ow.oid = the current organisation of user
   bmRouter.post('/responses.json', function(paramRequest, paramResponse, paramNext){
     var m = {pl:{}};
     //formHtml
