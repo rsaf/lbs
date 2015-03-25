@@ -29,8 +29,26 @@ module.exports = function(paramService, esbMessage) {
         }
     });
 
+    photosRouter.get('/statistics/counts.json', function(paramRequest, paramResponse, paramNext){
 
+        var m = {
+            "ns":"scm",
+            "op": "getUsersCount",
+            "pl": ""
+        };
 
+        console.log("in user counts function");
+
+        esbMessage(m)
+            .then(function(r) {
+
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
 
     return photosRouter;
 };
