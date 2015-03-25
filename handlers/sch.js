@@ -29,6 +29,9 @@ module.exports = function(paramService, esbMessage) {
         }
     });
 
+
+
+
     return photosRouter;
 };
 
