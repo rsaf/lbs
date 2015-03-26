@@ -8,9 +8,7 @@ module.exports = function (paramPS, esbMessage) {
 //get photo by lzcode
     //workspace/phototoservices/v1/idphotos/:lzcode.json
     psRouter.get('/idphotos/:lzcode.json', function (paramRequest, paramResponse, paramNext) {
-
         oHelpers.sendResponse(paramResponse, 200, {pl: 'get photo by lzcode', er: null});
-
     });
 
     //get all photos by activity id
@@ -30,17 +28,11 @@ module.exports = function (paramPS, esbMessage) {
     //get photo standard by standard code
     //workspace/v1/phototoservices/standards/:standardcode.json
     psRouter.get('/standards/:standardcode.json', function (paramRequest, paramResponse) {
-
-
-
         var m = {
             "ns": "pmm",
             "op": "pmm_readStandardByCode",
             "pl":{sc: paramRequest.query.sc}
         };
-
-
-
 
         esbMessage(m)
             .then(function (r) {
@@ -50,7 +42,6 @@ module.exports = function (paramPS, esbMessage) {
                 oHelpers.sendResponse(paramResponse, 401, r.er);
             });
     });
-
 
     psRouter.get('/photos/properties/:standardType.json', function (paramRequest, paramResponse) {
 
