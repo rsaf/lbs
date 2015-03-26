@@ -10,7 +10,7 @@ var formidable = require('formidable');
 var fs = require('fs');
 var Q = require('q');
 
-function _initRequestMessage(paramRequest,type,id,adminOrg){
+function _initRequestMessage(paramRequest,type,code,adminOrg){
   var col,mod='bmm',
     message,url;
   if(type==='Activity'){
@@ -21,16 +21,16 @@ function _initRequestMessage(paramRequest,type,id,adminOrg){
   return {
     rdo: adminOrg
     ,rc: 'code'
-    ,rt: message + '申请'
+    ,rt: message + '申请 ' + code
     ,rsu: paramRequest.user.lanzheng.loginName
     ,rso: paramRequest.user.currentOrganization
-    ,rs: 40
+    ,rs: 10
     ,rb: 'message'
     ,rtr: type
     ,ei:[{
         col:col
         ,mod:mod
-        ,ei:id
+        ,ei:code
     }]
     ,url:url
   };
@@ -46,11 +46,20 @@ module.exports = function(paramService, esbMessage){
     return esbMessage(m);
   }
   function _rollBackTransaction(m){
-    m.pl.transaction = {
-      _id:m.pl.transactionid
-    }
-    m.op='wmm_rollBackTransaction';
-    return esbMessage(m);
+    return Q()
+    .then(function(){
+        return Q.all([
+          esbMessage({op:'wmm_rollBackTransaction',pl:{transaction:{_id:m.pl.transactionid}}})
+          ,esbMessage({op:'rmm_rollback',pl:{transactionid:m.pl.transactionid}})
+          ,esbMessage({op:'bmm_rollback',pl:{transactionid:m.pl.transactionid}})
+        ]);
+    })
+    .then(function(){
+      return Q.resolve('ok');
+    })
+    .then(null,function reject(err){
+      return Q.reject('In bmh _rollBackTransaction:',err);
+    });
   }
 
   function _persistForm(paramRequest, paramResponse){
@@ -69,13 +78,14 @@ module.exports = function(paramService, esbMessage){
     });
   }
   function _persistActivity(paramRequest, paramResponse){
-    var m = {},transactionid=false,response={};
+    var m = {},response={}
+      ,activity,adminid;
     //formHtml
     Q().then(function(){
       m.pl=JSON.parse(paramRequest.body.json).pl;
       m.pl.loginName=paramRequest.user.lanzheng.loginName;
       m.pl.currentOrganization=paramRequest.user.currentOrganization;
-      if(m.pl.activity && m.pl.activity.abd && m.pl.activity.abd.aps && parseInt(m.pl.activity.abd.aps)===40){
+      if(m.pl.activity && m.pl.activity.abd && m.pl.activity.abd.aps && parseInt(m.pl.activity.abd.aps)===10){
         // create a transaction
         m.op = "createTransaction";
         m.pl.transaction={
@@ -83,36 +93,36 @@ module.exports = function(paramService, esbMessage){
           ,modules:['bmm','rmm']
         };
         return Q.all([esbMessage(m), esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})])
-        .then(function(msg){
-          m.pl.transactionid=msg[0].pl.transaction._id;
-          m.op="createRequestMessage";
-          m.pl.requestMessage = _initRequestMessage(paramRequest,'Activity',m.pl.activity._id,msg[1].pl.oID);//org should be admin org
-          return esbMessage(m);
-        })
       }
-      return false;
+      return [false,false];
     })
-    .then(function(){      
+    .then(function(msg){
+      m.pl.transactionid=(msg[0]===false)?false:msg[0].pl.transaction._id;
+      adminid=(msg[1]===false)?false:msg[1].pl.oID;
       m.op='bmm_persistActivity';
       return esbMessage(m);
     })
     .then(function(msg){
-      var sendRes = function sendRes(){
-        oHelpers.sendResponse(paramResponse,200,msg); 
-      };
-      response = msg;
+      activity = msg;
       if(m.pl.transactionid){
-        return _commitTransaction(m).then(sendRes);
+        m.op="rmm_persistRequestMessage";
+        m.pl.request = _initRequestMessage(paramRequest,'Activity',activity.abd.ac,adminid);//org should be admin org
+        return esbMessage(m);
       }
-      sendRes();
+      return false;
+    })
+    .then(function(){
+      if(m.pl.transactionid){
+        return _commitTransaction(m);
+      }
+    })
+    .then(function(){      
+      oHelpers.sendResponse(paramResponse,200,{pl:activity}); 
     })
     .fail(function(er){
       var trans=Q();
       if(m.pl.transactionid){
-        trans = Q.all([
-          _rollBackTransaction(m)
-          //@todo: rollback rmm and bmm as well
-        ]);
+        trans = _rollBackTransaction(m);
       }
       trans.fin(function(){
         oHelpers.sendResponse(paramResponse,501,er);
@@ -149,11 +159,34 @@ module.exports = function(paramService, esbMessage){
   bmRouter.put('/form.json', function(paramRequest, paramResponse, paramNext){
     _persistForm(paramRequest, paramResponse, paramNext)
   });
-  bmRouter.post('/activity.json', function(paramRequest, paramResponse, paramNext){
-    _persistActivity(paramRequest, paramResponse, paramNext)
+  //query for responses (default where response.ow.uid = login user or ow.oid = the current organisation of user
+  bmRouter.get('/response.json', function(paramRequest, paramResponse, paramNext){
+    var m = {};
+    //formHtml
+    Q().then(function(){
+      m.pl={code:paramRequest.query.code};
+      m.pl._id=paramRequest.query._id;
+      m.op='bmm_getResponse';
+      return esbMessage(m);
+    }).then(function(msg){
+      oHelpers.sendResponse(paramResponse,200,{pl:msg});
+    }).fail(function(er){
+      oHelpers.sendResponse(paramResponse,501,er);      
+    });    
   });
-  bmRouter.put('/activity.json', function(paramRequest, paramResponse, paramNext){
-    _persistActivity(paramRequest, paramResponse, paramNext)
+  bmRouter.post('/responses.json', function(paramRequest, paramResponse, paramNext){
+    var m = {pl:{}};
+    //formHtml
+    Q().then(function(){
+      m.pl.loginName=(paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID;
+      m.pl.currentOrganization=(paramRequest.user&&paramRequest.user.currentOrganization)||false;
+      m.op='bmm_getResponses';
+      return esbMessage(m);
+    }).then(function(msg){
+      oHelpers.sendResponse(paramResponse,200,{pl:msg});
+    }).fail(function(er){
+      oHelpers.sendResponse(paramResponse,501,er);      
+    });    
   });
   bmRouter.post('/response.json',function(req,res,pnext){
     _persistRespose(req,res,pnext);
@@ -182,10 +215,29 @@ module.exports = function(paramService, esbMessage){
       m.op='bmm_getActivities';
       return esbMessage(m);
     }).then(function resolve(msg){
-      oHelpers.sendResponse(paramResponse,200,{pl:msg});
+      oHelpers.sendResponse(paramResponse,200,msg);
     },function reject(er){
       oHelpers.sendResponse(paramResponse,501,er);      
     });
+  });
+  bmRouter.get('/public/activities.json', function(paramRequest, paramResponse, paramNext){
+    var m = {};
+    //formHtml
+    Q().then(function(){
+      m.pl={}
+      m.op='bmm_getActivities';
+      return esbMessage(m);
+    }).then(function resolve(msg){
+      oHelpers.sendResponse(paramResponse,200,msg);
+    },function reject(er){
+      oHelpers.sendResponse(paramResponse,501,er);      
+    });
+  });
+  bmRouter.post('/activity.json', function(paramRequest, paramResponse, paramNext){
+    _persistActivity(paramRequest, paramResponse, paramNext)
+  });
+  bmRouter.put('/activity.json', function(paramRequest, paramResponse, paramNext){
+    _persistActivity(paramRequest, paramResponse, paramNext)
   });
   bmRouter.get('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
       if (paramRequest.params.activitiesType === 'activitieslist'){

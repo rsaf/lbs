@@ -17,10 +17,18 @@ module.exports = function(paramService, esbMessage)
           * @returns {Q@call;defer.promise} r[] {transactionId,transactionAmount,paymentOrderId,sourceAccountId,destinationAccountId,accountBalance}
           */
 
+         var varAccountID  = null;
+         if(paramRequest.user.userType==='admin'){
+             varAccountID = "F00001";
+         }
+         else {
+             varAccountID = paramRequest.user.lanzheng.loginName;
+         }
+
          var m = {
              "ns":"fmm",
              "op": "fmm_getTransactionHistory",
-             "pl": {"accountId": paramRequest.user.lanzheng.loginName}
+             "pl": {"accountId": varAccountID}
          };
          console.log(m);
          esbMessage(m)
@@ -41,10 +49,17 @@ module.exports = function(paramService, esbMessage)
         //* @param {type} m {accountId(required), accountType(optional)}
         //* @returns {Q@call;defer.promise} r{pl:{accountId , accountBalance},er:error}
         //userType
+        var varAccountID  = null;
+        if(paramRequest.user.userType==='admin'){
+            varAccountID = "F00001";
+        }
+        else {
+            varAccountID = paramRequest.user.lanzheng.loginName;
+        }
         var m = {
             "ns":"fmm",
             "op": "fmm_getUserBalance",
-            "pl": {"accountId": paramRequest.user.lanzheng.loginName, "accountType":paramRequest.user.userType}
+            "pl": {"accountId": varAccountID, "accountType":paramRequest.user.userType}
         };
         console.log(m);
         esbMessage(m)
