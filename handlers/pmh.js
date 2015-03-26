@@ -32,6 +32,7 @@ module.exports = function (paramPS, esbMessage) {
     psRouter.get('/standards/:standardcode.json', function (paramRequest, paramResponse) {
 
 
+
         var m = {
             "ns": "pmm",
             "op": "pmm_readStandardByCode",
@@ -44,14 +45,30 @@ module.exports = function (paramPS, esbMessage) {
         esbMessage(m)
             .then(function (r) {
                 oHelpers.sendResponse(paramResponse, 200, r.pl);
-
-
             })
             .fail(function (r) {
                 oHelpers.sendResponse(paramResponse, 401, r.er);
             });
     });
 
+
+    psRouter.get('/photos/properties/:standardType.json', function (paramRequest, paramResponse) {
+
+        var varStandardType = paramRequest.params.standardType;
+
+        var m = {
+            "ns": "pmm",
+            "op": "pmm_readStandardByType",
+            "pl":{it: varStandardType}
+        };
+        esbMessage(m)
+            .then(function (r) {
+                oHelpers.sendResponse(paramResponse, 200, r.pl);
+            })
+            .fail(function (r) {
+                oHelpers.sendResponse(paramResponse, 401, r.er);
+            });
+    });
 
     //get photo standard by standard code
     //workspace/standards/standards.json
@@ -70,7 +87,6 @@ module.exports = function (paramPS, esbMessage) {
                 oHelpers.sendResponse(paramResponse, 401, r.er);
             });
     });
-
     //get photo standard by standard code
     //workspace/standards/standards.json
     psRouter.get('/usage.json', function (paramRequest, paramResponse) {
