@@ -242,15 +242,13 @@ module.exports = function(paramPS, paramESBMessage) {
             "pl":paramRequest.body
         };
 
+        m.pl.cb = m.pl.cb._id
 
-        m.pl.uID = paramRequest.user.lanzheng.loginName;
-        m.pl.oID = paramRequest.user.currentOrganization;
 
         esbMessage(m)
             .then(function(r) {
 
-
-                console.log('r',r);
+                console.log('r response ---------',r);
 
                 oHelpers.sendResponse(paramResponse,200,r);
             })
@@ -367,8 +365,8 @@ module.exports = function(paramPS, paramESBMessage) {
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsDescription', pl: null};
         m.pl = {
-            uID:paramRequest.user.lanzheng.loginName,
-            oID:paramRequest.user.currentOrganization,
+            //uID:paramRequest.user.lanzheng.loginName,
+            //oID:paramRequest.user.currentOrganization,
             photoData:null,
             ifm:null,
             op : 'create',
@@ -386,10 +384,15 @@ module.exports = function(paramPS, paramESBMessage) {
 
             var profileToUpdate = JSON.parse(fields.json);
 
+
             fs.readFile(old_path, function(err, data) {
 
 
+
+
+
                 m.pl.profileData = profileToUpdate;
+
                 var attachment = {};
                         attachment.fm = file_ext;
                         attachment.fd = data;
@@ -432,6 +435,7 @@ module.exports = function(paramPS, paramESBMessage) {
             profileData:paramRequest.body
         };
 
+        m.pl.profileData.cb = m.pl.profileData.cb._id;
 
         esbMessage(m)
             .then(function(r) {
