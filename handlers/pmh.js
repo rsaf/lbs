@@ -61,6 +61,27 @@ module.exports = function (paramPS, esbMessage) {
             });
     });
 
+
+    psRouter.get('/photos/types.json', function (paramRequest, paramResponse) {
+
+
+
+        var m = {
+            "ns": "pmm",
+            "op": "pmm_readAllStandardsTypes",
+            "pl":{it: null}
+        };
+        esbMessage(m)
+            .then(function (r) {
+                oHelpers.sendResponse(paramResponse, 200, r.pl);
+            })
+            .fail(function (r) {
+                oHelpers.sendResponse(paramResponse, 401, r.er);
+            });
+    });
+
+
+
     //get photo standard by standard code
     //workspace/standards/standards.json
     psRouter.get('/standards.json', function (paramRequest, paramResponse) {
