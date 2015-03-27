@@ -28,10 +28,14 @@ module.exports = function (paramPS, esbMessage) {
     //get photo standard by standard code
     //workspace/v1/phototoservices/standards/:standardcode.json
     psRouter.get('/standards/:standardcode.json', function (paramRequest, paramResponse) {
+
+        var varStandardCode = paramRequest.params.standardcode;
+
+        console.log('varStandardCode---',varStandardCode);
         var m = {
             "ns": "pmm",
             "op": "pmm_readStandardByCode",
-            "pl":{sc: paramRequest.query.sc}
+            "pl":{sc: varStandardCode}
         };
 
         esbMessage(m)
