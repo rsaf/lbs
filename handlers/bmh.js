@@ -317,6 +317,7 @@ module.exports = function(paramService, esbMessage){
         };
 
 
+        m.pl.acid = m.pl.acid._id;
         m.pl.uID = paramRequest.user.lanzheng.loginName;
         m.pl.oID = paramRequest.user.currentOrganization;
 
@@ -411,10 +412,13 @@ module.exports = function(paramService, esbMessage){
             "pl":{}
         };
 
+
+
         m.pl.uID = paramRequest.user.lanzheng.loginName;
         m.pl.oID = paramRequest.user.currentOrganization;
         m.pl.op = 'update';
         m.pl.jsonData = paramRequest.body;
+        m.pl.acid = m.pl.acid._id;
 
         esbMessage(m)
             .then(function(r) {
@@ -501,7 +505,7 @@ module.exports = function(paramService, esbMessage){
             jsonData:paramRequest.body
         };
 
-
+        m.pl.jsonData.acid = m.pl.jsonData.acid._id;
         esbMessage(m)
             .then(function(r) {
                 console.log('r',r);
