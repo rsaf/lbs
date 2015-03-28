@@ -1,6 +1,10 @@
 /**
  * Created by LBS006 on 12/3/14.
  */
+
+// workspace/services
+
+
 var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
 
@@ -433,6 +437,28 @@ module.exports = function(paramService,  esbMessage){
       }
       paramResponse.end(JSON.stringify(r));
     });
+  });
+
+  serviceManagementRouter.get('/servicepointDetatils/:servicepointCode.json', function(paramRequest, paramResponse, paramNext){
+    var m = {
+      "ns":"smm",
+      "op": "smm_readServicePointDetails",
+      "pl": {sprc:paramRequest.params.servicepointCode}
+    };
+    m.pl.loginName=paramRequest.user.lanzheng.loginName;
+    m.pl.currentOrganization=paramRequest.user.currentOrganization;
+    esbMessage(m)
+        .then(function(r) {
+          paramResponse.writeHead(200, {"Content-Type": "application/json"});
+          paramResponse.end(JSON.stringify(r));
+        })
+        .fail(function(r) {
+          paramResponse.writeHead(501, {"Content-Type": "application/json"});
+          if(r.er && r.er.ec && r.er.ec>1000){
+            r.er.em='Server poblem....';
+          }
+          paramResponse.end(JSON.stringify(r));
+        });
   });
 
   serviceManagementRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
