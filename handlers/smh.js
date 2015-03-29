@@ -7,6 +7,8 @@
 
 var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
+var formidable = require('formidable');
+var fs = require('fs');
 
 function _initRequestMessage(paramRequest,type,code,adminOrg){
   var col,mod='smm',
@@ -438,8 +440,16 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(r));
     });
   });
+  serviceManagementRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
+    if (paramRequest.params.type === 'allbookings'){
+      oHelpers.sendResponse(paramResponse,200,allbookings);
+    }
+    else if(paramRequest.params.type === 'busnessrecords'){
+      oHelpers.sendResponse(paramResponse,200,busnessrecords);
+    }
+  });
 
-  serviceManagementRouter.get('/servicepointDetatils/:servicepointCode.json', function(paramRequest, paramResponse, paramNext){
+  serviceManagementRouter.get('/servicepointDetails/:servicepointCode.json', function(paramRequest, paramResponse, paramNext){
     var m = {
       "ns":"smm",
       "op": "smm_readServicePointDetails",
@@ -461,14 +471,529 @@ module.exports = function(paramService,  esbMessage){
         });
   });
 
-  serviceManagementRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
-      if (paramRequest.params.type === 'allbookings'){
-          oHelpers.sendResponse(paramResponse,200,allbookings);
+
+  serviceManagementRouter.get('/servicepointDetails/:servicepointDetatils_id.json', function(paramRequest, paramResponse){
+
+    var m = {
+      "ns":"smm",
+      "op": "smm_readServicePointDetailByID",
+      "pl":{ac:paramRequest.params.servicepointDetatils_id}
+    };
+
+    console.log('paramRequest.params.servicepointDetatils_id-----------',paramRequest.params.servicepointDetatils_id);
+
+
+    esbMessage(m)
+        .then(function(r) {
+          //console.log(r.pl);
+          oHelpers.sendResponse(paramResponse,200,r);
+        })
+        .fail(function(r) {
+          console.log('smh----',r.er);
+          var r = {pl:null, er:{ec:404,em:"could not find servicepoint detail page"}};
+          oHelpers.sendResponse(paramResponse,404,r);
+        });
+
+  });
+
+  serviceManagementRouter.put('/servicepointDetails/:servicepointDetatils_id.json', function(paramRequest, paramResponse){
+
+    console.log('paramRequest.params.servicepointDetatils_id',paramRequest.params.servicepointDetatils_id);
+    console.log('paramRequest.body',paramRequest.body);
+
+
+    var m = {
+      "ns":"smm",
+      "op": "smm_updateServicePointDetail",
+      "pl":paramRequest.body
+    };
+
+
+    m.pl.spbi = m.pl.spbi._id;
+    m.pl.uID = paramRequest.user.lanzheng.loginName;
+    m.pl.oID = paramRequest.user.currentOrganization;
+
+    esbMessage(m)
+        .then(function(r) {
+
+
+          console.log('r',r);
+
+          oHelpers.sendResponse(paramResponse,200,r);
+        })
+        .fail(function(r) {
+          console.log('smh error:----- ', r);
+          var r = {pl:null, er:{ec:404,em:"smh error: could not update servicepointDetail "}};
+          oHelpers.sendResponse(paramResponse,404,r);
+        });
+
+  });
+
+  serviceManagementRouter.post('/servicepointDetails/faq.json', function(paramRequest, paramResponse){
+
+    console.log('paramRequest.params.servicepointDetatils_id',paramRequest.params.servicepointDetatils_id);
+    console.log('paramRequest.body',paramRequest.body);
+
+
+    var m = {
+      "ns":"smm",
+      "op": "smm_updateServicePointDetailFAQ",
+      "pl":{}
+    };
+
+
+    m.pl.uID = paramRequest.user.lanzheng.loginName;
+    m.pl.oID = paramRequest.user.currentOrganization;
+    m.pl.op = 'create';
+    m.pl.jsonData = paramRequest.body;
+
+    esbMessage(m)
+        .then(function(r) {
+
+          console.log('r',r);
+
+          oHelpers.sendResponse(paramResponse,200,r);
+        })
+        .fail(function(r) {
+          console.log('smh error:----- ', r);
+          var r = {pl:null, er:{ec:404,em:"smh error: could not update servicepointDetail "}};
+          oHelpers.sendResponse(paramResponse,404,r);
+        });
+
+  });
+
+  serviceManagementRouter.delete('/servicepointDetails/faq/:servicepointDetatils_id/:faq_uuid.json', function(paramRequest, paramResponse){
+
+    console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_uuid);
+
+
+    var m = {
+      "ns":"smm",
+      "op": "smm_updateServicePointDetailFAQ",
+      "pl":{
+        uID:paramRequest.user.lanzheng.loginName,
+        oID :paramRequest.user.currentOrganization,
+        jsonData:{uuid:paramRequest.params.faq_uuid, _id:paramRequest.params.servicepointDetatils_id},
+        op :'delete'
+
       }
-      else if(paramRequest.params.type === 'busnessrecords'){
-          oHelpers.sendResponse(paramResponse,200,busnessrecords);
-      }
+    };
+
+    esbMessage(m)
+        .then(function(r) {
+          console.log('r',r);
+          oHelpers.sendResponse(paramResponse,200,r);
+        })
+        .fail(function(r) {
+          console.log('smh error:----- ', r);
+          var r = {pl:null, er:{ec:404,em:"smh error: could not delete servicepointDetail  faq"}};
+          oHelpers.sendResponse(paramResponse,404,r);
+        });
+
+  });
+
+  serviceManagementRouter.put('/servicepointDetails/faq/:servicepointDetatils_id/:faq_uuid.json', function(paramRequest, paramResponse){
+
+    console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_uuid);
+    console.log('paramRequest.body\n',paramRequest.body);
+
+
+    var m = {
+      "ns":"smm",
+      "op": "smm_updateServicePointDetailFAQ",
+      "pl":{}
+    };
+
+
+
+    m.pl.uID = paramRequest.user.lanzheng.loginName;
+    m.pl.oID = paramRequest.user.currentOrganization;
+    m.pl.op = 'update';
+    m.pl.jsonData = paramRequest.body;
+    //m.pl.spbi = m.pl.spbi._id;
+
+    esbMessage(m)
+        .then(function(r) {
+          console.log('r',r);
+          oHelpers.sendResponse(paramResponse,200,r);
+        })
+        .fail(function(r) {
+          console.log('smh error:----- ', r);
+          var r = {pl:null, er:{ec:404,em:"smh error: could not update servicepointDetail  faq"}};
+          oHelpers.sendResponse(paramResponse,404,r);
+        });
+
+  });
+
+  serviceManagementRouter.post('/servicepointDetails/description/attachment.json', function(paramRequest, paramResponse){
+
+
+
+
+    console.log('-----attachement bingo-----');
+
+
+    var m = {ns: 'smm',op:'smm_updateServicePointDetailDescription', pl: null};
+    m.pl = {
+      uID:paramRequest.user.lanzheng.loginName,
+      oID:paramRequest.user.currentOrganization,
+      photoData:null,
+      ifm:null,
+      op : 'create',
+      jsonData:null
+    };
+
+
+
+    var form = new formidable.IncomingForm();
+    form.parse(paramRequest, function(err, fields, files) {
+      var old_path = files.file.path,
+          file_ext = files.file.name.split('.').pop();
+
+      console.log('file name:----- ', files.file.name);
+
+      var jsonToUpdate = JSON.parse(fields.json);
+
+      fs.readFile(old_path, function(err, data) {
+
+
+        m.pl.jsonData = jsonToUpdate;
+        var attachment = {};
+        attachment.fm = file_ext;
+        attachment.fd = data;
+        attachment.nm = files.file.name;
+        m.pl.jsonData.description.attachment.push(attachment);
+
+        esbMessage(m)
+            .then(function(r) {
+              console.log('update successfull');
+              oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+              console.log('smh error:-----');
+              console.log(r.er);
+              var r = {pl:null, er:{ec:404,em:"could not save attachment and update profile"}};
+              oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+      })
+
     });
+
+  });
+
+  serviceManagementRouter.put('/servicepointDetails/description/:servicepointDetatils_id.json', function(paramRequest, paramResponse){
+
+
+    console.log('-----attachement -----');
+
+
+    var m = {ns: 'smm',op:'smm_updateServicePointDetailDescription', pl: null};
+    m.pl = {
+      uID:paramRequest.user.lanzheng.loginName,
+      oID:paramRequest.user.currentOrganization,
+      op : 'update',
+      _id: paramRequest.params.servicepointDetatils_id,
+      jsonData:paramRequest.body
+    };
+
+    m.pl.jsonData.spbi = m.pl.jsonData.spbi._id;
+    esbMessage(m)
+        .then(function(r) {
+          console.log('r',r);
+          oHelpers.sendResponse(paramResponse,200,r);
+        })
+        .fail(function(r) {
+          console.log('smh error:----- ', r);
+          var r = {pl:null, er:{ec:404,em:"smh error: could not update servicepointDetail  description"}};
+          oHelpers.sendResponse(paramResponse,404,r);
+        });
+
+  });
+
+
+  serviceManagementRouter.delete('/servicepointDetails/description/attachment/:servicepointDetatils_id/:attch_id.json', function(paramRequest, paramResponse){
+
+
+    console.log('paramRequest.params.attch_id\n',paramRequest.params.attch_id);
+
+    var m = {ns: 'smm',op:'smm_updateServicePointDetailDescription', pl: null};
+    m.pl = {
+      uID:paramRequest.user.lanzheng.loginName,
+      oID:paramRequest.user.currentOrganization,
+      ifm:null,
+      op : 'delete',
+      jsonData:{uuid:paramRequest.params.attch_id, _id:paramRequest.params.servicepointDetatils_id}
+    };
+
+    esbMessage(m)
+        .then(function(r) {
+          console.log('r',r);
+          oHelpers.sendResponse(paramResponse,200,r);
+        })
+        .fail(function(r) {
+          console.log('smh error:----- ', r);
+          var r = {pl:null, er:{ec:404,em:"smh error: could not delete servicepointDetail  attachment"}};
+          oHelpers.sendResponse(paramResponse,404,r);
+        });
+
+
+
+
+  });
+
+
+  serviceManagementRouter.post('/servicepointDetails/upload.json', function(paramRequest, paramResponse){
+
+
+    var m = {ns: 'smm',op:'smm_uploadServicePointDetailLogo', pl: null};
+    m.pl = {
+      uID:paramRequest.user.lanzheng.loginName,
+      oID:paramRequest.user.currentOrganization,
+      photoData:null,
+      ifm:null,
+      jsonData:null
+    };
+
+
+    var form = new formidable.IncomingForm();
+    form.parse(paramRequest, function(err, fields, files) {
+      var old_path = files.file.path,
+          file_ext = files.file.name.split('.').pop();
+
+
+      console.log('file name:----- ', files.file.name);
+
+      var jsonToUpdate = JSON.parse(fields.json);
+
+      fs.readFile(old_path, function(err, data) {
+
+
+        console.log('data-------',data )
+
+        m.pl.photoData= data;
+        m.pl.ifm = file_ext;
+        m.pl.jsonData = jsonToUpdate;
+
+        esbMessage(m)
+            .then(function(r) {
+              console.log('update successfull');
+              oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+              console.log('smh error:-----');
+              console.log(r.er);
+              var r = {pl:null, er:{ec:404,em:"could not save image and update profile"}};
+              oHelpers.sendResponse(paramResponse,404,r);
+            });
+      })
+
+    });
+
+  });
+
+
+  serviceManagementRouter.post('/servicepointDetails/images.json', function(paramRequest, paramResponse){
+
+    console.log('smh post new image')
+
+    var m = {ns: 'smm',op:'smm_updateServicePointDetailImages', pl: null};
+    m.pl = {
+      uID:paramRequest.user.lanzheng.loginName,
+      oID:paramRequest.user.currentOrganization,
+      photoData:null,
+      ifm:null,
+      op : 'create',
+      jsonData:null
+    };
+
+
+    var form = new formidable.IncomingForm();
+    form.parse(paramRequest, function(err, fields, files) {
+      var old_path = files.file.path,
+          file_ext = files.file.name.split('.').pop();
+
+
+      console.log('file name:----- ', files.file.name);
+
+      var jsonToUpdate = JSON.parse(fields.json);
+
+      fs.readFile(old_path, function(err, data) {
+
+
+        console.log('data-------',data )
+
+        m.pl.photoData= data;
+        m.pl.ifm = file_ext;
+        m.pl.jsonData = jsonToUpdate;
+
+        esbMessage(m)
+            .then(function(r) {
+              console.log('update successfull');
+              oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+              console.log('smh error:-----');
+              console.log(r.er);
+              var r = {pl:null, er:{ec:404,em:"could not save image and update profile"}};
+              oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+      })
+
+    });
+
+
+  });
+
+  serviceManagementRouter.delete('/servicepointDetails/images/:servicepointDetatils_id/:img_id.json', function(paramRequest, paramResponse){
+
+    console.log('paramRequest.params.attch_id\n',paramRequest.params.attch_id);
+
+    var m = {ns: 'smm',op:'smm_updateServicePointDetailImages', pl: null};
+
+    m.pl = {
+      uID:paramRequest.user.lanzheng.loginName,
+      oID:paramRequest.user.currentOrganization,
+      op : 'delete',
+      jsonData:{uuid:paramRequest.params.img_id, _id:paramRequest.params.servicepointDetatils_id}
+    };
+
+
+    esbMessage(m)
+        .then(function(r) {
+          console.log('r',r);
+          oHelpers.sendResponse(paramResponse,200,r);
+        })
+        .fail(function(r) {
+          console.log('smh error:----- ', r);
+          var r = {pl:null, er:{ec:404,em:"smh error: could not delete servicepointDetail  image"}};
+          oHelpers.sendResponse(paramResponse,404,r);
+        });
+  });
+
+
+  serviceManagementRouter.post('/servicepointDetails/videos.json', function(paramRequest, paramResponse){
+
+    console.log('smh post new video')
+
+    var m = {ns: 'smm',op:'smm_updateServicePointDetailVideos', pl: null};
+    m.pl = {
+      uID:paramRequest.user.lanzheng.loginName,
+      oID:paramRequest.user.currentOrganization,
+      ifm:null,
+      op : 'create',
+      jsonData:paramRequest.body
+    };
+
+
+    esbMessage(m)
+        .then(function(r) {
+
+
+          console.log('r',r);
+
+          oHelpers.sendResponse(paramResponse,200,r);
+        })
+        .fail(function(r) {
+          console.log('smh error:----- ', r);
+          var r = {pl:null, er:{ec:404,em:"smh error: could not update servicepointDetail "}};
+          oHelpers.sendResponse(paramResponse,404,r);
+        });
+
+  });
+
+
+  serviceManagementRouter.delete('/servicepointDetails/videos/:servicepointDetatils_id/:vid_id.json', function(paramRequest, paramResponse){
+
+    console.log('smh ---delete video\n',paramRequest.params.vid_id);
+
+    var m = {ns: 'smm',op:'smm_updateServicePointDetailVideos', pl: null};
+    m.pl = {
+      uID:paramRequest.user.lanzheng.loginName,
+      oID:paramRequest.user.currentOrganization,
+      op : 'delete',
+      jsonData:{uuid:paramRequest.params.vid_id, _id:paramRequest.params.servicepointDetatils_id}
+    };
+
+    esbMessage(m)
+        .then(function(r) {
+
+
+          console.log('r',r);
+
+          oHelpers.sendResponse(paramResponse,200,r);
+        })
+        .fail(function(r) {
+          console.log('smh error:----- ', r);
+          var r = {pl:null, er:{ec:404,em:"smh error: could not delete servicepointDetail video"}};
+          oHelpers.sendResponse(paramResponse,404,r);
+        });
+
+  });
+
+  serviceManagementRouter.post('/servicepointDetails/audios.json', function(paramRequest, paramResponse){
+
+
+    console.log('smh post new audio')
+
+
+    var m = {ns: 'smm',op:'smm_updateServicePointDetailAudios', pl: null};
+    m.pl = {
+      uID:paramRequest.user.lanzheng.loginName,
+      oID:paramRequest.user.currentOrganization,
+      ifm:null,
+      op : 'create',
+      jsonData:paramRequest.body
+    };
+
+
+    esbMessage(m)
+        .then(function(r) {
+
+
+          console.log('r',r);
+
+          oHelpers.sendResponse(paramResponse,200,r);
+        })
+        .fail(function(r) {
+          console.log('smm error:----- ', r);
+          var r = {pl:null, er:{ec:404,em:"smm error: could not update servicepointDetail "}};
+          oHelpers.sendResponse(paramResponse,404,r);
+        });
+
+  });
+
+  serviceManagementRouter.delete('/servicepointDetails/audios/:servicepointDetatils_id/:audio_id.json', function(paramRequest, paramResponse){
+
+    console.log('smm ---delete audio\n',paramRequest.params.audio_id);
+
+    var m = {ns: 'smm',op:'smm_updateServicePointDetailAudios', pl: null};
+    m.pl = {
+      uID:paramRequest.user.lanzheng.loginName,
+      oID:paramRequest.user.currentOrganization,
+      op : 'delete',
+      jsonData:{uuid:paramRequest.params.audio_id, _id:paramRequest.params.servicepointDetatils_id}
+    };
+
+
+    esbMessage(m)
+        .then(function(r) {
+
+
+          console.log('r--',r);
+
+          oHelpers.sendResponse(paramResponse,200,r);
+        })
+        .fail(function(r) {
+          console.log('smm error:----- ', r);
+          var r = {pl:null, er:{ec:404,em:"smm error: could not delete servicepointDetail audio"}};
+          oHelpers.sendResponse(paramResponse,404,r);
+        });
+
+  });
+
+  
 
         //createServicePoint
   return serviceManagementRouter;

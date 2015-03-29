@@ -272,14 +272,6 @@ module.exports = function(paramService, esbMessage){
       }
   });
 
-
-
-
-
-
-
-
-
     bmRouter.get('/activityDetails/:activityDetail_id.json', function(paramRequest, paramResponse){
 
         var m = {
@@ -418,7 +410,7 @@ module.exports = function(paramService, esbMessage){
         m.pl.oID = paramRequest.user.currentOrganization;
         m.pl.op = 'update';
         m.pl.jsonData = paramRequest.body;
-        m.pl.acid = m.pl.acid._id;
+        //m.pl.acid = m.pl.acid._id;
 
         esbMessage(m)
             .then(function(r) {
