@@ -8,7 +8,7 @@
 var oHelpers= require('../utilities/helpers.js');
 var formidable = require('formidable');
 var fs = require('fs');
-var Q = require('q');
+var q = require('q');
 
 function _initRequestMessage(paramRequest,type,code,adminOrg){
   var col,mod='bmm',
@@ -16,7 +16,7 @@ function _initRequestMessage(paramRequest,type,code,adminOrg){
   if(type==='Activity'){
     col='activities';
     url='/workspace/publishing/activities';
-    message="事务"
+    message="事务";
   }
   return {
     rdo: adminOrg
@@ -41,31 +41,31 @@ module.exports = function(paramService, esbMessage){
   function _commitTransaction(m){
     m.pl.transaction = {
       _id:m.pl.transactionid
-    }
+    };
     m.op='commitTransaction';
     return esbMessage(m);
   }
   function _rollBackTransaction(m){
-    return Q()
+    return q()
     .then(function(){
-        return Q.all([
+        return q.all([
           esbMessage({op:'wmm_rollBackTransaction',pl:{transaction:{_id:m.pl.transactionid}}})
           ,esbMessage({op:'rmm_rollback',pl:{transactionid:m.pl.transactionid}})
           ,esbMessage({op:'bmm_rollback',pl:{transactionid:m.pl.transactionid}})
         ]);
     })
     .then(function(){
-      return Q.resolve('ok');
+      return q.resolve('ok');
     })
     .then(null,function reject(err){
-      return Q.reject('In bmh _rollBackTransaction:',err);
+      return q.reject('In bmh _rollBackTransaction:',err);
     });
   }
 
   function _persistForm(paramRequest, paramResponse){
     var m = {};
     //formHtml
-    Q().then(function(){
+    q().then(function(){
       m.pl=JSON.parse(paramRequest.body.json);
       m.pl.loginName=paramRequest.user.lanzheng.loginName;
       m.pl.currentOrganization=paramRequest.user.currentOrganization;
@@ -81,18 +81,18 @@ module.exports = function(paramService, esbMessage){
     var m = {},response={}
       ,activity,adminid;
     //formHtml
-    Q().then(function(){
+    q().then(function(){
       m.pl=JSON.parse(paramRequest.body.json).pl;
       m.pl.loginName=paramRequest.user.lanzheng.loginName;
       m.pl.currentOrganization=paramRequest.user.currentOrganization;
-      if(m.pl.activity && m.pl.activity.abd && m.pl.activity.abd.aps && parseInt(m.pl.activity.abd.aps)===10){
+      if(m.pl.activity && m.pl.activity.abd && m.pl.activity.abd.aps && parseInt(m.pl.activity.abd.aps,10)===10){
         // create a transaction
         m.op = "createTransaction";
         m.pl.transaction={
           description:'publish Activity request'
           ,modules:['bmm','rmm']
         };
-        return Q.all([esbMessage(m), esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})])
+        return q.all([esbMessage(m), esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})]);
       }
       return [false,false];
     })
@@ -120,7 +120,7 @@ module.exports = function(paramService, esbMessage){
       oHelpers.sendResponse(paramResponse,200,{pl:activity}); 
     })
     .fail(function(er){
-      var trans=Q();
+      var trans=q();
       if(m.pl.transactionid){
         trans = _rollBackTransaction(m);
       }
@@ -132,9 +132,9 @@ module.exports = function(paramService, esbMessage){
   function _persistRespose(req, res,pnext){
     var m = {},transactionid=false,response={};
     //formHtml
-    Q().then(function(){
+    q().then(function(){
       m.pl=JSON.parse(req.body.json).pl;
-      //@todo: is user not set then use req.sessionID
+      // is user not set then use req.sessionID
       m.pl.loginName=(req.user&&req.user.lanzheng&&req.user.lanzheng.loginName)||req.sessionID;
       m.pl.currentOrganization=(req.user&&req.user.currentOrganization)||false;
       m.op='bmm_persistResponse';
@@ -154,16 +154,16 @@ module.exports = function(paramService, esbMessage){
 
   var bmRouter = paramService.Router();
   bmRouter.post('/form.json', function(paramRequest, paramResponse, paramNext){
-    _persistForm(paramRequest, paramResponse, paramNext)
+    _persistForm(paramRequest, paramResponse, paramNext);
   });
   bmRouter.put('/form.json', function(paramRequest, paramResponse, paramNext){
-    _persistForm(paramRequest, paramResponse, paramNext)
+    _persistForm(paramRequest, paramResponse, paramNext);
   });
   //query for responses (default where response.ow.uid = login user or ow.oid = the current organisation of user
   bmRouter.get('/response.json', function(paramRequest, paramResponse, paramNext){
     var m = {};
     //formHtml
-    Q().then(function(){
+    q().then(function(){
       m.pl={code:paramRequest.query.code};
       m.pl._id=paramRequest.query._id;
       m.op='bmm_getResponse';
@@ -177,7 +177,7 @@ module.exports = function(paramService, esbMessage){
   bmRouter.post('/responses.json', function(paramRequest, paramResponse, paramNext){
     var m = {pl:{}};
     //formHtml
-    Q().then(function(){
+    q().then(function(){
       m.pl.loginName=(paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID;
       m.pl.currentOrganization=(paramRequest.user&&paramRequest.user.currentOrganization)||false;
       m.op='bmm_getResponses';
@@ -197,8 +197,8 @@ module.exports = function(paramService, esbMessage){
   bmRouter.get('/activity.json', function(paramRequest, paramResponse, paramNext){
     var m = {};
     //formHtml
-    Q().then(function(){
-      m.pl={code:paramRequest.query.code}
+    q().then(function(){
+      m.pl={code:paramRequest.query.code};
       m.op='bmm_getActivity';
       return esbMessage(m);
     }).then(function(msg){
@@ -210,8 +210,8 @@ module.exports = function(paramService, esbMessage){
   bmRouter.get('/activities.json', function(paramRequest, paramResponse, paramNext){
     var m = {};
     //formHtml
-    Q().then(function(){
-      m.pl={loginName:paramRequest.user.lanzheng.loginName,currentOrganization:paramRequest.user.currentOrganization}
+    q().then(function(){
+      m.pl={loginName:paramRequest.user.lanzheng.loginName,currentOrganization:paramRequest.user.currentOrganization};
       m.op='bmm_getActivities';
       return esbMessage(m);
     }).then(function resolve(msg){
@@ -223,8 +223,8 @@ module.exports = function(paramService, esbMessage){
   bmRouter.get('/public/activities.json', function(paramRequest, paramResponse, paramNext){
     var m = {};
     //formHtml
-    Q().then(function(){
-      m.pl={}
+    q().then(function(){
+      m.pl={};
       m.op='bmm_getActivities';
       return esbMessage(m);
     }).then(function resolve(msg){
@@ -234,10 +234,10 @@ module.exports = function(paramService, esbMessage){
     });
   });
   bmRouter.post('/activity.json', function(paramRequest, paramResponse, paramNext){
-    _persistActivity(paramRequest, paramResponse, paramNext)
+    _persistActivity(paramRequest, paramResponse, paramNext);
   });
   bmRouter.put('/activity.json', function(paramRequest, paramResponse, paramNext){
-    _persistActivity(paramRequest, paramResponse, paramNext)
+    _persistActivity(paramRequest, paramResponse, paramNext);
   });
   bmRouter.get('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
       if (paramRequest.params.activitiesType === 'activitieslist'){
@@ -290,7 +290,7 @@ module.exports = function(paramService, esbMessage){
             })
             .fail(function(r) {
                 console.log('bmh----',r.er);
-                var r = {pl:null, er:{ec:404,em:"could not find activity detail page"}};
+                r = {pl:null, er:{ec:404,em:"could not find activity detail page"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
@@ -323,7 +323,7 @@ module.exports = function(paramService, esbMessage){
             })
             .fail(function(r) {
                 console.log('bmh error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail "}};
+                r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail "}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
@@ -356,13 +356,14 @@ module.exports = function(paramService, esbMessage){
             })
             .fail(function(r) {
                 console.log('bmh error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail "}};
+                r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail "}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
     });
-
+    
     bmRouter.delete('/activityDetails/faq/:activityDetail_id/:faq_uuid.json', function(paramRequest, paramResponse){
+    
 
         console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_uuid);
 
@@ -386,7 +387,7 @@ module.exports = function(paramService, esbMessage){
             })
             .fail(function(r) {
                 console.log('bmh error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"bmh error: could not delete activityDetail  faq"}};
+                r = {pl:null, er:{ec:404,em:"bmh error: could not delete activityDetail  faq"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
@@ -419,7 +420,7 @@ module.exports = function(paramService, esbMessage){
             })
             .fail(function(r) {
                 console.log('bmh error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail  faq"}};
+                r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail  faq"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
@@ -472,11 +473,11 @@ module.exports = function(paramService, esbMessage){
                     .fail(function(r) {
                         console.log('bmh error:-----');
                         console.log(r.er);
-                        var r = {pl:null, er:{ec:404,em:"could not save attachment and update profile"}};
+                        r = {pl:null, er:{ec:404,em:"could not save attachment and update profile"}};
                         oHelpers.sendResponse(paramResponse,404,r);
                     });
 
-            })
+            });
 
         });
 
@@ -505,7 +506,7 @@ module.exports = function(paramService, esbMessage){
             })
             .fail(function(r) {
                 console.log('bmh error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail  description"}};
+                r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail  description"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
@@ -533,7 +534,7 @@ module.exports = function(paramService, esbMessage){
             })
             .fail(function(r) {
                 console.log('bmh error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"bmh error: could not delete activityDetail  attachment"}};
+                r = {pl:null, er:{ec:404,em:"bmh error: could not delete activityDetail  attachment"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
@@ -569,7 +570,7 @@ module.exports = function(paramService, esbMessage){
             fs.readFile(old_path, function(err, data) {
 
 
-                console.log('data-------',data )
+                console.log('data-------',data );
 
                 m.pl.photoData= data;
                 m.pl.ifm = file_ext;
@@ -583,10 +584,10 @@ module.exports = function(paramService, esbMessage){
                     .fail(function(r) {
                         console.log('bmh error:-----');
                         console.log(r.er);
-                        var r = {pl:null, er:{ec:404,em:"could not save image and update profile"}};
+                        r = {pl:null, er:{ec:404,em:"could not save image and update profile"}};
                         oHelpers.sendResponse(paramResponse,404,r);
                     });
-            })
+            });
 
         });
 
@@ -595,7 +596,7 @@ module.exports = function(paramService, esbMessage){
 
     bmRouter.post('/activityDetails/images.json', function(paramRequest, paramResponse){
 
-        console.log('bmh post new image')
+        console.log('bmh post new image');
 
         var m = {ns: 'bmm',op:'bmm_updateActivityDetailImages', pl: null};
         m.pl = {
@@ -621,7 +622,7 @@ module.exports = function(paramService, esbMessage){
             fs.readFile(old_path, function(err, data) {
 
 
-                console.log('data-------',data )
+                console.log('data-------',data );
 
                 m.pl.photoData= data;
                 m.pl.ifm = file_ext;
@@ -635,11 +636,11 @@ module.exports = function(paramService, esbMessage){
                     .fail(function(r) {
                         console.log('bmh error:-----');
                         console.log(r.er);
-                        var r = {pl:null, er:{ec:404,em:"could not save image and update profile"}};
+                        r = {pl:null, er:{ec:404,em:"could not save image and update profile"}};
                         oHelpers.sendResponse(paramResponse,404,r);
                     });
 
-            })
+            });
 
         });
 
@@ -667,7 +668,7 @@ module.exports = function(paramService, esbMessage){
             })
             .fail(function(r) {
                 console.log('bmh error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"bmh error: could not delete activityDetail  image"}};
+                r = {pl:null, er:{ec:404,em:"bmh error: could not delete activityDetail  image"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
     });
@@ -675,7 +676,7 @@ module.exports = function(paramService, esbMessage){
 
     bmRouter.post('/activityDetails/videos.json', function(paramRequest, paramResponse){
 
-        console.log('bmh post new video')
+        console.log('bmh post new video');
 
         var m = {ns: 'bmm',op:'bmm_updateActivityDetailVideos', pl: null};
         m.pl = {
@@ -697,7 +698,7 @@ module.exports = function(paramService, esbMessage){
             })
             .fail(function(r) {
                 console.log('bmh error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail "}};
+                r = {pl:null, er:{ec:404,em:"bmh error: could not update activityDetail "}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
@@ -726,7 +727,7 @@ module.exports = function(paramService, esbMessage){
             })
             .fail(function(r) {
                 console.log('bmh error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"bmh error: could not delete activityDetail video"}};
+                r = {pl:null, er:{ec:404,em:"bmh error: could not delete activityDetail video"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
@@ -735,7 +736,7 @@ module.exports = function(paramService, esbMessage){
     bmRouter.post('/activityDetails/audios.json', function(paramRequest, paramResponse){
 
 
-        console.log('bmh post new audio')
+        console.log('bmh post new audio');
 
 
         var m = {ns: 'bmm',op:'bmm_updateActivityDetailAudios', pl: null};
@@ -758,7 +759,7 @@ module.exports = function(paramService, esbMessage){
             })
             .fail(function(r) {
                 console.log('bmm error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"bmm error: could not update activityDetail "}};
+                r = {pl:null, er:{ec:404,em:"bmm error: could not update activityDetail "}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
@@ -787,7 +788,7 @@ module.exports = function(paramService, esbMessage){
             })
             .fail(function(r) {
                 console.log('bmm error:----- ', r);
-                var r = {pl:null, er:{ec:404,em:"bmm error: could not delete activityDetail audio"}};
+                r = {pl:null, er:{ec:404,em:"bmm error: could not delete activityDetail audio"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
