@@ -482,10 +482,10 @@ module.exports = function(paramPS, paramESBMessage) {
     });
 
     //workspace/profiles/v1/upload
-    upRouter.post('/corporateDetails/upload.json', function(paramRequest, paramResponse){
+    upRouter.post('/corporate/logo/upload.json', function(paramRequest, paramResponse){
 
 
-        var m = {ns: 'upm',op:'upm_uploadCorporationDetailsLogo', pl: null};
+        var m = {ns: 'upm',op:'upm_uploadCorporationLogo', pl: null};
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,

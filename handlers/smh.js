@@ -775,6 +775,8 @@ module.exports = function(paramService,  esbMessage){
         m.pl.ifm = file_ext;
         m.pl.jsonData = jsonToUpdate;
 
+        m.pl.jsonData.spbi = m.pl.jsonData.spbi._id;
+
         esbMessage(m)
             .then(function(r) {
               console.log('update successfull');
