@@ -4,6 +4,7 @@ node_modules_local
 static
 photos
 /handlers/.brackets.json
+/handlers/.jshintrc
 /.project
 .idea/workspace.xml
 
