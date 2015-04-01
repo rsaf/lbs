@@ -1,5 +1,7 @@
 var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
+var formidable = require('formidable');
+var fs = require('fs');
 
 module.exports = function (paramService, esbMessage) {
   var homeRouter = paramService.Router();
@@ -127,9 +129,7 @@ module.exports = function (paramService, esbMessage) {
       homeRouter.get('/user.json', sessionUser());
       homeRouter.get('/logout.json', logoutUser());
       homeRouter.post('/user.json', createUser());
-    /* jshint ignore:start */
-      homeRouter.post('/apilogin.json', APILoginVerifier());
-    /* jshint ignore:end */
+      homeRouter.post('/apilogin.json'/* jshint ignore:start */, APILoginVerifier()/* jshint ignore:end */);
       homeRouter.get('/act.json', function (paramRequest, paramResponse, paramNext) {
         var m = {};
         //formHtml
@@ -181,16 +181,16 @@ module.exports = function (paramService, esbMessage) {
           return {
             plid: priceList._id,
             svid: priceList.service._id,
-            spc: priceList.servicePoint.ct.oID,
             svn: priceList.serviceName.text,
             svp: priceList.servicePrices,
             sdp: priceList.discountedPrice,
             spn: priceList.servicePoint.servicePointName,
             spid: priceList.servicePoint._id,
+            spc: priceList.servicePoint.ct.oID
           };
         })
         .then(null,function reject(err){
-          return q.reject("in hh handler _getPriceList:"+err+" ");
+          console.log('having error:',err);
         });
       }
       function _persistRespose(req, res, pnext) {
@@ -293,9 +293,34 @@ module.exports = function (paramService, esbMessage) {
             paramResponse.end(JSON.stringify(r));
           });
       });
+      homeRouter.post('/uploadphoto.json', function(paramRequest, paramResponse){
+        q()
+        .then(function(){
+          var form = new formidable.IncomingForm();
+          form.parse(paramRequest, function(err, fields, files) {
+            var old_path = files.file.path,
+            file_ext = files.file.name.split('.').pop();
+            fs.readFile(old_path, function(err, data) {
+              var m = {op:"bmm_uploadPhoto",pl:{}};
+              m.pl.photoData= data;
+              m.pl.ifm = file_ext;
+              esbMessage(m)
+              .then(function(r) {
+                  oHelpers.sendResponse(paramResponse,200,r);
+              })
+              .then(null,function reject(r) {
+                  console.log('bmh error:-----',r);
+                  r = {pl:null, er:{ec:100012,em:"Unable to upload photo."}};
+                  oHelpers.sendResponse(paramResponse,501,r);
+              });
+            });
+          });
+        });
+      });
     })
     .fail(function (err) {
       console.log('error: ' + err);
     });
+
   return homeRouter;
 };
