@@ -171,6 +171,7 @@ module.exports = function(paramService, esbMessage)
             currentOrganization : paramRequest.user.currentOrganization,
             response : {
               _id : msg[0]._id,
+              rs:30,
               sp:{
                 ps:'paid'
               }
