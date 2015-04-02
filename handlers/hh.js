@@ -129,7 +129,9 @@ module.exports = function (paramService, esbMessage) {
       homeRouter.get('/user.json', sessionUser());
       homeRouter.get('/logout.json', logoutUser());
       homeRouter.post('/user.json', createUser());
-      homeRouter.post('/apilogin.json'/* jshint ignore:start */, APILoginVerifier()/* jshint ignore:end */);
+      homeRouter.post('/apilogin.json'/* jshint ignore:start */
+                      , APILoginVerifier()
+                      /* jshint ignore:end */);
       homeRouter.get('/act.json', function (paramRequest, paramResponse, paramNext) {
         var m = {};
         //formHtml
@@ -200,6 +202,12 @@ module.exports = function (paramService, esbMessage) {
           q().then(function () {
             m.pl = JSON.parse(req.body.json).pl;
             // is user not set then use req.sessionID
+            if(m.pl.response){
+              delete m.pl.response.rs;
+              if(m.pl.response.sp && m.pl.response.sp.ps){
+                delete m.pl.response.sp.ps;
+              }
+            }
             if(m.pl.response&&m.pl.response.sb){
               //get details for this pricelist
               return _getPriceList(m.pl.response);
