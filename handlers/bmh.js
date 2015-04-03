@@ -188,6 +188,24 @@ module.exports = function(paramService, esbMessage){
       oHelpers.sendResponse(paramResponse,501,er);      
     });    
   });
+
+
+    bmRouter.get('/responses/forms.json', function(paramRequest, paramResponse, paramNext){
+        var m = {pl:{}};
+        //formHtml
+        Q().then(function(){
+            m.pl.loginName=(paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID;
+            m.pl.currentOrganization=(paramRequest.user&&paramRequest.user.currentOrganization)||false;
+            m.op='bmm_getAllForms';
+            return esbMessage(m);
+        }).then(function(msg){
+            oHelpers.sendResponse(paramResponse,200,{pl:msg});
+        }).fail(function(er){
+            oHelpers.sendResponse(paramResponse,501,er);
+        });
+    });
+
+
   bmRouter.post('/response.json',function(req,res,pnext){
     _persistRespose(req,res,pnext);
   });
@@ -248,6 +266,8 @@ module.exports = function(paramService, esbMessage){
       }
       else if(paramRequest.params.activitiesType === 'activitiesforms'){
           oHelpers.sendResponse(paramResponse,200,activitiesforms);
+
+
       }
       else if(paramRequest.params.activitiesType === 'publicforms'){
           oHelpers.sendResponse(paramResponse,200,publicforms);
@@ -575,6 +595,8 @@ module.exports = function(paramService, esbMessage){
                 m.pl.photoData= data;
                 m.pl.ifm = file_ext;
                 m.pl.jsonData = jsonToUpdate;
+
+                m.pl.jsonData.acid = m.pl.jsonData.acid._id;
 
                 esbMessage(m)
                     .then(function(r) {
