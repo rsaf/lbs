@@ -496,6 +496,37 @@ module.exports = function(paramService,  esbMessage){
 
   });
 
+
+
+  serviceManagementRouter.get('/search/servicepointDetails/all.json', function(paramRequest, paramResponse){
+
+    var m = {
+      "ns":"smm",
+      "op": "smm_readAllServicePointDetails",
+      "pl":{oID:paramRequest.user.currentOrganization
+        ,uID: paramRequest.user.lanzheng.loginName
+        ,pageSize:10
+      }
+    };
+
+    console.log(' smh get all servicePoint Details------');
+
+
+    esbMessage(m)
+        .then(function(r) {
+          //console.log(r.pl);
+          oHelpers.sendResponse(paramResponse,200,r);
+        })
+        .fail(function(r) {
+          console.log('smh----',r.er);
+          var r = {pl:null, er:{ec:404,em:"could not find servicepoint details page"}};
+          oHelpers.sendResponse(paramResponse,404,r);
+        });
+
+  });
+
+
+
   serviceManagementRouter.put('/servicepointDetails/:servicepointDetatils_id.json', function(paramRequest, paramResponse){
 
     console.log('paramRequest.params.servicepointDetatils_id',paramRequest.params.servicepointDetatils_id);

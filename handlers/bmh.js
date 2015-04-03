@@ -318,6 +318,37 @@ module.exports = function(paramService, esbMessage){
 
     });
 
+
+
+
+    bmRouter.get('/search/activityDetails/all.json', function(paramRequest, paramResponse){
+
+        var m = {
+            "ns":"bmm",
+            "op": "bmm_readAllActivityDetails",
+            "pl":{oID:paramRequest.user.currentOrganization
+                ,uID: paramRequest.user.lanzheng.loginName
+                ,pageSize:10
+            }
+        };
+
+        console.log('bmm_readAllActivityDetailByID-----------');
+
+
+        esbMessage(m)
+            .then(function(r) {
+                //console.log(r.pl);
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('bmh----',r.er);
+                r = {pl:null, er:{ec:404,em:"could not find activity detail page"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+
     bmRouter.put('/activityDetails/:activityDetail_id.json', function(paramRequest, paramResponse){
 
         console.log('paramRequest.params.activityDetail_id',paramRequest.params.activityDetail_id);
