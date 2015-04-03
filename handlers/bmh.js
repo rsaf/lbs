@@ -195,7 +195,7 @@ module.exports = function(paramService, esbMessage){
     bmRouter.get('/responses/forms.json', function(paramRequest, paramResponse, paramNext){
         var m = {pl:{}};
         //formHtml
-        Q().then(function(){
+        q().then(function(){
             m.pl.loginName=(paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID;
             m.pl.currentOrganization=(paramRequest.user&&paramRequest.user.currentOrganization)||false;
             m.op='bmm_getAllForms';
