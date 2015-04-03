@@ -818,6 +818,37 @@ module.exports = function(paramService, esbMessage){
 
     });
 
+    bmRouter.put('/archive/response/response.json', function(paramRequest, paramResponse){
+
+
+        return q().then(function(){
+            var jsonParam = JSON.parse(paramRequest.body.json);
+            var m = {
+                ns: 'mdm',
+                vs: '1.0',
+                op: 'bmm_deleteResponse',
+                pl:  jsonParam.pl.response
+            };
+            console.log('what will be deleted', jsonParam.pl);
+
+            return esbMessage(m);
+        })
+            .then(function (r) {
+                paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                paramResponse.end(JSON.stringify(r));
+            })
+            .fail(function (r) {
+
+                console.log('bmm error---', r.er);
+
+                var r = {pl: null, er: {ec: 404, em: "could not delete reponse"}};
+                oHelpers.sendResponse(paramResponse, 404, r);
+            });
+
+
+
+    });
+
 
 
 
