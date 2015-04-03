@@ -1,5 +1,7 @@
-var Q = require('q');
+var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
+var formidable = require('formidable');
+var fs = require('fs');
 
 module.exports = function (paramService, esbMessage) {
   var homeRouter = paramService.Router();
@@ -25,7 +27,7 @@ module.exports = function (paramService, esbMessage) {
     });
 
 
-    Q.all([promiseAD, promiseCD]).then(function (r) {
+    q.all([promiseAD, promiseCD]).then(function (r) {
       var results = [];
       results.push(r[0].pl);
       results.push(r[1].pl);
@@ -111,7 +113,7 @@ module.exports = function (paramService, esbMessage) {
 
 
   //console.log('\nsch: getting security dependencies ...');
-  Q.all([p1, p2, p3, p4, p5, p6, p7]).then(function (r) {
+  q.all([p1, p2, p3, p4, p5, p6, p7]).then(function (r) {
 
       //console.log(r);
       userloginVerifier = r[0].pl.fn;
@@ -127,11 +129,11 @@ module.exports = function (paramService, esbMessage) {
       homeRouter.get('/user.json', sessionUser());
       homeRouter.get('/logout.json', logoutUser());
       homeRouter.post('/user.json', createUser());
-      homeRouter.post('/apilogin.json', APILoginVerifier());
+      homeRouter.post('/apilogin.json'/* jshint ignore:start */, APILoginVerifier()/* jshint ignore:end */);
       homeRouter.get('/act.json', function (paramRequest, paramResponse, paramNext) {
         var m = {};
         //formHtml
-        Q().then(function () {
+        q().then(function () {
           m.pl = {};
           m.op = 'bmm_getActivities';
           return esbMessage(m);
@@ -150,7 +152,7 @@ module.exports = function (paramService, esbMessage) {
 
       //response routes preventing the login popup
       function _getPriceList(response){
-        return Q()
+        return q()
         .then(function(){
         //get the response/activity so we can use the query
           return esbMessage({
@@ -195,7 +197,7 @@ module.exports = function (paramService, esbMessage) {
           var m = {},
           transactionid = false,
           response = {};          //formHtml
-          Q().then(function () {
+          q().then(function () {
             m.pl = JSON.parse(req.body.json).pl;
             // is user not set then use req.sessionID
             if(m.pl.response&&m.pl.response.sb){
@@ -228,7 +230,7 @@ module.exports = function (paramService, esbMessage) {
           pl: {}
         };
         //formHtml
-        Q().then(function () {
+        q().then(function () {
           m.pl.loginName = (paramRequest.user && paramRequest.user.lanzheng && paramRequest.user.lanzheng.loginName) || paramRequest.sessionID;
           m.pl.currentOrganization = (paramRequest.user && paramRequest.user.currentOrganization) || false;
           m.op = 'bmm_getResponses';
@@ -244,7 +246,7 @@ module.exports = function (paramService, esbMessage) {
       homeRouter.get('/response.json', function (paramRequest, paramResponse, paramNext) {
         var m = {};
         //formHtml
-        Q().then(function () {
+        q().then(function () {
           m.pl = {
             code: paramRequest.query.code
           };
@@ -271,7 +273,7 @@ module.exports = function (paramService, esbMessage) {
           "op": "smm_queryServices",
           "pl": {}
         };
-        Q().then(function () {
+        q().then(function () {
             m.pl = JSON.parse(paramRequest.body.json);
             return esbMessage(m);
           })
@@ -291,7 +293,30 @@ module.exports = function (paramService, esbMessage) {
             paramResponse.end(JSON.stringify(r));
           });
       });
-
+      homeRouter.post('/uploadphoto.json', function(paramRequest, paramResponse){
+        q()
+        .then(function(){
+          var form = new formidable.IncomingForm();
+          form.parse(paramRequest, function(err, fields, files) {
+            var old_path = files.file.path,
+            file_ext = files.file.name.split('.').pop();
+            fs.readFile(old_path, function(err, data) {
+              var m = {op:"bmm_uploadPhoto",pl:{}};
+              m.pl.photoData= data;
+              m.pl.ifm = file_ext;
+              esbMessage(m)
+              .then(function(r) {
+                  oHelpers.sendResponse(paramResponse,200,r);
+              })
+              .fail(function(r) {
+                  console.log('bmh error:-----',r);
+                  r = {pl:null, er:{ec:100012,em:"Unable to upload photo."}};
+                  oHelpers.sendResponse(paramResponse,501,r);
+              });
+            });
+          });
+        });
+      });
     })
     .fail(function (err) {
       console.log('error: ' + err);
