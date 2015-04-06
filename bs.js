@@ -145,6 +145,7 @@ module.exports.startBS = function(){
             bs.use('/workspace/requests', oRequestRouter);                // workspace/requests
             bs.use('/workspace/standards', oStandardsRouter );            // workspace/standards
             bs.use('/workspace/photos', oPhotosRouter);                   // workspace/photos
+            bs.use('/workspace/blobs', oPhotosRouter);                    // workspace/blobs , newly added
             bs.use('/workspace/inspection', oInspectionRouter);           // workspace/inspection
             bs.use('/workspace/corrections',  oCorrectionsRouter );       // workspace/corrections
             bs.use('/workspace/services', oServiceRouter);                // workspace/services
