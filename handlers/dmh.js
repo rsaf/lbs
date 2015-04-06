@@ -143,10 +143,44 @@ module.exports = function (paramService, esbMessage)
   });
 
     // http://localhost/#/workspace/documents/
+    //workspace/blobs/documents/all.json
+
+
+    photosRouter.get('/documents/all.json', function (paramRequest, paramResponse, paramNext) {
+
+                console.log('dmh get use documents------');
+
+            var m = {
+                "ns": "dmm",
+                "op": "dmm_getUserDocuments",
+                "pl":null
+            };
+            m.pl = {
+                uID:paramRequest.user.lanzheng.loginName,
+                oID:paramRequest.user.currentOrganization
+            };
+            esbMessage(m)
+                .then(function (r) {
+
+                    console.log('dmh get document successful----',r);
+                    oHelpers.sendResponse(paramResponse, 200, r);
+                })
+                .fail(function (r) {
+
+                    console.log('dmh error----:',r);
+                    oHelpers.sendResponse(paramResponse, 501, r);
+                });
+
+
+    });
+
+
     //workspace/blobs/documents/upload.json
     photosRouter.post('/documents/upload.json', function (paramRequest, paramResponse, paramNext) {
 
-        var m = {ns: 'dmm',op:'dmm_uploadPhoto', pl: null};
+        console.log('dmh  uploading document-----');
+
+        var m = {ns: 'dmm',op:'dmm_uploadDocument', pl: null};
         m.pl = {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
@@ -175,6 +209,8 @@ module.exports = function (paramService, esbMessage)
                 file_ext = files.file.name.split('.').pop(),
                 file_name =files.file.name;
 
+                console.log('file name:---',file_name);
+
 
             fs.readFile(old_path, function(err, data) {
                 m.pl.photoData= data;
@@ -187,16 +223,19 @@ module.exports = function (paramService, esbMessage)
                 m.pl.opp.rm  = fields['imgInfo[4][value]'];
                 //m.pl.opp.isd = fields['imgInfo[5][value]'];  // the date from the user input needs to be validated
                 m.pl.opp.isd = Date.now();
-                m.pl.opp.irs = fields['imgInfo[6][value]'];;
+                m.pl.opp.irs = fields['imgInfo[6][value]'];
 
                 esbMessage(m)
                     .then(function (r) {
                         paramResponse.writeHead(200, {"Content-Type": "application/json"});
+
+                        console.log('dmh upload successful---',r);
+
                         paramResponse.end(JSON.stringify(r));
                     })
                     .fail(function (r) {
-                        console.log(r.er);
-                        var r = {pl: null, er: {ec: 404, em: "could not save image"}};
+                        console.log('dmh error-----:',r.er);
+                        var r = {pl: null, er: {ec: 404, em: "could not save document"}};
                         oHelpers.sendResponse(paramResponse, 404, r);
                     });
             });
