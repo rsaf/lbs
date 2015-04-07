@@ -74,7 +74,7 @@ module.exports = function (paramService, esbMessage)
           })
           .fail(function (r) {
 
-              console.log('error saf: ', r.er)
+              console.log('error ----: ', r.er)
 
               oHelpers.sendResponse(paramResponse, 501, r);
           });
@@ -146,7 +146,7 @@ module.exports = function (paramService, esbMessage)
     //workspace/blobs/documents/all.json
 
 
-    photosRouter.get('/documents/all.json', function (paramRequest, paramResponse, paramNext) {
+    photosRouter.get('/:doctype/all.json', function (paramRequest, paramResponse, paramNext) {
 
                 console.log('dmh get use documents------');
 
@@ -156,10 +156,12 @@ module.exports = function (paramService, esbMessage)
                 "pl":null
             };
             m.pl = {
+                ft:paramRequest.params.doctype,
                 uID:paramRequest.user.lanzheng.loginName,
                 oID:paramRequest.user.currentOrganization
-            };
-            esbMessage(m)
+               };
+
+        esbMessage(m)
                 .then(function (r) {
 
                     console.log('dmh get document successful----',r);
@@ -189,7 +191,7 @@ module.exports = function (paramService, esbMessage)
 //    fd: null
 //}
     //workspace/blobs/documents/upload.json
-    photosRouter.post('/documents/upload.json', function (paramRequest, paramResponse, paramNext) {
+    photosRouter.post('/:doctype/upload.json', function (paramRequest, paramResponse, paramNext) {
 
         console.log('dmh  uploading document-----');
 
@@ -209,6 +211,10 @@ module.exports = function (paramService, esbMessage)
 
         var form = new formidable.IncomingForm();
         form.parse(paramRequest, function(err, fields, files) {
+
+
+            console.log('fields----',fields);
+
             var old_path = files.file.path,
                 file_size = files.file.size,
                 file_ext = files.file.name.split('.').pop(),
@@ -219,11 +225,12 @@ module.exports = function (paramService, esbMessage)
 
             fs.readFile(old_path, function(err, data) {
                 m.pl.fn = file_name;
-                //m.pl.ft = null;
+                m.pl.ft = paramRequest.params.doctype;
                 m.pl.rm  = fields['imgInfo[4][value]'];
                 m.pl.fs = file_size;
                 m.pl.fm = file_ext;
                 m.pl.fd = data;
+
                 esbMessage(m)
                     .then(function (r) {
                         paramResponse.writeHead(200, {"Content-Type": "application/json"});
@@ -239,6 +246,44 @@ module.exports = function (paramService, esbMessage)
                     });
             });
         });
+
+    });
+
+
+    photosRouter.delete('/documents/:doc_id.json', function (paramRequest, paramResponse, paramNext) {
+
+        var m= {ns: null,op:'dmm_markDocumentForDelete', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            _id:paramRequest.params.doc_id
+        };
+
+
+
+//      var m= {ns: null,op:'dmm_markPhotoForDelete', pl: {}};
+//
+//      m.pl.uID=paramRequest.user.lanzheng.loginName;
+//      m.pl.oID=paramRequest.user.currentOrganization;
+//      m.pl._id=paramRequest.params.photocode;
+
+
+
+        console.log("doc_id: ",paramRequest.params.doc_id);
+
+
+        esbMessage(m)
+            .then(function (r) {
+
+                console.log('deleted document response: ',r)
+                oHelpers.sendResponse(paramResponse, 200, r);
+            })
+            .fail(function (r) {
+
+                console.log('dmr error ----: ', r.er)
+
+                oHelpers.sendResponse(paramResponse, 501, r);
+            });
 
     });
 
