@@ -213,7 +213,9 @@ module.exports = function (paramService, esbMessage)
         form.parse(paramRequest, function(err, fields, files) {
 
 
-            console.log('fields----',fields);
+            var fileInfo = JSON.parse(fields.fileInfo);
+
+            console.log('fields----', fileInfo);
 
             var old_path = files.file.path,
                 file_size = files.file.size,
@@ -226,7 +228,7 @@ module.exports = function (paramService, esbMessage)
             fs.readFile(old_path, function(err, data) {
                 m.pl.fn = file_name;
                 m.pl.ft = paramRequest.params.doctype;
-                m.pl.rm  = fields['imgInfo[4][value]'];
+                m.pl.rm  = fileInfo.description;
                 m.pl.fs = file_size;
                 m.pl.fm = file_ext;
                 m.pl.fd = data;
@@ -258,7 +260,6 @@ module.exports = function (paramService, esbMessage)
             oID:paramRequest.user.currentOrganization,
             _id:paramRequest.params.doc_id
         };
-
 
 
 //      var m= {ns: null,op:'dmm_markPhotoForDelete', pl: {}};
