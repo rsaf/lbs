@@ -175,6 +175,19 @@ module.exports = function (paramService, esbMessage)
     });
 
 
+
+    //
+//m.pl = {
+//    fn: null,
+//    ft: null,
+//    rm: null,
+//    fs: null,
+//    fm: null,
+//    uri: null
+//    uID: null,
+//    oID: null,
+//    fd: null
+//}
     //workspace/blobs/documents/upload.json
     photosRouter.post('/documents/upload.json', function (paramRequest, paramResponse, paramNext) {
 
@@ -182,23 +195,15 @@ module.exports = function (paramService, esbMessage)
 
         var m = {ns: 'dmm',op:'dmm_uploadDocument', pl: null};
         m.pl = {
+            fn: null,
+            ft: null,
+            rm: null,
+            fs: null,
+            fm: null,
+            uri: null,
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
-            photoData:null,
-            sgc:10,
-            stc:100,
-            opp:{ //other photos properties
-                ign:null, // 照片名称: image name                                      ===
-                igt:null, // 主题类型: 旅游照片 image type                              ===
-                igs:null, // 拍摄方式: 单板相机 image source                            ===
-                isl:null, // 拍摄地点:  image shooting location                        ===
-                rm:null,  // 照片描述: // 30 remarks 备注                               ===
-                isd:null, // 拍摄日期: // image shooting date                          ?
-                irs:null, // 像素尺寸:84mmX105mm image resolution size                  ?
-                ofs:null, // 文件大小:86Kb //28 original photo size 初始照片文件大小      ===
-                ifm:null  // 27 initial format 初始照片格式                              ===
-            },
-            uri: null // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
+            fd:null
         };
 
 
@@ -213,18 +218,12 @@ module.exports = function (paramService, esbMessage)
 
 
             fs.readFile(old_path, function(err, data) {
-                m.pl.photoData= data;
-                m.pl.opp.ifm = file_ext;
-                m.pl.opp.ofs = file_size;
-                m.pl.opp.ign = file_name;
-                m.pl.opp.igt = fields['imgInfo[1][value]'];
-                m.pl.opp.igs = fields['imgInfo[2][value]'];
-                m.pl.opp.isl = fields['imgInfo[3][value]'];
-                m.pl.opp.rm  = fields['imgInfo[4][value]'];
-                //m.pl.opp.isd = fields['imgInfo[5][value]'];  // the date from the user input needs to be validated
-                m.pl.opp.isd = Date.now();
-                m.pl.opp.irs = fields['imgInfo[6][value]'];
-
+                m.pl.fn = file_name;
+                //m.pl.ft = null;
+                m.pl.rm  = fields['imgInfo[4][value]'];
+                m.pl.fs = file_size;
+                m.pl.fm = file_ext;
+                m.pl.fd = data;
                 esbMessage(m)
                     .then(function (r) {
                         paramResponse.writeHead(200, {"Content-Type": "application/json"});
