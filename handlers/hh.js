@@ -125,7 +125,10 @@ module.exports = function (paramService, esbMessage) {
       organizationUsers = r[6].pl.fn;
 
       homeRouter.post('/login.json', userloginVerifier());
-      homeRouter.post('/registration.json', registerUzer());
+      homeRouter.post('/registration.json',  registerUzer());
+      //@todo: have this endpoint change owner ship of the response using
+      //  a not yet created function in bmm to change ownership of response
+      homeRouter.post('/registrationandaccociate.json',  registerUzer());
       homeRouter.get('/user.json', sessionUser());
       homeRouter.get('/logout.json', logoutUser());
       homeRouter.post('/user.json', createUser());
