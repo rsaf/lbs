@@ -115,6 +115,10 @@ module.exports = function (paramService, esbMessage) {
   //console.log('\nsch: getting security dependencies ...');
   q.all([p1, p2, p3, p4, p5, p6, p7]).then(function (r) {
 
+
+
+    console.log('register user-----hh.js');
+
       //console.log(r);
       userloginVerifier = r[0].pl.fn;
       registerUzer = r[1].pl.fn;
@@ -129,9 +133,7 @@ module.exports = function (paramService, esbMessage) {
       homeRouter.get('/user.json', sessionUser());
       homeRouter.get('/logout.json', logoutUser());
       homeRouter.post('/user.json', createUser());
-      homeRouter.post('/apilogin.json'/* jshint ignore:start */
-                      , APILoginVerifier()
-                      /* jshint ignore:end */);
+      homeRouter.post('/apilogin.json', APILoginVerifier());
       homeRouter.get('/act.json', function (paramRequest, paramResponse, paramNext) {
         var m = {};
         //formHtml

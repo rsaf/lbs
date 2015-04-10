@@ -8,9 +8,39 @@ var oHelpers= require('../utilities/helpers.js');
 module.exports = function(paramService, esbMessage) {
   var photosRouter = paramService.Router();
 
+    ///workspace/users/userType
+
     photosRouter.get('/:userType.json', function(paramRequest, paramResponse, paramNext){
+
+
+        console.log('inside sch-----------');
+
         if (paramRequest.params.userType === 'all'){
-            oHelpers.sendResponse(paramResponse,200,all);
+
+            var m = {
+                "ns": "scm",
+                "op": "scm_getAllUsers",
+                "pl": {
+                      currentOrganization:paramRequest.user.currentOrganization
+                    }
+                 };
+
+            esbMessage(m)
+                .then(function (r) {
+
+                    console.log('sch response-----all users-',r);
+                    oHelpers.sendResponse(paramResponse, 200, r);
+                })
+                .fail(function (r) {
+
+                    console.log('sch error-----',r);
+
+                    oHelpers.sendResponse(paramResponse, 501, r);
+                });
+
+
+
+           // oHelpers.sendResponse(paramResponse,200,all);
         }
         else if(paramRequest.params.userType === 'groups'){
             oHelpers.sendResponse(paramResponse,200,groups);
@@ -28,7 +58,6 @@ module.exports = function(paramService, esbMessage) {
             oHelpers.sendResponse(paramResponse,200,interfaceUsers);
         }
     });
-
 
 
 
