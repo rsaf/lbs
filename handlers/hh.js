@@ -117,8 +117,6 @@ module.exports = function (paramService, esbMessage) {
 
 
 
-    console.log('register user-----hh.js');
-
       //console.log(r);
       userloginVerifier = r[0].pl.fn;
       registerUzer = r[1].pl.fn;

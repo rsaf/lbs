@@ -238,7 +238,6 @@ module.exports = function(paramPS, paramESBMessage) {
     upRouter.get('/corporate/:profileID.json', function(paramRequest, paramResponse){
 
 
-        console.log('uph read corporate info---');
 
         var m = {
             "ns":"upm",
@@ -284,7 +283,7 @@ module.exports = function(paramPS, paramESBMessage) {
         esbMessage(m)
             .then(function(r) {
 
-                console.log('r response ---------',r);
+               // console.log('r response ---------',r);
 
                 oHelpers.sendResponse(paramResponse,200,r);
             })
