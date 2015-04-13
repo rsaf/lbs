@@ -155,6 +155,23 @@ module.exports = function(paramService, esbMessage){
 
 
   var bmRouter = paramService.Router();
+    //@todo - Ed's get template
+    bmRouter.get('/listtemplate.json', function(paramRequest, paramResponse, paramNext){
+        //http://localhost/files/7ab7a057-b10f-47d1-9967-f5b11b625b9b.xlsx
+        var m = {pl:{}};
+        q().then(function(){
+            m.pl.fileType=paramRequest.query.ft?paramRequest.query:"xlsx"
+            m.pl.formID=paramRequest.query.fid;
+            m.pl.loginName=(paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID;
+            m.pl.currentOrganization=(paramRequest.user&&paramRequest.user.currentOrganization)||false;
+            m.op='bmm_get_list_template';
+            return esbMessage(m);
+        }).then(function(msg){
+            oHelpers.sendResponse(paramResponse,200,msg);//"http://localhost/files/7ab7a057-b10f-47d1-9967-f5b11b625b9b.xlsx");
+        }).fail(function(er){
+            oHelpers.sendResponse(paramResponse,501,er);
+        });
+    })
   bmRouter.post('/form.json', function(paramRequest, paramResponse, paramNext){
     _persistForm(paramRequest, paramResponse, paramNext);
   });
