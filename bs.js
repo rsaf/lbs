@@ -14,6 +14,7 @@ module.exports.startBS = function(){
     var esb = require('esb');
 
     var oHomeRouter ;               // home
+    var oSearchRouter ;               // home
     var oUserNotificationRouter;    // workspace/notifications  ==>  mdh.js  mdm
     var oUserRouter;                // workspace/users          ==>  sch.js  scm ///
     var oProfileRouter;             // workspace/profile        ==>  uph.js  upm
@@ -79,6 +80,7 @@ module.exports.startBS = function(){
             redisClient = r[4].pl.fn;
 
             oHomeRouter = require('./handlers/hh.js')(exp, esbMessageFunction);                // home
+            oSearchRouter = require('./handlers/ish.js')(exp, esbMessageFunction);             // details/search
             oUserNotificationRouter = require('./handlers/mdh.js')(exp, esbMessageFunction);   // workspace/notifications
             oUserRouter = require('./handlers/sch.js')(exp, esbMessageFunction);               // workspace/users
             oProfileRouter = require('./handlers/uph.js')(exp, esbMessageFunction);            // workspace/profile
@@ -139,6 +141,7 @@ module.exports.startBS = function(){
             //REST API Interface
             //Business functions expose from here
 
+            bs.use('/details/search', oSearchRouter);                     // details/search
             bs.use('/workspace/notifications', oUserNotificationRouter);  // workspace/notifications
             bs.use('/workspace/users', oUserRouter);                      // workspace/users
             bs.use('/workspace/profiles/v1',oProfileRouter);              // workspace/profile

@@ -38,13 +38,13 @@ module.exports = function (paramService, esbMessage) {
 
     }).fail(function (rv) {
 
-      var r = {
-        pl: null,
-        er: {
-          ec: 404,
-          em: "search is temporary unavailable"
-        }
-      };
+            var r = {
+              pl: null,
+              er: {
+                ec: 404,
+                em: "search is temporary unavailable"
+              }
+            };
 
       oHelpers.sendResponse(paramResponse, 404, r);
 
