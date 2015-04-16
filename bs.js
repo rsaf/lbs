@@ -135,13 +135,15 @@ module.exports.startBS = function(){
 
             bs.use('/home', oHomeRouter);  // home
             console.log('BS: configuring user acl middleware...');
+            bs.use('/details/search', oSearchRouter);                     // details/search
+
             bs.use(scmCheckUserFunction());
 
             console.log('BS: configuring REST endpoints request handles middleware...');
             //REST API Interface
             //Business functions expose from here
 
-            bs.use('/details/search', oSearchRouter);                     // details/search
+
             bs.use('/workspace/notifications', oUserNotificationRouter);  // workspace/notifications
             bs.use('/workspace/users', oUserRouter);                      // workspace/users
             bs.use('/workspace/profiles/v1',oProfileRouter);              // workspace/profile
