@@ -38,13 +38,13 @@ module.exports = function (paramService, esbMessage) {
 
     }).fail(function (rv) {
 
-            var r = {
-              pl: null,
-              er: {
-                ec: 404,
-                em: "search is temporary unavailable"
-              }
-            };
+      var r = {
+        pl: null,
+        er: {
+          ec: 404,
+          em: "search is temporary unavailable"
+        }
+      };
 
       oHelpers.sendResponse(paramResponse, 404, r);
 
@@ -117,6 +117,8 @@ module.exports = function (paramService, esbMessage) {
 
 
 
+    console.log('register user-----hh.js');
+
       //console.log(r);
       userloginVerifier = r[0].pl.fn;
       registerUzer = r[1].pl.fn;
@@ -127,7 +129,10 @@ module.exports = function (paramService, esbMessage) {
       organizationUsers = r[6].pl.fn;
 
       homeRouter.post('/login.json', userloginVerifier());
-      homeRouter.post('/registration.json', registerUzer());
+      homeRouter.post('/registration.json',  registerUzer());
+      //@todo: have this endpoint change owner ship of the response using
+      //  a not yet created function in bmm to change ownership of response
+      homeRouter.post('/registrationandaccociate.json',  registerUzer());
       homeRouter.get('/user.json', sessionUser());
       homeRouter.get('/logout.json', logoutUser());
       homeRouter.post('/user.json', createUser());

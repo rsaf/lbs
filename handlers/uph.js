@@ -47,7 +47,7 @@ module.exports = function(paramPS, paramESBMessage) {
                 file_ext = files.file.name.split('.').pop();
 
 
-            console.log('file name:----- ', files.file.name);
+           // console.log('file name:----- ', files.file.name);
 
             var profileToUpdate = JSON.parse(fields.json);
 
@@ -81,7 +81,7 @@ module.exports = function(paramPS, paramESBMessage) {
     upRouter.get('/personal.json', function(paramRequest, paramResponse){
 
      //oHelpers.sendResponse(paramResponse,200,personalUserProfile );
-        console.log("\n userID :" + paramRequest.user.id);
+      //  console.log("\n userID :" + paramRequest.user.id);
         var m = {
             "ns":"upm",
             "op": "readPersonalProfileByUserID",
@@ -151,7 +151,7 @@ module.exports = function(paramPS, paramESBMessage) {
         };
 
 
-        console.log('paramRequest.body----',paramRequest.body);
+      //  console.log('paramRequest.body----',paramRequest.body);
 
         esbMessage(m)
             .then(function(r) {
@@ -169,12 +169,46 @@ module.exports = function(paramPS, paramESBMessage) {
 
 
 
+//get workspace/profiles/v1/corporateDetails/:profileID.json
+//    upRouter.get('/search/corporateDetails/all.json', function(paramRequest, paramResponse){
+//
+//
+//      //  console.log('uph read all corporate detail---');
+//
+//        var m = {
+//            "ns":"upm",
+//            "op": "readAllCorporateDetailPageByID",
+//            "pl":{oID:paramRequest.user.currentOrganization
+//                ,uID: paramRequest.user.lanzheng.loginName
+//                ,pageSize:10
+//               }
+//        };
+//
+//      //  console.log('upm m.pl----', m.pl);
+//
+//        esbMessage(m)
+//            .then(function(r) {
+//                //console.log(r.pl);
+//                oHelpers.sendResponse(paramResponse,200,r);
+//            })
+//            .fail(function(r) {
+//                console.log(r.er);
+//                var r = {pl:null, er:{ec:404,em:"could not find detail page"}};
+//                oHelpers.sendResponse(paramResponse,404,r);
+//            });
+//
+//    });
+
+
+
+
+
 
 //get workspace/profiles/v1/corporateDetails/:profileID.json
     upRouter.get('/corporateDetails/:profileID.json', function(paramRequest, paramResponse){
 
 
-        console.log('uph read corporate detail---');
+      //  console.log('uph read corporate detail---');
 
         var m = {
             "ns":"upm",
@@ -185,7 +219,7 @@ module.exports = function(paramPS, paramESBMessage) {
             }
         };
 
-        console.log('upm m.pl----', m.pl);
+      //  console.log('upm m.pl----', m.pl);
 
         esbMessage(m)
             .then(function(r) {
@@ -204,6 +238,7 @@ module.exports = function(paramPS, paramESBMessage) {
     upRouter.get('/corporate/:profileID.json', function(paramRequest, paramResponse){
 
 
+     //   console.log('uph read corporate info---');
 
         var m = {
             "ns":"upm",
@@ -233,8 +268,8 @@ module.exports = function(paramPS, paramESBMessage) {
     //post workspace/profiles/v1/personal.json
     upRouter.put('/corporateDetails/:profile_id.json', function(paramRequest, paramResponse){
 
-        console.log('paramRequest.params.profile_id',paramRequest.params.profile_id);
-        console.log('paramRequest.body',paramRequest.body);
+    //    console.log('paramRequest.params.profile_id',paramRequest.params.profile_id);
+     //   console.log('paramRequest.body',paramRequest.body);
 
 
         var m = {
@@ -249,7 +284,7 @@ module.exports = function(paramPS, paramESBMessage) {
         esbMessage(m)
             .then(function(r) {
 
-               // console.log('r response ---------',r);
+            //    console.log('r response ---------',r);
 
                 oHelpers.sendResponse(paramResponse,200,r);
             })
@@ -264,8 +299,8 @@ module.exports = function(paramPS, paramESBMessage) {
     //post workspace/profiles/v1/personal.json
     upRouter.post('/corporateDetails/faq.json', function(paramRequest, paramResponse){
 
-        console.log('paramRequest.params.profile_id',paramRequest.params.profile_id);
-        console.log('paramRequest.body',paramRequest.body);
+      //  console.log('paramRequest.params.profile_id',paramRequest.params.profile_id);
+      //  console.log('paramRequest.body',paramRequest.body);
 
 
         var m = {
@@ -283,7 +318,7 @@ module.exports = function(paramPS, paramESBMessage) {
         esbMessage(m)
             .then(function(r) {
 
-                console.log('r',r);
+             //   console.log('r',r);
 
                 oHelpers.sendResponse(paramResponse,200,r);
             })
@@ -298,7 +333,7 @@ module.exports = function(paramPS, paramESBMessage) {
     //post workspace/profiles/v1/personal.json
     upRouter.delete('/corporateDetails/faq/:profile_id/:faq_uuid.json', function(paramRequest, paramResponse){
 
-        console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_uuid);
+       // console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_uuid);
 
 
         var m = {
@@ -315,7 +350,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
         esbMessage(m)
             .then(function(r) {
-                console.log('r',r);
+           //     console.log('r',r);
                 oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
@@ -329,8 +364,8 @@ module.exports = function(paramPS, paramESBMessage) {
     //post workspace/profiles/v1/personal.json
     upRouter.put('/corporateDetails/faq/:profile_id/:faq_uuid.json', function(paramRequest, paramResponse){
 
-        console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_id);
-        console.log('paramRequest.body\n',paramRequest.body);
+      //  console.log('paramRequest.params.faq_id\n',paramRequest.params.faq_id);
+      //  console.log('paramRequest.body\n',paramRequest.body);
 
 
         var m = {
@@ -346,7 +381,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
         esbMessage(m)
             .then(function(r) {
-                console.log('r',r);
+            //    console.log('r',r);
                 oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
@@ -361,7 +396,7 @@ module.exports = function(paramPS, paramESBMessage) {
     upRouter.post('/corporateDetails/description/attachment.json', function(paramRequest, paramResponse){
 
 
-        console.log('-----attachement bingo-----');
+      //  console.log('-----attachement bingo-----');
 
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsDescription', pl: null};
@@ -381,7 +416,7 @@ module.exports = function(paramPS, paramESBMessage) {
             var old_path = files.file.path,
                 file_ext = files.file.name.split('.').pop();
 
-            console.log('file name:----- ', files.file.name);
+         //   console.log('file name:----- ', files.file.name);
 
             var profileToUpdate = JSON.parse(fields.json);
 
@@ -402,7 +437,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
                 esbMessage(m)
                     .then(function(r) {
-                        console.log('update successfull');
+                     //   console.log('update successfull');
                         oHelpers.sendResponse(paramResponse,200,r);
                     })
                     .fail(function(r) {
@@ -424,7 +459,7 @@ module.exports = function(paramPS, paramESBMessage) {
     upRouter.put('/corporateDetails/description/:profile_id.json', function(paramRequest, paramResponse){
 
 
-        console.log('-----attachement bingo-----');
+      //  console.log('-----attachement bingo-----');
 
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsDescription', pl: null};
@@ -440,7 +475,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
         esbMessage(m)
             .then(function(r) {
-                console.log('r',r);
+           //     console.log('r',r);
                 oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
@@ -455,7 +490,7 @@ module.exports = function(paramPS, paramESBMessage) {
     upRouter.delete('/corporateDetails/description/attachment/:profile_id/:attch_id.json', function(paramRequest, paramResponse){
 
 
-        console.log('paramRequest.params.attch_id\n',paramRequest.params.attch_id);
+     //   console.log('paramRequest.params.attch_id\n',paramRequest.params.attch_id);
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsDescription', pl: null};
         m.pl = {
@@ -468,7 +503,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
         esbMessage(m)
             .then(function(r) {
-                console.log('r',r);
+           //     console.log('r',r);
                 oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
@@ -502,14 +537,14 @@ module.exports = function(paramPS, paramESBMessage) {
                 file_ext = files.file.name.split('.').pop();
 
 
-            console.log('file name:----- ', files.file.name);
+          //  console.log('file name:----- ', files.file.name);
 
             var profileToUpdate = JSON.parse(fields.json);
 
             fs.readFile(old_path, function(err, data) {
 
 
-                console.log('data-------',data )
+            //    console.log('data-------',data )
 
                 m.pl.photoData= data;
                 m.pl.ifm = file_ext;
@@ -535,7 +570,7 @@ module.exports = function(paramPS, paramESBMessage) {
     //workspace/profiles/v1/upload
     upRouter.post('/corporateDetails/images.json', function(paramRequest, paramResponse){
 
-        console.log('uph post new image')
+      //  console.log('uph post new image')
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsImages', pl: null};
         m.pl = {
@@ -554,14 +589,14 @@ module.exports = function(paramPS, paramESBMessage) {
                 file_ext = files.file.name.split('.').pop();
 
 
-            console.log('file name:----- ', files.file.name);
+        //    console.log('file name:----- ', files.file.name);
 
             var profileToUpdate = JSON.parse(fields.json);
 
             fs.readFile(old_path, function(err, data) {
 
 
-                console.log('data-------',data )
+           //     console.log('data-------',data )
 
                 m.pl.photoData= data;
                 m.pl.ifm = file_ext;
@@ -588,7 +623,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
     upRouter.delete('/corporateDetails/images/:profile_id/:img_id.json', function(paramRequest, paramResponse){
 
-        console.log('paramRequest.params.attch_id\n',paramRequest.params.attch_id);
+      //  console.log('paramRequest.params.attch_id\n',paramRequest.params.attch_id);
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsImages', pl: null};
 
@@ -602,7 +637,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
         esbMessage(m)
             .then(function(r) {
-                console.log('r',r);
+             //   console.log('r',r);
                 oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
@@ -616,7 +651,7 @@ module.exports = function(paramPS, paramESBMessage) {
     //post workspace/profiles/v1/personal.json
     upRouter.post('/corporateDetails/videos.json', function(paramRequest, paramResponse){
 
-        console.log('uph post new video')
+     //   console.log('uph post new video')
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsVideos', pl: null};
         m.pl = {
@@ -632,7 +667,7 @@ module.exports = function(paramPS, paramESBMessage) {
             .then(function(r) {
 
 
-                console.log('r',r);
+            //    console.log('r',r);
 
                 oHelpers.sendResponse(paramResponse,200,r);
             })
@@ -648,7 +683,7 @@ module.exports = function(paramPS, paramESBMessage) {
     //post workspace/profiles/v1/personal.json
     upRouter.delete('/corporateDetails/videos/:profile_id/:vid_id.json', function(paramRequest, paramResponse){
 
-        console.log('uph ---delete video\n',paramRequest.params.vid_id);
+       // console.log('uph ---delete video\n',paramRequest.params.vid_id);
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsVideos', pl: null};
         m.pl = {
@@ -662,7 +697,7 @@ module.exports = function(paramPS, paramESBMessage) {
             .then(function(r) {
 
 
-                console.log('r',r);
+             //   console.log('r',r);
 
                 oHelpers.sendResponse(paramResponse,200,r);
             })
@@ -678,7 +713,7 @@ module.exports = function(paramPS, paramESBMessage) {
     upRouter.post('/corporateDetails/audios.json', function(paramRequest, paramResponse){
 
 
-        console.log('uph post new audio')
+      //  console.log('uph post new audio')
 
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsAudios', pl: null};
@@ -695,12 +730,12 @@ module.exports = function(paramPS, paramESBMessage) {
             .then(function(r) {
 
 
-                console.log('r',r);
+            //    console.log('r',r);
 
                 oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
-                console.log('uph error:----- ', r);
+             //   console.log('uph error:----- ', r);
                 var r = {pl:null, er:{ec:404,em:"uph error: could not update corporate details"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
@@ -709,7 +744,7 @@ module.exports = function(paramPS, paramESBMessage) {
     //post workspace/profiles/v1/personal.json
     upRouter.delete('/corporateDetails/audios/:profile_id/:audio_id.json', function(paramRequest, paramResponse){
 
-        console.log('uph ---delete audio\n',paramRequest.params.audio_id);
+       // console.log('uph ---delete audio\n',paramRequest.params.audio_id);
 
         var m = {ns: 'upm',op:'upm_updateCorporationDetailsAudios', pl: null};
         m.pl = {
@@ -724,12 +759,12 @@ module.exports = function(paramPS, paramESBMessage) {
             .then(function(r) {
 
 
-                console.log('r--',r);
+             //   console.log('r--',r);
 
                 oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
-                console.log('uph error:----- ', r);
+             //   console.log('uph error:----- ', r);
                 var r = {pl:null, er:{ec:404,em:"uph error: could not delete corporate audio"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
@@ -740,7 +775,7 @@ module.exports = function(paramPS, paramESBMessage) {
 
 //put workspace/v1/profiles/:personal.json
     upRouter.put('/personal/:profileID.json', function(paramRequest, paramResponse){
-        console.log ()
+      //  console.log ()
 
 });
 

@@ -155,6 +155,24 @@ module.exports = function(paramService, esbMessage){
 
 
   var bmRouter = paramService.Router();
+    //@todo - Ed's get template
+  bmRouter.get('/listtemplate.json', function(paramRequest, paramResponse, paramNext){
+        //http://localhost/files/7ab7a057-b10f-47d1-9967-f5b11b625b9b.xlsx
+        var m = {pl:{}};
+        q().then(function(){
+            m.pl.fileType=paramRequest.query.ft?paramRequest.query:"xlsx"
+            m.pl.formID=paramRequest.query.fid;
+            m.pl.loginName=(paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID;
+            m.pl.currentOrganization=(paramRequest.user&&paramRequest.user.currentOrganization)||false;
+            m.op='bmm_get_list_template';
+            return esbMessage(m);
+        }).then(function(msg){
+            oHelpers.sendResponse(paramResponse,200,msg);//"http://localhost/files/7ab7a057-b10f-47d1-9967-f5b11b625b9b.xlsx");
+        }).fail(function(er){
+            oHelpers.sendResponse(paramResponse,501,er);
+        });
+    })
+
   bmRouter.post('/form.json', function(paramRequest, paramResponse, paramNext){
     _persistForm(paramRequest, paramResponse, paramNext);
   });
@@ -176,6 +194,22 @@ module.exports = function(paramService, esbMessage){
       oHelpers.sendResponse(paramResponse,501,er);      
     });    
   });
+
+    bmRouter.get('/activitydata.json', function(paramRequest, paramResponse, paramNext){
+        var m = {};
+        q().then(function(){
+            //paramRequest.query.code
+           // m.pl.ac="LZB1016";
+            //m.pl._id=paramRequest.query._id;
+            m.op='bmm_download_activity_data';
+            return esbMessage(m);
+        }).then(function(msg){
+            oHelpers.sendResponse(paramResponse,200,{pl:msg});
+        }).fail(function(er){
+            oHelpers.sendResponse(paramResponse,501,er);
+        });
+    });
+
   bmRouter.post('/responses.json', function(paramRequest, paramResponse, paramNext){
     var m = {pl:{}};
     //formHtml
@@ -259,7 +293,7 @@ module.exports = function(paramService, esbMessage){
   bmRouter.put('/activity.json', function(paramRequest, paramResponse, paramNext){
     _persistActivity(paramRequest, paramResponse, paramNext);
   });
-  bmRouter.get('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
+   bmRouter.get('/:activitiesType.json', function(paramRequest, paramResponse, paramNext){
       if (paramRequest.params.activitiesType === 'activitieslist'){
           oHelpers.sendResponse(paramResponse,200,activitieslist);
       }
@@ -294,7 +328,7 @@ module.exports = function(paramService, esbMessage){
       }
   });
 
-    bmRouter.get('/activityDetails/:activityDetail_id.json', function(paramRequest, paramResponse){
+   bmRouter.get('/activityDetails/:activityDetail_id.json', function(paramRequest, paramResponse){
 
         var m = {
             "ns":"bmm",
@@ -317,8 +351,6 @@ module.exports = function(paramService, esbMessage){
             });
 
     });
-
-
 
 
     bmRouter.get('/search/activityDetails/all.json', function(paramRequest, paramResponse){
@@ -879,9 +911,6 @@ module.exports = function(paramService, esbMessage){
 
 
     });
-
-
-
 
     return bmRouter;
 };

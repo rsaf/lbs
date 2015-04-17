@@ -13,6 +13,8 @@ module.exports = function(paramService, esbMessage) {
     photosRouter.get('/:userType.json', function(paramRequest, paramResponse, paramNext){
 
 
+        console.log('inside sch-----------');
+
         if (paramRequest.params.userType === 'all'){
 
             var m = {
@@ -26,7 +28,7 @@ module.exports = function(paramService, esbMessage) {
             esbMessage(m)
                 .then(function (r) {
 
-                   // console.log('sch response-----all users-',r);
+                    console.log('sch response-----all users-',r);
                     oHelpers.sendResponse(paramResponse, 200, r);
                 })
                 .fail(function (r) {
