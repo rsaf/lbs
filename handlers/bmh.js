@@ -194,7 +194,46 @@ module.exports = function(paramService, esbMessage){
       oHelpers.sendResponse(paramResponse,501,er);      
     });    
   });
-
+    bmRouter.get('/activityGenerateUploadedResponses/:zipuri', function(paramRequest, paramResponse, paramNext){
+      var m = {},transactionid=false,response={};
+      //formHtml
+      q().then(function(){
+        m.pl=JSON.parse(paramRequest.body.json).pl;
+        // is user not set then use req.sessionID
+        m.pl.loginName=(paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID;
+        m.pl.currentOrganization=(paramRequest.user&&paramRequest.user.currentOrganization)||false;
+        m.op='bmm_import_response_data';
+        return esbMessage(m);
+      })
+      .then(
+        function resolve(msg){
+          oHelpers.sendResponse(res,200,msg); 
+        },function fail(er){
+          oHelpers.sendResponse(res,501,er);
+        }
+      );
+    });
+    bmRouter.post('/activityResponseUpload/:activity_code.json', function(paramRequest, paramResponse, paramNext){
+      var m = {};
+      q().then(function(){
+        m.pl = {
+          activityCode : paramRequest.params.activity_code,
+          loginName : (paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID,
+          currentOrganization : (paramRequest.user&&paramRequest.user.currentOrganization)||false,
+          fm : undefined,//???
+          fd : undefined //???
+        }
+        m.op='bmm_upload_respondents_list';
+        return esbMessage(m);
+      })
+      .then(
+        function resolve(msg){
+          oHelpers.sendResponse(res,200,msg); 
+        },function fail(er){
+          oHelpers.sendResponse(res,501,er);
+        }
+      );
+    });
     bmRouter.get('/activityResponseDownload/:activity_code.json', function(paramRequest, paramResponse, paramNext){
         var m = {};
         q().then(function(){
