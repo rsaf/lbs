@@ -195,11 +195,12 @@ module.exports = function(paramService, esbMessage){
     });    
   });
 
-    bmRouter.get('/activitydata.json', function(paramRequest, paramResponse, paramNext){
+    bmRouter.get('/activityResponseDownload/:activity_code.json', function(paramRequest, paramResponse, paramNext){
         var m = {};
         q().then(function(){
             //paramRequest.query.code
-           // m.pl.ac="LZB1016";
+            console.log("Retrieved activity code in download as ",paramRequest.params.activity_code);
+            m.pl={ac:paramRequest.params.activity_code}
             //m.pl._id=paramRequest.query._id;
             m.op='bmm_download_activity_data';
             return esbMessage(m);
