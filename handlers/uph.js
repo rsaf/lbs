@@ -170,34 +170,34 @@ module.exports = function(paramPS, paramESBMessage) {
 
 
 //get workspace/profiles/v1/corporateDetails/:profileID.json
-    upRouter.get('/search/corporateDetails/all.json', function(paramRequest, paramResponse){
-
-
-      //  console.log('uph read all corporate detail---');
-
-        var m = {
-            "ns":"upm",
-            "op": "readAllCorporateDetailPageByID",
-            "pl":{oID:paramRequest.user.currentOrganization
-                ,uID: paramRequest.user.lanzheng.loginName
-                ,pageSize:10
-               }
-        };
-
-      //  console.log('upm m.pl----', m.pl);
-
-        esbMessage(m)
-            .then(function(r) {
-                //console.log(r.pl);
-                oHelpers.sendResponse(paramResponse,200,r);
-            })
-            .fail(function(r) {
-                console.log(r.er);
-                var r = {pl:null, er:{ec:404,em:"could not find detail page"}};
-                oHelpers.sendResponse(paramResponse,404,r);
-            });
-
-    });
+//    upRouter.get('/search/corporateDetails/all.json', function(paramRequest, paramResponse){
+//
+//
+//      //  console.log('uph read all corporate detail---');
+//
+//        var m = {
+//            "ns":"upm",
+//            "op": "readAllCorporateDetailPageByID",
+//            "pl":{oID:paramRequest.user.currentOrganization
+//                ,uID: paramRequest.user.lanzheng.loginName
+//                ,pageSize:10
+//               }
+//        };
+//
+//      //  console.log('upm m.pl----', m.pl);
+//
+//        esbMessage(m)
+//            .then(function(r) {
+//                //console.log(r.pl);
+//                oHelpers.sendResponse(paramResponse,200,r);
+//            })
+//            .fail(function(r) {
+//                console.log(r.er);
+//                var r = {pl:null, er:{ec:404,em:"could not find detail page"}};
+//                oHelpers.sendResponse(paramResponse,404,r);
+//            });
+//
+//    });
 
 
 

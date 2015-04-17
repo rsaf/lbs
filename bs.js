@@ -14,6 +14,7 @@ module.exports.startBS = function(){
     var esb = require('esb');
 
     var oHomeRouter ;               // home
+    var oSearchRouter ;               // home
     var oUserNotificationRouter;    // workspace/notifications  ==>  mdh.js  mdm
     var oUserRouter;                // workspace/users          ==>  sch.js  scm ///
     var oProfileRouter;             // workspace/profile        ==>  uph.js  upm
@@ -79,6 +80,7 @@ module.exports.startBS = function(){
             redisClient = r[4].pl.fn;
 
             oHomeRouter = require('./handlers/hh.js')(exp, esbMessageFunction);                // home
+            oSearchRouter = require('./handlers/ish.js')(exp, esbMessageFunction);             // details/search
             oUserNotificationRouter = require('./handlers/mdh.js')(exp, esbMessageFunction);   // workspace/notifications
             oUserRouter = require('./handlers/sch.js')(exp, esbMessageFunction);               // workspace/users
             oProfileRouter = require('./handlers/uph.js')(exp, esbMessageFunction);            // workspace/profile
@@ -133,11 +135,14 @@ module.exports.startBS = function(){
 
             bs.use('/home', oHomeRouter);  // home
             console.log('BS: configuring user acl middleware...');
+            bs.use('/details/search', oSearchRouter);                     // details/search
+
             bs.use(scmCheckUserFunction());
 
             console.log('BS: configuring REST endpoints request handles middleware...');
             //REST API Interface
             //Business functions expose from here
+
 
             bs.use('/workspace/notifications', oUserNotificationRouter);  // workspace/notifications
             bs.use('/workspace/users', oUserRouter);                      // workspace/users

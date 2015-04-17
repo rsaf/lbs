@@ -345,16 +345,7 @@ module.exports = function (paramPS, esbMessage) {
 
     });
 
-    //
-    //psRouter.post('/idphotos.json', function (req, res){
-    //    var form = new formidable.IncomingForm();
-    //    form.parse(req, function(err, fields, files) {
-    //        res.writeHead(200, {'content-type': 'text/plain'});
-    //        res.write('received upload:\n');
-    //        res.end(util.inspect({fields: fields, files: files}) + '\n');
-    //    });
-    //    form.on('end', processForm);
-    //});
+
 
    ///workspace/corrections/idphotos.json
     psRouter.get('/idphotos.json', function (paramRequest, paramResponse){
@@ -490,8 +481,102 @@ module.exports = function (paramPS, esbMessage) {
           oHelpers.sendResponse(paramResponse,200,folders);
       }
     });
+
+
+
+
+
+
+    psRouter.post('/upload.json', function (paramRequest, paramResponse, paramNext) {
+
+        console.log('pmh  uploading photo-----');
+
+        var m = {ns: 'dmm',op:'dmm_uploadPhoto', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            photoData:null,
+            sgc:10,
+            stc:100,
+            pp:{ //other photos properties
+                ign:null, // 照片名称: image name                                      ===
+                igt:null, // 主题类型: 旅游照片 image type                              ===
+                igs:null, // 拍摄方式: 单板相机 image source                            ===
+                isl:null, // 拍摄地点:  image shooting location                        ===
+                rm:null,  // 照片描述: // 30 remarks 备注                               ===
+                isd:null, // 拍摄日期: // image shooting date                          ?
+                irs:null, // 像素尺寸:84mmX105mm image resolution size                  ?
+                ofs:null, // 文件大小:86Kb //28 original photo size 初始照片文件大小      ===
+                ifm:null  // 27 initial format 初始照片格式                              ===
+            },
+            uri: null // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
+        };
+
+
+
+        var form = new formidable.IncomingForm();
+        form.parse(paramRequest, function(err, fields, files) {
+
+
+            var fileInfo = JSON.parse(fields.fileInfo);
+
+            console.log('fields----', fileInfo);
+
+            var old_path = files.file.path,
+                file_size = files.file.size,
+                file_ext = files.file.name.split('.').pop(),
+                file_name =files.file.name;
+
+            console.log('file name:---',file_name);
+
+
+            fs.readFile(old_path, function(err, data) {
+                m.pl.fn = file_name;
+                m.pl.ft = paramRequest.params.doctype;
+                m.pl.rm  = fileInfo.description;
+                m.pl.fs = file_size;
+                m.pl.fm = file_ext;
+                m.pl.fd = data;
+
+                esbMessage(m)
+                    .then(function (r) {
+                        paramResponse.writeHead(200, {"Content-Type": "application/json"});
+
+                        console.log('dmh upload successful---',r);
+
+                        paramResponse.end(JSON.stringify(r));
+                    })
+                    .fail(function (r) {
+                        console.log('dmh error-----:',r.er);
+                        var r = {pl: null, er: {ec: 404, em: "could not save document"}};
+                        oHelpers.sendResponse(paramResponse, 404, r);
+                    });
+            });
+        });
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     return psRouter;
 };
+
+
+
+
+
+
 
 var idPhotosUsage = {
   "pl": [{
