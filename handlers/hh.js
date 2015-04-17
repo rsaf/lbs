@@ -116,9 +116,6 @@ module.exports = function (paramService, esbMessage) {
   q.all([p1, p2, p3, p4, p5, p6, p7]).then(function (r) {
 
 
-
-    console.log('register user-----hh.js');
-
       //console.log(r);
       userloginVerifier = r[0].pl.fn;
       registerUzer = r[1].pl.fn;
@@ -279,7 +276,7 @@ module.exports = function (paramService, esbMessage) {
       });
       homeRouter.put('/response.json', function (req, res, pnext) {
 
-        console.log('posting response-----');
+        console.log('response update-----');
 
         _persistRespose(req, res, pnext);
       });
@@ -309,9 +306,12 @@ module.exports = function (paramService, esbMessage) {
             paramResponse.end(JSON.stringify(r));
           });
       });
+
+
+
       homeRouter.post('/uploadphoto.json', function(paramRequest, paramResponse){
 
-        console.log('uploading image from response form')
+        console.log('uploading image from response form--------')
 
         q()
         .then(function(){
@@ -319,23 +319,56 @@ module.exports = function (paramService, esbMessage) {
           form.parse(paramRequest, function(err, fields, files) {
             var old_path = files.file.path,
             file_ext = files.file.name.split('.').pop();
+            var json = JSON.parse(fields.json);
+            console.log('json-----',json);
+
             fs.readFile(old_path, function(err, data) {
-              var m = {op:"bmm_uploadPhoto",pl:{}};
+              var m = {
+                ns: 'pmm',
+                op:"pmm_uploadPhoto",
+                pl:{pp:{}}
+              };
+
               m.pl.photoData= data;
               m.pl.ifm = file_ext;
+              m.pl.ac = json.ac;
+              m.pl.rc = json.rc;
+              m.pl.ow = json.ow;
+
+
+
               esbMessage(m)
               .then(function(r) {
-                  oHelpers.sendResponse(paramResponse,200,r);
-              })
-              .then(null,function reject(r) {
-                  console.log('bmh error:-----',r);
-                  r = {pl:null, er:{ec:100012,em:"Unable to upload photo."}};
-                  oHelpers.sendResponse(paramResponse,501,r);
+                    oHelpers.sendResponse(paramResponse,200,r);
+
+                      var m= {
+                          ns: 'pmm',
+                          op:"pmm_SubmitPhotoToInspection",
+                          pl: r.pl
+                          }
+
+                      esbMessage(m)
+                          .then(function(r) {
+                            oHelpers.sendResponse(paramResponse,200,r);
+                          })
+                          .then(null,function reject(r) {
+                            console.log('hh error:-----',r);
+                            r = {pl:null, er:{ec:100012,em:"Unable to submit photo to inspection----"}};
+                            oHelpers.sendResponse(paramResponse,501,r);
+                          });
+
+
+                })
+                .then(null,function reject(r) {
+                    console.log('hh error:-----',r);
+                    r = {pl:null, er:{ec:100012,em:"Unable to upload photo."}};
+                    oHelpers.sendResponse(paramResponse,501,r);
               });
             });
           });
         });
       });
+
     })
     .fail(function (err) {
       console.log('error: ' + err);

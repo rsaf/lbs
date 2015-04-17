@@ -16,7 +16,31 @@ module.exports = function (paramService, esbMessage)
       oHelpers.sendResponse(paramResponse, 200, idphotos);
     }
     else if (paramRequest.params.photoType === 'processing') {
-      oHelpers.sendResponse(paramResponse, 200, processing);
+
+
+        var m = {
+            "ns": "pmm",
+            "op": "pmm_getUnderProcessingPhotosByOwner",
+            "pl":{
+                ow:{ uid: paramRequest.user.lanzheng.loginName,
+                    oid: paramRequest.user.currentOrganization
+                   }
+                }
+        };
+
+        esbMessage(m)
+            .then(function (r) {
+                oHelpers.sendResponse(paramResponse, 200, r);
+            })
+            .fail(function (r) {
+
+                 console.log('dmh error---',r);
+                oHelpers.sendResponse(paramResponse, 501, r);
+            });
+
+
+
+      //oHelpers.sendResponse(paramResponse, 200, processing);
     }
 
     else if (paramRequest.params.photoType === 'otherphotos') {
@@ -108,6 +132,7 @@ module.exports = function (paramService, esbMessage)
 
       var form = new formidable.IncomingForm();
       form.parse(paramRequest, function(err, fields, files) {
+
         var old_path = files.file.path,
             file_size = files.file.size,
             file_ext = files.file.name.split('.').pop(),
