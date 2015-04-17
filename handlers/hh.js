@@ -278,6 +278,9 @@ module.exports = function (paramService, esbMessage) {
         _persistRespose(req, res, pnext);
       });
       homeRouter.put('/response.json', function (req, res, pnext) {
+
+        console.log('posting response-----');
+
         _persistRespose(req, res, pnext);
       });
       //query for services used in a response, put here to prevent login popup
@@ -307,6 +310,9 @@ module.exports = function (paramService, esbMessage) {
           });
       });
       homeRouter.post('/uploadphoto.json', function(paramRequest, paramResponse){
+
+        console.log('uploading image from response form')
+
         q()
         .then(function(){
           var form = new formidable.IncomingForm();
