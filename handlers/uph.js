@@ -94,7 +94,10 @@ module.exports = function(paramPS, paramESBMessage) {
             })
             .fail(function(r) {
                 console.log(r.er);
-                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                var r = {pl:null, er:{ec:404,em:"could not fin" +
+                "" +
+                "" +
+                "d navigation"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
