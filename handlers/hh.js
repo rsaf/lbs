@@ -339,8 +339,16 @@ module.exports = function (paramService, esbMessage) {
 
               esbMessage(m)
               .then(function(r) {
+
+
+                      var tempImage = '/commons/images/Latest-photo.jpg';
+                      var uri_swap = r.pl.uri;
+                      r.pl.uri = tempImage;
+                      r.status = true;
+
                     oHelpers.sendResponse(paramResponse,200,r);
 
+                      r.pl.uri = uri_swap;
                       var m= {
                           ns: 'pmm',
                           op:"pmm_SubmitPhotoToInspection",
@@ -349,12 +357,14 @@ module.exports = function (paramService, esbMessage) {
 
                       esbMessage(m)
                           .then(function(r) {
-                            oHelpers.sendResponse(paramResponse,200,r);
+                            //we do not need to send this response back to client browser... Response have already been sent..
+                            //oHelpers.sendResponse(paramResponse,200,r);
                           })
                           .then(null,function reject(r) {
                             console.log('hh error:-----',r);
                             r = {pl:null, er:{ec:100012,em:"Unable to submit photo to inspection----"}};
-                            oHelpers.sendResponse(paramResponse,501,r);
+                            //oHelpers.sendResponse(paramResponse,501,r);
+                            //we do not need to send this response back to client browser... Response have already been sent..
                           });
 
 
