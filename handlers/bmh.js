@@ -194,12 +194,14 @@ module.exports = function(paramService, esbMessage){
       oHelpers.sendResponse(paramResponse,501,er);      
     });    
   });
-    bmRouter.get('/activityGenerateUploadedResponses/:zipuri', function(paramRequest, paramResponse, paramNext){
+    bmRouter.get('/:activity_code/:zipuri/generateResponses.json', function(paramRequest, paramResponse, paramNext){
       var m = {},transactionid=false,response={};
       //formHtml
       q().then(function(){
         m.pl=JSON.parse(paramRequest.body.json).pl;
         // is user not set then use req.sessionID
+        m.pl.activityCode=paramRequest.params.activity_code;
+        m.pl.zipuri=paramRequest.params.zipuri;
         m.pl.loginName=(paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID;
         m.pl.currentOrganization=(paramRequest.user&&paramRequest.user.currentOrganization)||false;
         m.op='bmm_import_response_data';
@@ -213,27 +215,74 @@ module.exports = function(paramService, esbMessage){
         }
       );
     });
-    bmRouter.post('/activityResponseUpload/:activity_code.json', function(paramRequest, paramResponse, paramNext){
-      var m = {};
-      q().then(function(){
+
+    bmRouter.post('/:activity_code/:doctype/uploadResponses.json', function (paramRequest, paramResponse, paramNext) {
+
+        console.log('bmh  uploading document-----');
+
+        var m = {ns: 'bmm',op:'bmm_upload_respondents_list', pl: null};
+
+/*
+            activityCode : paramRequest.params.activity_code,
+            loginName : (paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID,
+            currentOrganization : (paramRequest.user&&paramRequest.user.currentOrganization)||false,
+            */
         m.pl = {
-          activityCode : paramRequest.params.activity_code,
-          loginName : (paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID,
-          currentOrganization : (paramRequest.user&&paramRequest.user.currentOrganization)||false,
-          fm : undefined,//???
-          fd : undefined //???
-        }
-        m.op='bmm_upload_respondents_list';
-        return esbMessage(m);
-      })
-      .then(
-        function resolve(msg){
-          oHelpers.sendResponse(res,200,msg); 
-        },function fail(er){
-          oHelpers.sendResponse(res,501,er);
-        }
-      );
+            fn: null,
+            ft: null,
+            rm: null,
+            fs: null,
+            fm: null,
+            uri: null,
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            fd:null
+        };
+
+
+        var form = new formidable.IncomingForm();
+        form.parse(paramRequest, function(err, fields, files) {
+
+
+            var fileInfo = JSON.parse(fields.fileInfo);
+            console.log('files: ',files);
+            console.log('fields----', fileInfo);
+
+            var old_path = files.file.path,
+                file_size = files.file.size,
+                file_ext = files.file.name.split('.').pop(),
+                file_name =files.file.name;
+
+                console.log('file name:---',file_name);
+
+
+            fs.readFile(old_path, function(err, data) {
+                m.pl.fn = file_name;
+                m.pl.ft = paramRequest.params.doctype;
+                m.pl.rm  = fileInfo.description;
+                m.pl.fs = file_size;
+                m.pl.fm = file_ext;
+                m.pl.fd = data;
+
+                esbMessage(m)
+                    .then(function (r) {
+                        paramResponse.writeHead(200, {"Content-Type": "application/json"});
+
+                        console.log('dmh upload successful---',r);
+
+                        paramResponse.end(JSON.stringify(r));
+                    })
+                    .fail(function (r) {
+                        console.log('dmh error-----:',r.er);
+                        var r = {pl: null, er: {ec: 404, em: "could not save document"}};
+                        oHelpers.sendResponse(paramResponse, 404, r);
+                    });
+            });
+        });
+
     });
+
+
     bmRouter.get('/activityResponseDownload/:activity_code.json', function(paramRequest, paramResponse, paramNext){
         var m = {};
         q().then(function(){
