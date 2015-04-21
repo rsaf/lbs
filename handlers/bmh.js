@@ -220,13 +220,8 @@ module.exports = function(paramService, esbMessage){
 
         console.log('bmh  uploading document-----');
 
-        var m = {ns: 'bmm',op:'bmm_upload_respondents_list', pl: null};
+        var m = {ns: 'bmm',op:'bmm_upload_respondents_list', pl: null, ac:paramRequest.params.activity_code};
 
-/*
-            activityCode : paramRequest.params.activity_code,
-            loginName : (paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID,
-            currentOrganization : (paramRequest.user&&paramRequest.user.currentOrganization)||false,
-            */
         m.pl = {
             fn: null,
             ft: null,
@@ -268,9 +263,23 @@ module.exports = function(paramService, esbMessage){
                     .then(function (r) {
                         paramResponse.writeHead(200, {"Content-Type": "application/json"});
 
-                        console.log('dmh upload successful---',r);
-
                         paramResponse.end(JSON.stringify(r));
+
+                        //@todo tie this to a publish button on the webside
+                        console.log('Immediately proceeding to pregenerate responses');
+                        var m_p = {
+                            ns: 'bmm',
+                            op: 'bmm_import_responses_data',
+                            activityCode: paramRequest.params.activity_code,
+                            loginName : paramRequest.user.lanzheng.loginName,
+                            currentOrganization : paramRequest.user.currentOrganization
+                        };
+                        esbMessage(m_p)
+                            .then(function onResolve(r){
+                                console.log("Resolved response pregeneration with response: ",r);
+                            },function onRejected(r){
+                                console.log("Failed response pregeneration with respnose: ",r);
+                            })
                     })
                     .fail(function (r) {
                         console.log('dmh error-----:',r.er);
