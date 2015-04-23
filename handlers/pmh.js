@@ -7,8 +7,66 @@ module.exports = function (paramPS, esbMessage) {
 
 //get photo by lzcode
     //workspace/phototoservices/v1/idphotos/:lzcode.json
-    psRouter.get('/idphotos/:lzcode.json', function (paramRequest, paramResponse, paramNext) {
-        oHelpers.sendResponse(paramResponse, 200, {pl: 'get photo by lzcode', er: null});
+
+
+    ///workspace/photoservices/inspections/idphotos/lzcode.json
+    psRouter.get('/inspections/idphotos/:lzcode.json', function (paramRequest, paramResponse, paramNext) {
+
+       // oHelpers.sendResponse(paramResponse, 200, {pl: 'get photo by lzcode', er: null});
+
+
+        var m = {
+            "ns": "pmm",
+            "op": "pmm_getPhotosForInspection",
+            "pl":{
+                ow:{ uid: paramRequest.user.lanzheng.loginName,
+                    oid: paramRequest.user.currentOrganization
+                }
+            }
+        };
+
+        esbMessage(m)
+            .then(function (r) {
+                oHelpers.sendResponse(paramResponse, 200, r);
+            })
+            .fail(function (r) {
+
+                console.log('pmh error---',r);
+                oHelpers.sendResponse(paramResponse, 501, r);
+            });
+
+    });
+
+
+
+
+
+    ///workspace/photoservices/corrections/idphotos/lzcode.json
+    psRouter.get('/corrections/idphotos/:lzcode.json', function (paramRequest, paramResponse, paramNext) {
+
+        // oHelpers.sendResponse(paramResponse, 200, {pl: 'get photo by lzcode', er: null});
+
+
+        var m = {
+            "ns": "pmm",
+            "op": "pmm_getPhotosForCorrection",
+            "pl":{
+                ow:{ uid: paramRequest.user.lanzheng.loginName,
+                    oid: paramRequest.user.currentOrganization
+                }
+            }
+        };
+
+        esbMessage(m)
+            .then(function (r) {
+                oHelpers.sendResponse(paramResponse, 200, r);
+            })
+            .fail(function (r) {
+
+                console.log('pmh error---',r);
+                oHelpers.sendResponse(paramResponse, 501, r);
+            });
+
     });
 
     //get all photos by activity id
@@ -294,38 +352,79 @@ module.exports = function (paramPS, esbMessage) {
 
         console.log('\n-----inspection results data:-----', paramRequest.body.data);
 
-        if(paramRequest.body.data){
+        var inspectionStatus = paramRequest.params.status;
 
-        var m = {
-            ns: 'mdm',
-            vs: '1.0',
-            op: 'sendNotification',
-            pl: {
-                recipients: [{
-                    inmail: {to: 'guest'},
-                    weixin: {to: 'lionleo001'},
-                    sms: {to: '15900755434'},
-                    email: {to: 'rolland@lbsconsulting.com'}
-                }]
-                ,notification:{}
+
+
+        if(inspectionStatus === 'unqualified'){
+
+
+                var m = {
+                    ns: 'mdm',
+                    vs: '1.0',
+                    op: 'sendNotification',
+                    pl: {
+                        recipients: [{
+                            inmail: {to: 'sa'},
+                            weixin: {to: 'lionleo001'},
+                            sms: {to: '15900755434'},
+                            email: {to: 'rolland@lbsconsulting.com'}
+                        }]
+                        ,notification:{}
+                    }
+                };
+                m.pl.notification.subject = '照片不合格提示';
+                m.pl.notification.notificationType = '事务通知';
+                m.pl.notification.from = 'sa';
+
+
+                if(paramRequest.body.data){
+
+                    if(paramRequest.body.data[1]){
+                        m.pl.notification.body = paramRequest.body.data[0].value  + '   '  +  paramRequest.body.data[1].value ;
+                    }
+                    else if(paramRequest.body.data[0]){
+                        m.pl.notification.body = paramRequest.body.data[0].value ;
+                    }
+                }
+
+        }
+        else if(inspectionStatus === 'qualified'){
+
+                console.log('qualifed photo----submiting to correction-----');
+
+
+            var m= {
+                ns: 'pmm',
+                op:"pmm_SubmitPhotoToCorrection",
+                pl: paramRequest.body.photo
             }
-        };
-        m.pl.notification.subject = '照片不合格提示';
-        m.pl.notification.notificationType = '事务通知';
 
-            if(paramRequest.body.data[1]){
-                m.pl.notification.body = paramRequest.body.data[0].value  + '   '  +  paramRequest.body.data[1].value ;
-            }
-            else if(paramRequest.body.data[0]){
-                m.pl.notification.body = paramRequest.body.data[0].value ;
-            }
+            esbMessage(m)
+                .then(function(r) {
+
+                    console.log('response from correction--',r);
+                    //we do not need to send this response back to client browser... Response have already been sent..
+                    //oHelpers.sendResponse(paramResponse,200,r);
+                })
+                .then(null,function reject(r) {
+                    console.log('pmh error:-----',r);
+                    r = {pl:null, er:{ec:100012,em:"Unable to submit photo to correction----"}};
+                    //oHelpers.sendResponse(paramResponse,501,r);
+                    //we do not need to send this response back to client browser... Response have already been sent..
+                });
 
 
-         m.pl.notification.from = 'rolladmin';
+
+        }
+        else{
+
+            var r = {pl:null, er:{ec:404,em:"unkown inspection status!"}};
+            oHelpers.sendResponse(paramResponse,404,r);
+
+        }
 
 
-
-        console.log('payload ----', m.pl);
 
         esbMessage(m)
             .then(function(r) {
@@ -336,18 +435,14 @@ module.exports = function (paramPS, esbMessage) {
             .fail(function(r) {
 
                 console.log(r.er);
-                var r = {pl:null, er:{ec:404,em:"could not send notification"}};
+                var r = {pl:null, er:{ec:404,em:""}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
-
-        }
 
 
     });
 
-
-
-   ///workspace/corrections/idphotos.json
+    ///workspace/corrections/idphotos.json
     psRouter.get('/idphotos.json', function (paramRequest, paramResponse){
         oHelpers.sendResponse(paramResponse, 200, idphotos);
     });
@@ -482,11 +577,6 @@ module.exports = function (paramPS, esbMessage) {
       }
     });
 
-
-
-
-
-
     psRouter.post('/upload.json', function (paramRequest, paramResponse, paramNext) {
 
         console.log('pmh  uploading photo-----');
@@ -555,18 +645,6 @@ module.exports = function (paramPS, esbMessage) {
         });
 
     });
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     return psRouter;

@@ -258,15 +258,18 @@ module.exports = function(paramService, esbMessage){
                 m.pl.fs = file_size;
                 m.pl.fm = file_ext;
                 m.pl.fd = data;
-
+                console.log('uploading response lists ...', m.pl);
                 esbMessage(m)
                     .then(function (r) {
                         paramResponse.writeHead(200, {"Content-Type": "application/json"});
 
                         paramResponse.end(JSON.stringify(r));
 
+                        console.log("coming backing from uploading response list ...", r);
+
                         //@todo tie this to a publish button on the webside
                         console.log('Immediately proceeding to pregenerate responses');
+
                         var m_p = {
                             ns: 'bmm',
                             op: 'bmm_import_responses_data',
@@ -278,7 +281,7 @@ module.exports = function(paramService, esbMessage){
                             .then(function onResolve(r){
                                 console.log("Resolved response pregeneration with response: ",r);
                             },function onRejected(r){
-                                console.log("Failed response pregeneration with respnose: ",r);
+                                console.log("Failed response pregeneration with respnose2: ", r);
                             })
                     })
                     .fail(function (r) {
