@@ -94,14 +94,15 @@ module.exports = function(paramService, esbMessage){
       }
       return Q.all(promises);
     }).then(function(ret) {
-            if(request.rtr == "Activity")
+            if(dbRequest._doc && dbRequest._doc.rtr == "Activity" && //request is an activity publish request
+                dbRequest._doc.ei && dbRequest._doc.ei.length>0 && dbRequest._doc.ei[0].ei !== undefined) //publish request has an activity code
             {
                 //pregenerate responses if they exist
-                console.log('Immediately proceeding to pregenerate responses');
+                console.log('Proceeding to pregenerate responses');
                 var m_p = {
                     ns: 'bmm',
                     op: 'bmm_import_responses_data',
-                    activityCode: paramRequest.params.activity_code,
+                    activityCode: dbRequest._doc.ei[0].ei,
                     loginName : m.pl.loginName,
                     currentOrganization : m.pl.currentOrganization,
                     transactionid: m.pl.transactionid
