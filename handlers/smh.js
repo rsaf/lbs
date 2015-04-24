@@ -178,72 +178,90 @@ module.exports = function(paramService,  esbMessage){
   serviceManagementRouter.post('/:serviceCode/:responseCode/perform.json', function(paramRequest, paramResponse){
     var rc = paramRequest.params.responseCode;
     var sv = paramRequest.params.serviceCode;
-    _onServicePerformed(rc,sv)
+    console.log("Hitting perform endpoint with ",sv,"fulfilling",rc);
+    return _onServicePerformed(rc,sv,paramRequest.user)
+        //Return the payload constructed by the helper
         .then(function resolve(r){
-
+          console.log("Resolving performance");
+          return r;
         }  ,  function failure(r){
-
+          console.log("Rejecting performance");
+          return r;
         })
   })
 
-  function _onServicePerformed(responseCode, service){
-    q()
+  function _onServicePerformed(responseCode, serviceCode, user){
+    var ln = user && user.lanzheng?user.lanzheng.loginName:undefined;
+    var co = user && user.lanzheng?user.lanzheng.currentOrganization:undefined;
+    var service = undefined;
+    //TODO - Wrap in a transaction; Touch SMM & FMM as needed
+    return q()
+        //GET SERVICE INFO
         .then(function(){
+          return esbMessage({
+            ns : "smm",
+            op : "smm_getService",
+            pl : {
+              code : serviceCode,
+              loginName : ln,
+              currentOrganization : co
+            }
+          })
+        })
+        //FETCH RESPONSE STATUS FROM CODE
+        .then(function(serviceResponse){
+          service = serviceResponse.pl;
           return esbMessage({
             ns : "bmm",
             op : "bmm_getResponse",
-            pl : {code : responseCode}
+            pl : {
+              code : responseCode,
+              loginName : ln,
+              currentOrganization : co
+            }
           });
         })
+        //UPDATE RESPONSE STATUS TO 'PERFORMED'
         .then(function(response){
           var idx = response && response.sb && response.sb.length > 1
-              ? response.sb.findIndex(function(e){return e.svid == sv && e.status == "ISSUED"})
+              ? response.sb.findIndex(function(e){return e.svid == service && e.status == "ISSUED"})
               : -1;
-          if(idx > 0) //This service performance had been requested
+          if(idx > 0)
           {
             response.sb[idx].status = "PERFORMED";
             return esbMessage({
               "ns" : "bmm",
               "op" : "bmm_persistResponse",
               "pl" : {
-                sb : response.sb
+                sb : response.sb,
+                loginName : ln,
+                currentOrganization : co
               }
-            })
-            .then(function resolve(){
-              return _onServiceToProcess(responseCode, service);
-            }  ,  function failure(){
-              console.log("failed");//TODO
-            })
+            });
           }
-          else
-          {
-            //TODO send a nice response saying to screw off
-            console.log("Invalid service performance");
-            return false;
-          }
+          else q.reject({pl:null, er:{em:"Invalid service performance - request not issued",ec:1567}});
         })
-        .then(function resolve(r){
-          return true; //TODO
-        }  ,  function failure(r){
-          return false; //TODO
-        });
-  }
-  function _onServiceToProcess(responseCode, service){
-    //TODO do stuff perhaps here
-    return _onServiceProcessed(responseCode, service);
-  }
-  function _onServiceProcessed(responseCode, service){
-    q()
-        .then(function(){
+        //PROCESS PERFORMANCE
+        .then(function(esbResponse){
+          //TODO add processing logic, if any, here. We assume success. If not, set PERFORMED --> ISSUED and fail the promise.
+          return true;
+        })
+        //FETCH RESPONSE STATUS FROM CODE
+        .then(function(processResponse){
           return esbMessage({
             ns : "bmm",
             op : "bmm_getResponse",
-            pl : {code : responseCode}
+            pl : {
+              code : responseCode,
+              loginName : ln,
+              currentOrganization : co
+            }
           });
         })
+        //UPDATE RESPONSE STATUS TO 'PROCESSED'
         .then(function(response){
           var idx = response && response.sb && response.sb.length > 1
-              ? response.sb.findIndex(function(e){return e.svid == sv && e.status == "PERFORMED"})
+              ? response.sb.findIndex(function(e){return e.svid == service && e.status == "PERFORMED"})
               : -1;
           if(idx > 0) //This service has been processed and seen satisfactory
           {
@@ -252,59 +270,68 @@ module.exports = function(paramService,  esbMessage){
               "ns" : "bmm",
               "op" : "bmm_persistResponse",
               "pl" : {
-                sb : response.sb
+                sb : response.sb,
+                loginName : undefined,
+                currentOrganization : undefined
               }
             })
-            .then(function resolve(){
-              return _scheduleNextOrder(response, idx+1);
-            }  ,  function failure(){
-              console.log("failed");//TODO
-            })
           }
-          else
-          {
-            //TODO send a nice response saying to screw off
-            console.log("Invalid service performance - failed processing");
-            return false;
-          }
+          else  q.reject({pl:null, er:{em:"Invalid service performance - failed processing",ec:1568}});
         })
+        //SCHEDULE NEXT ORDER and OKAY THE PREVIOUS SERVICE
+        .then(function(esbResponse){
+          _scheduleNextOrder(response, idx+1);
+          return {acknowledged:true, processed:true}
+        })
+        //RESOLVE
         .then(function resolve(r){
-          return true; //TODO
+          return {pl:r,er:null};
         }  ,  function failure(r){
-          return false; //TODO
+          return r;
         });
   }
   function _scheduleNextOrder(response, index){
-    if(!(response && response.sb && response.sb.length > index && response.sb[index]))
-    {
-      console.log("No next schedule");
-      return false; //TODO
-    }
-
-    var nextService = response.sb[index];
-
-    if(nextService.status != "PENDING")
-    {
-      console.log("Next on schedule isn't pending");
-      return false; //TODO
-    }
-    else
-    {
-      response.sb[idx].status = "ISSUED";
+    console.log("SCHEDULING NEXT ORDER");
+    var ln = undefined;
+    var co = undefined;
+    //TODO - Wrap in a Transaction!!!
+    q()
+    .then(function(){
+      if(response)
+        q.reject({pl:null,er:{ec:1920,em:"No response passed."}});
+      else if(!response.sb || response.sb.length == 0)
+        q.reject({pl:null,er:{ec:1921,em:"No response services available."}});
+      else if(!response.sb.length > index || !response.sb[index])
+        q.reject({pl:null,er:{ec:1922,em:"Index not availabe in response services list."}});
+      else if(response.sb[index].status != "PENDING")
+        q.reject({pl:null,er:{ec:1923,em:"Attempting to issue a "+response.sb[index].status+" service. Must be PENDING."}});
+      else return true;
+    })
+    .then(function(){
+      response.sb[index].status = "ISSUED"
       return esbMessage({
-        "ns" : "bmm",
-        "op" : "bmm_persistResponse",
-        "pl" : {
-          sb : response.sb
+        "ns": "bmm",
+        "op": "bmm_persistResponse",
+        "pl": {
+          sb: response.sb,
+          loginName : ln,
+          currentOrganization : co
         }
       })
+    })
+    .then(function(esbResponse){
       //TODO - Issue Order here
-      .then(function resolve(){
-        return true; //TODO
-      }  ,  function failure(){
-        console.log("failed");//TODO
-      })
-    }
+          console.log("ORDER ISSUED!!! >_> YEAH!!! <_<")
+          return {issued: true, response:response};
+    })
+    //TODO - Handle 'no more' case and close response
+    .then(function resolve(r){
+      return {pl:r,er:null};
+    }  ,  function failure(r){
+      //TODO - Handle failure of next order
+      console.log("FAILED TO SCHEDULE NEXT ORDER.");
+      return r;
+    })
   }
 
   serviceManagementRouter.get ('/service.json', function(paramRequest, paramResponse, paramNext){
