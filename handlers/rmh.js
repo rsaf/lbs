@@ -110,10 +110,11 @@ module.exports = function(paramService, esbMessage){
                 esbMessage(m_p)
                     .then(function onResolve(r){
                         console.log("Resolved response pregeneration with response: ",r);
+                        return ret;
                     },function onRejected(r){
                         console.log("Failed response pregeneration with respnose: ",r);
+                        return ret;
                     });
-                return Q.all(promises);
             }
             else return true;
     }).then(function(ret) {
