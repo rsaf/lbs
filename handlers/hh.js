@@ -434,7 +434,7 @@ module.exports = function (paramService, esbMessage) {
 
                       var m= {
                           ns: 'pmm',
-                          op:"pmm_getPhotosForInspection",
+                          op:"pmm_SubmitPhotoToInspection",
                           pl: r.pl
                           }
                       m.pl.uri = uri_swap;

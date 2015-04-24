@@ -351,42 +351,80 @@ module.exports = function (paramPS, esbMessage) {
 
 
         console.log('\n-----inspection results data:-----', paramRequest.body.data);
+        console.log('\n-----inspection results data:-----', paramRequest.body.photo);
 
         var inspectionStatus = paramRequest.params.status;
 
 
-
         if(inspectionStatus === 'unqualified'){
 
+            var m= {
+                ns: 'pmm',
+                op:"pmm_SetInspectedPhotoAsUnqualified",
+                pl: paramRequest.body.photo
+            }
 
-                var m = {
-                    ns: 'mdm',
-                    vs: '1.0',
-                    op: 'sendNotification',
-                    pl: {
-                        recipients: [{
-                            inmail: {to: 'sa'},
-                            weixin: {to: 'lionleo001'},
-                            sms: {to: '15900755434'},
-                            email: {to: 'rolland@lbsconsulting.com'}
-                        }]
-                        ,notification:{}
+
+            esbMessage(m)
+                .then(function(r) {
+
+                    paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                    paramResponse.end(JSON.stringify(r));
+
+
+                    var m = {
+                        ns: 'mdm',
+                        vs: '1.0',
+                        op: 'sendNotification',
+                        pl: {
+                            recipients: [{
+                                inmail: {to: 'sa'},
+                                weixin: {to: 'lionleo001'},
+                                sms: {to: '15900755434'},
+                                email: {to: 'rolland@lbsconsulting.com'}
+                            }]
+                            ,notification:{}
+                        }
+                    };
+                    m.pl.notification.subject = '照片不合格提示';
+                    m.pl.notification.notificationType = '事务通知';
+                    m.pl.notification.from = 'sa';
+
+
+                    if(paramRequest.body.data){
+
+                        if(paramRequest.body.data.othersText){
+                            m.pl.notification.body = paramRequest.body.data.reason  + '   '  +  paramRequest.body.data.other;
+                        }
+                        else if(paramRequest.body.data.reason){
+                            m.pl.notification.body = paramRequest.body.data.reason ;
+                        }
                     }
-                };
-                m.pl.notification.subject = '照片不合格提示';
-                m.pl.notification.notificationType = '事务通知';
-                m.pl.notification.from = 'sa';
+
+                    esbMessage(m)
+                        .then(function(r) {
+
+                            console.log('notification sent to user--');
+                            //we do not need to send this response back to client browser... Response have already been sent..
+                            //oHelpers.sendResponse(paramResponse,200,r);
+                        })
+                        .then(null,function reject(r) {
+                            console.log('pmh error:-----',r);
+                            r = {pl:null, er:{ec:100012,em:"Unable to  send notification to user----"}};
+                            //oHelpers.sendResponse(paramResponse,501,r);
+                            //we do not need to send this response back to client browser... Response have already been sent..
+                        });
 
 
-                if(paramRequest.body.data){
 
-                    if(paramRequest.body.data[1]){
-                        m.pl.notification.body = paramRequest.body.data[0].value  + '   '  +  paramRequest.body.data[1].value ;
-                    }
-                    else if(paramRequest.body.data[0]){
-                        m.pl.notification.body = paramRequest.body.data[0].value ;
-                    }
-                }
+
+                })
+                .fail(function(r) {
+
+                    console.log(r.er);
+                    var r = {pl:null, er:{ec:404,em:"unable to mark photo as qualified"}};
+                    oHelpers.sendResponse(paramResponse,404,r);
+                });
 
         }
         else if(inspectionStatus === 'qualified'){
@@ -396,14 +434,13 @@ module.exports = function (paramPS, esbMessage) {
 
             var m= {
                 ns: 'pmm',
-                op:"pmm_SubmitPhotoToCorrection",
+                op:"pmm_SubmitPhotoToCorrectionAndSetAsQualified",
                 pl: paramRequest.body.photo
             }
 
             esbMessage(m)
                 .then(function(r) {
 
-                    console.log('response from correction--',r);
                     //we do not need to send this response back to client browser... Response have already been sent..
                     //oHelpers.sendResponse(paramResponse,200,r);
                 })
@@ -415,7 +452,6 @@ module.exports = function (paramPS, esbMessage) {
                 });
 
 
-
         }
         else{
 
@@ -425,22 +461,72 @@ module.exports = function (paramPS, esbMessage) {
         }
 
 
+    });
+
+
+    psRouter.get('/inspection/:phototype.json', function (paramRequest, paramResponse) {
+
+
+
+        console.log('get inspection photo by type-----');
+
+        var phototype = paramRequest.params.phototype;
+
+
+        if(phototype === 'unqualified'){
+
+            var m = {
+                "ns": "pmm",
+                "op": "pmm_getUnqualifedPhotos",
+                "pl":{
+                    ow:{ uid: paramRequest.user.lanzheng.loginName,
+                          oid: paramRequest.user.currentOrganization
+                     }
+                }
+            };
+
+        }
+        else if(phototype === 'qualified'){
+
+
+
+            var m = {
+                "ns": "pmm",
+                "op": "pmm_getQualifedPhotos",
+                "pl":{
+                    ow:{ uid: paramRequest.user.lanzheng.loginName,
+                        oid: paramRequest.user.currentOrganization
+                    }
+                }
+            };
+
+        }
+        else{
+
+            var r = {pl:null, er:{ec:404,em:"unkown inspection photo type"}};
+            oHelpers.sendResponse(paramResponse,404,r);
+
+        }
+
 
         esbMessage(m)
             .then(function(r) {
 
                 paramResponse.writeHead(200, {"Content-Type": "application/json"});
                 paramResponse.end(JSON.stringify(r));
+
             })
             .fail(function(r) {
 
                 console.log(r.er);
-                var r = {pl:null, er:{ec:404,em:""}};
+                var r = {pl:null, er:{ec:404,em:"unable to get inspection photos"}};
                 oHelpers.sendResponse(paramResponse,404,r);
             });
 
 
     });
+
+
 
     ///workspace/corrections/idphotos.json
     psRouter.get('/idphotos.json', function (paramRequest, paramResponse){
