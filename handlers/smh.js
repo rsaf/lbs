@@ -174,6 +174,139 @@ module.exports = function(paramService,  esbMessage){
       });
     });
   });
+
+  serviceManagementRouter.post('/:serviceCode/:responseCode/perform.json', function(paramRequest, paramResponse){
+    var rc = paramRequest.params.responseCode;
+    var sv = paramRequest.params.serviceCode;
+    _onServicePerformed(rc,sv)
+        .then(function resolve(r){
+
+        }  ,  function failure(r){
+
+        })
+  })
+
+  function _onServicePerformed(responseCode, service){
+    q()
+        .then(function(){
+          return esbMessage({
+            ns : "bmm",
+            op : "bmm_getResponse",
+            pl : {code : responseCode}
+          });
+        })
+        .then(function(response){
+          var idx = response && response.sb && response.sb.length > 1
+              ? response.sb.findIndex(function(e){return e.svid == sv && e.status == "ISSUED"})
+              : -1;
+          if(idx > 0) //This service performance had been requested
+          {
+            response.sb[idx].status = "PERFORMED";
+            return esbMessage({
+              "ns" : "bmm",
+              "op" : "bmm_persistResponse",
+              "pl" : {
+                sb : response.sb
+              }
+            })
+            .then(function resolve(){
+              return _onServiceToProcess(responseCode, service);
+            }  ,  function failure(){
+              console.log("failed");//TODO
+            })
+          }
+          else
+          {
+            //TODO send a nice response saying to screw off
+            console.log("Invalid service performance");
+            return false;
+          }
+        })
+        .then(function resolve(r){
+          return true; //TODO
+        }  ,  function failure(r){
+          return false; //TODO
+        });
+  }
+  function _onServiceToProcess(responseCode, service){
+    //TODO do stuff perhaps here
+    return _onServiceProcessed(responseCode, service);
+  }
+  function _onServiceProcessed(responseCode, service){
+    q()
+        .then(function(){
+          return esbMessage({
+            ns : "bmm",
+            op : "bmm_getResponse",
+            pl : {code : responseCode}
+          });
+        })
+        .then(function(response){
+          var idx = response && response.sb && response.sb.length > 1
+              ? response.sb.findIndex(function(e){return e.svid == sv && e.status == "PERFORMED"})
+              : -1;
+          if(idx > 0) //This service has been processed and seen satisfactory
+          {
+            response.sb[idx].status = "PROCESSED";
+            return esbMessage({
+              "ns" : "bmm",
+              "op" : "bmm_persistResponse",
+              "pl" : {
+                sb : response.sb
+              }
+            })
+            .then(function resolve(){
+              return _scheduleNextOrder(response, idx+1);
+            }  ,  function failure(){
+              console.log("failed");//TODO
+            })
+          }
+          else
+          {
+            //TODO send a nice response saying to screw off
+            console.log("Invalid service performance - failed processing");
+            return false;
+          }
+        })
+        .then(function resolve(r){
+          return true; //TODO
+        }  ,  function failure(r){
+          return false; //TODO
+        });
+  }
+  function _scheduleNextOrder(response, index){
+    if(!(response && response.sb && response.sb.length > index && response.sb[index]))
+    {
+      console.log("No next schedule");
+      return false; //TODO
+    }
+
+    var nextService = response.sb[index];
+
+    if(nextService.status != "PENDING")
+    {
+      console.log("Next on schedule isn't pending");
+      return false; //TODO
+    }
+    else
+    {
+      response.sb[idx].status = "ISSUED";
+      return esbMessage({
+        "ns" : "bmm",
+        "op" : "bmm_persistResponse",
+        "pl" : {
+          sb : response.sb
+        }
+      })
+      //TODO - Issue Order here
+      .then(function resolve(){
+        return true; //TODO
+      }  ,  function failure(){
+        console.log("failed");//TODO
+      })
+    }
+  }
+
   serviceManagementRouter.get ('/service.json', function(paramRequest, paramResponse, paramNext){
     var query = {};
     if(typeof paramRequest.query._id!=='undefined'){
@@ -419,6 +552,7 @@ module.exports = function(paramService,  esbMessage){
       paramResponse.end(JSON.stringify(r));
     });
   });
+
   serviceManagementRouter.get('/myservicepoints.json', function(paramRequest, paramResponse, paramNext){
     var m = {
       "ns":"smm",
@@ -1026,7 +1160,7 @@ module.exports = function(paramService,  esbMessage){
 
   });
 
-  
+
 
         //createServicePoint
   return serviceManagementRouter;
