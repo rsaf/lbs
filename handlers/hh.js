@@ -103,7 +103,6 @@ module.exports = function (paramService, esbMessage) {
   };
   var p6 = esbMessage(m6);
 
-
   var m7 = {
     "ns": 'scm',
     "op": 'getOrganizationUsers',
@@ -118,11 +117,10 @@ module.exports = function (paramService, esbMessage) {
   };
   var p8 = esbMessage(m8);
 
-
   q.all([p1, p2, p3, p4, p5, p6, p7, p8]).then(function (r) {
 
 
-     // console.log(r);
+      //console.log(r);
       userloginVerifier = r[0].pl.fn;
       registerUzer = r[1].pl.fn;
       sessionUser = r[2].pl.fn;
