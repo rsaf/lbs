@@ -12,57 +12,58 @@ module.exports = function (paramService, esbMessage)
   var photosRouter = paramService.Router();
 
   photosRouter.get('/:photoType.json', function (paramRequest, paramResponse, paramNext) {
-    if (paramRequest.params.photoType === 'idphotos') {
-      oHelpers.sendResponse(paramResponse, 200, idphotos);
-    }
-    else if (paramRequest.params.photoType === 'processing') {
 
+          var photoType = paramRequest.params.photoType;
 
         var m = {
-            "ns": "pmm",
-            "op": "pmm_getUnderProcessingPhotosByOwner",
-            "pl":{
-                ow:{ uid: paramRequest.user.lanzheng.loginName,
-                    oid: paramRequest.user.currentOrganization
-                   }
-                }
-        };
-
-        esbMessage(m)
-            .then(function (r) {
-                oHelpers.sendResponse(paramResponse, 200, r);
-            })
-            .fail(function (r) {
-
-                 console.log('dmh error---',r);
-                oHelpers.sendResponse(paramResponse, 501, r);
-            });
+              "ns": "pmm",
+              "op":null,
+              "pl":{
+                  uID:paramRequest.user.lanzheng.loginName,
+                  oID:paramRequest.user.currentOrganization
+              }
+          };
 
 
+        if (photoType === 'idphotos') {
 
-      //oHelpers.sendResponse(paramResponse, 200, processing);
-    }
+            m.pl.ow = { uid: paramRequest.user.lanzheng.loginName,
+                oid: paramRequest.user.currentOrganization
+            }
 
-    else if (paramRequest.params.photoType === 'otherphotos') {
-        var m = {
-            "ns": "dmm",
-            "op": "dmm_getUserPhotos",
-            "pl":null
-        };
-        m.pl = {
-            uID:paramRequest.user.lanzheng.loginName,
-            oID:paramRequest.user.currentOrganization
-        };
-        esbMessage(m)
-            .then(function (r) {
-                oHelpers.sendResponse(paramResponse, 200, r);
-            })
-            .fail(function (r) {
+            m.op =  "pmm_getIdphotosByOwner";
 
-                oHelpers.sendResponse(paramResponse, 501, r);
-            });
+        }
+        else if (photoType === 'processing') {
 
-    }
+              m.pl.ow = { uid: paramRequest.user.lanzheng.loginName,
+                            oid: paramRequest.user.currentOrganization
+                        }
+
+              m.op =  "pmm_getUnderProcessingPhotosByOwner";
+
+        }
+
+        else if (photoType === 'otherphotos') {
+
+              m.op =  "dmm_getUserPhotos";
+              m.ns =  "dmm";
+        }
+       else{
+            console.log('unkown photo type-----',photoType);
+            var r = {pl: null, er: {ec: 404, em: "unkown photo type"}};
+            oHelpers.sendResponse(paramResponse, 501, r);
+
+        }
+
+      esbMessage(m)
+              .then(function (r) {
+                  oHelpers.sendResponse(paramResponse, 200, r);
+              })
+              .fail(function (r) {
+
+                  oHelpers.sendResponse(paramResponse, 501, r);
+              });
   });
 
   ///workspace/photos/:photocode.json

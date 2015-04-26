@@ -1,6 +1,7 @@
 var oHelpers = require('../utilities/helpers.js');
 var formidable = require('formidable');
 var fs = require('fs');
+var q = require('q');
 
 module.exports = function (paramPS, esbMessage) {
     var psRouter = paramPS.Router();
@@ -19,6 +20,7 @@ module.exports = function (paramPS, esbMessage) {
             "ns": "pmm",
             "op": "pmm_getPhotosForInspection",
             "pl": {
+                ac : paramRequest.params.lzcode,
                 ow: {
                     uid: paramRequest.user.lanzheng.loginName,
                     oid: paramRequest.user.currentOrganization
@@ -28,6 +30,8 @@ module.exports = function (paramPS, esbMessage) {
 
         esbMessage(m)
             .then(function (r) {
+
+                console.log('pmh inpection photos----',r);
                 oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
@@ -40,10 +44,37 @@ module.exports = function (paramPS, esbMessage) {
 
 
     ///workspace/photoservices/corrections/idphotos/lzcode.json
+    //psRouter.get('/corrections/idphotos/:lzcode.json', function (paramRequest, paramResponse, paramNext) {
+    //
+    //    // oHelpers.sendResponse(paramResponse, 200, {pl: 'get photo by lzcode', er: null});
+    //
+    //
+    //    var m = {
+    //        "ns": "pmm",
+    //        "op": "pmm_getPhotosForCorrection",
+    //        "pl": {
+    //            ow: {
+    //                uid: paramRequest.user.lanzheng.loginName,
+    //                oid: paramRequest.user.currentOrganization
+    //            }
+    //        }
+    //    };
+    //
+    //    esbMessage(m)
+    //        .then(function (r) {
+    //            oHelpers.sendResponse(paramResponse, 200, r);
+    //        })
+    //        .fail(function (r) {
+    //
+    //            console.log('pmh error---', r);
+    //            oHelpers.sendResponse(paramResponse, 501, r);
+    //        });
+    //
+    //});
+
     psRouter.get('/corrections/idphotos/:lzcode.json', function (paramRequest, paramResponse, paramNext) {
 
-        // oHelpers.sendResponse(paramResponse, 200, {pl: 'get photo by lzcode', er: null});
-
+        var ac = paramRequest.params.lzcode;
 
         var m = {
             "ns": "pmm",
@@ -52,7 +83,8 @@ module.exports = function (paramPS, esbMessage) {
                 ow: {
                     uid: paramRequest.user.lanzheng.loginName,
                     oid: paramRequest.user.currentOrganization
-                }
+                },
+                ac:ac
             }
         };
 
@@ -68,74 +100,39 @@ module.exports = function (paramPS, esbMessage) {
 
     });
 
-    psRouter.get('/corrections/idphotos/:lzcode.json', function (paramRequest, paramResponse, paramNext) {
 
-        // oHelpers.sendResponse(paramResponse, 200, {pl: 'get photo by lzcode', er: null});
-
-
-        var m = {
-            "ns": "pmm",
-            "op": "pmm_getPhotosForCorrection",
-            "pl": {
-                ow: {
-                    uid: paramRequest.user.lanzheng.loginName,
-                    oid: paramRequest.user.currentOrganization
-                }
-            }
-        };
-
-        esbMessage(m)
-            .then(function (r) {
-                oHelpers.sendResponse(paramResponse, 200, r);
-            })
-            .fail(function (r) {
-
-                console.log('pmh error---', r);
-                oHelpers.sendResponse(paramResponse, 501, r);
-            });
-
-    });
-
-
-    psRouter.get('/corrections/:phototype.json', function (paramRequest, paramResponse) {
+    psRouter.get('/corrections/:phototype/:lzcode.json', function (paramRequest, paramResponse) {
 
 
         console.log('get correction photo by type-----');
 
         var phototype = paramRequest.params.phototype;
+        var ac = paramRequest.params.lzcode;
 
 
         console.log('get correction photo by type-----', phototype);
 
 
+        var m = {
+            "ns": "pmm",
+            "op": null,
+            "pl": {
+                ow: {
+                    uid: paramRequest.user.lanzheng.loginName,
+                    oid: paramRequest.user.currentOrganization
+                },
+                ac:ac
+            }
+        };
+
+
         if (phototype === 'done') {
 
-            var m = {
-                "ns": "pmm",
-                "op": "pmm_getCorrectionSuccessfulPhotos",
-                "pl": {
-                    ow: {
-                        uid: paramRequest.user.lanzheng.loginName,
-                        oid: paramRequest.user.currentOrganization
-                    }
-                }
-            };
-
+            m.op = "pmm_getCorrectionSuccessfulPhotos";
         }
         else if (phototype === 'failed') {
 
-
-            var m = {
-                "ns": "pmm",
-                "op": "pmm_getCorrectionFailedPhotos",
-                "pl": {
-                    ow: {
-                        uid: paramRequest.user.lanzheng.loginName,
-                        oid: paramRequest.user.currentOrganization
-                    }
-                }
-            };
-
+            m.op = 'pmm_getCorrectionFailedPhotos';
         }
         else {
 
@@ -538,41 +535,38 @@ module.exports = function (paramPS, esbMessage) {
 
 
 
-psRouter.get('/inspection/:phototype.json', function (paramRequest, paramResponse) {
+psRouter.get('/inspection/:phototype/:activity_id.json', function (paramRequest, paramResponse) {
 
 
     console.log('get inspection photo by type-----');
 
     var phototype = paramRequest.params.phototype;
+    var activity_id =  paramRequest.params.activity_id;
+
+
+
+    var m = {
+        "ns": "pmm",
+        "op": null,
+        "pl": {
+            ow: {
+                uid: paramRequest.user.lanzheng.loginName,
+                oid: paramRequest.user.currentOrganization
+            },
+            ac:activity_id
+        }
+    };
 
 
     if (phototype === 'unqualified') {
 
-        var m = {
-            "ns": "pmm",
-            "op": "pmm_getUnqualifedPhotos",
-            "pl": {
-                ow: {
-                    uid: paramRequest.user.lanzheng.loginName,
-                    oid: paramRequest.user.currentOrganization
-                }
-            }
-        };
+        m.op = 'pmm_getUnqualifedPhotos';
+
 
     }
     else if (phototype === 'qualified') {
 
-
-        var m = {
-            "ns": "pmm",
-            "op": "pmm_getQualifedPhotos",
-            "pl": {
-                ow: {
-                    uid: paramRequest.user.lanzheng.loginName,
-                    oid: paramRequest.user.currentOrganization
-                }
-            }
-        };
+        m.op = 'pmm_getQualifedPhotos';
 
     }
     else {
@@ -797,7 +791,21 @@ psRouter.get('/:type.json', function (paramRequest, paramResponse, paramNext) {
         oHelpers.sendResponse(paramResponse, 200, idPhotosUsage);
     }
     else if (paramRequest.params.type === 'folders') {
-        oHelpers.sendResponse(paramResponse, 200, folders);
+
+        var m = {};
+        //formHtml
+        q().then(function(){
+            m.pl={loginName:paramRequest.user.lanzheng.loginName,currentOrganization:paramRequest.user.currentOrganization};
+            m.op='bmm_getActivities';
+            return esbMessage(m);
+        }).then(function resolve(msg){
+
+            console.log('activities---',msg);
+            oHelpers.sendResponse(paramResponse,200,msg);
+        },function reject(er){
+            oHelpers.sendResponse(paramResponse,501,er);
+        });
+
     }
 });
 
