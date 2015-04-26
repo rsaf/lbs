@@ -6,6 +6,7 @@ var fs = require('fs');
 module.exports = function (paramService, esbMessage) {
   var homeRouter = paramService.Router();
 
+
   homeRouter.get('/search/:keyword.json', function (paramRequest, paramResponse, paramNext) {
 
     var keyword = paramRequest.params.keyword;
@@ -53,9 +54,7 @@ module.exports = function (paramService, esbMessage) {
 
   });
 
-
-
-
+  console.log('\nsch: getting security dependencies ...');
   var userloginVerifier = null;
   var registerUzer = null;
   var sessionUser = null;
@@ -63,6 +62,7 @@ module.exports = function (paramService, esbMessage) {
   var createUser = null;
   var APILoginVerifier = null;
   var organizationUsers = null;
+  var registerAndAssociateUser = null;
 
   var m1 = {
     "ns": 'scm',
@@ -111,12 +111,18 @@ module.exports = function (paramService, esbMessage) {
   };
   var p7 = esbMessage(m7);
 
+  var m8 = {
+    "ns": 'scm',
+    "op": 'getRegisterWithCallback',
+    "pl": null
+  };
+  var p8 = esbMessage(m8);
 
-  //console.log('\nsch: getting security dependencies ...');
-  q.all([p1, p2, p3, p4, p5, p6, p7]).then(function (r) {
+
+  q.all([p1, p2, p3, p4, p5, p6, p7, p8]).then(function (r) {
 
 
-      //console.log(r);
+     // console.log(r);
       userloginVerifier = r[0].pl.fn;
       registerUzer = r[1].pl.fn;
       sessionUser = r[2].pl.fn;
@@ -124,12 +130,39 @@ module.exports = function (paramService, esbMessage) {
       createUser = r[4].pl.fn;
       APILoginVerifier = r[5].pl.fn;
       organizationUsers = r[6].pl.fn;
+      registerAndAssociateUser = r[7].pl.fn;
 
       homeRouter.post('/login.json', userloginVerifier());
       homeRouter.post('/registration.json',  registerUzer());
       //@todo: have this endpoint change owner ship of the response using
       //  a not yet created function in bmm to change ownership of response
-      homeRouter.post('/registrationandaccociate.json',  registerUzer());
+      homeRouter.post('/registrationandassociate/:responseCode.json',  function(paramRequest, paramResponse){
+        registerAndAssociateUser()(paramRequest, paramResponse, function(req,res,user){
+          var code = paramRequest.params.responseCode;
+          if(code && user)
+          {
+            esbMessage({
+              "ns": 'bmm',
+              "op": 'bmm_associate_response_with_user',
+              "pl": {
+                rc:code,
+                user:user.pl,
+                registerResponse:user
+              }
+            }).then(function resolve(r){
+              paramResponse.writeHead(200, {"Content-Type": "application/json"});
+              paramResponse.end(JSON.stringify(r.pl.registerResponse));
+            }  ,  function fail(r){
+              paramResponse.writeHead(1005, {"Content-Type": "application/json"});
+              paramResponse.end(JSON.stringify(r.pl.registerResponse));
+            });
+          }
+          else
+          {
+
+          }
+        });
+      });
       homeRouter.get('/user.json', sessionUser());
       homeRouter.get('/logout.json', logoutUser());
       homeRouter.post('/user.json', createUser());
@@ -210,12 +243,7 @@ module.exports = function (paramService, esbMessage) {
                   });
               });
 
-          }
-
-      );
-
-
-
+          });
 
       homeRouter.get('/act.json', function (paramRequest, paramResponse, paramNext) {
         var m = {};
@@ -317,7 +345,7 @@ module.exports = function (paramService, esbMessage) {
             }
           );
         }
-        //gets a list of responses (based on login or session id)
+      //gets a list of responses (based on login or session id)
       homeRouter.post('/responses.json', function (paramRequest, paramResponse, paramNext) {
         var m = {
           pl: {}
@@ -389,9 +417,6 @@ module.exports = function (paramService, esbMessage) {
             paramResponse.end(JSON.stringify(r));
           });
       });
-
-
-
       homeRouter.post('/uploadphoto.json', function(paramRequest, paramResponse){
 
         console.log('uploading image from response form--------')
@@ -461,10 +486,9 @@ module.exports = function (paramService, esbMessage) {
           });
         });
       });
-
     })
     .fail(function (err) {
-      console.log('error: ' + err);
+      console.log('error getting security dependencies..: ' + err);
     });
 
   return homeRouter;

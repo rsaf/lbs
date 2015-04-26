@@ -94,6 +94,30 @@ module.exports = function(paramService, esbMessage){
       }
       return Q.all(promises);
     }).then(function(ret) {
+            if(dbRequest._doc && dbRequest._doc.rtr == "Activity" && //request is an activity publish request
+                dbRequest._doc.ei && dbRequest._doc.ei.length>0 && dbRequest._doc.ei[0].ei !== undefined) //publish request has an activity code
+            {
+                //pregenerate responses if they exist
+                console.log('Proceeding to pregenerate responses');
+                var m_p = {
+                    ns: 'bmm',
+                    op: 'bmm_import_responses_data',
+                    activityCode: dbRequest._doc.ei[0].ei,
+                    loginName : m.pl.loginName,
+                    currentOrganization : m.pl.currentOrganization,
+                    transactionid: m.pl.transactionid
+                };
+                esbMessage(m_p)
+                    .then(function onResolve(r){
+                        console.log("Resolved response pregeneration with response: ",r);
+                        return ret;
+                    },function onRejected(r){
+                        console.log("Failed response pregeneration with respnose: ",r);
+                        return ret;
+                    });
+            }
+            else return true;
+    }).then(function(ret) {
       return _commitTransaction({pl:{transactionid:m.pl.transactionid}});
     }).then(function(ret) {
       if(!request.rs){

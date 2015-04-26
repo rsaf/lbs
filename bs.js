@@ -72,7 +72,8 @@ module.exports.startBS = function(){
 
         return Q.all([p0, p1, p2, p3,p4]).then(function (r) {
             console.log('\nBS: getting BS dependencies ...');
-            //console.log(r);
+          //  console.log(r);
+
             bsPort = r[0].pl.fn;
             scmPassportObject = r[1].pl.fn;
             olmRequestLoggerFunction = r[2].pl.fn;
