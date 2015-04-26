@@ -6,6 +6,7 @@ var fs = require('fs');
 module.exports = function (paramService, esbMessage) {
   var homeRouter = paramService.Router();
 
+
   homeRouter.get('/search/:keyword.json', function (paramRequest, paramResponse, paramNext) {
 
     var keyword = paramRequest.params.keyword;
@@ -53,9 +54,7 @@ module.exports = function (paramService, esbMessage) {
 
   });
 
-
-
-
+  console.log('\nsch: getting security dependencies ...');
   var userloginVerifier = null;
   var registerUzer = null;
   var sessionUser = null;
@@ -120,11 +119,10 @@ module.exports = function (paramService, esbMessage) {
   var p8 = esbMessage(m8);
 
 
-  //console.log('\nsch: getting security dependencies ...');
   q.all([p1, p2, p3, p4, p5, p6, p7, p8]).then(function (r) {
 
 
-      //console.log(r);
+     // console.log(r);
       userloginVerifier = r[0].pl.fn;
       registerUzer = r[1].pl.fn;
       sessionUser = r[2].pl.fn;
@@ -245,12 +243,7 @@ module.exports = function (paramService, esbMessage) {
                   });
               });
 
-          }
-
-      );
-
-
-
+          });
 
       homeRouter.get('/act.json', function (paramRequest, paramResponse, paramNext) {
         var m = {};
@@ -352,7 +345,7 @@ module.exports = function (paramService, esbMessage) {
             }
           );
         }
-        //gets a list of responses (based on login or session id)
+      //gets a list of responses (based on login or session id)
       homeRouter.post('/responses.json', function (paramRequest, paramResponse, paramNext) {
         var m = {
           pl: {}
@@ -424,9 +417,6 @@ module.exports = function (paramService, esbMessage) {
             paramResponse.end(JSON.stringify(r));
           });
       });
-
-
-
       homeRouter.post('/uploadphoto.json', function(paramRequest, paramResponse){
 
         console.log('uploading image from response form--------')
@@ -496,10 +486,9 @@ module.exports = function (paramService, esbMessage) {
           });
         });
       });
-
     })
     .fail(function (err) {
-      console.log('error: ' + err);
+      console.log('error getting security dependencies..: ' + err);
     });
 
   return homeRouter;

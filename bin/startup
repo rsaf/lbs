@@ -75,7 +75,7 @@ var bsPromise = bss.startBS().then(function (r) {
     console.log('Bootstrapper: system boot strapping took ' + ((endTime.getTime() - startTime.getTime()) / 1000) + ' seconds \n\n');
 
 }).fail(function (r) {
-    console.log('starting ESB failed with error message: ' + r)
+    console.log('starting BS failed with error message: ' + r)
 });
 
 
