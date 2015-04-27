@@ -175,25 +175,38 @@ module.exports = function(paramService,  esbMessage){
     });
   });
 
-  serviceManagementRouter.post('/:serviceCode/:responseCode/perform.json', function(paramRequest, paramResponse){
-    var rc = paramRequest.params.responseCode;
-    var sv = paramRequest.params.serviceCode;
+  serviceManagementRouter.post('/perform.json', function(paramRequest, paramResponse){
+    var rc = paramRequest.body.responseCode;
+    var sv = paramRequest.body.serviceCode;
     console.log("Hitting perform endpoint with ",sv,"fulfilling",rc);
-    return _onServicePerformed(rc,sv,paramRequest.user)
-        //Return the payload constructed by the helper
-        .then(function resolve(r){
-          console.log("Resolving performance");
-          return r;
-        }  ,  function failure(r){
-          console.log("Rejecting performance");
+    q().then(function() {
+      return _onServicePerformed(rc, sv, paramRequest.user)
+    })
+      //Return the payload constructed by the helper
+        .then(function resolve(r) {
+          oHelpers.sendResponse(paramResponse,200,r);
           return r;
         })
+        .fail(function failure(r) {
+          oHelpers.sendResponse(paramResponse,501,r);
+          return r;
+        });
   })
 
   function _onServicePerformed(responseCode, serviceCode, user){
     var ln = user && user.lanzheng?user.lanzheng.loginName:undefined;
     var co = user && user.lanzheng?user.lanzheng.currentOrganization:undefined;
     var service = undefined;
+    var enq = undefined;
+    var idx = undefined;
+
+    function findFirstIndex(array, callback){
+      for(var i = 0; i < array.length; i++)
+      {
+        if(callback(array[i])) return i;
+      }
+      return -1;
+    }
     //TODO - Wrap in a transaction; Touch SMM & FMM as needed
     return q()
         //GET SERVICE INFO
@@ -208,9 +221,9 @@ module.exports = function(paramService,  esbMessage){
             }
           })
         })
-        //FETCH RESPONSE STATUS FROM CODE
+        //FETCH RESPONSE STATUS FROM CODEs
         .then(function(serviceResponse){
-          service = serviceResponse.pl;
+          service = serviceResponse.pl.toObject();
           return esbMessage({
             ns : "bmm",
             op : "bmm_getResponse",
@@ -223,23 +236,25 @@ module.exports = function(paramService,  esbMessage){
         })
         //UPDATE RESPONSE STATUS TO 'PERFORMED'
         .then(function(response){
-          var idx = response && response.sb && response.sb.length > 1
-              ? response.sb.findIndex(function(e){return e.svid == service && e.status == "ISSUED"})
+          idx = response && response.sb && response.sb.length > 0
+              ? findFirstIndex(response.sb,function(e){return (true || e.svid == service._id) && e.status == "ISSUED"})
               : -1;
-          if(idx > 0)
+          if(idx >= 0)
           {
             response.sb[idx].status = "PERFORMED";
+            response.sb = response.sb[idx]
+            var rpl = response;
             return esbMessage({
               "ns" : "bmm",
               "op" : "bmm_persistResponse",
               "pl" : {
-                sb : response.sb,
+                response : rpl,
                 loginName : ln,
                 currentOrganization : co
               }
             });
           }
-          else q.reject({pl:null, er:{em:"Invalid service performance - request not issued",ec:1567}});
+          else throw {pl:null,er:{em:"Invalid service performance - request not issued",ec:1567}};
         })
         //PROCESS PERFORMANCE
         .then(function(esbResponse){
@@ -260,51 +275,54 @@ module.exports = function(paramService,  esbMessage){
         })
         //UPDATE RESPONSE STATUS TO 'PROCESSED'
         .then(function(response){
-          var idx = response && response.sb && response.sb.length > 1
-              ? response.sb.findIndex(function(e){return e.svid == service && e.status == "PERFORMED"})
+          idx = response && response.sb && response.sb.length > 0
+              ? findFirstIndex(response.sb, function(e){
+            return (true || e.svid == service._id) && e.status == "PERFORMED"})
               : -1;
-          if(idx > 0) //This service has been processed and seen satisfactory
+          if(idx >= 0) //This service has been processed and seen satisfactory
           {
             response.sb[idx].status = "PROCESSED";
+            response.sb = response.sb[idx];
             return esbMessage({
               "ns" : "bmm",
               "op" : "bmm_persistResponse",
               "pl" : {
-                sb : response.sb,
-                loginName : undefined,
-                currentOrganization : undefined
+                response : response,
+                loginName : ln,
+                currentOrganization : co
               }
             })
           }
-          else  q.reject({pl:null, er:{em:"Invalid service performance - failed processing",ec:1568}});
+          else  throw {pl:null, er:{em:"Invalid service performance - failed processing",ec:1568}};
         })
         //SCHEDULE NEXT ORDER and OKAY THE PREVIOUS SERVICE
         .then(function(esbResponse){
-          _scheduleNextOrder(response, idx+1);
-          return {acknowledged:true, processed:true}
+          enq = esbResponse;
+          _scheduleNextOrder(enq, idx+1);
+          return true;
         })
         //RESOLVE
         .then(function resolve(r){
           return {pl:r,er:null};
-        }  ,  function failure(r){
+        })
+        .fail(function failure(r){
           return r;
         });
   }
   function _scheduleNextOrder(response, index){
-    console.log("SCHEDULING NEXT ORDER");
     var ln = undefined;
     var co = undefined;
     //TODO - Wrap in a Transaction!!!
-    q()
+    return q()
     .then(function(){
-      if(response)
-        q.reject({pl:null,er:{ec:1920,em:"No response passed."}});
+      if(!response)
+        throw {pl:null,er:{ec:1920,em:"No response passed."}};
       else if(!response.sb || response.sb.length == 0)
-        q.reject({pl:null,er:{ec:1921,em:"No response services available."}});
+        throw {pl:null,er:{ec:1921,em:"No response services available."}};
       else if(!response.sb.length > index || !response.sb[index])
-        q.reject({pl:null,er:{ec:1922,em:"Index not availabe in response services list."}});
+        throw {pl:null,er:{ec:1922,em:"Index not availabe in response services list."}};
       else if(response.sb[index].status != "PENDING")
-        q.reject({pl:null,er:{ec:1923,em:"Attempting to issue a "+response.sb[index].status+" service. Must be PENDING."}});
+        throw {pl:null,er:{ec:1923,em:"Attempting to issue a "+response.sb[index].status+" service. Must be PENDING."}};
       else return true;
     })
     .then(function(){
@@ -329,7 +347,7 @@ module.exports = function(paramService,  esbMessage){
       return {pl:r,er:null};
     }  ,  function failure(r){
       //TODO - Handle failure of next order
-      console.log("FAILED TO SCHEDULE NEXT ORDER.");
+      console.log("FAILED TO SCHEDULE NEXT ORDER.",r);
       return r;
     })
   }
