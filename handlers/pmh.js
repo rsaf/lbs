@@ -43,34 +43,6 @@ module.exports = function (paramPS, esbMessage) {
     });
 
 
-    ///workspace/photoservices/corrections/idphotos/lzcode.json
-    //psRouter.get('/corrections/idphotos/:lzcode.json', function (paramRequest, paramResponse, paramNext) {
-    //
-    //    // oHelpers.sendResponse(paramResponse, 200, {pl: 'get photo by lzcode', er: null});
-    //
-    //
-    //    var m = {
-    //        "ns": "pmm",
-    //        "op": "pmm_getPhotosForCorrection",
-    //        "pl": {
-    //            ow: {
-    //                uid: paramRequest.user.lanzheng.loginName,
-    //                oid: paramRequest.user.currentOrganization
-    //            }
-    //        }
-    //    };
-    //
-    //    esbMessage(m)
-    //        .then(function (r) {
-    //            oHelpers.sendResponse(paramResponse, 200, r);
-    //        })
-    //        .fail(function (r) {
-    //
-    //            console.log('pmh error---', r);
-    //            oHelpers.sendResponse(paramResponse, 501, r);
-    //        });
-    //
-    //});
 
     psRouter.get('/corrections/idphotos/:lzcode.json', function (paramRequest, paramResponse, paramNext) {
 
@@ -99,7 +71,6 @@ module.exports = function (paramPS, esbMessage) {
             });
 
     });
-
 
     psRouter.get('/corrections/:phototype/:lzcode.json', function (paramRequest, paramResponse) {
 
@@ -601,12 +572,10 @@ psRouter.get('/idphotos.json', function (paramRequest, paramResponse) {
 });
 
 // download image for correction
-psRouter.get('/todo/:foldername.json', function (paramRequest, paramResponse) {
+psRouter.get('/todo/:activityCode.json', function (paramRequest, paramResponse) {
 
 
-    console.log('---------------------------------------------');
-    console.log('pmh downloading photos for correction--------------');
-    console.log('---------------------------------------------');
+    var ac = paramRequest.params.activityCode;
 
     var m = {
         "ns": "pmm",
@@ -615,14 +584,15 @@ psRouter.get('/todo/:foldername.json', function (paramRequest, paramResponse) {
             ow: {
                 uid: paramRequest.user.lanzheng.loginName,
                 oid: paramRequest.user.currentOrganization
-            }
+            },
+            ac:ac
         }
     };
 
     esbMessage(m)
         .then(function (r) {
 
-            console.log('pmh collected photos for correction error---', r);
+            console.log('pmh collected photos for correction---', r);
 
             oHelpers.sendResponse(paramResponse, 200, r);
         })
@@ -634,7 +604,7 @@ psRouter.get('/todo/:foldername.json', function (paramRequest, paramResponse) {
 
 });
 
-psRouter.post('/ack/:foldername/:photoname.json', function (paramRequest, paramResponse) {
+psRouter.post('/ack/:activityCode/:photoname.json', function (paramRequest, paramResponse) {
     //foldername
     //photoname
     console.log(paramRequest.body);
@@ -650,14 +620,16 @@ psRouter.post('/ack/:foldername/:photoname.json', function (paramRequest, paramR
 });
 
 // correction failed
-psRouter.post('/fail/:foldername/:photoname.json', function (paramRequest, paramResponse) {
+psRouter.post('/fail/:activityCode/:photoname.json', function (paramRequest, paramResponse) {
     //foldername
     //photoname
     console.log('in fail function ...');
 
-    var photoUrl = paramRequest.params.photoname;
+    var photoUrl = paramRequest.body.pl.photoname;
+    var ac =  paramRequest.body.pl.foldername;
 
 
+    console.log('--paramRequest.body---',paramRequest.body);
     console.log('failed photo url---', photoUrl);
 
     //{uuid: uri.slice(0, uri.lastIndexOf("."));
@@ -666,8 +638,11 @@ psRouter.post('/fail/:foldername/:photoname.json', function (paramRequest, param
     var m = {
         ns: 'pmm',
         op: "pmm_SetCorrectionPhotoAsFailed",
-        pl: {photourl: '/photos/' + photoUrl}
+        pl: {uri: '/photos/' + photoUrl, ac:ac}
     }
+
+
+    ///photos/4cf9598d-621d-4d49-93b9-f60c1ef8c137.jpeg
 
     console.log('m----', m);
 
@@ -675,7 +650,7 @@ psRouter.post('/fail/:foldername/:photoname.json', function (paramRequest, param
         .then(function (r) {
 
 
-            console.log('photo marked as correction failed');
+            console.log('photo marked as correction failed, successful');
 
             paramResponse.writeHead(200, {"Content-Type": "application/json"});
             paramResponse.end(JSON.stringify(r));
@@ -690,18 +665,33 @@ psRouter.post('/fail/:foldername/:photoname.json', function (paramRequest, param
             oHelpers.sendResponse(paramResponse, 404, r);
         });
 
-
 });
 
 // correction succesfull
-psRouter.post('/done/:foldername/:photoname.json', function (paramRequest, paramResponse) {
+psRouter.post('/done/:activityCode/:photoname.json', function (paramRequest, paramResponse) {
     //checksum
     //folerName
     //photoName
     //photoData
-    console.log('in done function ...');
-    var m = {ns: 'pmm', op: 'pmm_uploadPhoto', pl: null};
-    m.pl = {
+
+
+
+    //@todo get the uri from the payload(photo name) and get the corresponding response code for that image from pmm,
+    //@todo... then save the new image to the bucket with response and activity codes set,
+    //@todo....then update the image corresponding to this corrected image on bmm responses
+
+
+
+    var m1 = {  ns: 'pmm',
+                op: 'pmm_getPhotoByUri',
+                pl:{ac:null,
+                    uri:null
+                }
+            }
+
+
+    var m2 = {ns: 'pmm', op: 'pmm_uploadPhoto', pl: null};
+    m2.pl = {
         uID: paramRequest.user.lanzheng.loginName,
         oID: paramRequest.user.currentOrganization,
         ow: {//owner of the document, this person can fill out the form is does not have to be the same person as the one who created the response
@@ -722,13 +712,24 @@ psRouter.post('/done/:foldername/:photoname.json', function (paramRequest, param
             ofs: null, // 文件大小:86Kb //28 original photo size 初始照片文件大小      ===
             ifm: null  // 27 initial format 初始照片格式                              ===
         },
-        uri: null // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
+        uri: null, // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
+        ac:null,
+        rc:null
     };
+
+
+
+    var m3 = {
+            ns: 'bmm',
+            op: 'bmm_updateResponsePhotoByResponseCode',
+            pl:{rc:null,
+                uri:null
+            }
+    }
+
 
     var form = new formidable.IncomingForm();
     form.parse(paramRequest, function (err, fields, files) {
-        console.log(fields);
-        console.log(files);
 
 
         var old_path = files.file.path,
@@ -736,42 +737,86 @@ psRouter.post('/done/:foldername/:photoname.json', function (paramRequest, param
             file_ext = files.file.name.split('.').pop(),
             file_name = files.file.name;
 
-        console.log(fields);
+
+        var jsonData = JSON.parse( fields.json);
+
+        console.log('field------',fields);
+        console.log('jsonData------',jsonData);
 
         fs.readFile(old_path, function (err, data) {
             console.log(data);
-            m.pl.photoData = data;
-            m.pl.pp.ifm = file_ext;
-            m.pl.pp.ofs = file_size;
-            m.pl.pp.ign = file_name;
-            m.pl.pp.igt = fields['imgInfo[1][value]'];
-            m.pl.pp.igs = fields['imgInfo[2][value]'];
-            m.pl.pp.isl = fields['imgInfo[3][value]'];
-            m.pl.pp.rm = fields['imgInfo[4][value]'];
-            m.pl.pp.isd = Date.now();
-            m.pl.pp.irs = fields['imgInfo[6][value]'];
+            m2.pl.photoData = data;
+            m2.pl.pp.ifm = file_ext;
+            m2.pl.pp.ofs = file_size;
+            m2.pl.pp.ign = file_name;
+            m2.pl.pp.isd = Date.now();
 
             console.log(data);
 
-            var r = {pl: null, er: null};
-            if (data) {
-                r.pl = {rs: true};
-            }
-            else {
-                r.pl = {rs: false};
-            }
-            oHelpers.sendResponse(paramResponse, 200, r);
 
-            esbMessage(m)
+
+            m1.pl.ac = jsonData.pl.foldername;
+            m1.pl.uri = '/photos/'+jsonData.pl.photoname;
+
+            m2.pl.ac =  jsonData.pl.foldername;
+
+
+            console.log('m1---',m1);
+
+            esbMessage(m1)
                 .then(function (r) {
 
-                    console.log(' pmh --corrected photo saveed to bucket')
-                    //oHelpers.sendResponse(paramResponse, 200, r);//@todo this does not need response to client
+
+                    m2.pl.rc = r.pl.rc;
+                    m3.pl.rc = r.pl.rc;
+
+                    console.log(' pmh ---got photo by uri');
+
+
+                    esbMessage(m2)
+                        .then(function (r) {
+
+                            m3.pl.uri = r.pl.uri;
+
+                            console.log(' pmh save corrected photo saved to bucket');
+
+                            //oHelpers.sendResponse(paramResponse, 200, r);//@todo this does not need response to client
+                        })
+                        .then(function(){
+
+
+                            esbMessage(m3)
+                                .then(function (r) {
+
+                                    console.log(' pmh updated response photo successful--');
+
+
+                                    var r = {pl: null,rs:true, er: null};
+
+                                   oHelpers.sendResponse(paramResponse, 200, r);//@todo this does not need response to client
+
+                                })
+                                .fail(function(r){
+                                    console.log(' pmh --failed to update response photo--',r);
+
+                                    //var r = {pl: null, er: {ec: 404, em: "could not save image"}};
+
+                                })
+
+
+                        })
+                        .fail(function (r) {
+                            console.log(' pmh --failed to save corrected photo to bucket----',r)
+
+                            var r = {pl: null, er: {ec: 404, em: "could not save image"}};
+                            //oHelpers.sendResponse(paramResponse, 404, r); @todo this does not need response to client
+                        });
+
+
                 })
                 .fail(function (r) {
 
-
-                    console.log(' pmh --failed to save corrected photo to bucket')
+                    console.log(' pmh --failed to get photo by photo uri')
 
                     var r = {pl: null, er: {ec: 404, em: "could not save image"}};
                     //oHelpers.sendResponse(paramResponse, 404, r); @todo this does not need response to client
