@@ -107,6 +107,7 @@ module.exports = function(paramService, esbMessage)
  * makes payment to account ?? for all the services
  */
   fmmRouter.post('/responsepayment.json', function(paramRequest, paramResponse, paramNext){
+      console.log("HIT THIS ENDPOINT");
     var varAccountID  = null,
         m = {},
         transactionid = false,
@@ -194,6 +195,7 @@ module.exports = function(paramService, esbMessage)
       return _commitTransaction({pl:{transactionid : transactionid}});
     })
     .then(function(){
+      _issueFirstOrderForResponse(paramRequest);
       oHelpers.sendResponse(paramResponse,200,r);
     })
     .then(null,function reject(err){
@@ -209,6 +211,92 @@ module.exports = function(paramService, esbMessage)
       oHelpers.sendResponse(paramResponse,code,r);
     });
   });
-  
+
+    function _issueFirstOrderForResponse(request){
+        var responseInfo = undefined;
+        var ln = request.user.lanzheng.loginName;
+        var org = request.user.currentOrganization;
+        var json = JSON.parse(request.body.json);
+        var responseCode = json.pl.code;
+        var transactionid = undefined;
+        var dbEntity = undefined;
+        var jsonEntity = undefined;
+        console.log("NOW I CAN START OFF THE CHAIN OF EVENTS for RESPONSE",responseCode);
+        return q()
+            //INIT TRANSACTION
+            .then(function(){
+                return esbMessage({  //and a transactionid
+                    op:"createTransaction",
+                    pl:{
+                        loginName : ln,
+                        currentOrganization : org,
+                        transaction:{
+                            description:'Notify service point of response intent'
+                            ,modules:['bmm','smm']
+                        }
+                    }
+                })
+            })
+            //FETCH RESPONSE STATUS FROM CODEs
+            .then(function(tid){
+                console.log("FETCH RESPONSE STATUS FROM CODES");
+                transactionid = tid;
+                return esbMessage({
+                    ns : "bmm",
+                    op : "bmm_getResponse",
+                    pl : {
+                        code : responseCode,
+                        loginName : ln,
+                        currentOrganization : org,
+                        transactionid : transactionid
+                    }
+                });
+            })
+            //SPAWN BUSINESS RECORD
+            .then(function(esbResponse) {
+                console.log("SPAWN BUSINESS RECORD");
+                responseInfo = esbResponse;
+                return esbMessage({
+                    ns: "smm",
+                    op: "smm_spawnBusinessRecord",
+                    pl: {
+                        response: responseInfo,
+                        loginName: ln,
+                        currentOrganization: org,
+                        transactionid: transactionid
+                    }
+                })
+            })
+            //SET FIRST SERVICE TO 'ISSUED'
+            .then(function(){
+                console.log("SETTING FIRST SERVICE TO 'ISSUED'");
+                if(!(responseInfo && responseInfo.sb && responseInfo.sb.length > 0)) return false;
+                responseInfo.sb[0].status = "ISSUED";
+                responseInfo.sb = responseInfo.sb[0];
+                console.log("RI = ",responseInfo)
+                return esbMessage({
+                    "ns": "bmm",
+                    "op": "bmm_persistResponse",
+                    "pl": {
+                        response: responseInfo,
+                        loginName : ln,
+                        currentOrganization : org
+                    }
+                })
+            })
+            //COMMIT TRANSACTION
+            .then(function (){
+                if(transactionid){
+                    return _commitTransaction({pl:{transactionid : transactionid}});
+                }
+                return false;
+            })
+            //EXIT
+            .then(function resolve(r){
+                console.log("Chain of events resolved! - ",r);
+            }  ,  function failure(r){
+                console.log("Unable to set chain of events into play:",r);
+            });
+    }
   return fmmRouter;
 };
