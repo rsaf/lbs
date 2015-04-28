@@ -221,7 +221,7 @@ module.exports = function(paramService, esbMessage)
         var transactionid = undefined;
         var dbEntity = undefined;
         var jsonEntity = undefined;
-        console.log("NOW I CAN START OFF THE CHAIN OF EVENTS for RESPONSE",responseCode);
+        console.log("Issuing first order for RESPONSE",responseCode);
         return q()
             //INIT TRANSACTION
             .then(function(){
@@ -239,7 +239,6 @@ module.exports = function(paramService, esbMessage)
             })
             //FETCH RESPONSE STATUS FROM CODEs
             .then(function(tid){
-                console.log("FETCH RESPONSE STATUS FROM CODES");
                 transactionid = tid;
                 return esbMessage({
                     ns : "bmm",
@@ -254,13 +253,17 @@ module.exports = function(paramService, esbMessage)
             })
             //SPAWN BUSINESS RECORD
             .then(function(esbResponse) {
-                console.log("SPAWN BUSINESS RECORD");
                 responseInfo = esbResponse;
                 return esbMessage({
                     ns: "smm",
                     op: "smm_spawnBusinessRecord",
                     pl: {
-                        response: responseInfo,
+                        response: {
+                            //TODO unhardcode this
+                            groupName : "FEMA",
+                            description : "Disaster Relief",
+                            memberCount : 300
+                        },
                         loginName: ln,
                         currentOrganization: org,
                         transactionid: transactionid
@@ -269,11 +272,9 @@ module.exports = function(paramService, esbMessage)
             })
             //SET FIRST SERVICE TO 'ISSUED'
             .then(function(){
-                console.log("SETTING FIRST SERVICE TO 'ISSUED'");
                 if(!(responseInfo && responseInfo.sb && responseInfo.sb.length > 0)) return false;
                 responseInfo.sb[0].status = "ISSUED";
                 responseInfo.sb = responseInfo.sb[0];
-                console.log("RI = ",responseInfo)
                 return esbMessage({
                     "ns": "bmm",
                     "op": "bmm_persistResponse",
@@ -287,7 +288,8 @@ module.exports = function(paramService, esbMessage)
             //COMMIT TRANSACTION
             .then(function (){
                 if(transactionid){
-                    return _commitTransaction({pl:{transactionid : transactionid}});
+                    console.log("COMMITTING TRANSACTION",transactionid.pl.transaction._id);
+                    return _commitTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
                 }
                 return false;
             })
@@ -295,7 +297,8 @@ module.exports = function(paramService, esbMessage)
             .then(function resolve(r){
                 console.log("Chain of events resolved! - ",r);
             }  ,  function failure(r){
-                console.log("Unable to set chain of events into play:",r);
+                console.log("Unable to issue order (rolling back):",r);
+                return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
             });
     }
   return fmmRouter;

@@ -52,6 +52,22 @@ module.exports = function(paramService,  esbMessage){
     m.op='commitTransaction';
     return esbMessage(m);
   }
+  function _rollBackTransaction2(m){
+    return q()
+        .then(function(){
+          return q.all([
+            esbMessage({op:'smm_rollback',pl:{transaction:{_id:m.pl.transactionid}}})
+            ,esbMessage({op:'bmm_rollback',pl:{transactionid:m.pl.transactionid}})
+          ]);
+        })
+        .then(function(){
+          return q.resolve('ok');
+        })
+        .then(null,function reject(err){
+          return q.reject('in smh _rollBackTransaction2:',err);
+        });
+  }
+
   function _rollBackTransaction(m){
     m.pl.transaction = {
       _id:m.pl.transactionid
@@ -196,6 +212,7 @@ module.exports = function(paramService,  esbMessage){
   function _onServicePerformed(responseCode, serviceCode, user){
     var ln = user && user.lanzheng?user.lanzheng.loginName:undefined;
     var co = user && user.lanzheng?user.lanzheng.currentOrganization:undefined;
+    var transactionid = undefined;
     var service = undefined;
     var enq = undefined;
     var idx = undefined;
@@ -207,10 +224,26 @@ module.exports = function(paramService,  esbMessage){
       }
       return -1;
     }
-    //TODO - Wrap in a transaction; Touch SMM & FMM as needed
+    //TODO - Touch SMM & FMM as needed
     return q()
-        //GET SERVICE INFO
+        //START TRANSACTION
         .then(function(){
+          return esbMessage({
+            op:"createTransaction",
+            pl:{
+              loginName : ln,
+              currentOrganization : co,
+              transaction:{
+                description:'Record service performance'
+                ,modules:['bmm','smm']
+              }
+            }
+          })
+        })
+        //GET SERVICE INFO
+        .then(function(tid){
+          transactionid = tid.pl.transaction._id;
+          console.log("Performance associated with transaction id = ",transactionid);
           return esbMessage({
             ns : "smm",
             op : "smm_getService",
@@ -258,8 +291,21 @@ module.exports = function(paramService,  esbMessage){
         })
         //PROCESS PERFORMANCE
         .then(function(esbResponse){
-          //TODO add processing logic, if any, here. We assume success. If not, set PERFORMED --> ISSUED and fail the promise.
-          return true;
+          return esbMessage({
+            ns: "smm",
+            op: "smm_spawnBusinessRecord",
+            pl: {
+              response: {
+                //TODO unhardcode this
+                groupName : "FEMA",
+                description : "Disaster Relief",
+                memberCount : 300
+              },
+              loginName: ln,
+              currentOrganization: org,
+              transactionid: transactionid
+            }
+          })
         })
         //FETCH RESPONSE STATUS FROM CODE
         .then(function(processResponse){
@@ -298,15 +344,20 @@ module.exports = function(paramService,  esbMessage){
         //SCHEDULE NEXT ORDER and OKAY THE PREVIOUS SERVICE
         .then(function(esbResponse){
           enq = esbResponse;
-          _scheduleNextOrder(enq, idx+1);
+          if(transactionid){
+            console.log("COMMITTING TRANSACTION",transactionid.pl.transaction._id);
+            return _commitTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
+          }
           return true;
         })
         //RESOLVE
         .then(function resolve(r){
+          _scheduleNextOrder(enq, idx+1);
           return {pl:r,er:null};
         })
         .fail(function failure(r){
-          return r;
+          console.log("Rolling back service performance transaction. Failure : ",r);
+          return _rollBackTransaction2({pl:{transactionid : transactionid.pl.transaction._id}});
         });
   }
   function _scheduleNextOrder(response, index){
