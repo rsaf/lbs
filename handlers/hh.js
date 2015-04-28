@@ -6,6 +6,7 @@ var fs = require('fs');
 module.exports = function (paramService, esbMessage) {
   var homeRouter = paramService.Router();
 
+
   homeRouter.get('/search/:keyword.json', function (paramRequest, paramResponse, paramNext) {
 
     var keyword = paramRequest.params.keyword;
@@ -53,9 +54,7 @@ module.exports = function (paramService, esbMessage) {
 
   });
 
-
-
-
+  console.log('\nsch: getting security dependencies ...');
   var userloginVerifier = null;
   var registerUzer = null;
   var sessionUser = null;
@@ -120,14 +119,10 @@ module.exports = function (paramService, esbMessage) {
   var p8 = esbMessage(m8);
 
 
-  //console.log('\nsch: getting security dependencies ...');
   q.all([p1, p2, p3, p4, p5, p6, p7, p8]).then(function (r) {
 
 
-
-    console.log('register user-----hh.js');
-
-      //console.log(r);
+     // console.log(r);
       userloginVerifier = r[0].pl.fn;
       registerUzer = r[1].pl.fn;
       sessionUser = r[2].pl.fn;
@@ -171,7 +166,85 @@ module.exports = function (paramService, esbMessage) {
       homeRouter.get('/user.json', sessionUser());
       homeRouter.get('/logout.json', logoutUser());
       homeRouter.post('/user.json', createUser());
-      homeRouter.post('/apilogin.json', APILoginVerifier());
+      homeRouter.post('/apilogin.json', APILoginVerifier(),  function(paramRequest, paramResponse){
+              // Show the upload form
+
+              console.log('in done function ...');
+              var m = {ns: 'dmm',op:'dmm_uploadPhoto', pl: null};
+              m.pl = {
+                  //uID:paramRequest.user.lanzheng.loginName,
+                 // oID:paramRequest.user.currentOrganization,
+                  photoData:null,
+                  sgc:10,
+                  stc:100,
+                  pp:{ //other photos properties
+                      ign:null, // 照片名称: image name                                      ===
+                      igt:null, // 主题类型: 旅游照片 image type                              ===
+                      igs:null, // 拍摄方式: 单板相机 image source                            ===
+                      isl:null, // 拍摄地点:  image shooting location                        ===
+                      rm:null,  // 照片描述: // 30 remarks 备注                               ===
+                      isd:null, // 拍摄日期: // image shooting date                          ?
+                      irs:null, // 像素尺寸:84mmX105mm image resolution size                  ?
+                      ofs:null, // 文件大小:86Kb //28 original photo size 初始照片文件大小      ===
+                      ifm:null  // 27 initial format 初始照片格式                              ===
+                  },
+                  uri: null // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
+              };
+              var r = {pl: null, er: null};
+              r.pl = {rs:false};
+
+
+              var form = new formidable.IncomingForm();
+              form.parse(paramRequest, function(err, fields, files) {
+                  console.log(fields);
+                  console.log(files);
+
+
+                  var old_path = files.file.path,
+                      file_size = files.file.size,
+                      file_ext = files.file.name.split('.').pop(),
+                      file_name =files.file.name;
+
+                  console.log(fields);
+
+                  fs.readFile(old_path, function(err, data) {
+                      console.log(data);
+                      m.pl.photoData= data;
+                      //m.pl.pp.ifm = file_ext;
+                      m.pl.pp.ofs = file_size;
+                      m.pl.pp.ign = file_name;
+                      //m.pl.pp.igt = fields['imgInfo[1][value]'];
+                      //m.pl.pp.igs = fields['imgInfo[2][value]'];
+                      //m.pl.pp.isl = fields['imgInfo[3][value]'];
+                      //m.pl.pp.rm  = fields['imgInfo[4][value]'];
+                      //m.pl.pp.isd = Date.now();
+                      //m.pl.pp.irs = fields['imgInfo[6][value]'];
+
+                      console.log(data);
+
+
+                      if (data){
+                          r.pl.rs = true;
+                      }
+                      else {
+                          r.pl.rs = false
+                      }
+                      oHelpers.sendResponse(paramResponse, 200, r);
+
+                      //    esbMessage(m)
+                      //        .then(function (r) {
+                      //            oHelpers.sendResponse(paramResponse, 200, r);
+                      //        })
+                      //        .fail(function (r) {
+                      //            var r = {pl: null, er: {ec: 404, em: "could not save image"}};
+                      //            oHelpers.sendResponse(paramResponse, 404, r);
+                      //        });
+
+                  });
+              });
+
+          });
+
       homeRouter.get('/act.json', function (paramRequest, paramResponse, paramNext) {
         var m = {};
         //formHtml
@@ -272,7 +345,7 @@ module.exports = function (paramService, esbMessage) {
             }
           );
         }
-        //gets a list of responses (based on login or session id)
+      //gets a list of responses (based on login or session id)
       homeRouter.post('/responses.json', function (paramRequest, paramResponse, paramNext) {
         var m = {
           pl: {}
@@ -313,6 +386,9 @@ module.exports = function (paramService, esbMessage) {
         _persistRespose(req, res, pnext);
       });
       homeRouter.put('/response.json', function (req, res, pnext) {
+
+        console.log('response update-----');
+
         _persistRespose(req, res, pnext);
       });
       //query for services used in a response, put here to prevent login popup
@@ -342,24 +418,69 @@ module.exports = function (paramService, esbMessage) {
           });
       });
       homeRouter.post('/uploadphoto.json', function(paramRequest, paramResponse){
+
+        console.log('uploading image from response form--------')
+
         q()
         .then(function(){
           var form = new formidable.IncomingForm();
           form.parse(paramRequest, function(err, fields, files) {
             var old_path = files.file.path,
             file_ext = files.file.name.split('.').pop();
+            var json = JSON.parse(fields.json);
+            console.log('json-----',json);
+
             fs.readFile(old_path, function(err, data) {
-              var m = {op:"bmm_uploadPhoto",pl:{}};
+              var m = {
+                ns: 'pmm',
+                op:"pmm_uploadPhoto",
+                pl:{pp:{}}
+              };
+
               m.pl.photoData= data;
               m.pl.ifm = file_ext;
+              m.pl.ac = json.ac;
+              m.pl.rc = json.rc;
+              m.pl.ow = json.ow;
+
+
+
               esbMessage(m)
               .then(function(r) {
-                  oHelpers.sendResponse(paramResponse,200,r);
-              })
-              .then(null,function reject(r) {
-                  console.log('bmh error:-----',r);
-                  r = {pl:null, er:{ec:100012,em:"Unable to upload photo."}};
-                  oHelpers.sendResponse(paramResponse,501,r);
+
+                      var tempImage = '/commons/images/IDPhotoSubmitedDemo.png';
+                      var uri_swap = r.pl.uri;
+                      r.pl.uri = tempImage;
+                      r.status = true;
+
+                    oHelpers.sendResponse(paramResponse,200,r);
+
+
+                      var m= {
+                          ns: 'pmm',
+                          op:"pmm_SubmitPhotoToInspection",
+                          pl: r.pl
+                          }
+                      m.pl.uri = uri_swap;
+
+                      esbMessage(m)
+                          .then(function(r) {
+                            //we do not need to send this response back to client browser... Response have already been sent..
+                            //oHelpers.sendResponse(paramResponse,200,r);
+                          })
+                          .then(null,function reject(r) {
+                            console.log('hh error:-----',r);
+                            r = {pl:null, er:{ec:100012,em:"Unable to submit photo to inspection----"}};
+                            //oHelpers.sendResponse(paramResponse,501,r);
+                            //we do not need to send this response back to client browser... Response have already been sent..
+                          });
+
+
+                })
+                .then(null,function reject(r) {
+                    console.log('hh error:-----',r);
+                    r = {pl:null, er:{ec:100012,em:"Unable to upload photo."}};
+                    oHelpers.sendResponse(paramResponse,501,r);
               });
             });
           });
@@ -367,7 +488,7 @@ module.exports = function (paramService, esbMessage) {
       });
     })
     .fail(function (err) {
-      console.log('error: ' + err);
+      console.log('error getting security dependencies..: ' + err);
     });
 
   return homeRouter;

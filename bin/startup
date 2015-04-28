@@ -15,25 +15,32 @@ var bsPromise = bss.startBS().then(function (r) {
     var bssInstance = r.pl.fn;
     var bssPort = r.pl.pt;
 
-    if(cluster.isMaster){
-    console.log('Forking %s worker(s) from master ...', numCPUs);
-        for(var i =0; i < numCPUs; i++){
-            cluster.fork();
-        }
+    bssInstance.listen(bssPort);
+    console.log('BS is now running on port: ', bssPort );
 
-        cluster.on('online', function(worker){
-            console.log('A worker is running on  %s pid ...', worker.process.pid );
-        });
 
-        cluster.on('exit', function (worker){
-       console.log('The worker with %s pid is closed...', worker.process.pid );
-        });
-    }
-    else if (cluster.isWorker){
-        bssInstance.listen(bssPort);
-        console.log('The worker with process id (%s) is is now listening on port (%s) ', cluster.worker.process.pid, bssPort );
-    }
+    //node cluster
+    //if(cluster.isMaster){
+    //console.log('Forking %s worker(s) from master ...', numCPUs);
+    //    for(var i =0; i < numCPUs; i++){
+    //        cluster.fork();
+    //    }
+    //
+    //    cluster.on('online', function(worker){
+    //        console.log('A worker is running on  %s pid ...', worker.process.pid );
+    //    });
+    //
+    //    cluster.on('exit', function (worker){
+    //   console.log('The worker with %s pid is closed...', worker.process.pid );
+    //    });
+    //}
+    //else if (cluster.isWorker){
+    //    bssInstance.listen(bssPort);
+    //    console.log('The worker with process id (%s) is is now listening on port (%s) ', cluster.worker.process.pid, bssPort );
+    //}
 
+
+    //Amazon cluster
     //cluster2, has some bugs .. we are not using it...
     //var c = new cluster({
     //    port: bssPort,
@@ -63,13 +70,12 @@ var bsPromise = bss.startBS().then(function (r) {
     //});
 
     console.log('Bootstrapper: BS cluster is fully configured....');
-
     endTime = new Date();
     console.log('Bootstrapper: system boot strapping commpleted at  ' + endTime.toLocaleString());
     console.log('Bootstrapper: system boot strapping took ' + ((endTime.getTime() - startTime.getTime()) / 1000) + ' seconds \n\n');
 
 }).fail(function (r) {
-    console.log('starting ESB failed with error message: ' + r)
+    console.log('starting BS failed with error message: ' + r)
 });
 
 

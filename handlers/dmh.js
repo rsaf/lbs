@@ -12,33 +12,58 @@ module.exports = function (paramService, esbMessage)
   var photosRouter = paramService.Router();
 
   photosRouter.get('/:photoType.json', function (paramRequest, paramResponse, paramNext) {
-    if (paramRequest.params.photoType === 'idphotos') {
-      oHelpers.sendResponse(paramResponse, 200, idphotos);
-    }
-    else if (paramRequest.params.photoType === 'processing') {
-      oHelpers.sendResponse(paramResponse, 200, processing);
-    }
 
-    else if (paramRequest.params.photoType === 'otherphotos') {
+          var photoType = paramRequest.params.photoType;
+
         var m = {
-            "ns": "dmm",
-            "op": "dmm_getUserPhotos",
-            "pl":null
-        };
-        m.pl = {
-            uID:paramRequest.user.lanzheng.loginName,
-            oID:paramRequest.user.currentOrganization
-        };
-        esbMessage(m)
-            .then(function (r) {
-                oHelpers.sendResponse(paramResponse, 200, r);
-            })
-            .fail(function (r) {
+              "ns": "pmm",
+              "op":null,
+              "pl":{
+                  uID:paramRequest.user.lanzheng.loginName,
+                  oID:paramRequest.user.currentOrganization
+              }
+          };
 
-                oHelpers.sendResponse(paramResponse, 501, r);
-            });
 
-    }
+        if (photoType === 'idphotos') {
+
+            m.pl.ow = { uid: paramRequest.user.lanzheng.loginName,
+                oid: paramRequest.user.currentOrganization
+            }
+
+            m.op =  "pmm_getIdphotosByOwner";
+
+        }
+        else if (photoType === 'processing') {
+
+              m.pl.ow = { uid: paramRequest.user.lanzheng.loginName,
+                            oid: paramRequest.user.currentOrganization
+                        }
+
+              m.op =  "pmm_getUnderProcessingPhotosByOwner";
+
+        }
+
+        else if (photoType === 'otherphotos') {
+
+              m.op =  "dmm_getUserPhotos";
+              m.ns =  "dmm";
+        }
+       else{
+            console.log('unkown photo type-----',photoType);
+            var r = {pl: null, er: {ec: 404, em: "unkown photo type"}};
+            oHelpers.sendResponse(paramResponse, 501, r);
+
+        }
+
+      esbMessage(m)
+              .then(function (r) {
+                  oHelpers.sendResponse(paramResponse, 200, r);
+              })
+              .fail(function (r) {
+
+                  oHelpers.sendResponse(paramResponse, 501, r);
+              });
   });
 
   ///workspace/photos/:photocode.json
@@ -108,6 +133,7 @@ module.exports = function (paramService, esbMessage)
 
       var form = new formidable.IncomingForm();
       form.parse(paramRequest, function(err, fields, files) {
+
         var old_path = files.file.path,
             file_size = files.file.size,
             file_ext = files.file.name.split('.').pop(),
