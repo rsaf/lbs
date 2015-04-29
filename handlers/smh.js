@@ -216,6 +216,7 @@ module.exports = function(paramService,  esbMessage){
     var service = undefined;
     var enq = undefined;
     var idx = undefined;
+    var responseInfo = undefined;
 
     function findFirstIndex(array, callback){
       for(var i = 0; i < array.length; i++)
@@ -227,6 +228,7 @@ module.exports = function(paramService,  esbMessage){
     //TODO - Touch SMM & FMM as needed
     return q()
         //START TRANSACTION
+        /*
         .then(function(){
           return esbMessage({
             op:"createTransaction",
@@ -240,6 +242,7 @@ module.exports = function(paramService,  esbMessage){
             }
           })
         })
+        */
         //GET SERVICE INFO
         .then(function(tid){
           transactionid = tid.pl.transaction._id;
@@ -269,12 +272,13 @@ module.exports = function(paramService,  esbMessage){
         })
         //UPDATE RESPONSE STATUS TO 'PERFORMED'
         .then(function(response){
+          responseInfo = response;
           idx = response && response.sb && response.sb.length > 0
-              ? findFirstIndex(response.sb,function(e){return (true || e.svid == service._id) && e.status == "ISSUED"})
+              ? findFirstIndex(response.sb,function(e){return (true || e.svid == service._id) && e.cvs == 20})//IS ISSUED
               : -1;
           if(idx >= 0)
           {
-            response.sb[idx].status = "PERFORMED";
+            response.sb[idx].cvs = 40;//PERFORMED
             response.sb = response.sb[idx]
             var rpl = response;
             return esbMessage({
@@ -296,10 +300,17 @@ module.exports = function(paramService,  esbMessage){
             op: "smm_spawnBusinessRecord",
             pl: {
               response: {
-                //TODO unhardcode this
-                groupName : "FEMA",
-                description : "Disaster Relief",
-                memberCount : 300
+                acn:responseInfo.acn//activity name
+                ,ac:responseInfo.dp.ac// activity code
+                ,rc:responseCode//response code
+                ,serviceCode:serviceCode// service code
+                ,svn:service.serviceName// service name code
+                ,st:20//IS ISSUED
+                ,uid:ln// user login account , customer who bought the service
+                ,usn:responseInfo.ow.uid// user name , customer who bought the service
+                ,svp:responseInfo.sb[idx].svp//
+                ,service:""//{ type: paramMongoose.Schema.Types.ObjectId, ref: 'services',required:true }
+                ,oID:service.ct.oid
               },
               loginName: ln,
               currentOrganization: org,
@@ -323,11 +334,11 @@ module.exports = function(paramService,  esbMessage){
         .then(function(response){
           idx = response && response.sb && response.sb.length > 0
               ? findFirstIndex(response.sb, function(e){
-            return (true || e.svid == service._id) && e.status == "PERFORMED"})
+            return (true || e.svid == service._id) && e.cvs == 40})//IS PERFORMED
               : -1;
           if(idx >= 0) //This service has been processed and seen satisfactory
           {
-            response.sb[idx].status = "PROCESSED";
+            response.sb[idx].cvs = 50;//PROCESSED
             response.sb = response.sb[idx];
             return esbMessage({
               "ns" : "bmm",
@@ -365,6 +376,19 @@ module.exports = function(paramService,  esbMessage){
     var co = undefined;
     //TODO - Wrap in a Transaction!!!
     return q()
+        .then(function(){
+            return esbMessage({  //and a transactionid
+                op:"createTransaction",
+                pl:{
+                    loginName : ln,
+                    currentOrganization : org,
+                    transaction:{
+                        description:'Notify service point of response intent'
+                        ,modules:['bmm','smm']
+                    }
+                }
+            })
+        })
     .then(function(){
       if(!response)
         throw {pl:null,er:{ec:1920,em:"No response passed."}};
@@ -372,26 +396,60 @@ module.exports = function(paramService,  esbMessage){
         throw {pl:null,er:{ec:1921,em:"No response services available."}};
       else if(!response.sb.length > index || !response.sb[index])
         throw {pl:null,er:{ec:1922,em:"Index not availabe in response services list."}};
-      else if(response.sb[index].status != "PENDING")
-        throw {pl:null,er:{ec:1923,em:"Attempting to issue a "+response.sb[index].status+" service. Must be PENDING."}};
+      else if(response.sb[index].cvs != 10)
+        throw {pl:null,er:{ec:1923,em:"Attempting to issue a "+response.sb[index].cvs+" service. Must be PENDING (10)."}};
       else return true;
     })
     .then(function(){
-      response.sb[index].status = "ISSUED"
+      response.sb[index].cvs = 20//ISSUED
       return esbMessage({
         "ns": "bmm",
         "op": "bmm_persistResponse",
         "pl": {
           sb: response.sb,
           loginName : ln,
-          currentOrganization : co
+          currentOrganization : co,
+          transactionid : transactionid
         }
       })
     })
-    .then(function(esbResponse){
-      //TODO - Issue Order here
-          console.log("ORDER ISSUED!!! >_> YEAH!!! <_<")
-          return {issued: true, response:response};
+    //SPAWN BUSINESS RECORD
+    .then(function() {
+        if(response.sb.length <= index) throw "no services to order";
+        return esbMessage({
+            ns : "smm",
+            op : "smm_getService",
+            pl : {
+                qid : response.sb[index].svid,
+                loginName : ln,
+                currentOrganization : co,
+                transactionid : transactionid
+            }
+        })
+    })
+    .then(function(serviceResponse){
+        var service = serviceResponse.pl;
+        //console.log("SPAWNING USING \nSERVICE:",service,"\nRESPONSE:",responseInfo);
+        return esbMessage({
+            ns: "smm",
+            op: "smm_spawnBusinessRecord",
+            pl: {
+                response: {
+                    acn:response.acn//activity name
+                    ,rc:responseCode//response code
+                    ,serviceCode:service.serviceCode// service code
+                    ,svn:response.svn// service name code
+                    ,st:10// 'issued' status
+                    ,uid:ln// user login account , customer who bought the service
+                    ,usn:response.usn// user name , customer who bought the service
+                    ,svp:response.svp// service price
+                    ,service:service._id//{ type: paramMongoose.Schema.Types.ObjectId, ref: 'services',required:true }
+                },
+                loginName: ln,
+                currentOrganization: org,
+                transactionid: transactionid
+            }
+        })
     })
     //TODO - Handle 'no more' case and close response
     .then(function resolve(r){
@@ -437,7 +495,7 @@ module.exports = function(paramService,  esbMessage){
     esbMessage(m)
     .then(function(r) {
       paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      paramResponse.end(JSON.stringify(r));
+      paramResponse.end(JSON.stringify(r.pl));
     })
     .fail(function(r) {
       paramResponse.writeHead(501, {"Content-Type": "application/json"});
@@ -669,6 +727,39 @@ module.exports = function(paramService,  esbMessage){
       }
       paramResponse.end(JSON.stringify(r));
     });
+  });
+  serviceManagementRouter.get('/busnessrecords.json', function(paramRequest, paramResponse, paramNext){
+
+      var businessRecords = busnessrecords//TODO - fill this up
+      console.log("HIT BUSINESSRECORDS")
+      var deferred = q.defer(),
+          user = paramRequest.user.lanzheng.loginName;
+          org = paramRequest.user.currentOrganization;
+
+      return q()
+          .then(function(){
+              return esbMessage({
+                  ns : "smm",
+                  op : "recordsByOrganization",
+                  pl : {
+                      loginName : user,
+                      organization : org
+                  }
+              })
+          })
+          .then(function resolve(records){
+              records.pl = records.pl.map(function(ele){
+                  console.log(ele);
+                  var newe = ele.toObject();
+                  newe.svn = ele.svn.text;
+                  return newe;
+              });
+              console.log("records are now :",records);
+              oHelpers.sendResponse(paramResponse,200,records);
+          }  ,  function failure(err){
+              console.log(err);
+              oHelpers.sendResponse(paramResponse,400,err)
+          })
   });
   serviceManagementRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
     if (paramRequest.params.type === 'allbookings'){

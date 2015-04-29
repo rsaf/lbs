@@ -213,7 +213,6 @@ module.exports = function(paramService, esbMessage)
   });
 
     function _issueFirstOrderForResponse(request){
-        var responseInfo = undefined;
         var ln = request.user.lanzheng.loginName;
         var org = request.user.currentOrganization;
         var json = JSON.parse(request.body.json);
@@ -221,6 +220,9 @@ module.exports = function(paramService, esbMessage)
         var transactionid = undefined;
         var dbEntity = undefined;
         var jsonEntity = undefined;
+        var service = undefined;
+        var responseInfo = undefined;
+
         console.log("Issuing first order for RESPONSE",responseCode);
         return q()
             //INIT TRANSACTION
@@ -254,15 +256,37 @@ module.exports = function(paramService, esbMessage)
             //SPAWN BUSINESS RECORD
             .then(function(esbResponse) {
                 responseInfo = esbResponse;
+                if(responseInfo.sb.length <= 0) return false;//no service to issue
+                return esbMessage({
+                    ns : "smm",
+                    op : "smm_getService",
+                    pl : {
+                        qid : responseInfo.sb[0].svid,
+                        loginName : ln,
+                        currentOrganization : org,
+                        transactionid : transactionid
+                    }
+                })
+            })
+            .then(function(serviceResponse){
+                if(!serviceResponse) return false;//no service to issue
+                service = serviceResponse.pl;
+                console.log("SPAWNING USING \nSERVICE:",service,"\nRESPONSE:",responseInfo);
                 return esbMessage({
                     ns: "smm",
                     op: "smm_spawnBusinessRecord",
                     pl: {
                         response: {
-                            //TODO unhardcode this
-                            groupName : "FEMA",
-                            description : "Disaster Relief",
-                            memberCount : 300
+                            acn:responseInfo.acn//activity code
+                            ,rc:responseCode//response code
+                            ,serviceCode:service.serviceCode// service code
+                            ,svn:service.serviceName// service name code
+                            ,st:20// status
+                            ,uid:ln// user login account , customer who bought the service
+                            ,usn:responseInfo.ow.uid// user name , customer who bought the service
+                            ,svp:responseInfo.sb[0].svp//
+                            ,service:service._id//{ type: paramMongoose.Schema.Types.ObjectId, ref: 'services',required:true }
+                            ,oID:service.ct.oID
                         },
                         loginName: ln,
                         currentOrganization: org,
@@ -272,8 +296,8 @@ module.exports = function(paramService, esbMessage)
             })
             //SET FIRST SERVICE TO 'ISSUED'
             .then(function(){
-                if(!(responseInfo && responseInfo.sb && responseInfo.sb.length > 0)) return false;
-                responseInfo.sb[0].status = "ISSUED";
+                if(!(responseInfo && responseInfo.sb && responseInfo.sb.length > 0)) return false;//no service
+                responseInfo.sb[0].cvs = 20;
                 responseInfo.sb = responseInfo.sb[0];
                 return esbMessage({
                     "ns": "bmm",
@@ -286,9 +310,9 @@ module.exports = function(paramService, esbMessage)
                 })
             })
             //COMMIT TRANSACTION
+            //TODO handle no-service case
             .then(function (){
                 if(transactionid){
-                    console.log("COMMITTING TRANSACTION",transactionid.pl.transaction._id);
                     return _commitTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
                 }
                 return false;
