@@ -652,14 +652,14 @@ psRouter.post('/fail/:activityCode/:photoname.json', function (paramRequest, par
 
             console.log('photo marked as correction failed, successful');
 
-            paramResponse.writeHead(200, {"Content-Type": "application/json"});
-            paramResponse.end(JSON.stringify(r));
+            var r = {pl: {rs:true}, er: null};
+            oHelpers.sendResponse(paramResponse, 200, r);//@todo this does not need response to client
 
 
         })
         .fail(function (r) {
 
-            console.log('pmh error----', r.er);
+            console.log('pmh error----', r);
 
             var r = {pl: null, er: {ec: 404, em: "unable to mark photo as correction failed"}};
             oHelpers.sendResponse(paramResponse, 404, r);
@@ -710,11 +710,12 @@ psRouter.post('/done/:activityCode/:photoname.json', function (paramRequest, par
             isd: null, // 拍摄日期: // image shooting date                          ?
             irs: null, // 像素尺寸:84mmX105mm image resolution size                  ?
             ofs: null, // 文件大小:86Kb //28 original photo size 初始照片文件大小      ===
-            ifm: null  // 27 initial format 初始照片格式                              ===
+            fm: null  // 27 initial format 初始照片格式                              ===
         },
         uri: null, // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
         ac:null,
-        rc:null
+        rc:null,
+        ifm:null
     };
 
 
@@ -746,7 +747,7 @@ psRouter.post('/done/:activityCode/:photoname.json', function (paramRequest, par
         fs.readFile(old_path, function (err, data) {
             console.log(data);
             m2.pl.photoData = data;
-            m2.pl.pp.ifm = file_ext;
+            m2.pl.ifm = file_ext;
             m2.pl.pp.ofs = file_size;
             m2.pl.pp.ign = file_name;
             m2.pl.pp.isd = Date.now();
@@ -784,44 +785,37 @@ psRouter.post('/done/:activityCode/:photoname.json', function (paramRequest, par
                         })
                         .then(function(){
 
-
                             esbMessage(m3)
                                 .then(function (r) {
 
                                     console.log(' pmh updated response photo successful--');
 
 
-                                    var r = {pl: null,rs:true, er: null};
+                                    var r = {pl: {rs:true}, er: null};
 
                                    oHelpers.sendResponse(paramResponse, 200, r);//@todo this does not need response to client
 
                                 })
                                 .fail(function(r){
-                                    console.log(' pmh --failed to update response photo--',r);
+                                    console.log(' pmh --failed to update response photo--', r.er);
 
                                     //var r = {pl: null, er: {ec: 404, em: "could not save image"}};
-
                                 })
-
-
                         })
                         .fail(function (r) {
-                            console.log(' pmh --failed to save corrected photo to bucket----',r)
+                            console.log(' pmh --failed to save corrected photo to bucket----', r.er)
 
                             var r = {pl: null, er: {ec: 404, em: "could not save image"}};
                             //oHelpers.sendResponse(paramResponse, 404, r); @todo this does not need response to client
                         });
-
-
                 })
                 .fail(function (r) {
 
-                    console.log(' pmh --failed to get photo by photo uri')
+                    console.log(' pmh --failed to get photo by photo uri', r.er)
 
                     var r = {pl: null, er: {ec: 404, em: "could not save image"}};
                     //oHelpers.sendResponse(paramResponse, 404, r); @todo this does not need response to client
                 });
-
         });
     });
 });
