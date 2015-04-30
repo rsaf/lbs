@@ -43,34 +43,6 @@ module.exports = function (paramPS, esbMessage) {
     });
 
 
-    psRouter.get('/corrections/idphotos/:lzcode.json', function (paramRequest, paramResponse, paramNext) {
-
-        var ac = paramRequest.params.lzcode;
-
-        var m = {
-            "ns": "pmm",
-            "op": "pmm_getPhotosForCorrection",
-            "pl": {
-                ow: {
-                    uid: paramRequest.user.lanzheng.loginName,
-                    oid: paramRequest.user.currentOrganization
-                },
-                ac: ac
-            }
-        };
-
-        esbMessage(m)
-            .then(function (r) {
-                oHelpers.sendResponse(paramResponse, 200, r);
-            })
-            .fail(function (r) {
-
-                console.log('pmh error---', r);
-                oHelpers.sendResponse(paramResponse, 501, r);
-            });
-
-    });
-
     psRouter.get('/corrections/:phototype/:lzcode.json', function (paramRequest, paramResponse) {
 
 
@@ -85,27 +57,32 @@ module.exports = function (paramPS, esbMessage) {
 
         var m = {
             "ns": "pmm",
-            "op": null,
+            "op": 'pmm_getCorrectionPhotosByStatus',
             "pl": {
                 ow: {
                     uid: paramRequest.user.lanzheng.loginName,
                     oid: paramRequest.user.currentOrganization
                 },
-                ac: ac
+                ac: ac,
+                st:null
             }
         };
 
+        if (phototype === 'unprocessed') {
 
-        if (phototype === 'done') {
-
-            m.op = "pmm_getCorrectionSuccessfulPhotos";
+            m.pl.st = '100';
         }
-        else if (phototype === 'failed') {
+        else if (phototype === 'inprocess') {
+            m.pl.st = '200';
+        }
+        else if (phototype === 'processsuccessful') {
 
-            m.op = 'pmm_getCorrectionFailedPhotos';
+            m.pl.st = '300';
+        }
+        else if (phototype === 'processfailed') {
+            m.pl.st = '400';
         }
         else {
-
             var r = {pl: null, er: {ec: 404, em: "unkown correction photo type"}};
             oHelpers.sendResponse(paramResponse, 404, r);
 
@@ -565,53 +542,77 @@ module.exports = function (paramPS, esbMessage) {
     });
 
 // download image for correction
-    psRouter.get('/todo/:status/:activityCode.json', function (paramRequest, paramResponse) {
+//    psRouter.get('/todo/:status/:activityCode.json', function (paramRequest, paramResponse) {
+//
+//
+//        var ac = paramRequest.params.activityCode;
+//        var st = '';
+//
+//        var m = {
+//            "ns": "pmm",
+//            "op": "pmm_getPhotosForCorrection",
+//            "pl": {
+//                ow: {
+//                    uid: paramRequest.user.lanzheng.loginName,
+//                    oid: paramRequest.user.currentOrganization
+//                },
+//                ac: ac,
+//                st:st
+//            }
+//        };
+//
+//        esbMessage(m)
+//            .then(function (r) {
+//
+//                console.log('pmh collected photos for correction---', r);
+//
+//                oHelpers.sendResponse(paramResponse, 200, r);
+//            })
+//            .fail(function (r) {
+//
+//                console.log('pmh error---', r);
+//                oHelpers.sendResponse(paramResponse, 501, r);
+//            });
+//
+//    });
+
+    psRouter.post('/ack/:activityCode/:photoname.json', function (paramRequest, paramResponse) {
+
+        console.log('in ack function ...');
+
+        var photoUrl = paramRequest.body.pl.photoname;
+        var ac = paramRequest.body.pl.foldername;
 
 
-        var ac = paramRequest.params.activityCode;
-        var st = '';
+        console.log('--paramRequest.body---', paramRequest.body);
 
         var m = {
-            "ns": "pmm",
-            "op": "pmm_getPhotosForCorrection",
-            "pl": {
-                ow: {
-                    uid: paramRequest.user.lanzheng.loginName,
-                    oid: paramRequest.user.currentOrganization
-                },
-                ac: ac,
-                st:st
-            }
-        };
+            ns: 'pmm',
+            op: "pmm_SetCorrectionPhotoAsInProcess",
+            pl: {uri: '/photos/' + photoUrl, ac: ac}
+        }
+
+        console.log('m----', m);
 
         esbMessage(m)
             .then(function (r) {
 
-                console.log('pmh collected photos for correction---', r);
 
-                oHelpers.sendResponse(paramResponse, 200, r);
+                console.log('photo marked as inprocess, successful');
+
+                var r = {pl: {rs: true}, er: null};
+                oHelpers.sendResponse(paramResponse, 200, r);//@todo this does not need response to client
+
+
             })
             .fail(function (r) {
 
-                console.log('pmh error---', r);
-                oHelpers.sendResponse(paramResponse, 501, r);
+                var r = {pl: {rs: false}, er: null};
+                oHelpers.sendResponse(paramResponse, 404, r);
             });
 
-    });
 
-    psRouter.post('/ack/:activityCode/:photoname.json', function (paramRequest, paramResponse) {
-        //foldername
-        //photoname
-        console.log(paramRequest.body);
 
-        var r = {pl: null, er: null};
-        if (true) {
-            r.pl = {rs: true};
-        }
-        else {
-            r.pl = {rs: false};
-        }
-        oHelpers.sendResponse(paramResponse, 200, r);
     });
 
 // correction failed
