@@ -20,7 +20,7 @@ module.exports = function (paramPS, esbMessage) {
             "ns": "pmm",
             "op": "pmm_getPhotosForInspection",
             "pl": {
-                ac : paramRequest.params.lzcode,
+                ac: paramRequest.params.lzcode,
                 ow: {
                     uid: paramRequest.user.lanzheng.loginName,
                     oid: paramRequest.user.currentOrganization
@@ -31,7 +31,7 @@ module.exports = function (paramPS, esbMessage) {
         esbMessage(m)
             .then(function (r) {
 
-                console.log('pmh inpection photos----',r);
+                console.log('pmh inpection photos----', r);
                 oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
@@ -42,35 +42,6 @@ module.exports = function (paramPS, esbMessage) {
 
     });
 
-
-
-    psRouter.get('/corrections/idphotos/:lzcode.json', function (paramRequest, paramResponse, paramNext) {
-
-        var ac = paramRequest.params.lzcode;
-
-        var m = {
-            "ns": "pmm",
-            "op": "pmm_getPhotosForCorrection",
-            "pl": {
-                ow: {
-                    uid: paramRequest.user.lanzheng.loginName,
-                    oid: paramRequest.user.currentOrganization
-                },
-                ac:ac
-            }
-        };
-
-        esbMessage(m)
-            .then(function (r) {
-                oHelpers.sendResponse(paramResponse, 200, r);
-            })
-            .fail(function (r) {
-
-                console.log('pmh error---', r);
-                oHelpers.sendResponse(paramResponse, 501, r);
-            });
-
-    });
 
     psRouter.get('/corrections/:phototype/:lzcode.json', function (paramRequest, paramResponse) {
 
@@ -86,27 +57,32 @@ module.exports = function (paramPS, esbMessage) {
 
         var m = {
             "ns": "pmm",
-            "op": null,
+            "op": 'pmm_getCorrectionPhotosByStatus',
             "pl": {
                 ow: {
                     uid: paramRequest.user.lanzheng.loginName,
                     oid: paramRequest.user.currentOrganization
                 },
-                ac:ac
+                ac: ac,
+                st:null
             }
         };
 
+        if (phototype === 'unprocessed') {
 
-        if (phototype === 'done') {
-
-            m.op = "pmm_getCorrectionSuccessfulPhotos";
+            m.pl.st = '100';
         }
-        else if (phototype === 'failed') {
+        else if (phototype === 'inprocess') {
+            m.pl.st = '200';
+        }
+        else if (phototype === 'processsuccessful') {
 
-            m.op = 'pmm_getCorrectionFailedPhotos';
+            m.pl.st = '300';
+        }
+        else if (phototype === 'processfailed') {
+            m.pl.st = '400';
         }
         else {
-
             var r = {pl: null, er: {ec: 404, em: "unkown correction photo type"}};
             oHelpers.sendResponse(paramResponse, 404, r);
 
@@ -417,18 +393,18 @@ module.exports = function (paramPS, esbMessage) {
             m.pl.st = '300';
 
 
-            var m2= {
+            var m2 = {
                 ns: 'pmm',
-                op:"pmm_SubmitPhotoToCorrection",
+                op: "pmm_SubmitPhotoToCorrection",
                 pl: paramRequest.body.photo
             }
 
         }
         else if (inspectionStatus === 'unqualified') {
 
-             m.pl.st = '400';
+            m.pl.st = '400';
 
-                var m2 = {
+            var m2 = {
                 ns: 'mdm',
                 vs: '1.0',
                 op: 'sendNotification',
@@ -439,7 +415,7 @@ module.exports = function (paramPS, esbMessage) {
                         sms: {to: '15900755434'},
                         email: {to: 'rolland@lbsconsulting.com'}
                     }]
-                    ,notification:{}
+                    , notification: {}
                 }
             };
             m2.pl.notification.subject = '照片不合格提示';
@@ -447,13 +423,13 @@ module.exports = function (paramPS, esbMessage) {
             m2.pl.notification.from = 'sa';
 
 
-            if(paramRequest.body.data){
+            if (paramRequest.body.data) {
 
-                if(paramRequest.body.data.othersText){
-                    m2.pl.notification.body = paramRequest.body.data.reason  + '   '  +  paramRequest.body.data.other;
+                if (paramRequest.body.data.othersText) {
+                    m2.pl.notification.body = paramRequest.body.data.reason + '   ' + paramRequest.body.data.other;
                 }
-                else if(paramRequest.body.data.reason){
-                    m2.pl.notification.body = paramRequest.body.data.reason ;
+                else if (paramRequest.body.data.reason) {
+                    m2.pl.notification.body = paramRequest.body.data.reason;
                 }
             }
 
@@ -466,466 +442,440 @@ module.exports = function (paramPS, esbMessage) {
 
             return;
         }
-          //submit inspection status
-          esbMessage(m)
+        //submit inspection status
+        esbMessage(m)
             .then(function (r) {
 
-                  console.log('inpected photo status saved---');
-                oHelpers.sendResponse(paramResponse,200,r);
+                console.log('inpected photo status saved---');
+                oHelpers.sendResponse(paramResponse, 200, r);
             })
-            .then(function(){
+            .then(function () {
 
                 //submit to correction
 
-                  esbMessage(m2)
-                      .then(function (r) {
+                esbMessage(m2)
+                    .then(function (r) {
 
-                          console.log('sumit to correction/send notificatio done---');
-                          oHelpers.sendResponse(paramResponse,200,r);
-                      })
+                        console.log('sumit to correction/send notificatio done---');
+                        oHelpers.sendResponse(paramResponse, 200, r);
+                    })
 
-                      .fail(null, function reject(r) {
-                          console.log('pmh error:-----', r);
-                          r = {pl: null, er: {ec: 100012, em: "send notification or submit to correction----"}};
-                          oHelpers.sendResponse(paramResponse,501,r);
-                      });
-
+                    .fail(null, function reject(r) {
+                        console.log('pmh error:-----', r);
+                        r = {pl: null, er: {ec: 100012, em: "send notification or submit to correction----"}};
+                        oHelpers.sendResponse(paramResponse, 501, r);
+                    });
 
 
             })
             .fail(null, function reject(r) {
                 console.log('pmh error:-----', r);
                 r = {pl: null, er: {ec: 100012, em: "Unable to save inspection status----"}};
-                oHelpers.sendResponse(paramResponse,501,r);
+                oHelpers.sendResponse(paramResponse, 501, r);
                 //we do not need to send this response back to client browser... Response have already been sent..
             });
     })
 
 
+    psRouter.get('/inspection/:phototype/:activity_id.json', function (paramRequest, paramResponse) {
 
 
+        console.log('get inspection photo by type-----');
+
+        var phototype = paramRequest.params.phototype;
+        var activity_id = paramRequest.params.activity_id;
 
 
-psRouter.get('/inspection/:phototype/:activity_id.json', function (paramRequest, paramResponse) {
+        var m = {
+            "ns": "pmm",
+            "op": null,
+            "pl": {
+                ow: {
+                    uid: paramRequest.user.lanzheng.loginName,
+                    oid: paramRequest.user.currentOrganization
+                },
+                ac: activity_id
+            }
+        };
 
 
-    console.log('get inspection photo by type-----');
+        if (phototype === 'unqualified') {
 
-    var phototype = paramRequest.params.phototype;
-    var activity_id =  paramRequest.params.activity_id;
-
+            m.op = 'pmm_getUnqualifedPhotos';
 
 
-    var m = {
-        "ns": "pmm",
-        "op": null,
-        "pl": {
-            ow: {
-                uid: paramRequest.user.lanzheng.loginName,
-                oid: paramRequest.user.currentOrganization
-            },
-            ac:activity_id
         }
-    };
+        else if (phototype === 'qualified') {
 
+            m.op = 'pmm_getQualifedPhotos';
 
-    if (phototype === 'unqualified') {
+        }
+        else {
 
-        m.op = 'pmm_getUnqualifedPhotos';
-
-
-    }
-    else if (phototype === 'qualified') {
-
-        m.op = 'pmm_getQualifedPhotos';
-
-    }
-    else {
-
-        var r = {pl: null, er: {ec: 404, em: "unkown inspection photo type"}};
-        oHelpers.sendResponse(paramResponse, 404, r);
-
-    }
-
-
-    esbMessage(m)
-        .then(function (r) {
-
-            paramResponse.writeHead(200, {"Content-Type": "application/json"});
-            paramResponse.end(JSON.stringify(r));
-
-        })
-        .fail(function (r) {
-
-            console.log(r.er);
-            var r = {pl: null, er: {ec: 404, em: "unable to get inspection photos"}};
+            var r = {pl: null, er: {ec: 404, em: "unkown inspection photo type"}};
             oHelpers.sendResponse(paramResponse, 404, r);
-        });
+
+        }
 
 
-});
+        esbMessage(m)
+            .then(function (r) {
+
+                paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                paramResponse.end(JSON.stringify(r));
+
+            })
+            .fail(function (r) {
+
+                console.log(r.er);
+                var r = {pl: null, er: {ec: 404, em: "unable to get inspection photos"}};
+                oHelpers.sendResponse(paramResponse, 404, r);
+            });
+
+
+    });
 
 
 ///workspace/corrections/idphotos.json
-psRouter.get('/idphotos.json', function (paramRequest, paramResponse) {
-    oHelpers.sendResponse(paramResponse, 200, idphotos);
-});
+    psRouter.get('/idphotos.json', function (paramRequest, paramResponse) {
+        oHelpers.sendResponse(paramResponse, 200, idphotos);
+    });
 
 // download image for correction
-psRouter.get('/todo/:activityCode.json', function (paramRequest, paramResponse) {
+//    psRouter.get('/todo/:status/:activityCode.json', function (paramRequest, paramResponse) {
+//
+//
+//        var ac = paramRequest.params.activityCode;
+//        var st = '';
+//
+//        var m = {
+//            "ns": "pmm",
+//            "op": "pmm_getPhotosForCorrection",
+//            "pl": {
+//                ow: {
+//                    uid: paramRequest.user.lanzheng.loginName,
+//                    oid: paramRequest.user.currentOrganization
+//                },
+//                ac: ac,
+//                st:st
+//            }
+//        };
+//
+//        esbMessage(m)
+//            .then(function (r) {
+//
+//                console.log('pmh collected photos for correction---', r);
+//
+//                oHelpers.sendResponse(paramResponse, 200, r);
+//            })
+//            .fail(function (r) {
+//
+//                console.log('pmh error---', r);
+//                oHelpers.sendResponse(paramResponse, 501, r);
+//            });
+//
+//    });
+
+    psRouter.post('/ack/:activityCode/:photoname.json', function (paramRequest, paramResponse) {
+
+        console.log('in ack function ...');
+
+        var photoUrl = paramRequest.body.pl.photoname;
+        var ac = paramRequest.body.pl.foldername;
 
 
-    var ac = paramRequest.params.activityCode;
+        console.log('--paramRequest.body---', paramRequest.body);
 
-    var m = {
-        "ns": "pmm",
-        "op": "pmm_getPhotosForCorrection",
-        "pl": {
-            ow: {
-                uid: paramRequest.user.lanzheng.loginName,
-                oid: paramRequest.user.currentOrganization
-            },
-            ac:ac
+        var m = {
+            ns: 'pmm',
+            op: "pmm_SetCorrectionPhotoAsInProcess",
+            pl: {uri: '/photos/' + photoUrl, ac: ac}
         }
-    };
 
-    esbMessage(m)
-        .then(function (r) {
+        console.log('m----', m);
 
-            console.log('pmh collected photos for correction---', r);
+        esbMessage(m)
+            .then(function (r) {
 
-            oHelpers.sendResponse(paramResponse, 200, r);
-        })
-        .fail(function (r) {
 
-            console.log('pmh error---', r);
-            oHelpers.sendResponse(paramResponse, 501, r);
-        });
+                console.log('photo marked as inprocess, successful');
 
-});
+                var r = {pl: {rs: true}, er: null};
+                oHelpers.sendResponse(paramResponse, 200, r);//@todo this does not need response to client
 
-psRouter.post('/ack/:activityCode/:photoname.json', function (paramRequest, paramResponse) {
-    //foldername
-    //photoname
-    console.log(paramRequest.body);
 
-    var r = {pl: null, er: null};
-    if (true) {
-        r.pl = {rs: true};
-    }
-    else {
-        r.pl = {rs: false};
-    }
-    oHelpers.sendResponse(paramResponse, 200, r);
-});
+            })
+            .fail(function (r) {
+
+                var r = {pl: {rs: false}, er: null};
+                oHelpers.sendResponse(paramResponse, 404, r);
+            });
+
+
+
+    });
 
 // correction failed
-psRouter.post('/fail/:activityCode/:photoname.json', function (paramRequest, paramResponse) {
-    //foldername
-    //photoname
-    console.log('in fail function ...');
+    psRouter.post('/fail/:activityCode/:photoname.json', function (paramRequest, paramResponse) {
+        //foldername
+        //photoname
+        console.log('in fail function ...');
 
-    var photoUrl = paramRequest.body.pl.photoname;
-    var ac =  paramRequest.body.pl.foldername;
-
-
-    console.log('--paramRequest.body---',paramRequest.body);
-    console.log('failed photo url---', photoUrl);
-
-    //{uuid: uri.slice(0, uri.lastIndexOf("."));
+        var photoUrl = paramRequest.body.pl.photoname;
+        var ac = paramRequest.body.pl.foldername;
 
 
-    var m = {
-        ns: 'pmm',
-        op: "pmm_SetCorrectionPhotoAsFailed",
-        pl: {uri: '/photos/' + photoUrl, ac:ac}
-    }
+        console.log('--paramRequest.body---', paramRequest.body);
+        console.log('failed photo url---', photoUrl);
+
+        //{uuid: uri.slice(0, uri.lastIndexOf("."));
 
 
-    ///photos/4cf9598d-621d-4d49-93b9-f60c1ef8c137.jpeg
-
-    console.log('m----', m);
-
-    esbMessage(m)
-        .then(function (r) {
-
-
-            console.log('photo marked as correction failed, successful');
-
-            paramResponse.writeHead(200, {"Content-Type": "application/json"});
-            paramResponse.end(JSON.stringify(r));
+        var m = {
+            ns: 'pmm',
+            op: "pmm_SetCorrectionPhotoAsFailed",
+            pl: {uri: '/photos/' + photoUrl, ac: ac}
+        }
 
 
-        })
-        .fail(function (r) {
+        ///photos/4cf9598d-621d-4d49-93b9-f60c1ef8c137.jpeg
 
-            console.log('pmh error----', r.er);
+        console.log('m----', m);
 
-            var r = {pl: null, er: {ec: 404, em: "unable to mark photo as correction failed"}};
-            oHelpers.sendResponse(paramResponse, 404, r);
-        });
+        esbMessage(m)
+            .then(function (r) {
 
-});
+
+                console.log('photo marked as correction failed, successful');
+
+                var r = {pl: {rs: true}, er: null};
+                oHelpers.sendResponse(paramResponse, 200, r);//@todo this does not need response to client
+
+
+            })
+            .fail(function (r) {
+
+                console.log('pmh error----', r);
+
+                var r = {pl: null, er: {ec: 404, em: "unable to mark photo as correction failed"}};
+                oHelpers.sendResponse(paramResponse, 404, r);
+            });
+
+    });
 
 // correction succesfull
-psRouter.post('/done/:activityCode/:photoname.json', function (paramRequest, paramResponse) {
-    //checksum
-    //folerName
-    //photoName
-    //photoData
+    psRouter.post('/done/:activityCode/:photoname.json', function (paramRequest, paramResponse) {
+        //checksum
+        //folerName
+        //photoName
+        //photoData
+
+        var m1 = {ns: 'pmm', op: 'pmm_setCorrectionPhotoAsDone', pl: null};
+        m1.pl = {
+            uID: paramRequest.user.lanzheng.loginName,
+            oID: paramRequest.user.currentOrganization,
+            ow: {//owner of the document, this person can fill out the form is does not have to be the same person as the one who created the response
+                uid: paramRequest.user.lanzheng.loginName,//this is the user login or the session id when this is an anonymous user
+                oid: paramRequest.user.currentOrganization//the current organisation is optional
+            },
+            photoData: null,
+            sg: '30',
+            st: '300',
+            pp: { //other photos properties
+                ign: null, // 照片名称: image name                                      ===
+                igt: null, // 主题类型: 旅游照片 image type                              ===
+                igs: null, // 拍摄方式: 单板相机 image source                            ===
+                isl: null, // 拍摄地点:  image shooting location                        ===
+                rm: null,  // 照片描述: // 30 remarks 备注                               ===
+                isd: null, // 拍摄日期: // image shooting date                          ?
+                irs: null, // 像素尺寸:84mmX105mm image resolution size                  ?
+                ofs: null, // 文件大小:86Kb //28 original photo size 初始照片文件大小      ===
+                fm: null  // 27 initial format 初始照片格式                              ===
+            },
+            uri: null, // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
+            ac: null,
+            rc: null,
+            ifm: null
+        };
 
 
-
-    //@todo get the uri from the payload(photo name) and get the corresponding response code for that image from pmm,
-    //@todo... then save the new image to the bucket with response and activity codes set,
-    //@todo....then update the image corresponding to this corrected image on bmm responses
-
-
-
-    var m1 = {  ns: 'pmm',
-                op: 'pmm_getPhotoByUri',
-                pl:{ac:null,
-                    uri:null
-                }
-            }
-
-
-    var m2 = {ns: 'pmm', op: 'pmm_uploadPhoto', pl: null};
-    m2.pl = {
-        uID: paramRequest.user.lanzheng.loginName,
-        oID: paramRequest.user.currentOrganization,
-        ow: {//owner of the document, this person can fill out the form is does not have to be the same person as the one who created the response
-            uid: paramRequest.user.lanzheng.loginName,//this is the user login or the session id when this is an anonymous user
-            oid: paramRequest.user.currentOrganization//the current organisation is optional
-        },
-        photoData: null,
-        sg: '30',
-        st: '300',
-        pp: { //other photos properties
-            ign: null, // 照片名称: image name                                      ===
-            igt: null, // 主题类型: 旅游照片 image type                              ===
-            igs: null, // 拍摄方式: 单板相机 image source                            ===
-            isl: null, // 拍摄地点:  image shooting location                        ===
-            rm: null,  // 照片描述: // 30 remarks 备注                               ===
-            isd: null, // 拍摄日期: // image shooting date                          ?
-            irs: null, // 像素尺寸:84mmX105mm image resolution size                  ?
-            ofs: null, // 文件大小:86Kb //28 original photo size 初始照片文件大小      ===
-            ifm: null  // 27 initial format 初始照片格式                              ===
-        },
-        uri: null, // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
-        ac:null,
-        rc:null
-    };
-
-
-
-    var m3 = {
+        var m2 = {
             ns: 'bmm',
             op: 'bmm_updateResponsePhotoByResponseCode',
-            pl:{rc:null,
-                uri:null
+            pl: {
+                rc: null,
+                uri: null
             }
-    }
+        }
 
 
-    var form = new formidable.IncomingForm();
-    form.parse(paramRequest, function (err, fields, files) {
+        var form = new formidable.IncomingForm();
+        form.parse(paramRequest, function (err, fields, files) {
 
 
-        var old_path = files.file.path,
-            file_size = files.file.size,
-            file_ext = files.file.name.split('.').pop(),
-            file_name = files.file.name;
+            var old_path = files.file.path,
+                file_size = files.file.size,
+                file_ext = files.file.name.split('.').pop(),
+                file_name = files.file.name;
 
 
-        var jsonData = JSON.parse( fields.json);
+            var jsonData = JSON.parse(fields.json);
 
-        console.log('field------',fields);
-        console.log('jsonData------',jsonData);
+            console.log('field------', fields);
+            console.log('jsonData------', jsonData);
 
-        fs.readFile(old_path, function (err, data) {
-            console.log(data);
-            m2.pl.photoData = data;
-            m2.pl.pp.ifm = file_ext;
-            m2.pl.pp.ofs = file_size;
-            m2.pl.pp.ign = file_name;
-            m2.pl.pp.isd = Date.now();
+            fs.readFile(old_path, function (err, data) {
+                console.log(data);
+                m1.pl.photoData = data;
+                m1.pl.ifm = file_ext;
+                m1.pl.pp.ofs = file_size;
+                m1.pl.pp.isd = Date.now();
 
-            console.log(data);
-
+                console.log(data);
 
 
-            m1.pl.ac = jsonData.pl.foldername;
-            m1.pl.uri = '/photos/'+jsonData.pl.photoname;
-
-            m2.pl.ac =  jsonData.pl.foldername;
+             //   m1.pl.ac = jsonData.pl.foldername;
+                m1.pl.uri = '/photos/' + jsonData.pl.photoname;
 
 
-            console.log('m1---',m1);
+                console.log('m1---', m1);
 
-            esbMessage(m1)
-                .then(function (r) {
+                esbMessage(m1)
+                    .then(function (r) {
 
+                        console.log(' pmh save corrected photo saved to bucket',r);
 
-                    m2.pl.rc = r.pl.rc;
-                    m3.pl.rc = r.pl.rc;
-
-                    console.log(' pmh ---got photo by uri');
-
-
-                    esbMessage(m2)
-                        .then(function (r) {
-
-                            m3.pl.uri = r.pl.uri;
-
-                            console.log(' pmh save corrected photo saved to bucket');
-
-                            //oHelpers.sendResponse(paramResponse, 200, r);//@todo this does not need response to client
-                        })
-                        .then(function(){
+                        m2.pl.rc = r.pl.rc;
+                        m2.pl.uri = r.pl.uri;
 
 
-                            esbMessage(m3)
-                                .then(function (r) {
+                    })
+                    .then(function (r) {
 
-                                    console.log(' pmh updated response photo successful--');
+                        esbMessage(m2)
+                            .then(function (r) {
 
-
-                                    var r = {pl: null,rs:true, er: null};
-
-                                   oHelpers.sendResponse(paramResponse, 200, r);//@todo this does not need response to client
-
-                                })
-                                .fail(function(r){
-                                    console.log(' pmh --failed to update response photo--',r);
-
-                                    //var r = {pl: null, er: {ec: 404, em: "could not save image"}};
-
-                                })
+                                console.log(' pmh updated response photo successful--',r);
 
 
-                        })
-                        .fail(function (r) {
-                            console.log(' pmh --failed to save corrected photo to bucket----',r)
+                                var r = {pl: {rs: true}, er: null};
 
-                            var r = {pl: null, er: {ec: 404, em: "could not save image"}};
-                            //oHelpers.sendResponse(paramResponse, 404, r); @todo this does not need response to client
-                        });
+                                oHelpers.sendResponse(paramResponse, 200, r);
 
+                            });
+                    })
+                    .fail(function (r) {
 
-                })
-                .fail(function (r) {
-
-                    console.log(' pmh --failed to get photo by photo uri')
-
-                    var r = {pl: null, er: {ec: 404, em: "could not save image"}};
-                    //oHelpers.sendResponse(paramResponse, 404, r); @todo this does not need response to client
-                });
-
+                        console.log(' pmh --error------ ', r);
+                        var r = {pl: {rs: false}, er: null};
+                        oHelpers.sendResponse(paramResponse, 200, r);
+                    });
+            });
         });
     });
-});
 
 //fake endpoints
-psRouter.get('/:type.json', function (paramRequest, paramResponse, paramNext) {
-    if (paramRequest.params.type === 'idPhotoStandard') {
+    psRouter.get('/:type.json', function (paramRequest, paramResponse, paramNext) {
+        if (paramRequest.params.type === 'idPhotoStandard') {
 
-        oHelpers.sendResponse(paramResponse, 200, idPhotoStandard);
-    }
-    else if (paramRequest.params.type === 'idPhotosUsage') {
-        oHelpers.sendResponse(paramResponse, 200, idPhotosUsage);
-    }
-    else if (paramRequest.params.type === 'folders') {
+            oHelpers.sendResponse(paramResponse, 200, idPhotoStandard);
+        }
+        else if (paramRequest.params.type === 'idPhotosUsage') {
+            oHelpers.sendResponse(paramResponse, 200, idPhotosUsage);
+        }
+        else if (paramRequest.params.type === 'folders') {
 
-        var m = {};
-        //formHtml
-        q().then(function(){
-            m.pl={loginName:paramRequest.user.lanzheng.loginName,currentOrganization:paramRequest.user.currentOrganization};
-            m.op='bmm_getActivities';
-            return esbMessage(m);
-        }).then(function resolve(msg){
+            var m = {};
+            //formHtml
+            q().then(function () {
+                m.pl = {
+                    loginName: paramRequest.user.lanzheng.loginName,
+                    currentOrganization: paramRequest.user.currentOrganization
+                };
+                m.op = 'bmm_getActivities';
+                return esbMessage(m);
+            }).then(function resolve(msg) {
 
-            console.log('activities---',msg);
-            oHelpers.sendResponse(paramResponse,200,msg);
-        },function reject(er){
-            oHelpers.sendResponse(paramResponse,501,er);
-        });
+                console.log('activities---', msg);
+                oHelpers.sendResponse(paramResponse, 200, msg);
+            }, function reject(er) {
+                oHelpers.sendResponse(paramResponse, 501, er);
+            });
 
-    }
-});
-
-psRouter.post('/upload.json', function (paramRequest, paramResponse, paramNext) {
-
-    console.log('pmh  uploading photo-----');
-
-    var m = {ns: 'dmm', op: 'dmm_uploadPhoto', pl: null};
-    m.pl = {
-        uID: paramRequest.user.lanzheng.loginName,
-        oID: paramRequest.user.currentOrganization,
-        photoData: null,
-        sgc: 10,
-        stc: 100,
-        pp: { //other photos properties
-            ign: null, // 照片名称: image name                                      ===
-            igt: null, // 主题类型: 旅游照片 image type                              ===
-            igs: null, // 拍摄方式: 单板相机 image source                            ===
-            isl: null, // 拍摄地点:  image shooting location                        ===
-            rm: null,  // 照片描述: // 30 remarks 备注                               ===
-            isd: null, // 拍摄日期: // image shooting date                          ?
-            irs: null, // 像素尺寸:84mmX105mm image resolution size                  ?
-            ofs: null, // 文件大小:86Kb //28 original photo size 初始照片文件大小      ===
-            ifm: null  // 27 initial format 初始照片格式                              ===
-        },
-        uri: null // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
-    };
-
-
-    var form = new formidable.IncomingForm();
-    form.parse(paramRequest, function (err, fields, files) {
-
-
-        var fileInfo = JSON.parse(fields.fileInfo);
-
-        console.log('fields----', fileInfo);
-
-        var old_path = files.file.path,
-            file_size = files.file.size,
-            file_ext = files.file.name.split('.').pop(),
-            file_name = files.file.name;
-
-        console.log('file name:---', file_name);
-
-
-        fs.readFile(old_path, function (err, data) {
-            m.pl.fn = file_name;
-            m.pl.ft = paramRequest.params.doctype;
-            m.pl.rm = fileInfo.description;
-            m.pl.fs = file_size;
-            m.pl.fm = file_ext;
-            m.pl.fd = data;
-
-            esbMessage(m)
-                .then(function (r) {
-                    paramResponse.writeHead(200, {"Content-Type": "application/json"});
-
-                    console.log('dmh upload successful---', r);
-
-                    paramResponse.end(JSON.stringify(r));
-                })
-                .fail(function (r) {
-                    console.log('dmh error-----:', r.er);
-                    var r = {pl: null, er: {ec: 404, em: "could not save document"}};
-                    oHelpers.sendResponse(paramResponse, 404, r);
-                });
-        });
+        }
     });
 
-});
+    psRouter.post('/upload.json', function (paramRequest, paramResponse, paramNext) {
+
+        console.log('pmh  uploading photo-----');
+
+        var m = {ns: 'dmm', op: 'dmm_uploadPhoto', pl: null};
+        m.pl = {
+            uID: paramRequest.user.lanzheng.loginName,
+            oID: paramRequest.user.currentOrganization,
+            photoData: null,
+            sgc: 10,
+            stc: 100,
+            pp: { //other photos properties
+                ign: null, // 照片名称: image name                                      ===
+                igt: null, // 主题类型: 旅游照片 image type                              ===
+                igs: null, // 拍摄方式: 单板相机 image source                            ===
+                isl: null, // 拍摄地点:  image shooting location                        ===
+                rm: null,  // 照片描述: // 30 remarks 备注                               ===
+                isd: null, // 拍摄日期: // image shooting date                          ?
+                irs: null, // 像素尺寸:84mmX105mm image resolution size                  ?
+                ofs: null, // 文件大小:86Kb //28 original photo size 初始照片文件大小      ===
+                ifm: null  // 27 initial format 初始照片格式                              ===
+            },
+            uri: null // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
+        };
 
 
-return psRouter;
-}
-;
+        var form = new formidable.IncomingForm();
+        form.parse(paramRequest, function (err, fields, files) {
+
+
+            var fileInfo = JSON.parse(fields.fileInfo);
+
+            console.log('fields----', fileInfo);
+
+            var old_path = files.file.path,
+                file_size = files.file.size,
+                file_ext = files.file.name.split('.').pop(),
+                file_name = files.file.name;
+
+            console.log('file name:---', file_name);
+
+
+            fs.readFile(old_path, function (err, data) {
+                m.pl.fn = file_name;
+                m.pl.ft = paramRequest.params.doctype;
+                m.pl.rm = fileInfo.description;
+                m.pl.fs = file_size;
+                m.pl.fm = file_ext;
+                m.pl.fd = data;
+
+                esbMessage(m)
+                    .then(function (r) {
+                        paramResponse.writeHead(200, {"Content-Type": "application/json"});
+
+                        console.log('dmh upload successful---', r);
+
+                        paramResponse.end(JSON.stringify(r));
+                    })
+                    .fail(function (r) {
+                        console.log('dmh error-----:', r.er);
+                        var r = {pl: null, er: {ec: 404, em: "could not save document"}};
+                        oHelpers.sendResponse(paramResponse, 404, r);
+                    });
+            });
+        });
+
+    });
+
+
+    return psRouter;
+};
 
 
 var idPhotosUsage = {
