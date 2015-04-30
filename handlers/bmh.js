@@ -268,6 +268,7 @@ module.exports = function(paramService, esbMessage){
                         console.log("coming backing from uploading response list ...", r);
 
                         //@todo tie this to a publish button on the webside
+                        /*
                         console.log('Immediately proceeding to pregenerate responses');
 
                         var m_p = {
@@ -283,6 +284,7 @@ module.exports = function(paramService, esbMessage){
                             },function onRejected(r){
                                 console.log("Failed response pregeneration with respnose2: ", r);
                             })
+                            */
                     })
                     .fail(function (r) {
                         console.log('dmh error-----:',r.er);
