@@ -194,6 +194,18 @@ module.exports = function(paramService, esbMessage){
       oHelpers.sendResponse(paramResponse,501,er);      
     });    
   });
+    bmRouter.get('/:activity_code/getUserMetaZipUploaded.json', function(paramRequest, paramResponse, paramNext){
+        var m = {
+            ns : "bmm",
+            op : "bmm_getUserMeta",
+            pl : {
+                ac_code : paramRequest.params.activity_code
+            }
+        }
+        return esbMessage(m).then(function(doc){
+            oHelpers.sendResponse(paramResponse,200,{pl:doc});
+        })
+    })
     bmRouter.get('/:activity_code/:zipuri/generateResponses.json', function(paramRequest, paramResponse, paramNext){
       var m = {},transactionid=false,response={};
       //formHtml
@@ -223,12 +235,14 @@ module.exports = function(paramService, esbMessage){
         var m = {ns: 'bmm',op:'bmm_upload_respondents_list', pl: null, ac:paramRequest.params.activity_code};
 
         m.pl = {
-            fn: null,
-            ft: null,
-            rm: null,
-            fs: null,
-            fm: null,
-            uri: null,
+            fp:{
+                fn: null,
+                ft: null,
+                rm: null,
+                fs: null,
+                fm: null,
+                uri: null
+            },
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
             fd:null
@@ -252,11 +266,11 @@ module.exports = function(paramService, esbMessage){
 
 
             fs.readFile(old_path, function(err, data) {
-                m.pl.fn = file_name;
-                m.pl.ft = paramRequest.params.doctype;
-                m.pl.rm  = fileInfo.description;
-                m.pl.fs = file_size;
-                m.pl.fm = file_ext;
+                m.pl.fp.fn = file_name;
+                m.pl.fp.ft = paramRequest.params.doctype;
+                m.pl.fp.rm  = fileInfo.description;
+                m.pl.fp.fs = file_size;
+                m.pl.fp.fm = file_ext;
                 m.pl.fd = data;
                 console.log('uploading response lists ...', m.pl);
                 esbMessage(m)
