@@ -213,15 +213,15 @@ module.exports = function(paramService, esbMessage)
   });
 
     function _issueFirstOrderForResponse(request){
-        var ln = request.user.lanzheng.loginName;
-        var org = request.user.currentOrganization;
-        var json = JSON.parse(request.body.json);
-        var responseCode = json.pl.code;
-        var transactionid = undefined;
-        var dbEntity = undefined;
-        var jsonEntity = undefined;
-        var service = undefined;
-        var responseInfo = undefined;
+        var ln = request.user.lanzheng.loginName,
+            org = request.user.currentOrganization,
+            json = JSON.parse(request.body.json),
+            responseCode = json.pl.code,
+            transactionid,
+            dbEntity,
+            jsonEntity,
+            service,
+            responseInfo;
 
         console.log("Issuing first order for RESPONSE",responseCode);
         return q()
@@ -253,7 +253,7 @@ module.exports = function(paramService, esbMessage)
                     }
                 });
             })
-            //SPAWN BUSINESS RECORD
+            //FETCH SERVICE INFO
             .then(function(esbResponse) {
                 responseInfo = esbResponse;
                 if(responseInfo.sb.length <= 0) return false;//no service to issue
@@ -268,6 +268,7 @@ module.exports = function(paramService, esbMessage)
                     }
                 })
             })
+            //SPAWN BUSINESS RECORD
             .then(function(serviceResponse){
                 if(!serviceResponse) return false;//no service to issue
                 service = serviceResponse.pl;
