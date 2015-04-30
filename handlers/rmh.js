@@ -135,7 +135,7 @@ module.exports = function(paramService, esbMessage){
               from:paramRequest.user.lanzheng.loginName,
               subject:dbRequest.rt,
               body:dbRequest.rb,
-              notificationType:'type of notification'}
+              notificationType:'申请通知'}
         }};
         esbMessage(m);
     }).then(
