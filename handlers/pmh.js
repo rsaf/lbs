@@ -385,6 +385,7 @@ module.exports = function (paramPS, esbMessage) {
             ns: 'pmm',
             op: "pmm_SetInspectedPhotoStatus",
             pl: paramRequest.body.photo
+
         }
 
 
@@ -393,46 +394,10 @@ module.exports = function (paramPS, esbMessage) {
             m.pl.st = '300';
 
 
-            var m2 = {
-                ns: 'pmm',
-                op: "pmm_SubmitPhotoToCorrection",
-                pl: paramRequest.body.photo
-            }
-
         }
         else if (inspectionStatus === 'unqualified') {
 
             m.pl.st = '400';
-
-            var m2 = {
-                ns: 'mdm',
-                vs: '1.0',
-                op: 'sendNotification',
-                pl: {
-                    recipients: [{
-                        inmail: {to: 'sa'},
-                        weixin: {to: 'lionleo001'},
-                        sms: {to: '15900755434'},
-                        email: {to: 'rolland@lbsconsulting.com'}
-                    }]
-                    , notification: {}
-                }
-            };
-            m2.pl.notification.subject = '照片不合格提示';
-            m2.pl.notification.notificationType = '事务通知';
-            m2.pl.notification.from = 'sa';
-
-
-            if (paramRequest.body.data) {
-
-                if (paramRequest.body.data.othersText) {
-                    m2.pl.notification.body = paramRequest.body.data.reason + '   ' + paramRequest.body.data.other;
-                }
-                else if (paramRequest.body.data.reason) {
-                    m2.pl.notification.body = paramRequest.body.data.reason;
-                }
-            }
-
         }
         else {
 
@@ -443,6 +408,7 @@ module.exports = function (paramPS, esbMessage) {
             return;
         }
         //submit inspection status
+
         esbMessage(m)
             .then(function (r) {
 
@@ -451,21 +417,49 @@ module.exports = function (paramPS, esbMessage) {
             })
             .then(function () {
 
-                //submit to correction
 
-                esbMessage(m2)
-                    .then(function (r) {
+                if (inspectionStatus === 'unqualified') {
 
-                        console.log('sumit to correction/send notificatio done---');
-                        oHelpers.sendResponse(paramResponse, 200, r);
-                    })
+                    var m = {
+                        ns: 'mdm',
+                        vs: '1.0',
+                        op: 'sendNotification',
+                        pl: {
+                            recipients: [{
+                                inmail: {to: 'sa'},
+                                weixin: {to: null},
+                                sms: {to: '13917207446'},
+                                email: {to: null}
+                            }]
+                            , notification: {}
+                        }
+                    };
 
-                    .fail(null, function reject(r) {
-                        console.log('pmh error:-----', r);
-                        r = {pl: null, er: {ec: 100012, em: "send notification or submit to correction----"}};
-                        oHelpers.sendResponse(paramResponse, 501, r);
-                    });
+                    m.pl.notification.subject = '蓝正照片不合格提示:';
+                    m.pl.notification.notificationType = '事务通知';
+                    m.pl.notification.from = '系统';
 
+
+
+                    if (paramRequest.body.data&&paramRequest.body.data.reason) {
+
+                        console.log('paramRequest.body.data.reason',paramRequest.body.data.reason);
+
+                        if (paramRequest.body.data.othersText) {
+                            m.pl.notification.body = paramRequest.body.data.reason + '   ' + paramRequest.body.data.other;
+                        }
+                        else{
+                            m.pl.notification.body = paramRequest.body.data.reason;
+                        }
+                    }
+
+                    esbMessage(m)
+                        .then(function (r) {
+
+                            console.log('sumit to correction/send notification done---',r);
+                            oHelpers.sendResponse(paramResponse, 200, r);
+                        });
+                }
 
             })
             .fail(null, function reject(r) {
@@ -625,11 +619,6 @@ module.exports = function (paramPS, esbMessage) {
         var ac = paramRequest.body.pl.foldername;
 
 
-        console.log('--paramRequest.body---', paramRequest.body);
-        console.log('failed photo url---', photoUrl);
-
-        //{uuid: uri.slice(0, uri.lastIndexOf("."));
-
 
         var m = {
             ns: 'pmm',
@@ -638,19 +627,51 @@ module.exports = function (paramPS, esbMessage) {
         }
 
 
-        ///photos/4cf9598d-621d-4d49-93b9-f60c1ef8c137.jpeg
 
-        console.log('m----', m);
+
 
         esbMessage(m)
             .then(function (r) {
-
 
                 console.log('photo marked as correction failed, successful');
 
                 var r = {pl: {rs: true}, er: null};
                 oHelpers.sendResponse(paramResponse, 200, r);//@todo this does not need response to client
 
+
+            })
+            .then(function(r){
+
+               // m.pl.recipients[0].inmail.to = r.pl.ow.uid;
+                console.log('r---------------',r);
+
+                    var m = {
+                        ns: 'mdm',
+                        vs: '1.0',
+                        op: 'sendNotification',
+                        pl: {
+                            recipients: [{
+                                inmail: {to: 'sa'},
+                                weixin: {to: null},
+                                sms: {to: '13917207446'},
+                                email: {to: null}
+                            }]
+                            , notification: {}
+                        }
+                    };
+
+                    m.pl.notification.subject = '蓝正照片不合格提示:';
+                    m.pl.notification.notificationType = '事务通知';
+                    m.pl.notification.from = '系统';
+                    m.pl.notification.body = '您的照片制作失败了。。。。';
+
+
+                    esbMessage(m)
+                        .then(function (r) {
+
+                            console.log('sumit to correction/send notification done---',r);
+                            oHelpers.sendResponse(paramResponse, 200, r);
+                        });
 
             })
             .fail(function (r) {
