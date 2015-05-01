@@ -5,6 +5,7 @@
  */
 var oHelpers= require('../utilities/helpers.js');
 var q = require('q');
+var lib = require('lib');
 
 module.exports = function(paramService, esbMessage)
 {
@@ -112,10 +113,14 @@ module.exports = function(paramService, esbMessage)
         m = {},
         transactionid = false,
         r = {er:null,pl:null},
-        reqPayload=false;
+        phone = undefined,
+        reqPayload=false,
+        refCode = undefined;
     q().then(function(){
       //get a transaction id from wmm
       reqPayload = JSON.parse(paramRequest.body.json);
+        phone = reqPayload.pl.phone;
+        refCode = lib.generateResponseReferenceCode();
       m.pl=reqPayload.pl;
       m.op='bmm_getResponse';
       return q.all([
@@ -180,7 +185,8 @@ module.exports = function(paramService, esbMessage)
               rs:30,
               sp:{
                 ps:'paid'
-              }
+              },
+              rfc:refCode
             }
           }
         })
@@ -196,6 +202,8 @@ module.exports = function(paramService, esbMessage)
     })
     .then(function(){
       _issueFirstOrderForResponse(paramRequest);
+            var mail = paramRequest.user.lanzheng.loginName
+      _sendSMS(mail, phone, refCode);
       oHelpers.sendResponse(paramResponse,200,r);
     })
     .then(null,function reject(err){
@@ -211,7 +219,33 @@ module.exports = function(paramService, esbMessage)
       oHelpers.sendResponse(paramResponse,code,r);
     });
   });
+    function _sendSMS(mail, phone, refCode){
+        console.log("SENDING SMS to ",phone,"with reference code",refCode);
+        var m = {
+            ns: 'mdm',
+            vs: '1.0',
+            op: 'sendNotification',
+            pl: {
+                recipients: [{
+                    inmail: {to: mail},
+                    weixin: {to: null},
+                    sms: {to: phone},
+                    email: {to: null}
+                }]
+                , notification: {}
+            }
+        };
 
+        m.pl.notification.subject = '蓝正照片不合格提示:';
+        m.pl.notification.notificationType = '事务通知';
+        m.pl.notification.from = '系统';
+        m.pl.notification.body = refCode;
+
+        esbMessage(m)
+            .then(function (r) {
+                console.log("Sent sms... r = ",r);
+            });
+    }
     function _issueFirstOrderForResponse(request){
         var ln = request.user.lanzheng.loginName,
             org = request.user.currentOrganization,
