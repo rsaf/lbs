@@ -203,7 +203,7 @@ module.exports = function(paramService, esbMessage)
     .then(function(){
       _issueFirstOrderForResponse(paramRequest);
             var mail = paramRequest.user.lanzheng.loginName
-      _sendSMS(mail, phone);
+      _sendSMS(mail, phone, refCode);
       oHelpers.sendResponse(paramResponse,200,r);
     })
     .then(null,function reject(err){
