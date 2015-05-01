@@ -107,6 +107,7 @@ module.exports = function(paramService, esbMessage)
  * makes payment to account ?? for all the services
  */
   fmmRouter.post('/responsepayment.json', function(paramRequest, paramResponse, paramNext){
+      console.log("HIT THIS ENDPOINT");
     var varAccountID  = null,
         m = {},
         transactionid = false,
@@ -194,6 +195,7 @@ module.exports = function(paramService, esbMessage)
       return _commitTransaction({pl:{transactionid : transactionid}});
     })
     .then(function(){
+      _issueFirstOrderForResponse(paramRequest);
       oHelpers.sendResponse(paramResponse,200,r);
     })
     .then(null,function reject(err){
@@ -209,6 +211,120 @@ module.exports = function(paramService, esbMessage)
       oHelpers.sendResponse(paramResponse,code,r);
     });
   });
-  
+
+    function _issueFirstOrderForResponse(request){
+        var ln = request.user.lanzheng.loginName,
+            org = request.user.currentOrganization,
+            json = JSON.parse(request.body.json),
+            responseCode = json.pl.code,
+            transactionid,
+            dbEntity,
+            jsonEntity,
+            service,
+            responseInfo;
+
+        console.log("Issuing first order for RESPONSE",responseCode);
+        return q()
+            //INIT TRANSACTION
+            .then(function(){
+                return esbMessage({  //and a transactionid
+                    op:"createTransaction",
+                    pl:{
+                        loginName : ln,
+                        currentOrganization : org,
+                        transaction:{
+                            description:'Notify service point of response intent'
+                            ,modules:['bmm','smm']
+                        }
+                    }
+                })
+            })
+            //FETCH RESPONSE STATUS FROM CODEs
+            .then(function(tid){
+                transactionid = tid;
+                return esbMessage({
+                    ns : "bmm",
+                    op : "bmm_getResponse",
+                    pl : {
+                        code : responseCode,
+                        loginName : ln,
+                        currentOrganization : org,
+                        transactionid : transactionid
+                    }
+                });
+            })
+            //FETCH SERVICE INFO
+            .then(function(esbResponse) {
+                responseInfo = esbResponse;
+                if(responseInfo.sb.length <= 0) return false;//no service to issue
+                return esbMessage({
+                    ns : "smm",
+                    op : "smm_getService",
+                    pl : {
+                        qid : responseInfo.sb[0].svid,
+                        loginName : ln,
+                        currentOrganization : org,
+                        transactionid : transactionid
+                    }
+                })
+            })
+            //SPAWN BUSINESS RECORD
+            .then(function(serviceResponse){
+                if(!serviceResponse) return false;//no service to issue
+                service = serviceResponse.pl;
+                console.log("SPAWNING USING \nSERVICE:",service,"\nRESPONSE:",responseInfo);
+                return esbMessage({
+                    ns: "smm",
+                    op: "smm_spawnBusinessRecord",
+                    pl: {
+                        response: {
+                            acn:responseInfo.acn//activity code
+                            ,rc:responseCode//response code
+                            ,serviceCode:service.serviceCode// service code
+                            ,svn:service.serviceName// service name code
+                            ,st:20// status
+                            ,uid:ln// user login account , customer who bought the service
+                            ,usn:responseInfo.ow.uid// user name , customer who bought the service
+                            ,svp:responseInfo.sb[0].svp//
+                            ,service:service._id//{ type: paramMongoose.Schema.Types.ObjectId, ref: 'services',required:true }
+                            ,oID:service.ct.oID
+                        },
+                        loginName: ln,
+                        currentOrganization: org,
+                        transactionid: transactionid
+                    }
+                })
+            })
+            //SET FIRST SERVICE TO 'ISSUED'
+            .then(function(){
+                if(!(responseInfo && responseInfo.sb && responseInfo.sb.length > 0)) return false;//no service
+                responseInfo.sb[0].cvs = 20;
+                responseInfo.sb = responseInfo.sb[0];
+                return esbMessage({
+                    "ns": "bmm",
+                    "op": "bmm_persistResponse",
+                    "pl": {
+                        response: responseInfo,
+                        loginName : ln,
+                        currentOrganization : org
+                    }
+                })
+            })
+            //COMMIT TRANSACTION
+            //TODO handle no-service case
+            .then(function (){
+                if(transactionid){
+                    return _commitTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
+                }
+                return false;
+            })
+            //EXIT
+            .then(function resolve(r){
+                console.log("Chain of events resolved! - ",r);
+            }  ,  function failure(r){
+                console.log("Unable to issue order (rolling back):",r);
+                return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
+            });
+    }
   return fmmRouter;
 };
