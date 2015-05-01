@@ -393,8 +393,7 @@ module.exports = function (paramPS, esbMessage) {
 
         if (inspectionStatus === 'qualified') {
 
-            m.pl.st = '100';
-            m.pl.sg = '30';
+            m.pl.st = '300';
 
         }
         else if (inspectionStatus === 'unqualified') {
@@ -461,6 +460,24 @@ module.exports = function (paramPS, esbMessage) {
                             console.log('sumit to correction/send notification done---',r);
                           //  oHelpers.sendResponse(paramResponse, 200, r);
                         });
+                }
+                else{
+
+
+                    var m = {
+                        ns: 'pmm',
+                        op: "pmm_SubmitPhotoToCorrection",
+                        pl: paramRequest.body.photo
+                    }
+
+                    esbMessage(m)
+                        .then(function (r) {
+
+                            console.log('photo submitted to correction -------',r);
+                            //  oHelpers.sendResponse(paramResponse, 200, r);
+                        });
+
+
                 }
 
             })
