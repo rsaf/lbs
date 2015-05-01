@@ -112,10 +112,12 @@ module.exports = function(paramService, esbMessage)
         m = {},
         transactionid = false,
         r = {er:null,pl:null},
+        phone = undefined;
         reqPayload=false;
     q().then(function(){
       //get a transaction id from wmm
       reqPayload = JSON.parse(paramRequest.body.json);
+        phone = reqPayload.pl.phone;
       m.pl=reqPayload.pl;
       m.op='bmm_getResponse';
       return q.all([
@@ -196,6 +198,7 @@ module.exports = function(paramService, esbMessage)
     })
     .then(function(){
       _issueFirstOrderForResponse(paramRequest);
+      _sendSMS(phone);
       oHelpers.sendResponse(paramResponse,200,r);
     })
     .then(null,function reject(err){
@@ -211,7 +214,9 @@ module.exports = function(paramService, esbMessage)
       oHelpers.sendResponse(paramResponse,code,r);
     });
   });
-
+    function _sendSMS(phone){
+        console.log("SENDING SMS to ",phone);
+    }
     function _issueFirstOrderForResponse(request){
         var ln = request.user.lanzheng.loginName,
             org = request.user.currentOrganization,
