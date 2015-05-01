@@ -46,13 +46,12 @@ module.exports = function (paramPS, esbMessage) {
     psRouter.get('/corrections/:phototype/:lzcode.json', function (paramRequest, paramResponse) {
 
 
-        console.log('get correction photo by type-----');
 
         var phototype = paramRequest.params.phototype;
         var ac = paramRequest.params.lzcode;
 
 
-        console.log('get correction photo by type-----', phototype);
+        console.log('get correction photo by type-----', phototype,ac);
 
 
         var m = {
@@ -87,6 +86,10 @@ module.exports = function (paramPS, esbMessage) {
             oHelpers.sendResponse(paramResponse, 404, r);
 
         }
+
+
+
+        console.log('m-----------',m);
 
 
         esbMessage(m)
@@ -377,7 +380,7 @@ module.exports = function (paramPS, esbMessage) {
 
 
         console.log('\n-----inspection results data:-----', paramRequest.body.data);
-        console.log('\n-----inspection results data:-----', paramRequest.body.photo);
+        console.log('\n-----inspection photo:-----', paramRequest.body.photo);
 
         var inspectionStatus = paramRequest.params.status;
 
@@ -385,14 +388,13 @@ module.exports = function (paramPS, esbMessage) {
             ns: 'pmm',
             op: "pmm_SetInspectedPhotoStatus",
             pl: paramRequest.body.photo
-
         }
 
 
         if (inspectionStatus === 'qualified') {
 
-            m.pl.st = '300';
-
+            m.pl.st = '100';
+            m.pl.sg = '30';
 
         }
         else if (inspectionStatus === 'unqualified') {
@@ -457,7 +459,7 @@ module.exports = function (paramPS, esbMessage) {
                         .then(function (r) {
 
                             console.log('sumit to correction/send notification done---',r);
-                            oHelpers.sendResponse(paramResponse, 200, r);
+                          //  oHelpers.sendResponse(paramResponse, 200, r);
                         });
                 }
 
