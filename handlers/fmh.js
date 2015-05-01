@@ -236,7 +236,7 @@ module.exports = function(paramService, esbMessage)
             }
         };
 
-        m.pl.notification.subject = '蓝正照片不合格提示:';
+        m.pl.notification.subject = '您事务响应蓝正吗为';
         m.pl.notification.notificationType = '事务通知';
         m.pl.notification.from = '系统';
         m.pl.notification.body = refCode;
