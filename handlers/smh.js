@@ -512,7 +512,7 @@ module.exports = function (paramService, esbMessage) {
         esbMessage(m)
             .then(function (r) {
                 paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(r.pl));
+                paramResponse.end(JSON.stringify(r));
             })
             .fail(function (r) {
                 paramResponse.writeHead(501, {"Content-Type": "application/json"});
