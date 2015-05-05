@@ -112,6 +112,7 @@ module.exports = function(paramService, esbMessage)
     var varAccountID  = null,
         m = {},
         transactionid = false,
+        responseCode = null,
         r = {er:null,pl:null},
         phone = undefined,
         reqPayload=false,
@@ -139,6 +140,7 @@ module.exports = function(paramService, esbMessage)
       ]);
     })
     .then(function(msg){
+      responseCode = msg[0].rc;
       transactionid = msg[1].pl.transaction._id;
       var serviceBookings = msg[0].sb,
           orders = [],
@@ -173,7 +175,7 @@ module.exports = function(paramService, esbMessage)
           "pl": {orders : orders}
       };
       return q.all([
-        m,//parameters to save orders and insert payment records
+          m,//parameters to save orders and insert payment records
         esbMessage({  //update the response and set payment status to 'paid'
           op : "bmm_persistResponse",
           pl:{
@@ -200,9 +202,20 @@ module.exports = function(paramService, esbMessage)
       r.pl = msg[0];
       return _commitTransaction({pl:{transactionid : transactionid}});
     })
-    .then(function(){
-      _issueFirstOrderForResponse(paramRequest);
-            var mail = paramRequest.user.lanzheng.loginName
+    .then(function (msg){
+        return esbMessage({
+            "ns" : "bmm",
+            "op" : "getResponse",
+            "pl" : {
+                loginName : paramRequest.user.lanzheng.loginName,
+                currentOrganization : paramRequest.user.currentOrganization,
+                code :responseCode
+            }
+        })
+    })
+    .then(function(response){
+      _issueOrders(response, paramRequest);
+      var mail = paramRequest.user.lanzheng.loginName;
       _sendSMS(mail, phone, refCode);
       oHelpers.sendResponse(paramResponse,200,r);
     })
@@ -211,7 +224,7 @@ module.exports = function(paramService, esbMessage)
       r.er={ec:10012,em:"Could not make payment"};
       //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
       if(err.er && err.er ==='Insufficient funds'){
-        r.er={ec:10011,em:err};
+        r.er={ec:10011,em:err.er};
         code = 403;
       }else{
         _rollBackTransaction({pl:{transactionid : transactionid}});
@@ -245,6 +258,30 @@ module.exports = function(paramService, esbMessage)
             .then(function (r) {
                 console.log("Sent sms... r = ",r);
             });
+    }
+    function _issueOrders(responseObj, request){
+        console.log("ISSUING ORDERS");
+        var specialCases = [
+                {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse}
+            ],
+            ac_code = lib.digFor(responseObj,"fd.ac");
+            sv_code = lib.digFor(responseObj,"sb.0.svn"),
+            isSpecial = -1;
+
+        for(var i = 0; i < specialCases.length; i++)
+        {
+            var tgt = specialCases[i];
+            if(!ac_code || !sv_code || tgt.ac != ac_code || tgt.sv != sv_code) continue;
+            isSpecial = i;
+            break;
+        }
+        if(isSpecial >= 0)
+            return specialCases[isSpecial].fn(request);
+        else
+            return _issueFirstOrderForResponse(request);
+    }
+    function _handleSingleIdValidationResponse(request){
+        console.log("FOO HAS INITIATED A SINGLE ID VALIDATION RESPONSE!");
     }
     function _issueFirstOrderForResponse(request){
         var ln = request.user.lanzheng.loginName,
@@ -331,7 +368,7 @@ module.exports = function(paramService, esbMessage)
             })
             //SET FIRST SERVICE TO 'ISSUED'
             .then(function(){
-                if(!(responseInfo && responseInfo.sb && responseInfo.sb.length > 0)) return false;//no service
+                if(lib.digFor(responseInfo,"sb.length") <= 0) return false;//no service
                 responseInfo.sb[0].cvs = 20;
                 responseInfo.sb = responseInfo.sb[0];
                 return esbMessage({

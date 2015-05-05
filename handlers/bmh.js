@@ -155,7 +155,6 @@ module.exports = function(paramService, esbMessage){
 
 
   var bmRouter = paramService.Router();
-    //@todo - Ed's get template
   bmRouter.get('/listtemplate.json', function(paramRequest, paramResponse, paramNext){
         //http://localhost/files/7ab7a057-b10f-47d1-9967-f5b11b625b9b.xlsx
         var m = {pl:{}};
