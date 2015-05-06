@@ -112,7 +112,7 @@ module.exports = function(paramService, esbMessage)
     var varAccountID  = null,
         m = {},
         transactionid = false,
-        responseCode = null,
+        responseInfo = null,
         r = {er:null,pl:null},
         phone = undefined,
         reqPayload=false,
@@ -140,7 +140,7 @@ module.exports = function(paramService, esbMessage)
       ]);
     })
     .then(function(msg){
-      responseCode = msg[0].rc;
+      responseInfo = msg[0];
       transactionid = msg[1].pl.transaction._id;
       var serviceBookings = msg[0].sb,
           orders = [],
@@ -174,47 +174,42 @@ module.exports = function(paramService, esbMessage)
           "op": "fmm_makeDirectPayment",
           "pl": {orders : orders}
       };
-      return q.all([
-          m,//parameters to save orders and insert payment records
-        esbMessage({  //update the response and set payment status to 'paid'
+
+      var m1 = {  //update the response and set payment status to 'paid'
           op : "bmm_persistResponse",
           pl:{
-            transactionid : transactionid,
-            loginName : paramRequest.user.lanzheng.loginName,
-            currentOrganization : paramRequest.user.currentOrganization,
-            response : {
-              _id : msg[0]._id,
-              rs:30,
-              sp:{
-                ps:'paid'
-              },
-              rfc:refCode
-            }
+              transactionid : transactionid,
+              loginName : paramRequest.user.lanzheng.loginName,
+              currentOrganization : paramRequest.user.currentOrganization,
+              response : {
+                  _id : msg[0]._id,
+                  rs:30,
+                  sp:{
+                      ps:'paid'
+                  },
+                  rfc:refCode
+              }
           }
-        })
+      };
+            if(orders && orders.length == 0)
+            {
+                m = m1
+            }
+      return q.all([
+        m,//parameters to save orders and insert payment records
+        esbMessage(m1)
       ]);
     })
     .then(function(msg){
       //create orders and move money around, if this fails we can roll back the response
-      return esbMessage(msg[0]);
+      return lib.digFor(msg,"0.op")?esbMessage(msg[0]):msg[0];
     })
     .then(function(msg){
       r.pl = msg[0];
       return _commitTransaction({pl:{transactionid : transactionid}});
     })
-    .then(function (msg){
-        return esbMessage({
-            "ns" : "bmm",
-            "op" : "getResponse",
-            "pl" : {
-                loginName : paramRequest.user.lanzheng.loginName,
-                currentOrganization : paramRequest.user.currentOrganization,
-                code :responseCode
-            }
-        })
-    })
-    .then(function(response){
-      _issueOrders(response, paramRequest);
+    .then(function(){
+      _issueOrders(responseInfo, paramRequest);
       var mail = paramRequest.user.lanzheng.loginName;
       _sendSMS(mail, phone, refCode);
       oHelpers.sendResponse(paramResponse,200,r);
@@ -260,28 +255,47 @@ module.exports = function(paramService, esbMessage)
             });
     }
     function _issueOrders(responseObj, request){
-        console.log("ISSUING ORDERS");
+        console.log("ISSUING ORDERS",responseObj);
         var specialCases = [
                 {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse}
             ],
-            ac_code = lib.digFor(responseObj,"fd.ac");
+            ac_code = lib.digFor(responseObj,"acn");
             sv_code = lib.digFor(responseObj,"sb.0.svn"),
             isSpecial = -1;
 
         for(var i = 0; i < specialCases.length; i++)
         {
             var tgt = specialCases[i];
-            if(!ac_code || !sv_code || tgt.ac != ac_code || tgt.sv != sv_code) continue;
+            if(!ac_code || tgt.ac != ac_code /*|| !sv_code  || tgt.sv != sv_code*/) continue;
             isSpecial = i;
             break;
         }
         if(isSpecial >= 0)
-            return specialCases[isSpecial].fn(request);
+            return specialCases[isSpecial].fn(request,responseObj);
         else
             return _issueFirstOrderForResponse(request);
     }
-    function _handleSingleIdValidationResponse(request){
-        console.log("FOO HAS INITIATED A SINGLE ID VALIDATION RESPONSE!");
+    function _handleSingleIdValidationResponse(request,responseObj){
+        return q()
+            .then(function(){
+                return esbMessage({
+                    ns:"upm",
+                    op:"upm_validateUserInfo",
+                    pl:{
+                        "method":"validateID",
+                        "sfz": responseObj.fd.fields["sfz"], //shenfenzheng or user national id number
+                        "xm": responseObj.fd.fields["xm"],  //xingming or user full name
+                        "zz": ""   //zhengzhao or user id photo buffer //must be provided when executing the validatePhoto method.
+                    }
+                });
+            })
+            //EXIT
+            .then(function resolve(r){
+                console.log("Chain of events resolved (Special case)! - ",r);
+            }  ,  function failure(r){
+                console.log("Unable to issue (special case) order (rolling back):",r);
+                return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
+            });
     }
     function _issueFirstOrderForResponse(request){
         var ln = request.user.lanzheng.loginName,
