@@ -158,15 +158,18 @@ module.exports = function(paramService, esbMessage){
         importSpecialCaseActivities.forEach(function(input){
             console.log("(bmm) persisting",input.persist);
             var req = {
-                body:{json:JSON.stringify(input.persist.pl)},
+                body:{json:JSON.stringify({pl:{activity:input.persist.pl}})},
                 user:{
                     lanzheng:{loginName:"a1ed"},
                     currentOrganization:"200000000000000000000000"
                 }
             };
             var res = {
-                writeHead : function(){},
+                writeHead : function(){
+                    console.log("IN THE HEAD");
+                },
                 end : function(){
+                    console.log("IN THE END");/*
                     return esbMessage({
                     "ns": input.rename.ns,
                     "op": input.rename.op,
@@ -174,15 +177,10 @@ module.exports = function(paramService, esbMessage){
                         find: m.pl[input.rename.tgtField],
                         code: input.rename.pl
                     }
-                })}
+                })*/}
                 }
             ;
             _persistActivity(req,res)
-                /*
-                .then(function(){
-
-                })
-                */
         })
     }
 
