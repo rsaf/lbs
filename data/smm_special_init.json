@@ -1,0 +1,90 @@
+[
+  {
+    "_comment": "LZP 101",
+    "persist": {
+      "ns": "smm",
+      "op": "persistServicePoint",
+      "tgtField": "servicePoint",
+      "pl": {
+        "servicePointCode": "LZP101",
+        "servicePointName": "11",
+        "status": 0,
+        "servicePointAddress": "111",
+        "servicePointType": "55497867db5d88683c9fb321",
+        "operatingHours": "11",
+        "contactPerson": "11",
+        "contactPhone": "111",
+        "servicePointDescription": "11",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "op": "smm_changeServicePointCode",
+      "tgtField": "servicePointCode",
+      "pl": "LZP101"
+    }
+  },
+  {
+    "_comment":"LZS 101",
+    "persist": {
+      "ns": "smm",
+      "op": "persistService",
+      "tgtField": "service",
+      "pl": {
+        "serviceCode": "LZS101",
+        "PriceList": [
+          {
+            "servicePoint": "55497ec3679878d23c1d1827",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "0",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 0,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "55497867db5d88683c9fb324",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "ID Validation",
+        "serviceName": "5548375f02f7c81622e557a5",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "op": "smm_changeServiceCode",
+      "tgtField": "serviceCode",
+      "pl": "LZS101"
+    }
+  }
+]

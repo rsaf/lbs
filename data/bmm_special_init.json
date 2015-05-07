@@ -1,0 +1,59 @@
+[
+  {
+    "rename": {
+      "ns": "bmm",
+      "op": "bmm_changeActivityCode",
+      "tgtField": "abd.ac",
+      "pl": "LZB101"
+    },
+    "persist": {
+        "pl" : {
+          "_id": "5548868d6ef4089d33260f00",
+          "ds": false,
+          "sqc": [
+            {
+              "sn": "5548375f02f7c81622e557a5",
+              "st": "5546eb52979602500c9d7fb1",
+              "pl": "5539ae180d6074ef0ec1bd06",
+              "ui": {
+                "serviceCode": "LZS101",
+                "price": "0元",
+                "serviceName": "Single ID Validation",
+                "servicePointName": "ffff"
+              },
+              "pc": []
+            }
+          ],
+          "arc": {
+            "pc": []
+          },
+          "abd": {
+            "ac": "LZB101",
+            "an": "Single ID Validation",
+            "fdn": "Test 1.2.0",
+            "apm": "在线支付",
+            "at": "1",
+            "asd": "2015-05-01T00:00:00Z",
+            "acd": "2015-05-29T00:00:00Z",
+            "vc": "",
+            "arv": "",
+            "aiv": "",
+            "apt": "10",
+            "aps": 30
+          },
+          "md": {
+            "uID": "a1ed",
+            "oID": "200000000000000000000000",
+            "lu": "2015-05-04T05:46:36.947Z"
+          },
+          "ct": {
+            "uID": "a1ed",
+            "oID": "200000000000000000000000",
+            "cd": "2015-05-04T03:19:15.179Z"
+          },
+          "__v": 1,
+          "fm": "5546e58b5a7cfdae08ae00e9"
+        }
+    }
+  }
+]

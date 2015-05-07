@@ -151,7 +151,40 @@ module.exports = function(paramService, esbMessage){
     );
   }
 
+    function _prepopulateSpecialCaseActivities(){
 
+        var importSpecialCaseActivities = require('../data/bmm_special_init.json');
+
+        importSpecialCaseActivities.forEach(function(input){
+            console.log("(bmm) persisting",input.persist);
+            var req = {
+                body:{json:JSON.stringify(input.persist.pl)},
+                user:{
+                    lanzheng:{loginName:"a1ed"},
+                    currentOrganization:"200000000000000000000000"
+                }
+            };
+            var res = {
+                writeHead : function(){},
+                end : function(){
+                    return esbMessage({
+                    "ns": input.rename.ns,
+                    "op": input.rename.op,
+                    "pl": {
+                        find: m.pl[input.rename.tgtField],
+                        code: input.rename.pl
+                    }
+                })}
+                }
+            ;
+            _persistActivity(req,res)
+                /*
+                .then(function(){
+
+                })
+                */
+        })
+    }
 
 
   var bmRouter = paramService.Router();
@@ -1028,6 +1061,7 @@ module.exports = function(paramService, esbMessage){
 
     });
 
+    _prepopulateSpecialCaseActivities();
     return bmRouter;
 };
 

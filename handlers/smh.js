@@ -77,6 +77,65 @@ module.exports = function (paramService, esbMessage) {
         return esbMessage(m);
     }
 
+    function _prepopulateSpecialCaseServices(){
+
+        var importSpecialCaseServices = require('../data/smm_special_init.json');
+
+        importSpecialCaseServices.forEach(function(ele){
+            console.log("persisting",ele);
+            _persistSpecialCaseWithTransaction(ele);
+        })
+    }
+
+    function _persistSpecialCaseWithTransaction(input){
+        var transactionid = undefined;
+        return q()
+            .then(function createTransaction() {
+                return esbMessage({
+                    "op": "createTransaction",
+                    "pl": {
+                        transaction: {
+                            description: 'persist with transaction'
+                            , modules: ['smm']
+                        },
+                        currentOrganization : "200000000000000000000000",
+                        loginName : "a1ed"
+                    }
+                });
+            })
+            .then(function persistSpecialCase(msg) {
+                transactionid = msg.pl.transaction._id;
+
+                var m = {
+                    "ns": input.persist.ns,
+                    "op": input.persist.op,
+                    "pl":{
+                        transactionid : transactionid
+                    }
+                };
+                m.pl[input.persist.tgtField] = input.persist.pl;
+                return esbMessage(m);
+            })
+            .then(function rename(m) {
+                return esbMessage({
+                    "ns": input.rename.ns,
+                    "op": input.rename.op,
+                    "pl": {
+                        find: m.pl[input.rename.tgtField],
+                        code: input.rename.pl
+                    }
+                })
+            })
+            .then(function commitTransaction(m) {
+                return _commitTransaction({pl:{transactionid:transactionid}});
+            })
+            .then(function resolve(r) {
+                return r
+            }  ,  function failure(r) {
+                throw r;
+            })
+    }
+
     var serviceManagementRouter = paramService.Router();
     serviceManagementRouter.put('/service.json', function (paramRequest, paramResponse, paramNext) {//update service
         var m = {};
@@ -1359,6 +1418,7 @@ module.exports = function (paramService, esbMessage) {
 
 
     //createServicePoint
+    _prepopulateSpecialCaseServices();
     return serviceManagementRouter;
 };
 
