@@ -83,7 +83,16 @@ module.exports = function (paramService, esbMessage) {
 
         importSpecialCaseServices.forEach(function(ele){
             console.log("persisting",ele);
-            _persistSpecialCaseWithTransaction(ele);
+            return esbMessage({
+                "ns" : ele.rename.ns,
+                "op" : ele.rename.find,
+                "pl" : {
+                    code : ele.rename.pl
+                }
+            }).then(function(inUse){
+                if(!inUse)
+                    _persistSpecialCaseWithTransaction(ele);
+            })
         })
     }
 
@@ -1416,8 +1425,9 @@ module.exports = function (paramService, esbMessage) {
 
     });
 
-    serviceManagementRouter._prepopulateSpecialCaseServices = _prepopulateSpecialCaseServices
     //createServicePoint
+
+    _prepopulateSpecialCaseServices();
     return serviceManagementRouter;
 };
 

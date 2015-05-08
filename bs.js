@@ -83,21 +83,21 @@ module.exports.startBS = function(){
             oHomeRouter = require('./handlers/hh.js')(exp, esbMessageFunction);                // home
             oSearchRouter = require('./handlers/ish.js')(exp, esbMessageFunction);             // details/search
             oUserNotificationRouter = require('./handlers/mdh.js')(exp, esbMessageFunction);   // workspace/notifications
+            oInterfacesRouter =                                                                // workspace/interfaces
             oUserRouter = require('./handlers/sch.js')(exp, esbMessageFunction);               // workspace/users
             oProfileRouter = require('./handlers/uph.js')(exp, esbMessageFunction);            // workspace/profile
             oRequestRouter = require('./handlers/rmh.js')(exp, esbMessageFunction);            // workspace/requests
-            oStandardsRouter =  require('./handlers/pmh.js')(exp, esbMessageFunction);         // workspace/standards
+            oStandardsRouter =                                                                 // workspace/standards
+            oInspectionRouter =                                                                // workspace/inspection
+            oCorrectionsRouter =                                                               // workspace/corrections
+            oPhotoServiceRouter = require('./handlers/pmh.js')(exp, esbMessageFunction);       // workspace/photoservices
             oPhotosRouter= require('./handlers/dmh.js')(exp, esbMessageFunction);              // workspace/photos
-            oInspectionRouter = require('./handlers/pmh.js')(exp, esbMessageFunction);         // workspace/inspection
-            oCorrectionsRouter = require('./handlers/pmh.js')(exp, esbMessageFunction);        // workspace/corrections
             oServiceRouter = require('./handlers/smh.js')(exp, esbMessageFunction);            // workspace/services
+            oResponsesRouter  =                                                                // workspace/responses
             oActivitiesRouter = require('./handlers/bmh.js')(exp, esbMessageFunction);         // workspace/activities.old
-            oResponsesRouter  =  require('./handlers/bmh.js')(exp, esbMessageFunction);        // workspace/responses
             oFinanceRouter = require('./handlers/fmh.js')(exp, esbMessageFunction);            // workspace/finance
-            oInterfacesRouter = require('./handlers/sch.js')(exp, esbMessageFunction);         // workspace/interfaces
             oOperationsLogRouter = require('./handlers/olh.js')(exp, esbMessageFunction);      // workspace/operationslog
 
-            oPhotoServiceRouter = require('./handlers/pmh.js')(exp, esbMessageFunction);       // workspace/photoservices
 
             console.log('BS: self configuring with injected dependencies ....');
             //bs.set('port', bsPort);
@@ -162,9 +162,6 @@ module.exports.startBS = function(){
             bs.use('/workspace/operationslog', oOperationsLogRouter);     // workspace/operationslog
             bs.use('/workspace/photoservices',   oPhotoServiceRouter);    // workspace/photoservices
 
-            //Run inits
-            oActivitiesRouter._prepopulateSpecialCaseActivities();
-            oServiceRouter._prepopulateSpecialCaseServices();
 
             bs.all('*', oHelpers.four_oh_four);
 

@@ -28,6 +28,7 @@
     },
     "rename": {
       "ns": "smm",
+      "find" : "smm_servicePointCodeInUse",
       "op": "smm_changeServicePointCode",
       "tgtField": "servicePointCode",
       "pl": "LZP101"
@@ -82,6 +83,7 @@
     },
     "rename": {
       "ns": "smm",
+      "find":"smm_serviceCodeInUse",
       "op": "smm_changeServiceCode",
       "tgtField": "serviceCode",
       "pl": "LZS101"

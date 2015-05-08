@@ -158,6 +158,7 @@ module.exports = function(paramService, esbMessage){
         importSpecialCaseActivities.forEach(function(input) {
             console.log("(bmm) persisting", input.persist);
             var req = {
+
                 body: {json: JSON.stringify({pl: {activity: input.persist.pl}})},
                 user: {
                     lanzheng: {loginName: "a1ed"},
@@ -190,11 +191,20 @@ module.exports = function(paramService, esbMessage){
                     })
                 }
             };
-            _persistActivity(req,res)
+            return esbMessage({
+                "ns" : input.rename.ns,
+                "op" : input.rename.find,
+                "pl" : {
+                    code : input.rename.pl
+                }
+            }).then(function(inUse){
+                if(!inUse)
+                _persistActivity(req,res)
+            })
         })
     }
 
-
+    _prepopulateSpecialCaseActivities();
   var bmRouter = paramService.Router();
   bmRouter.get('/listtemplate.json', function(paramRequest, paramResponse, paramNext){
         //http://localhost/files/7ab7a057-b10f-47d1-9967-f5b11b625b9b.xlsx
@@ -1068,7 +1078,7 @@ module.exports = function(paramService, esbMessage){
 
 
     });
-    bmRouter._prepopulateSpecialCaseActivities = _prepopulateSpecialCaseActivities
+
     return bmRouter;
 };
 

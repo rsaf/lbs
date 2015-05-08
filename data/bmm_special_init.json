@@ -2,11 +2,15 @@
   {
     "rename": {
       "ns": "bmm",
+      "find" : "bmm_activityCodeInUse",
       "op": "bmm_changeActivityCode",
       "tgtField": "abd.ac",
       "pl": "LZB101"
     },
     "persist": {
+      "ns": "bmm",
+      "op": "_persistActivity",
+      "tgtField": "activity",
         "pl" : {
           "ds": false,
           "sqc": [
