@@ -151,35 +151,45 @@ module.exports = function(paramService, esbMessage){
     );
   }
 
-    function _prepopulateSpecialCaseActivities(){
+  function _prepopulateSpecialCaseActivities(){
 
         var importSpecialCaseActivities = require('../data/bmm_special_init.json');
 
-        importSpecialCaseActivities.forEach(function(input){
-            console.log("(bmm) persisting",input.persist);
+        importSpecialCaseActivities.forEach(function(input) {
+            console.log("(bmm) persisting", input.persist);
             var req = {
-                body:{json:JSON.stringify({pl:{activity:input.persist.pl}})},
-                user:{
-                    lanzheng:{loginName:"a1ed"},
-                    currentOrganization:"200000000000000000000000"
+                body: {json: JSON.stringify({pl: {activity: input.persist.pl}})},
+                user: {
+                    lanzheng: {loginName: "a1ed"},
+                    currentOrganization: "200000000000000000000000"
                 }
             };
             var res = {
-                writeHead : function(){
-                    console.log("IN THE HEAD");
-                },
-                end : function(){
-                    console.log("IN THE END");/*
-                    return esbMessage({
-                    "ns": input.rename.ns,
-                    "op": input.rename.op,
-                    "pl": {
-                        find: m.pl[input.rename.tgtField],
-                        code: input.rename.pl
+                writeHead: function (code) {
+                    if(code == 200)
+                    {
+
                     }
-                })*/}
+                    else
+                        console.log("FINAL REJECT");
+                },
+                end: function rename(stringjson) {
+                    console.log(JSON.parse(stringjson));
+                    var m = JSON.parse(stringjson);
+                    var tgt = m.pl;
+                    input.rename.tgtField.split(".").forEach(function(e){
+                       tgt = tgt[e];
+                    })
+                    esbMessage({
+                        "ns": input.rename.ns,
+                        "op": input.rename.op,
+                        "pl": {
+                            find: tgt,
+                            code: input.rename.pl
+                        }
+                    })
                 }
-            ;
+            };
             _persistActivity(req,res)
         })
     }
@@ -1058,8 +1068,7 @@ module.exports = function(paramService, esbMessage){
 
 
     });
-
-    _prepopulateSpecialCaseActivities();
+    bmRouter._prepopulateSpecialCaseActivities = _prepopulateSpecialCaseActivities
     return bmRouter;
 };
 

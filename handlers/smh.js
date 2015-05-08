@@ -1416,9 +1416,8 @@ module.exports = function (paramService, esbMessage) {
 
     });
 
-
+    serviceManagementRouter._prepopulateSpecialCaseServices = _prepopulateSpecialCaseServices
     //createServicePoint
-    _prepopulateSpecialCaseServices();
     return serviceManagementRouter;
 };
 

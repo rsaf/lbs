@@ -162,6 +162,10 @@ module.exports.startBS = function(){
             bs.use('/workspace/operationslog', oOperationsLogRouter);     // workspace/operationslog
             bs.use('/workspace/photoservices',   oPhotoServiceRouter);    // workspace/photoservices
 
+            //Run inits
+            oActivitiesRouter._prepopulateSpecialCaseActivities();
+            oServiceRouter._prepopulateSpecialCaseServices();
+
             bs.all('*', oHelpers.four_oh_four);
 
             //var bsInstance =  bs.listen(bs.get('port'));
