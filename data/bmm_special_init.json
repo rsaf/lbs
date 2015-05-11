@@ -1,8 +1,69 @@
 [
   {
+    "persist": {
+      "ns": "bmm",
+      "op": "_persistForm",
+      "tgtField": "form",
+      "pl": {
+        "_id": "5550085d59e1aab16964de37",
+        "fc": "LZF101",
+        "fd": {
+          "fmn": "Identification Form",
+          "uuid": "04904f81-86c1-4d12-b311-8bbc162bdb02",
+          "uri": "/forms/04904f81-86c1-4d12-b311-8bbc162bdb02.html",
+          "fcd": "2015-05-11T01:39:41.364Z",
+          "pt": [],
+          "fields": [
+            {
+              "nm": "name",
+              "_id": "5550085d59e1aab16964de39",
+              "nv": false
+            },
+            {
+              "nm": "idcode",
+              "_id": "5550085d59e1aab16964de38",
+              "nv": false
+            }
+          ]
+        },
+        "siv": [],
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000",
+          "lu": "2015-05-11T01:39:41.365Z"
+        },
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000",
+          "cd": "2015-05-11T01:39:41.364Z"
+        },
+        "__v": 0
+      }
+    },
     "rename": {
       "ns": "bmm",
-      "find" : "bmm_activityCodeInUse",
+      "find": "bmm_formMetaCodeInUse",
+      "op": "bmm_changeFormMetaCode",
+      "tgtField": "fc",
+      "pl": "LZF101"
+    },
+    "upload":{
+      "ns" : "bmm",
+      "link" : {
+        "linker" : "LZB101",
+        "op" : "bmm_changeActivityFormCode"
+      },
+      "content":
+      {
+        "form":{"fd":{"fmn":"lzf101"}},
+        "html":"<font><font>Name:</font></font><div><input id=\"t50910\" data-class=\"text\" type=\"text\" data-name=\"name\" height=\"1\" value=\"\" data-default=\"\"style=\"line-height:1\" data-verification=\"false\" size=\"20\" class=\"form-control\"data-bind=\"entity.fields.name\"><br></div><div><font><font>Identification Code:</font></font></div><div><font><font><input id=\"t7653102\" data-class=\"text\" type=\"text\" data-name=\"idcode\" height=\"1\" value=\"\"data-default=\"\" style=\"line-height:1\" data-verification=\"false\" size=\"20\" class=\"form-control\"data-bind=\"entity.fields.idcode\"><br></font></font></div>"
+      }
+    }
+  },
+  {
+    "rename": {
+      "ns": "bmm",
+      "find": "bmm_activityCodeInUse",
       "op": "bmm_changeActivityCode",
       "tgtField": "abd.ac",
       "pl": "LZB101"
@@ -11,52 +72,52 @@
       "ns": "bmm",
       "op": "_persistActivity",
       "tgtField": "activity",
-        "pl" : {
-          "ds": false,
-          "sqc": [
-            {
-              "sn": "5548375f02f7c81622e557a5",
-              "st": "5546eb52979602500c9d7fb1",
-              "pl": "5539ae180d6074ef0ec1bd06",
-              "ui": {
-                "serviceCode": "LZS101",
-                "price": "0元",
-                "serviceName": "Single ID Validation",
-                "servicePointName": "ffff"
-              },
-              "pc": []
-            }
-          ],
-          "arc": {
+      "pl": {
+        "ds": false,
+        "fm": "5550085d59e1aab16964de37",
+        "sqc": [
+          {
+            "sn": "5548375f02f7c81622e557a5",
+            "st": "5546eb52979602500c9d7fb1",
+            "pl": "5539ae180d6074ef0ec1bd06",
+            "ui": {
+              "serviceCode": "LZS101",
+              "price": "0元",
+              "serviceName": "Single ID Validation",
+              "servicePointName": "ffff"
+            },
             "pc": []
-          },
-          "abd": {
-            "ac": "LZB101",
-            "an": "Single ID Validation",
-            "fdn": "Test 1.2.0",
-            "apm": "在线支付",
-            "at": "1",
-            "asd": "2015-05-01T00:00:00Z",
-            "acd": "2015-05-29T00:00:00Z",
-            "vc": "",
-            "arv": "",
-            "aiv": "",
-            "apt": "10",
-            "aps": 30
-          },
-          "md": {
-            "uID": "a1ed",
-            "oID": "200000000000000000000000",
-            "lu": "2015-05-04T05:46:36.947Z"
-          },
-          "ct": {
-            "uID": "a1ed",
-            "oID": "200000000000000000000000",
-            "cd": "2015-05-04T03:19:15.179Z"
-          },
-          "__v": 0,
-          "fm": "5546e58b5a7cfdae08ae00e9"
-        }
+          }
+        ],
+        "arc": {
+          "pc": []
+        },
+        "abd": {
+          "ac": "LZB101",
+          "an": "Single ID Validation",
+          "fdn": "Test 1.2.0",
+          "apm": "在线支付",
+          "at": "1",
+          "asd": "2015-05-01T00:00:00Z",
+          "acd": "2015-05-29T00:00:00Z",
+          "vc": "",
+          "arv": "",
+          "aiv": "",
+          "apt": "10",
+          "aps": 30
+        },
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000",
+          "lu": "2015-05-04T05:46:36.947Z"
+        },
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000",
+          "cd": "2015-05-04T03:19:15.179Z"
+        },
+        "__v": 0
+      }
     }
   }
 ]

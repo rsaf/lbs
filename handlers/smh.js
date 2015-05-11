@@ -82,7 +82,6 @@ module.exports = function (paramService, esbMessage) {
         var importSpecialCaseServices = require('../data/smm_special_init.json');
 
         importSpecialCaseServices.forEach(function(ele){
-            console.log("persisting",ele);
             return esbMessage({
                 "ns" : ele.rename.ns,
                 "op" : ele.rename.find,

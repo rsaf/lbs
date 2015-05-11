@@ -155,8 +155,8 @@ module.exports = function(paramService, esbMessage){
 
         var importSpecialCaseActivities = require('../data/bmm_special_init.json');
 
+        //Import data
         importSpecialCaseActivities.forEach(function(input) {
-            console.log("(bmm) persisting", input.persist);
             var req = {
 
                 body: {json: JSON.stringify({pl: {activity: input.persist.pl}})},
@@ -165,22 +165,41 @@ module.exports = function(paramService, esbMessage){
                     currentOrganization: "200000000000000000000000"
                 }
             };
-            var res = {
-                writeHead: function (code) {
-                    if(code == 200)
-                    {
-
+            if(input.upload && input.persist.op == "_persistForm")//we have to handle a bucket upload
+            {
+                var jsonToUpload = input.upload.content;
+                var req = {
+                    body: {json: JSON.stringify(jsonToUpload)},
+                    user: {
+                        lanzheng: {loginName: "a1ed"},
+                        currentOrganization: "200000000000000000000000"
                     }
-                    else
-                        console.log("FINAL REJECT");
-                },
+                };
+            }
+            else if(input.persist.op == "_persistActivity")
+            {
+                var req = {
+
+                    body: {json: JSON.stringify({pl: {activity: input.persist.pl}})},
+                    user: {
+                        lanzheng: {loginName: "a1ed"},
+                        currentOrganization: "200000000000000000000000"
+                    }
+                };
+            }
+            else {
+                console.log("Persist action not recognized - needs to be _persistActivity/Form");
+                return;
+            }
+            var res = {
+                writeHead: function (code) {},
                 end: function rename(stringjson) {
                     console.log(JSON.parse(stringjson));
                     var m = JSON.parse(stringjson);
                     var tgt = m.pl;
                     input.rename.tgtField.split(".").forEach(function(e){
                        tgt = tgt[e];
-                    })
+                    });
                     esbMessage({
                         "ns": input.rename.ns,
                         "op": input.rename.op,
@@ -188,7 +207,18 @@ module.exports = function(paramService, esbMessage){
                             find: tgt,
                             code: input.rename.pl
                         }
-                    })
+                    }).then(function link(res){
+                        if(m && m.pl && m.pl._id && input.upload && input.upload.link && input.upload.link.linker){
+                            esbMessage({
+                                "ns" : input.rename.ns,
+                                "op" : "bmm_changeActivityFormRef",
+                                "pl" : {
+                                    find : input.upload.link.linker,
+                                    code : m.pl._id
+                                }
+                            });
+                        }
+                    });
                 }
             };
             return esbMessage({
@@ -199,12 +229,17 @@ module.exports = function(paramService, esbMessage){
                 }
             }).then(function(inUse){
                 if(!inUse)
-                _persistActivity(req,res)
+                {
+                    if(input.persist.op == "_persistActivity")
+                        _persistActivity(req,res);
+                    else if(input.persist.op == "_persistForm")
+                       _persistForm(req,res);
+                }
             })
         })
     }
+  _prepopulateSpecialCaseActivities();
 
-    _prepopulateSpecialCaseActivities();
   var bmRouter = paramService.Router();
   bmRouter.get('/listtemplate.json', function(paramRequest, paramResponse, paramNext){
         //http://localhost/files/7ab7a057-b10f-47d1-9967-f5b11b625b9b.xlsx
