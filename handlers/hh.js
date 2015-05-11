@@ -319,7 +319,7 @@ module.exports = function (paramService, esbMessage) {
                 delete m.pl.response.sp.ps;
               }
             }
-            if(m.pl.response&&m.pl.response.sb){
+            if(m.pl.response && m.pl.response.sb){
               //get details for this pricelist
               return _getPriceList(m.pl.response);
             }
@@ -381,7 +381,27 @@ module.exports = function (paramService, esbMessage) {
         });
       });
       homeRouter.post('/response.json', function (req, res, pnext) {
-        _persistRespose(req, res, pnext);
+          var usr = (req.user && req.user.lanzheng && req.user.lanzheng.loginName) || req.sessionID;
+          var act = JSON.parse(req.body.json).pl.activityCode;
+          console.log("WOOMOOFOO", act);
+          esbMessage({
+              "ns" : "bmm",
+              "op" : "bmm_findUserResponse",
+              "pl" : {
+                  user : usr,
+                  activity : act
+              }
+          }).then(function(msg){
+              if(msg){
+                  msg = {pl: msg}
+                oHelpers.sendResponse(res, 200, msg);
+              }
+              else {
+                  _persistRespose(req, res, pnext);
+              }
+          }  ,  function failure(err){
+              oHelpers.sendResponse(res, 501, err);
+          })
       });
       homeRouter.put('/response.json', function (req, res, pnext) {
 
