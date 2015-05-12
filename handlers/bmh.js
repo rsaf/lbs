@@ -211,13 +211,15 @@ module.exports = function(paramService, esbMessage){
                         if(m && m.pl && m.pl._id && input.upload && input.upload.link && input.upload.link.linker){
                             esbMessage({
                                 "ns" : input.rename.ns,
-                                "op" : "bmm_changeActivityFormRef",
+                                "op" : input.upload.link.op,
                                 "pl" : {
                                     find : input.upload.link.linker,
                                     code : m.pl._id
                                 }
                             });
                         }
+                    }  ,  function fail(err){
+                        console.err("ERROR IN BMH preinit:",err);
                     });
                 }
             };

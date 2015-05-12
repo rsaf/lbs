@@ -56,7 +56,7 @@
       "ns" : "bmm",
       "link" : {
         "linker" : "LZB101",
-        "op" : "bmm_changeActivityFormCode"
+        "op" : "bmm_changeActivityFormRef"
       },
       "content":
       {
@@ -79,19 +79,11 @@
       "tgtField": "activity",
       "pl": {
         "ds": false,
-        "fm": "5550085d59e1aab16964de37",
         "sqc": [
           {
-            "sn": "5548375f02f7c81622e557a5",
-            "st": "5546eb52979602500c9d7fb1",
-            "pl": "5539ae180d6074ef0ec1bd06",
-            "ui": {
-              "serviceCode": "LZS101",
-              "price": "0元",
-              "serviceName": "Single ID Validation",
-              "servicePointName":"Lanid ID Verification"
-            },
-            "pc": []
+            "sn": "55507ac813f2bd608316d942",
+            "st": "55497867db5d88683c9fb324",
+            "pl": "55507ac813f2bd608316d944"
           }
         ],
         "arc": {
