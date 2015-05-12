@@ -15,12 +15,17 @@
           "pt": [],
           "fields": [
             {
-              "nm": "name",
+              "nm": "姓名",
               "_id": "5550085d59e1aab16964de39",
               "nv": false
             },
             {
-              "nm": "idcode",
+              "nm": "身份证",
+              "_id": "5550085d59e1aab16964de38",
+              "nv": false
+            },
+            {
+              "nm": "结果",
               "_id": "5550085d59e1aab16964de38",
               "nv": false
             }
@@ -84,7 +89,7 @@
               "serviceCode": "LZS101",
               "price": "0元",
               "serviceName": "Single ID Validation",
-              "servicePointName": "ffff"
+              "servicePointName":"Lanid ID Verification"
             },
             "pc": []
           }
