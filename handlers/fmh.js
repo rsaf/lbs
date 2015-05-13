@@ -257,7 +257,8 @@ module.exports = function(paramService, esbMessage)
     function _issueOrders(responseObj, request){
         console.log("ISSUING ORDERS",responseObj);
         var specialCases = [
-                {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse}
+                {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
+                {ac:"LZB102",sv:"LZS101",fn:_handlePhotoValidationResponse}
             ],
             ac_code = lib.digFor(responseObj,"acn");
             sv_code = lib.digFor(responseObj,"sb.0.svn"),
@@ -292,10 +293,26 @@ module.exports = function(paramService, esbMessage)
             //EXIT
             .then(function resolve(r){
                 console.log("Chain of events resolved (Special case)! - ",r);
+                return r;
             }  ,  function failure(r){
                 console.log("Unable to issue (special case) order (rolling back):",r);
                 return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
             });
+    }
+    function _handlePhotoValidationResponse(request,responseObj){
+        return q()
+            .then(function(){
+                return esbMessage({
+                    ns:"upm",
+                    op:"upm_validateUserInfo",
+                    pl:{
+                        "method":"validatePhoto",
+                        "sfz": responseObj.fd.fields["sfz"],
+                        "xm" : responseObj.fd.fields["xm"],
+                        "zz" : responseObj.pp.pt
+                    }
+                })
+            })
     }
     function _issueFirstOrderForResponse(request){
         var ln = request.user.lanzheng.loginName,

@@ -69,7 +69,7 @@
         "standardPricing": "0",
         "standardServiceNotes": "0",
         "briefOverview": "ID Validation",
-        "serviceName": "5548375f02f7c81622e557a5",
+        "serviceName": "300000000000000000000001",
         "standardReservationRequest": true,
         "ct": {
           "uID": "a1ed",
@@ -86,7 +86,99 @@
       "find":"smm_serviceCodeInUse",
       "op": "smm_changeServiceCode",
       "tgtField": "serviceCode",
-      "pl": "LZS101"
+      "pl": "LZS101",
+      "reid" : "300000000000000000000001"
+    }
+  },
+  {
+    "_comment": "LZP 102",
+    "persist": {
+      "ns": "smm",
+      "op": "persistServicePoint",
+      "tgtField": "servicePoint",
+      "pl": {
+        "servicePointCode": "LZP102",
+        "servicePointName": "Lanid Photo Verification",
+        "status": 0,
+        "servicePointAddress": "",
+        "servicePointType": "55497867db5d88683c9fb321",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find" : "smm_servicePointCodeInUse",
+      "op": "smm_changeServicePointCode",
+      "tgtField": "servicePointCode",
+      "pl": "LZP102"
+    }
+  },
+  {
+    "_comment":"LZS 102",
+    "persist": {
+      "ns": "smm",
+      "op": "persistService",
+      "tgtField": "service",
+      "pl": {
+        "serviceCode": "LZS102",
+        "PriceList": [
+          {
+            "servicePoint": "55497ec3679878d23c1d1827",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "0",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 0,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "55497867db5d88683c9fb324",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "ID Validation",
+        "serviceName": "300000000000000000000002",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find":"smm_serviceCodeInUse",
+      "op": "smm_changeServiceCode",
+      "tgtField": "serviceCode",
+      "pl": "LZS102",
+      "reid" : "300000000000000000000002"
     }
   }
 ]

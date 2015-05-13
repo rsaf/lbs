@@ -77,11 +77,82 @@ module.exports = function (paramService, esbMessage) {
         return esbMessage(m);
     }
 
+    function _persistForm(paramRequest, paramResponse){
+        var m = {};
+        //formHtml
+        q().then(function(){
+            m.pl=JSON.parse(paramRequest.body.json);
+            m.pl.loginName=paramRequest.user.lanzheng.loginName;
+            m.pl.currentOrganization=paramRequest.user.currentOrganization;
+            m.op='bmm_persistForm';
+            return esbMessage(m);
+        }).then(function(msg){
+            oHelpers.sendResponse(paramResponse,200,msg);
+        }).fail(function(er){
+            oHelpers.sendResponse(paramResponse,501,er);
+        });
+    }
+    function _persistActivity(paramRequest, paramResponse){
+        var m = {},response={}
+            ,activity,adminid;
+        //formHtml
+        q().then(function(){
+            m.pl=JSON.parse(paramRequest.body.json).pl;
+            m.pl.loginName=paramRequest.user.lanzheng.loginName;
+            m.pl.currentOrganization=paramRequest.user.currentOrganization;
+            if(m.pl.activity && m.pl.activity.abd && m.pl.activity.abd.aps && parseInt(m.pl.activity.abd.aps,10)===10){
+                // create a transaction
+                m.op = "createTransaction";
+                m.pl.transaction={
+                    description:'publish Activity request'
+                    ,modules:['bmm','rmm']
+                };
+                return q.all([esbMessage(m), esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})]);
+            }
+            return [false,false];
+        })
+            .then(function(msg){
+                m.pl.transactionid=(msg[0]===false)?false:msg[0].pl.transaction._id;
+                adminid=(msg[1]===false)?false:msg[1].pl.oID;
+                m.op='bmm_persistActivity';
+                return esbMessage(m);
+            })
+            .then(function(msg){
+                activity = msg;
+                if(m.pl.transactionid){
+                    m.op="rmm_persistRequestMessage";
+                    m.pl.request = _initRequestMessage(paramRequest,'Activity',activity.abd.ac,adminid);//org should be admin org
+                    return esbMessage(m);
+                }
+                return false;
+            })
+            .then(function(){
+                if(m.pl.transactionid){
+                    return _commitTransaction(m);
+                }
+            })
+            .then(function(){
+                oHelpers.sendResponse(paramResponse,200,{pl:activity});
+            })
+            .fail(function(er){
+                var trans=q();
+                if(m.pl.transactionid){
+                    trans = _rollBackTransaction(m);
+                }
+                trans.fin(function(){
+                    oHelpers.sendResponse(paramResponse,501,er);
+                });
+            });
+    }
+
+    //todo this variable is bad form
+    var serviceNameMap = {};
     function _prepopulateSpecialCaseServices(){
 
         var importSpecialCaseServices = require('../data/smm_special_init.json');
 
-        importSpecialCaseServices.forEach(function(ele){
+
+        q.all(importSpecialCaseServices.map(function(ele){
             return esbMessage({
                 "ns" : ele.rename.ns,
                 "op" : ele.rename.find,
@@ -90,10 +161,114 @@ module.exports = function (paramService, esbMessage) {
                 }
             }).then(function(inUse){
                 if(!inUse)
-                    _persistSpecialCaseWithTransaction(ele);
+                    return _persistSpecialCaseWithTransaction(ele);
+            })
+        })).then(function(res){
+            console.log("foooo",res,serviceNameMap);
+            bmh_prepopulateSpecialCaseActivities(serviceNameMap);
+        } , function error(err){
+            console.log("WHUMP",err);
+        })
+    }
+
+    function bmh_prepopulateSpecialCaseActivities(serviceNameMap){
+
+        var importSpecialCaseActivities = require('../data/bmm_special_init.json');
+        //Import data
+        importSpecialCaseActivities.forEach(function(input) {
+            var req;
+            if(input.upload && input.persist.op == "_persistForm")//we have to handle a bucket upload
+            {
+                var jsonToUpload = input.upload.content;
+                req = {
+                    body: {json: JSON.stringify(jsonToUpload)},
+                    user: {
+                        lanzheng: {loginName: "a1ed"},
+                        currentOrganization: "200000000000000000000000"
+                    }
+                };
+                console.log("PERSIST FORM req:\n",req);
+            }
+            else if(input.persist.op == "_persistActivity")
+            {
+                input.persist.pl.sqc = input.persist.pl.sqc.map(function(ele){
+                    if(serviceNameMap[ele.sn]){
+                        ele.sn = serviceNameMap[ele.sn];
+                    }
+                    return ele;
+                })
+                req = {
+
+                    body: {json: JSON.stringify({pl: {activity: input.persist.pl}})},
+                    user: {
+                        lanzheng: {loginName: "a1ed"},
+                        currentOrganization: "200000000000000000000000"
+                    }
+                };
+            }
+            else {
+                console.log("Persist action not recognized - needs to be _persistActivity/Form");
+                return;
+            }
+            var res = {
+                writeHead: function (code) {},
+                end: function rename(stringjson) {
+                    var m = JSON.parse(stringjson);
+                    var tgt = m.pl;
+                    input.rename.tgtField.split(".").forEach(function(e){
+                        tgt = tgt[e];
+                    });
+                    console.log("RENAME PARAMS:",input.rename,tgt,"\n", m.pl);
+                    esbMessage({
+                        "ns": input.rename.ns,
+                        "op": input.rename.op,
+                        "pl": {
+                            find: tgt,
+                            code: input.rename.pl
+                        }
+                    })
+                        .then(function link(res){
+                            if(m && m.pl && m.pl._id && input.upload && input.upload.link && input.upload.link.linker){
+                                esbMessage({
+                                    "ns" : input.upload.ns,
+                                    "op" : input.upload.link.op,
+                                    "pl" : {
+                                        find : input.upload.link.linker,
+                                        code : m.pl._id
+                                    }
+                                });
+                            }
+                        }  ,  function fail(err){
+                            console.err("ERROR IN BMH preinit (link-rename):",err);
+                        });
+                }
+            };
+            return esbMessage({
+                "ns" : input.rename.ns,
+                "op" : input.rename.find,
+                "pl" : {
+                    code : input.rename.pl
+                }
+            }).then(function(inUse){
+                if(!inUse)
+                {
+                    if(input.persist.op == "_persistActivity")
+                        _persistActivity(req,res);
+                    else if(input.persist.op == "_persistForm")
+                    {
+                        _persistForm(req,res);
+                    }
+                }
+                else if (input.persist.op == "_persistForm"){
+                    console.log("in use?");
+                }
+            } , function failure(err){
+                console.log("ERROR PERSISTING:",err);
             })
         })
     }
+
+
 
     function _persistSpecialCaseWithTransaction(input){
         var transactionid = undefined;
@@ -125,12 +300,20 @@ module.exports = function (paramService, esbMessage) {
                 return esbMessage(m);
             })
             .then(function rename(m) {
+                console.log("about to in")
+                if(input.persist.tgtField == "service")
+                {
+                    console.log(m.pl);
+                    serviceNameMap[m.pl.serviceName.text] = m.pl.serviceName._id;
+                }
+                else console.log("EGADS!",input.persist);
                 return esbMessage({
                     "ns": input.rename.ns,
                     "op": input.rename.op,
                     "pl": {
                         find: m.pl[input.rename.tgtField],
-                        code: input.rename.pl
+                        code: input.rename.pl,
+                        reid: input.rename.reid
                     }
                 })
             })
@@ -138,7 +321,7 @@ module.exports = function (paramService, esbMessage) {
                 return _commitTransaction({pl:{transactionid:transactionid}});
             })
             .then(function resolve(r) {
-                return r
+                return r;
             }  ,  function failure(r) {
                 throw r;
             })
