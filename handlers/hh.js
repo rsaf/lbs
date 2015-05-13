@@ -483,11 +483,14 @@ module.exports = function (paramService, esbMessage) {
 
                       esbMessage(m)
                           .then(function(r) {
+
+
+                              console.log('sumited to inspection r= ',r);
                             //we do not need to send this response back to client browser... Response have already been sent..
                             //oHelpers.sendResponse(paramResponse,200,r);
                           })
-                          .then(null,function reject(r) {
-                            console.log('hh error:-----',r);
+                          .fail(null,function reject(r) {
+                            console.log('hh error:Unable to submit photo to inspection-----',r);
                             r = {pl:null, er:{ec:100012,em:"Unable to submit photo to inspection----"}};
                             //oHelpers.sendResponse(paramResponse,501,r);
                             //we do not need to send this response back to client browser... Response have already been sent..
@@ -495,8 +498,8 @@ module.exports = function (paramService, esbMessage) {
 
 
                 })
-                .then(null,function reject(r) {
-                    console.log('hh error:-----',r);
+                .fail(null,function reject(r) {
+                    console.log('hh error:Unable to upload photo-----',r);
                     r = {pl:null, er:{ec:100012,em:"Unable to upload photo."}};
                     oHelpers.sendResponse(paramResponse,501,r);
               });
