@@ -149,10 +149,15 @@ module.exports = function (paramService, esbMessage) {
     var serviceNameMap = {};
     function _prepopulateSpecialCaseServices(){
 
-        var importSpecialCaseServices = require('../data/smm_special_init.json');
+        var importSpecialCases = require('../data/smm_special_init.json');
 
-
-        q.all(importSpecialCaseServices.map(function(ele){
+        var importSpecialCaseServicePoints = importSpecialCases.filter(function(ele){
+            return ele.persist && ele.persist.tgtField == "servicePoint"
+        })
+        var importSpecialCaseServices = importSpecialCases.filter(function(ele){
+            return ele.persist && ele.persist.tgtField == "service"
+        })
+        return q.all(importSpecialCaseServicePoints.map(function(ele){
             return esbMessage({
                 "ns" : ele.rename.ns,
                 "op" : ele.rename.find,
@@ -163,8 +168,36 @@ module.exports = function (paramService, esbMessage) {
                 if(!inUse)
                     return _persistSpecialCaseWithTransaction(ele);
             })
-        })).then(function(res){
-            console.log("foooo",res,serviceNameMap);
+
+        })).then(function(servicePoints){
+            var magicalMap = {}
+            servicePoints.forEach(function(point){
+                magicalMap[point.pl.servicePointCode] = point.pl._id;
+            });
+            //Massage PriceLists to reference their servicePoints
+            importSpecialCaseServices = importSpecialCaseServices.map(function(service){
+                service.persist.pl.PriceList = service.persist.pl.PriceList.map(function(list){
+                    var spc = list.servicePoint
+                    list.servicePoint = magicalMap[spc];//MagicalMap::>  RenamedLZScode -> LZSid
+                    return list;
+                })
+                return service;
+            })
+            //Save Special Case
+            return q.all(importSpecialCaseServices.map(function(ele){
+                return esbMessage({
+                    "ns" : ele.rename.ns,
+                    "op" : ele.rename.find,
+                    "pl" : {
+                        code : ele.rename.pl
+                    }
+                }).then(function(inUse){
+                    if(!inUse)
+                        return _persistSpecialCaseWithTransaction(ele);
+                })
+
+            }))
+        }).then(function (res) {
             bmh_prepopulateSpecialCaseActivities(serviceNameMap);
         } , function error(err){
             console.log("WHUMP",err);
@@ -218,7 +251,6 @@ module.exports = function (paramService, esbMessage) {
                     input.rename.tgtField.split(".").forEach(function(e){
                         tgt = tgt[e];
                     });
-                    console.log("RENAME PARAMS:",input.rename,tgt,"\n", m.pl);
                     esbMessage({
                         "ns": input.rename.ns,
                         "op": input.rename.op,
@@ -268,10 +300,9 @@ module.exports = function (paramService, esbMessage) {
         })
     }
 
-
-
     function _persistSpecialCaseWithTransaction(input){
         var transactionid = undefined;
+        var resultset;
         return q()
             .then(function createTransaction() {
                 return esbMessage({
@@ -300,13 +331,15 @@ module.exports = function (paramService, esbMessage) {
                 return esbMessage(m);
             })
             .then(function rename(m) {
-                console.log("about to in")
+                resultset = m;
                 if(input.persist.tgtField == "service")
                 {
-                    console.log(m.pl);
                     serviceNameMap[m.pl.serviceName.text] = m.pl.serviceName._id;
                 }
-                else console.log("EGADS!",input.persist);
+                if(input.persist.tgtField == "servicePoint")
+                {
+                    servicePointMap[input.rename.pl] = m.pl._id
+                }
                 return esbMessage({
                     "ns": input.rename.ns,
                     "op": input.rename.op,
@@ -317,11 +350,15 @@ module.exports = function (paramService, esbMessage) {
                     }
                 })
             })
-            .then(function commitTransaction(m) {
+            .then(function commitTransaction(cnt) {
+                if(cnt == 1 && input.persist.tgtField == "servicePoint")
+                {
+                    resultset.pl.servicePointCode = input.rename.pl;
+                }
                 return _commitTransaction({pl:{transactionid:transactionid}});
             })
             .then(function resolve(r) {
-                return r;
+                return resultset;
             }  ,  function failure(r) {
                 throw r;
             })

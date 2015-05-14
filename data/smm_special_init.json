@@ -1,12 +1,12 @@
 [
   {
-    "_comment": "LZP 101",
+"_comment": "LZP101",
     "persist": {
       "ns": "smm",
       "op": "persistServicePoint",
       "tgtField": "servicePoint",
       "pl": {
-        "servicePointCode": "LZP101",
+        "servicePointCode": "400000000000000000000001",
         "servicePointName": "Lanid ID Verification",
         "status": 0,
         "servicePointAddress": "",
@@ -35,7 +35,7 @@
     }
   },
   {
-    "_comment":"LZS 101",
+"_comment":"LZS101",
     "persist": {
       "ns": "smm",
       "op": "persistService",
@@ -44,7 +44,7 @@
         "serviceCode": "LZS101",
         "PriceList": [
           {
-            "servicePoint": "55497ec3679878d23c1d1827",
+            "servicePoint": "LZP101",
             "servicePrices": "0",
             "discountedPrice": "0",
             "paymentMethod": ["1"],
@@ -91,13 +91,13 @@
     }
   },
   {
-    "_comment": "LZP 102",
+"_comment": "LZP102",
     "persist": {
       "ns": "smm",
       "op": "persistServicePoint",
       "tgtField": "servicePoint",
       "pl": {
-        "servicePointCode": "LZP102",
+        "servicePointCode": "400000000000000000000002",
         "servicePointName": "Lanid Photo Verification",
         "status": 0,
         "servicePointAddress": "",
@@ -126,7 +126,7 @@
     }
   },
   {
-    "_comment":"LZS 102",
+"_comment":"LZS102",
     "persist": {
       "ns": "smm",
       "op": "persistService",
@@ -135,7 +135,7 @@
         "serviceCode": "LZS102",
         "PriceList": [
           {
-            "servicePoint": "55497ec3679878d23c1d1827",
+            "servicePoint": "LZP102",
             "servicePrices": "0",
             "discountedPrice": "0",
             "paymentMethod": ["1"],
