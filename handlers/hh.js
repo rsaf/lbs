@@ -440,6 +440,8 @@ module.exports = function (paramService, esbMessage) {
               m.pl.ac = json.ac;
               m.pl.rc = json.rc;
               m.pl.ow = json.ow;
+              m.pl.can = json.can;
+              m.pl.cat = json.cat;
 
 
 
