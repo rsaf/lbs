@@ -832,7 +832,10 @@ module.exports = function (paramPS, esbMessage) {
                     loginName: paramRequest.user.lanzheng.loginName,
                     currentOrganization: paramRequest.user.currentOrganization
                 };
-                m.op = 'bmm_getActivities';
+                //m.op = 'bmm_getActivities';
+
+               m.op = 'pmm_getActivitiesInfo';
+
                 return esbMessage(m);
             }).then(function resolve(msg) {
 
