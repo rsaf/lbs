@@ -172,13 +172,15 @@ module.exports = function (paramService, esbMessage) {
         })).then(function(servicePoints){
             var magicalMap = {}
             servicePoints.forEach(function(point){
-                magicalMap[point.pl.servicePointCode] = point.pl._id;
+                if(point && point.pl)
+                    magicalMap[point.pl.servicePointCode] = point.pl._id;
             });
             //Massage PriceLists to reference their servicePoints
             importSpecialCaseServices = importSpecialCaseServices.map(function(service){
                 service.persist.pl.PriceList = service.persist.pl.PriceList.map(function(list){
                     var spc = list.servicePoint
-                    list.servicePoint = magicalMap[spc];//MagicalMap::>  RenamedLZScode -> LZSid
+                    if(magicalMap[spc])
+                        list.servicePoint = magicalMap[spc];//MagicalMap::>  RenamedLZScode -> LZSid
                     return list;
                 })
                 return service;
