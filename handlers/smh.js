@@ -222,7 +222,6 @@ module.exports = function (paramService, esbMessage) {
                         currentOrganization: "200000000000000000000000"
                     }
                 };
-                console.log("PERSIST FORM req:\n",req);
             }
             else if(input.persist.op == "_persistActivity")
             {
@@ -293,9 +292,6 @@ module.exports = function (paramService, esbMessage) {
                         _persistForm(req,res);
                     }
                 }
-                else if (input.persist.op == "_persistForm"){
-                    console.log("in use?");
-                }
             } , function failure(err){
                 console.log("ERROR PERSISTING:",err);
             })
@@ -337,10 +333,6 @@ module.exports = function (paramService, esbMessage) {
                 if(input.persist.tgtField == "service")
                 {
                     serviceNameMap[m.pl.serviceName.text] = m.pl.serviceName._id;
-                }
-                if(input.persist.tgtField == "servicePoint")
-                {
-                    servicePointMap[input.rename.pl] = m.pl._id
                 }
                 return esbMessage({
                     "ns": input.rename.ns,
