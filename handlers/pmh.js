@@ -20,11 +20,7 @@ module.exports = function (paramPS, esbMessage) {
             "ns": "pmm",
             "op": "pmm_getPhotosForInspection",
             "pl": {
-                ac: paramRequest.params.lzcode,
-                ow: {
-                    uid: paramRequest.user.lanzheng.loginName,
-                    oid: paramRequest.user.currentOrganization
-                }
+                ac: paramRequest.params.lzcode
             }
         };
 
@@ -58,10 +54,6 @@ module.exports = function (paramPS, esbMessage) {
             "ns": "pmm",
             "op": 'pmm_getCorrectionPhotosByStatus',
             "pl": {
-                ow: {
-                    uid: paramRequest.user.lanzheng.loginName,
-                    oid: paramRequest.user.currentOrganization
-                },
                 ac: ac,
                 st:null
             }
@@ -814,38 +806,145 @@ module.exports = function (paramPS, esbMessage) {
         });
     });
 
-//fake endpoints
-    psRouter.get('/:type.json', function (paramRequest, paramResponse, paramNext) {
-        if (paramRequest.params.type === 'idPhotoStandard') {
 
-            oHelpers.sendResponse(paramResponse, 200, idPhotoStandard);
-        }
-        else if (paramRequest.params.type === 'idPhotosUsage') {
-            oHelpers.sendResponse(paramResponse, 200, idPhotosUsage);
-        }
-        else if (paramRequest.params.type === 'folders') {
+    psRouter.get('/folders/:stage.json', function (paramRequest, paramResponse, paramNext) {
 
-            var m = {};
-            //formHtml
-            q().then(function () {
-                m.pl = {
-                    loginName: paramRequest.user.lanzheng.loginName,
-                    currentOrganization: paramRequest.user.currentOrganization
-                };
-                //m.op = 'bmm_getActivities';
+        var stage = paramRequest.params.stage;
 
-               m.op = 'pmm_getActivitiesInfo';
+        console.log('stage----',stage);
 
-                return esbMessage(m);
-            }).then(function resolve(msg) {
+        //
+        //if (type === 'idPhotoStandard') {
+        //
+        //    oHelpers.sendResponse(paramResponse, 200, idPhotoStandard);
+        //}
+        //else if (type === 'idPhotosUsage') {
+        //    oHelpers.sendResponse(paramResponse, 200, idPhotosUsage);
+        //}
+        //else if (type === 'folders') {
+        //
+        //    var m = {};
+        //    //formHtml
+        //
+        //    console.log('folders request--------');
+        //
+        //    q().then(function () {
+        //        m.pl = {
+        //            loginName: paramRequest.user.lanzheng.loginName,
+        //            currentOrganization: paramRequest.user.currentOrganization,
+        //            st:null,
+        //            sg:null
+        //        };
+        //        //m.op = 'bmm_getActivities';
 
-                console.log('activities---', msg);
-                oHelpers.sendResponse(paramResponse, 200, msg);
-            }, function reject(er) {
-                oHelpers.sendResponse(paramResponse, 501, er);
-            });
+            //
+            //   if(stage === 'unInspectedFolders'){// inspection
+            //       m.pl.st = 100;
+            //       m.pl.sg = 20;
+            //
+            //   }
+            //  else  if(stage === 'qualifiedFolders'){// inspection
+            //       m.pl.st = 300;
+            //       m.pl.sg = 20;
+            //
+            //   }
+            //   else  if(stage === 'unQualifiedFolders'){// inspection
+            //       m.pl.st = 400;
+            //       m.pl.sg = 20;
+            //
+            //   }
+            //   else  if(stage === 'unProcessed'){// correction
+            //       m.pl.st = 100;
+            //       m.pl.sg = 30;
+            //
+            //   }
+            //   else  if(stage === 'processSuccessful'){// correction
+            //       m.pl.st = 300;
+            //       m.pl.sg = 30;
+            //
+            //   }
+            //   else  if(stage === 'processFailed'){// correction
+            //       m.pl.st = 400;
+            //       m.pl.sg = 30;
+            //
+            //   }
+            //   else  if(stage === 'inProcess'){// correction
+            //       m.pl.st = 200;
+            //       m.pl.sg = 30;
+            //
+            //   }
+            //
+            //   m.op = 'pmm_getActivitiesInfo';
+            //
+            //    return esbMessage(m);
+            //}).then(function resolve(msg) {
+            //
+            //    console.log('activities---', msg);
+            //    oHelpers.sendResponse(paramResponse, 200, msg);
+            //}, function reject(er) {
+            //    oHelpers.sendResponse(paramResponse, 501, er);
+            //});
 
-        }
+        //}
+
+
+
+
+            var m = {
+                "ns": "pmm",
+                "op": "pmm_getActivitiesInfo",
+                "pl": {st:null,sg:null}
+            };
+
+
+            if(stage === 'unInspectedFolders'){// inspection
+                m.pl.st = '100';
+                m.pl.sg = '20';
+
+            }
+            else  if(stage === 'qualifiedFolders'){// inspection
+                m.pl.st = '300';
+                m.pl.sg = '20';
+
+            }
+            else  if(stage === 'unQualifiedFolders'){// inspection
+                m.pl.st = '400';
+                m.pl.sg = '20';
+
+            }
+            else  if(stage === 'unProcessedFolders'){// correction
+                m.pl.st = '100';
+                m.pl.sg = '30';
+
+            }
+            else  if(stage === 'processSuccessfulFolders'){// correction
+                m.pl.st = '300';
+                m.pl.sg = '30';
+
+            }
+            else  if(stage === 'processFailedFolders'){// correction
+                m.pl.st = '400';
+                m.pl.sg = '30';
+
+            }
+            else  if(stage === 'inProcessFolders'){// correction
+                m.pl.st = '200';
+                m.pl.sg = '30';
+
+            }
+
+
+            esbMessage(m)
+                .then(function (r) {
+
+                    oHelpers.sendResponse(paramResponse, 200, r);
+                })
+                .fail(function (r) {
+                    console.log('pmh error----', r.er);
+                    oHelpers.sendResponse(paramResponse, 401, r.er);
+                });
+
+
     });
 
     psRouter.post('/upload.json', function (paramRequest, paramResponse, paramNext) {
