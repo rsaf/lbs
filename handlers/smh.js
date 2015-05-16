@@ -1640,7 +1640,7 @@ module.exports = function (paramService, esbMessage) {
 
     //createServicePoint
 
-    _prepopulateSpecialCaseServices();
+   // _prepopulateSpecialCaseServices();
     return serviceManagementRouter;
 };
 
