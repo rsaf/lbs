@@ -284,7 +284,7 @@ module.exports = function(paramService, esbMessage)
                             currentOrganization : request.user.currentOrganization,
                             response : {
                                 _id : responseObj._id,
-                                rs:50,
+                                rs:45,
                                 rfc:responseObj.rfc
                             }
                     };
