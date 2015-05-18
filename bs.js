@@ -112,8 +112,8 @@ module.exports.startBS = function(){
                 }
             ));
 
-            bs.use(bodyParser.json());
-            bs.use(bodyParser.urlencoded({extended: true}));
+            bs.use(bodyParser.json({limit: '500kb'})); //todo the form tool may upload images up to 200kb as logo + X Kb placeholder image the for activity's respondants
+            bs.use(bodyParser.urlencoded({extended: true,limit: '500kb'}));
 
             bs.get('/favicon.ico', oOperationsLogRouter); // this is messing our logger
             bs.get('/', oHelpers.testStartPage); //use for local testing only
