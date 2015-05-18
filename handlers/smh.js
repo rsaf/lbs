@@ -170,19 +170,20 @@ module.exports = function (paramService, esbMessage) {
             })
 
         })).then(function(servicePoints){
-            var magicalMap = {}
+            var magicalMap = {};
             servicePoints.forEach(function(point){
                 if(point && point.pl)
                     magicalMap[point.pl.servicePointCode] = point.pl._id;
             });
+            console.log("MAGICAL MAP:" , magicalMap);
             //Massage PriceLists to reference their servicePoints
             importSpecialCaseServices = importSpecialCaseServices.map(function(service){
                 service.persist.pl.PriceList = service.persist.pl.PriceList.map(function(list){
-                    var spc = list.servicePoint
+                    var spc = list.servicePoint;
                     if(magicalMap[spc])
                         list.servicePoint = magicalMap[spc];//MagicalMap::>  RenamedLZScode -> LZSid
                     return list;
-                })
+                });
                 return service;
             })
             //Save Special Case
@@ -1640,7 +1641,7 @@ module.exports = function (paramService, esbMessage) {
 
     //createServicePoint
 
-   // _prepopulateSpecialCaseServices();
+    _prepopulateSpecialCaseServices();
     return serviceManagementRouter;
 };
 

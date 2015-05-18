@@ -345,8 +345,8 @@ module.exports = function(paramService, esbMessage)
                     pl:{
                         "transactionid":transactionid,
                         "method":"validateID",
-                        "sfz": responseObj.fd.fields["sfz"], //shenfenzheng or user national id number
-                        "xm": responseObj.fd.fields["xm"],  //xingming or user full name
+                        "sfz": responseObj.fd.fields["shenfenzhenghaoma"], //shenfenzheng or user national id number
+                        "xm": responseObj.fd.fields["xingming"],  //xingming or user full name
                         "zz": ""   //zhengzhao or user id photo buffer //must be provided when executing the validatePhoto method.
                     }
                 });
@@ -380,9 +380,9 @@ module.exports = function(paramService, esbMessage)
                     op:"upm_validateUserInfo",
                     pl:{
                         "method":"validatePhoto",
-                        "sfz": responseObj.fd.fields["sfz"],
-                        "xm" : responseObj.fd.fields["xm"],
-                        "zz" : responseObj.pp.pt
+                        "sfz": responseObj.fd.fields["shenfenzhenghaoma"],
+                        "xm" : responseObj.fd.fields["xingming"],
+                        "zz" : responseObj.pt[0].pp
                     }
                 })
             })
