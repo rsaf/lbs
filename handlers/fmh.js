@@ -205,16 +205,17 @@ module.exports = function(paramService, esbMessage)
       return lib.digFor(msg,"0.op")?esbMessage(msg[0]):msg[0];
     })
     .then(function(msg){
-      r.pl = msg[0];
+      r.pl = msg[1];
       return _commitTransaction({pl:{transactionid : transactionid}});
     })
     .then(function() {
       return _issueOrders(responseInfo, paramRequest, transactionid);
     })
-    .then(function(){
+    .then(function(z){
       var mail = paramRequest.user.lanzheng.loginName;
       _sendSMS(mail, phone, refCode);
-      oHelpers.sendResponse(paramResponse,200,r);
+            console.log("Z IS ",z);
+      oHelpers.sendResponse(paramResponse,200,z);
     })
     .then(null,function reject(err){
       var code = 501;
@@ -271,23 +272,24 @@ module.exports = function(paramService, esbMessage)
             isSpecial = i;
             break;
         }
-        if(isSpecial >= 0)
+        if(isSpecial >= 0) {
+            var responseObjectToReturn;
             return _issueFirstOrderForResponse(request)
-                .then(function(){
-                    return specialCases[isSpecial].fn(request,responseObj,transactionid);
+                .then(function () {
+                    return specialCases[isSpecial].fn(request, responseObj, transactionid);
                 })
                 //Update response Status
-                .then(function (r){
+                .then(function (r) {
                     var mypl = {
-                        transactionid : transactionid,
-                            loginName : request.user.lanzheng.loginName,
-                            currentOrganization : request.user.currentOrganization,
-                            response : {
-                                _id : responseObj._id,
-                                rs:45,
-                                rfc:responseObj.rfc,
-                                fd:r && r.pl ? {fields:{heyanjieguo: r.pl.LZBIZDESC}} : undefined
-                            }
+                        transactionid: transactionid,
+                        loginName: request.user.lanzheng.loginName,
+                        currentOrganization: request.user.currentOrganization,
+                        response: {
+                            _id: responseObj._id,
+                            rs: 45,
+                            rfc: responseObj.rfc,
+                            fd: r && r.pl ? {fields: {heyanjieguo: r.pl.LZBIZDESC}} : undefined
+                        }
                     };
                     return esbMessage({
                         "ns": "bmm",
@@ -296,43 +298,45 @@ module.exports = function(paramService, esbMessage)
                     })
                 })
                 //Fetch business record status
-                .then(function(r){
+                .then(function (r) {
+                    responseObjectToReturn = r;
                     return esbMessage({
-                        "ns":"smm",
-                        "op":"smm_fetchBusinessRecord",
-                        "pl":{
-                            ac_code : ac_code,
-                            rc_code : responseObj.rc
+                        "ns": "smm",
+                        "op": "smm_fetchBusinessRecord",
+                        "pl": {
+                            ac_code: ac_code,
+                            rc_code: responseObj.rc
                         }
                     })
                 })
                 //Update business record status
-                .then(function (r){
+                .then(function (r) {
                     var myr = r;
                     myr.st = 50;
                     var mypl = {
-                        query:{
-                            "ac":ac_code,
-                            "rc":responseObj.rc
+                        query: {
+                            "ac": ac_code,
+                            "rc": responseObj.rc
                         },
-                        response:myr,
-                        transactionid:{
-                            _id : transactionid
+                        response: myr,
+                        transactionid: {
+                            _id: transactionid
                         }
                     };
                     return esbMessage({
-                        "ns":"smm",
-                        "op":"smm_spawnBusinessRecord",
-                        "pl":mypl
+                        "ns": "smm",
+                        "op": "smm_spawnBusinessRecord",
+                        "pl": mypl
                     })
                 })
-                .then(function success(r){
-                    console.log("SUCCESS with handling special case order",r);
-                    return r;
-                }  ,  function failure(err){
-                    console.log("FAILED WITH ERROR handling special case order",err);
+                .then(function success(r) {
+                    console.log("SUCCESS with handling special case order", r);
+                    return responseObjectToReturn;
+                }, function failure(err) {
+                    console.log("FAILED WITH ERROR handling special case order", err);
                     throw err;
                 })
+        }
         else
             return _issueFirstOrderForResponse(request);
     }
