@@ -285,7 +285,8 @@ module.exports = function(paramService, esbMessage)
                             response : {
                                 _id : responseObj._id,
                                 rs:45,
-                                rfc:responseObj.rfc
+                                rfc:responseObj.rfc,
+                                fd:r && r.pl ? {fields:{heyanjieguo: r.pl.LZBIZDESC}} : undefined
                             }
                     };
                     return esbMessage({
