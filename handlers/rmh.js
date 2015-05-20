@@ -38,7 +38,8 @@ module.exports = function(paramService, esbMessage){
     return Q().then(function(){
       var m = {
         op:'rmm_getRequests',
-        pl:{loginName:req.user.lanzheng.loginName,orgid:req.user.currentOrganization,filter:filter}
+        pl:{loginName:req.user.lanzheng.loginName,orgid:req.user.currentOrganization,filter:filter},
+        mt:{p:req.query.p,ps:req.query.ps}
       }
       return esbMessage(m)      
     });
