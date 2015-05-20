@@ -247,7 +247,7 @@ module.exports = function (paramService, esbMessage) {
         var m = {};
         //formHtml
         q().then(function () {
-          m.pl = {};
+          m.pl = {readyOnly:true};
           m.op = 'bmm_getActivities';
           return esbMessage(m);
         }).then(function resolve(msg) {
