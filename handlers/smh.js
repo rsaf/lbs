@@ -787,6 +787,7 @@ module.exports = function (paramService, esbMessage) {
     serviceManagementRouter.get('/services.json', function (paramRequest, paramResponse, paramNext) {
         var m = {
             "op": "servicesByCreator",
+            "mt": {p:paramRequest.query.p,ps:paramRequest.query.ps},
             "pl": {}
         };
         m.pl.loginName = paramRequest.user.lanzheng.loginName;
@@ -1010,6 +1011,7 @@ module.exports = function (paramService, esbMessage) {
         var m = {
             "ns": "smm",
             "op": "servicePointsByCreator",
+            "mt": {p:paramRequest.query.p,ps:paramRequest.query.ps},
             "pl": {}
         };
         m.pl.loginName = paramRequest.user.lanzheng.loginName;
@@ -1040,6 +1042,7 @@ module.exports = function (paramService, esbMessage) {
                 return esbMessage({
                     ns: "smm",
                     op: "recordsByOrganization",
+                    mt: {p:paramRequest.query.p,ps:paramRequest.query.ps},
                     pl: {
                         loginName: user,
                         organization: org
@@ -1053,10 +1056,9 @@ module.exports = function (paramService, esbMessage) {
                     newe.svn = ele.svn.text;
                     return newe;
                 });
-                console.log("records are now :", records);
                 oHelpers.sendResponse(paramResponse, 200, records);
             }, function failure(err) {
-                console.log(err);
+                console.log("ERROR in getting records by organization:\n",err);
                 oHelpers.sendResponse(paramResponse, 400, err)
             })
     });
