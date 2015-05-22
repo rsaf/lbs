@@ -25,7 +25,8 @@ module.exports = function(paramService, esbMessage)
     var m = {
       "ns":"olm",
       "op": "readOperationsLog",
-      "pl": {"userAccountID":paramRequest.user.id, "opType":null, "pageNumber":1, "pageSize":10}
+      "pl": {"userAccountID":paramRequest.user.id, "opType":null},
+      "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps}
     };
 
     esbMessage(m)

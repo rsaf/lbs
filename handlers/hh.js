@@ -247,7 +247,7 @@ module.exports = function (paramService, esbMessage) {
         var m = {};
         //formHtml
         q().then(function () {
-          m.pl = {};
+          m.pl = {readyOnly:true};
           m.op = 'bmm_getActivities';
           return esbMessage(m);
         }).then(function resolve(msg) {
@@ -353,11 +353,10 @@ module.exports = function (paramService, esbMessage) {
           m.pl.loginName = (paramRequest.user && paramRequest.user.lanzheng && paramRequest.user.lanzheng.loginName) || paramRequest.sessionID;
           m.pl.currentOrganization = (paramRequest.user && paramRequest.user.currentOrganization) || false;
           m.op = 'bmm_getResponses';
+          m.mt={p:paramRequest.query.p,ps:paramRequest.query.ps}
           return esbMessage(m);
         }).then(function (msg) {
-          oHelpers.sendResponse(paramResponse, 200, {
-            pl: msg
-          });
+          oHelpers.sendResponse(paramResponse, 200, msg);
         }).fail(function (er) {
           oHelpers.sendResponse(paramResponse, 501, er);
         });
