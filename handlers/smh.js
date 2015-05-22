@@ -157,22 +157,6 @@ module.exports = function (paramService, esbMessage) {
         var importSpecialCaseServices = importSpecialCases.filter(function(ele){
             return ele.persist && ele.persist.tgtField == "service"
         })
-        var servicePoints;
-        return q.then(function(){
-            return esbMessage({
-                "ns" : "smm",
-                "op" : "servicePointTypes",
-                "pl" : {}
-            })
-        }).then(function(sps){
-            var servicePointTypeMap = {};
-            sps.pl.forEach(function(type){
-                servicePointTypeMap[type.text] = type._id;
-            });
-            importSpecialCaseServicePoints = importSpecialCaseServicePoints.map(function(ele){
-                ele.servicePointType = servicePointTypeMap
-            })
-        })
         return q.all(importSpecialCaseServicePoints.map(function(ele){
             return esbMessage({
                 "ns" : ele.rename.ns,
@@ -185,35 +169,21 @@ module.exports = function (paramService, esbMessage) {
                     return _persistSpecialCaseWithTransaction(ele);
             })
 
-        })).then(function(sps){
-            servicePoints = sps;
-            return esbMessage({
-                "ns" : "smm",
-                "op" : "serviceTypes",
-                "pl" : {}
-            })
-        }).then(function(serviceTypes){
-            var magicalMap = {}, serviceTypeMap = {};
+        })).then(function(servicePoints){
+            var magicalMap = {};
             servicePoints.forEach(function(point){
                 if(point && point.pl)
                     magicalMap[point.pl.servicePointCode] = point.pl._id;
             });
-            serviceTypes.pl.forEach(function(type){
-                serviceTypeMap[type.text] = type._id;
-            });
+            console.log("MAGICAL MAP:" , magicalMap);
             //Massage PriceLists to reference their servicePoints
             importSpecialCaseServices = importSpecialCaseServices.map(function(service){
                 service.persist.pl.PriceList = service.persist.pl.PriceList.map(function(list){
                     var spc = list.servicePoint;
                     if(magicalMap[spc])
                         list.servicePoint = magicalMap[spc];//MagicalMap::>  RenamedLZScode -> LZSid
-
                     return list;
                 });
-                if(serviceTypeMap[service.persist.pl.serviceType])
-                    service.persist.pl.serviceType = serviceTypeMap[service.persist.pl.serviceType];
-                else
-                    service.persist.pl.serviceType = undefined;
                 return service;
             })
             //Save Special Case
@@ -227,8 +197,6 @@ module.exports = function (paramService, esbMessage) {
                 }).then(function(inUse){
                     if(!inUse)
                         return _persistSpecialCaseWithTransaction(ele);
-                } , function(err){
-                    console.log("FAILED",err);
                 })
 
             }))
@@ -1064,6 +1032,7 @@ module.exports = function (paramService, esbMessage) {
     serviceManagementRouter.get('/busnessrecords.json', function (paramRequest, paramResponse, paramNext) {
 
         var businessRecords = busnessrecords//TODO - fill this up
+        console.log("HIT BUSINESSRECORDS")
         var deferred = q.defer(),
             user = paramRequest.user.lanzheng.loginName;
         org = paramRequest.user.currentOrganization;
@@ -1089,6 +1058,7 @@ module.exports = function (paramService, esbMessage) {
                 });
                 oHelpers.sendResponse(paramResponse, 200, records);
             }, function failure(err) {
+                console.log("ERROR in getting records by organization:\n",err);
                 oHelpers.sendResponse(paramResponse, 400, err)
             })
     });
