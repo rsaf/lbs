@@ -77,76 +77,8 @@ module.exports = function (paramService, esbMessage) {
         return esbMessage(m);
     }
 
-    function _persistForm(paramRequest, paramResponse){
-        var m = {};
-        //formHtml
-        q().then(function(){
-            m.pl=JSON.parse(paramRequest.body.json);
-            m.pl.loginName=paramRequest.user.lanzheng.loginName;
-            m.pl.currentOrganization=paramRequest.user.currentOrganization;
-            m.op='bmm_persistForm';
-            return esbMessage(m);
-        }).then(function(msg){
-            oHelpers.sendResponse(paramResponse,200,msg);
-        }).fail(function(er){
-            oHelpers.sendResponse(paramResponse,501,er);
-        });
-    }
-    function _persistActivity(paramRequest, paramResponse){
-        var m = {},response={}
-            ,activity,adminid;
-        //formHtml
-        q().then(function(){
-            m.pl=JSON.parse(paramRequest.body.json).pl;
-            m.pl.loginName=paramRequest.user.lanzheng.loginName;
-            m.pl.currentOrganization=paramRequest.user.currentOrganization;
-            if(m.pl.activity && m.pl.activity.abd && m.pl.activity.abd.aps && parseInt(m.pl.activity.abd.aps,10)===10){
-                // create a transaction
-                m.op = "createTransaction";
-                m.pl.transaction={
-                    description:'publish Activity request'
-                    ,modules:['bmm','rmm']
-                };
-                return q.all([esbMessage(m), esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})]);
-            }
-            return [false,false];
-        })
-            .then(function(msg){
-                m.pl.transactionid=(msg[0]===false)?false:msg[0].pl.transaction._id;
-                adminid=(msg[1]===false)?false:msg[1].pl.oID;
-                m.op='bmm_persistActivity';
-                return esbMessage(m);
-            })
-            .then(function(msg){
-                activity = msg;
-                if(m.pl.transactionid){
-                    m.op="rmm_persistRequestMessage";
-                    m.pl.request = _initRequestMessage(paramRequest,'Activity',activity.abd.ac,adminid);//org should be admin org
-                    return esbMessage(m);
-                }
-                return false;
-            })
-            .then(function(){
-                if(m.pl.transactionid){
-                    return _commitTransaction(m);
-                }
-            })
-            .then(function(){
-                oHelpers.sendResponse(paramResponse,200,{pl:activity});
-            })
-            .fail(function(er){
-                var trans=q();
-                if(m.pl.transactionid){
-                    trans = _rollBackTransaction(m);
-                }
-                trans.fin(function(){
-                    oHelpers.sendResponse(paramResponse,501,er);
-                });
-            });
-    }
 
     //todo this variable is bad form
-    var serviceNameMap = {};
     function _prepopulateSpecialCaseServices(){
 
         var importSpecialCases = require('../data/smm_special_init.json');
@@ -158,6 +90,7 @@ module.exports = function (paramService, esbMessage) {
             return ele.persist && ele.persist.tgtField == "service"
         })
         var servicePoints;
+        var serviceNameMap = {};
 
         return q()
         //GET SERVICE POINT _ID REF INFORMATION
@@ -205,13 +138,12 @@ module.exports = function (paramService, esbMessage) {
         //FILL IN SERVICE _ID REFS & PERSIST
         .then(function(serviceTypes){
             //Fill In
-            var magicalMap = {}, serviceTypeMap = {};
+            var scodeToIDMap = {}, serviceTypeMap = {};
             servicePoints.forEach(function(point){
                 console.log(point);
                 if(point && point.pl)
-                    magicalMap[point.pl.servicePointCode] = point.pl._id;
+                    scodeToIDMap[point.pl.servicePointCode] = point.pl._id;
             });
-                console.log("MAGICAL MAP IS",magicalMap);
             serviceTypes.pl.forEach(function(type){
                 serviceTypeMap[type.text] = type._id;
             });
@@ -219,9 +151,9 @@ module.exports = function (paramService, esbMessage) {
             importSpecialCaseServices = importSpecialCaseServices.map(function(service){
                 service.persist.pl.PriceList = service.persist.pl.PriceList.map(function(list){
                     var spc = list.servicePoint;
-                    console.log("for",list,":",spc,magicalMap[spc])
-                    if(magicalMap[spc])
-                        list.servicePoint = magicalMap[spc];//MagicalMap::>  RenamedLZScode -> LZSid
+                    console.log("for",list,":",spc, scodeToIDMap[spc])
+                    if( scodeToIDMap[spc])
+                        list.servicePoint =  scodeToIDMap[spc];//scodeToIDMap::>  RenamedLZScode -> LZSid
 
                     return list;
                 });
@@ -251,9 +183,10 @@ module.exports = function (paramService, esbMessage) {
         })
         //CREATE ACTIVITIES
         .then(function(res) {
-           //return bmh_prepopulateSpecialCaseActivities(serviceNameMap);
-
-                //*
+                res.forEach(function(ele){
+                    serviceNameMap[ele.pl.serviceName.text] = ele.pl.serviceName._id
+                })
+                console.log("SNM MAP", serviceNameMap);
             importSpecialCaseActivities = importSpecialCaseActivities.map(function(input) {
                 var req;
                 if(input.upload && input.persist.op == "_persistForm")//we have to handle a bucket upload
@@ -340,7 +273,6 @@ module.exports = function (paramService, esbMessage) {
                         console.log("ERROR PERSISTING:",err);
                     })
             })
-
             return q.all(importSpecialCaseActivities);
             //*/
         })
@@ -349,98 +281,6 @@ module.exports = function (paramService, esbMessage) {
         }  , function error(err){
             console.log("WHUMP",err);
         });
-    }
-
-    function bmh_prepopulateSpecialCaseActivities(serviceNameMap){
-
-        var importSpecialCaseActivities = require('../data/bmm_special_init.json');
-        //Import data
-        importSpecialCaseActivities = importSpecialCaseActivities.map(function(input) {
-            var req;
-            if(input.upload && input.persist.op == "_persistForm")//we have to handle a bucket upload
-            {
-                var jsonToUpload = input.upload.content;
-                req = {
-                    body: {json: JSON.stringify(jsonToUpload)},
-                    user: {
-                        lanzheng: {loginName: "a1ed"},
-                        currentOrganization: "200000000000000000000000"
-                    }
-                };
-            }
-            else if(input.persist.op == "_persistActivity")
-            {
-                input.persist.pl.sqc = input.persist.pl.sqc.map(function(ele){
-                    if(serviceNameMap[ele.sn]){
-                        ele.sn = serviceNameMap[ele.sn];
-                    }
-                    return ele;
-                })
-                req = {
-
-                    body: {json: JSON.stringify({pl: {activity: input.persist.pl}})},
-                    user: {
-                        lanzheng: {loginName: "a1ed"},
-                        currentOrganization: "200000000000000000000000"
-                    }
-                };
-            }
-            else {
-                console.log("Persist action not recognized - needs to be _persistActivity/Form");
-                return;
-            }
-            var res = {
-                writeHead: function (code) {},
-                end: function rename(stringjson) {
-                    var m = JSON.parse(stringjson);
-                    var tgt = m.pl;
-                    input.rename.tgtField.split(".").forEach(function(e){
-                        tgt = tgt[e];
-                    });
-                    esbMessage({
-                        "ns": input.rename.ns,
-                        "op": input.rename.op,
-                        "pl": {
-                            find: tgt,
-                            code: input.rename.pl
-                        }
-                    })
-                        .then(function link(res){
-                            if(m && m.pl && m.pl._id && input.upload && input.upload.link && input.upload.link.linker){
-                                esbMessage({
-                                    "ns" : input.upload.ns,
-                                    "op" : input.upload.link.op,
-                                    "pl" : {
-                                        find : input.upload.link.linker,
-                                        code : m.pl._id
-                                    }
-                                });
-                            }
-                        }  ,  function fail(err){
-                            console.err("ERROR IN BMH preinit (link-rename):",err);
-                        });
-                }
-            };
-            return esbMessage({
-                "ns" : input.rename.ns,
-                "op" : input.rename.find,
-                "pl" : {
-                    code : input.rename.pl
-                }
-            })
-            //PERSIST IF NOT IN USE
-            .then(function(inUse){
-                if(!inUse)
-                {
-                    if(input.persist.op == "_persistActivity")
-                        _persistActivity(req,res);
-                    else if(input.persist.op == "_persistForm")
-                        _persistForm(req,res);
-                }
-            } , function failure(err){
-                console.log("ERROR PERSISTING:",err);
-            })
-        })
     }
 
     function _persistSpecialCaseWithTransaction(input){
@@ -475,10 +315,6 @@ module.exports = function (paramService, esbMessage) {
             })
             .then(function rename(m) {
                 resultset = m;
-                if(input.persist.tgtField == "service")
-                {
-                    serviceNameMap[m.pl.serviceName.text] = m.pl.serviceName._id;
-                }
                 return esbMessage({
                     "ns": input.rename.ns,
                     "op": input.rename.op,
@@ -502,6 +338,74 @@ module.exports = function (paramService, esbMessage) {
             }  ,  function failure(r) {
                 throw r;
             })
+    }
+
+    function _persistForm(paramRequest, paramResponse){
+        var m = {};
+        //formHtml
+        q().then(function(){
+            m.pl=JSON.parse(paramRequest.body.json);
+            m.pl.loginName=paramRequest.user.lanzheng.loginName;
+            m.pl.currentOrganization=paramRequest.user.currentOrganization;
+            m.op='bmm_persistForm';
+            return esbMessage(m);
+        }).then(function(msg){
+            oHelpers.sendResponse(paramResponse,200,msg);
+        }).fail(function(er){
+            oHelpers.sendResponse(paramResponse,501,er);
+        });
+    }
+    function _persistActivity(paramRequest, paramResponse){
+        var m = {},response={}
+            ,activity,adminid;
+        //formHtml
+        q().then(function(){
+            m.pl=JSON.parse(paramRequest.body.json).pl;
+            m.pl.loginName=paramRequest.user.lanzheng.loginName;
+            m.pl.currentOrganization=paramRequest.user.currentOrganization;
+            if(m.pl.activity && m.pl.activity.abd && m.pl.activity.abd.aps && parseInt(m.pl.activity.abd.aps,10)===10){
+                // create a transaction
+                m.op = "createTransaction";
+                m.pl.transaction={
+                    description:'publish Activity request'
+                    ,modules:['bmm','rmm']
+                };
+                return q.all([esbMessage(m), esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})]);
+            }
+            return [false,false];
+        })
+            .then(function(msg){
+                m.pl.transactionid=(msg[0]===false)?false:msg[0].pl.transaction._id;
+                adminid=(msg[1]===false)?false:msg[1].pl.oID;
+                m.op='bmm_persistActivity';
+                return esbMessage(m);
+            })
+            .then(function(msg){
+                activity = msg;
+                if(m.pl.transactionid){
+                    m.op="rmm_persistRequestMessage";
+                    m.pl.request = _initRequestMessage(paramRequest,'Activity',activity.abd.ac,adminid);//org should be admin org
+                    return esbMessage(m);
+                }
+                return false;
+            })
+            .then(function(){
+                if(m.pl.transactionid){
+                    return _commitTransaction(m);
+                }
+            })
+            .then(function(){
+                oHelpers.sendResponse(paramResponse,200,{pl:activity});
+            })
+            .fail(function(er){
+                var trans=q();
+                if(m.pl.transactionid){
+                    trans = _rollBackTransaction(m);
+                }
+                trans.fin(function(){
+                    oHelpers.sendResponse(paramResponse,501,er);
+                });
+            });
     }
 
     var serviceManagementRouter = paramService.Router();

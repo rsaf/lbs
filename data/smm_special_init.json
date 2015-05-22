@@ -8,7 +8,8 @@
       "pl": {
         "servicePointCode": "400000000000000000000001",
         "servicePointName": "蓝证平台",
-        "status": 0,
+        "servicePointStatus":30,
+        "status": 30,
         "servicePointAddress": "云端网点",
         "servicePointType": "云端网点",
         "operatingHours": "00:00 - 24:00",
@@ -99,7 +100,8 @@
       "pl": {
         "servicePointCode": "400000000000000000000002",
         "servicePointName": "蓝证平台",
-        "status": 0,
+        "servicePointStatus":30,
+        "status": 30,
         "servicePointAddress": "云端网点",
         "servicePointType": "云端网点",
         "operatingHours": "00:00 - 24:00",
