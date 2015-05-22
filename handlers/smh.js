@@ -150,7 +150,7 @@ module.exports = function (paramService, esbMessage) {
     function _prepopulateSpecialCaseServices(){
 
         var importSpecialCases = require('../data/smm_special_init.json');
-
+        var importSpecialCaseActivities = require('../data/bmm_special_init.json');
         var importSpecialCaseServicePoints = importSpecialCases.filter(function(ele){
             return ele.persist && ele.persist.tgtField == "servicePoint"
         })
@@ -158,46 +158,60 @@ module.exports = function (paramService, esbMessage) {
             return ele.persist && ele.persist.tgtField == "service"
         })
         var servicePoints;
-        return q.then(function(){
+
+        return q()
+        //GET SERVICE POINT _ID REF INFORMATION
+        .then(function(){
             return esbMessage({
                 "ns" : "smm",
                 "op" : "servicePointTypes",
                 "pl" : {}
             })
-        }).then(function(sps){
-            var servicePointTypeMap = {};
-            sps.pl.forEach(function(type){
-                servicePointTypeMap[type.text] = type._id;
-            });
-            importSpecialCaseServicePoints = importSpecialCaseServicePoints.map(function(ele){
-                ele.servicePointType = servicePointTypeMap
-            })
         })
-        return q.all(importSpecialCaseServicePoints.map(function(ele){
-            return esbMessage({
-                "ns" : ele.rename.ns,
-                "op" : ele.rename.find,
-                "pl" : {
-                    code : ele.rename.pl
-                }
-            }).then(function(inUse){
-                if(!inUse)
-                    return _persistSpecialCaseWithTransaction(ele);
+        //FILL IN SERVICE POINT _ID REFS & PERSIST
+        .then(function (stypes){
+            //Fill In
+            var servicePointTypeMap = {};
+            stypes.pl.forEach(function (type) {
+                servicePointTypeMap[type.text] = type._id;
             })
-
-        })).then(function(sps){
+            importSpecialCaseServicePoints = importSpecialCaseServicePoints.map(function (ele) {
+                ele.servicePointType = servicePointTypeMap;
+                return ele;
+            })
+            //Persist
+            return q.all(importSpecialCaseServicePoints.map(function(ele){
+                return esbMessage({
+                    "ns" : ele.rename.ns,
+                    "op" : ele.rename.find,
+                    "pl" : {
+                        code : ele.rename.pl
+                    }
+                }).then(function(inUse){
+                    if(!inUse)
+                        return _persistSpecialCaseWithTransaction(ele);
+                })
+            }))
+        })
+        //GET SERVICE TYPES _ID REF INFORMATION
+        .then(function(sps){
             servicePoints = sps;
             return esbMessage({
                 "ns" : "smm",
                 "op" : "serviceTypes",
                 "pl" : {}
             })
-        }).then(function(serviceTypes){
+        })
+        //FILL IN SERVICE _ID REFS & PERSIST
+        .then(function(serviceTypes){
+            //Fill In
             var magicalMap = {}, serviceTypeMap = {};
             servicePoints.forEach(function(point){
+                console.log(point);
                 if(point && point.pl)
                     magicalMap[point.pl.servicePointCode] = point.pl._id;
             });
+                console.log("MAGICAL MAP IS",magicalMap);
             serviceTypes.pl.forEach(function(type){
                 serviceTypeMap[type.text] = type._id;
             });
@@ -205,18 +219,20 @@ module.exports = function (paramService, esbMessage) {
             importSpecialCaseServices = importSpecialCaseServices.map(function(service){
                 service.persist.pl.PriceList = service.persist.pl.PriceList.map(function(list){
                     var spc = list.servicePoint;
+                    console.log("for",list,":",spc,magicalMap[spc])
                     if(magicalMap[spc])
                         list.servicePoint = magicalMap[spc];//MagicalMap::>  RenamedLZScode -> LZSid
 
                     return list;
                 });
+                console.log("CHANGING ",service.persist.pl.serviceType,"to",serviceTypeMap[service.persist.pl.serviceType])
                 if(serviceTypeMap[service.persist.pl.serviceType])
                     service.persist.pl.serviceType = serviceTypeMap[service.persist.pl.serviceType];
                 else
                     service.persist.pl.serviceType = undefined;
                 return service;
             })
-            //Save Special Case
+            //Persist
             return q.all(importSpecialCaseServices.map(function(ele){
                 return esbMessage({
                     "ns" : ele.rename.ns,
@@ -232,18 +248,113 @@ module.exports = function (paramService, esbMessage) {
                 })
 
             }))
-        }).then(function (res) {
-            bmh_prepopulateSpecialCaseActivities(serviceNameMap);
-        } , function error(err){
-            console.log("WHUMP",err);
         })
+        //CREATE ACTIVITIES
+        .then(function(res) {
+           return bmh_prepopulateSpecialCaseActivities(serviceNameMap);
+                /*
+            importSpecialCaseActivities = importSpecialCaseActivities.map(function(input) {
+                var req;
+                if(input.upload && input.persist.op == "_persistForm")//we have to handle a bucket upload
+                {
+                    var jsonToUpload = input.upload.content;
+                    req = {
+                        body: {json: JSON.stringify(jsonToUpload)},
+                        user: {
+                            lanzheng: {loginName: "a1ed"},
+                            currentOrganization: "200000000000000000000000"
+                        }
+                    };
+                }
+                else if(input.persist.op == "_persistActivity")
+                {
+                    input.persist.pl.sqc = input.persist.pl.sqc.map(function(ele){
+                        if(serviceNameMap[ele.sn]){
+                            ele.sn = serviceNameMap[ele.sn];
+                        }
+                        return ele;
+                    })
+                    req = {
+
+                        body: {json: JSON.stringify({pl: {activity: input.persist.pl}})},
+                        user: {
+                            lanzheng: {loginName: "a1ed"},
+                            currentOrganization: "200000000000000000000000"
+                        }
+                    };
+                }
+                else {
+                    console.log("Persist action not recognized - needs to be _persistActivity/Form");
+                    return;
+                }
+                var res = {
+                    writeHead: function (code) {},
+                    end: function rename(stringjson) {
+                        var m = JSON.parse(stringjson);
+                        var tgt = m.pl;
+                        input.rename.tgtField.split(".").forEach(function(e){
+                            tgt = tgt[e];
+                        });
+                        esbMessage({
+                            "ns": input.rename.ns,
+                            "op": input.rename.op,
+                            "pl": {
+                                find: tgt,
+                                code: input.rename.pl
+                            }
+                        })
+                            .then(function link(res){
+                                if(m && m.pl && m.pl._id && input.upload && input.upload.link && input.upload.link.linker){
+                                    esbMessage({
+                                        "ns" : input.upload.ns,
+                                        "op" : input.upload.link.op,
+                                        "pl" : {
+                                            find : input.upload.link.linker,
+                                            code : m.pl._id
+                                        }
+                                    });
+                                }
+                            }  ,  function fail(err){
+                                console.err("ERROR IN BMH preinit (link-rename):",err);
+                            });
+                    }
+                };
+                return esbMessage({
+                    "ns" : input.rename.ns,
+                    "op" : input.rename.find,
+                    "pl" : {
+                        code : input.rename.pl
+                    }
+                })
+                    //PERSIST IF NOT IN USE
+                    .then(function(inUse){
+                        if(!inUse)
+                        {
+                            if(input.persist.op == "_persistActivity")
+                                _persistActivity(req,res);
+                            else if(input.persist.op == "_persistForm")
+                                _persistForm(req,res);
+                        }
+                    } , function failure(err){
+                        console.log("ERROR PERSISTING:",err);
+                    })
+            })
+
+            return q.all(importSpecialCaseActivities);
+            */
+        })
+        .then(function(res){
+            console.log("Completed Special Case Creation");
+        }  , function error(err){
+            console.log("WHUMP",err);
+        });
     }
 
     function bmh_prepopulateSpecialCaseActivities(serviceNameMap){
 
         var importSpecialCaseActivities = require('../data/bmm_special_init.json');
         //Import data
-        importSpecialCaseActivities.forEach(function(input) {
+        importSpecialCaseActivities = importSpecialCaseActivities.map(function(input) {
             var req;
             if(input.upload && input.persist.op == "_persistForm")//we have to handle a bucket upload
             {
@@ -315,15 +426,15 @@ module.exports = function (paramService, esbMessage) {
                 "pl" : {
                     code : input.rename.pl
                 }
-            }).then(function(inUse){
+            })
+            //PERSIST IF NOT IN USE
+            .then(function(inUse){
                 if(!inUse)
                 {
                     if(input.persist.op == "_persistActivity")
                         _persistActivity(req,res);
                     else if(input.persist.op == "_persistForm")
-                    {
                         _persistForm(req,res);
-                    }
                 }
             } , function failure(err){
                 console.log("ERROR PERSISTING:",err);
@@ -378,6 +489,7 @@ module.exports = function (paramService, esbMessage) {
                 })
             })
             .then(function commitTransaction(cnt) {
+                console.log("FOO");
                 if(cnt == 1 && input.persist.tgtField == "servicePoint")
                 {
                     resultset.pl.servicePointCode = input.rename.pl;
