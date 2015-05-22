@@ -140,7 +140,6 @@ module.exports = function (paramService, esbMessage) {
             //Fill In
             var scodeToIDMap = {}, serviceTypeMap = {};
             servicePoints.forEach(function(point){
-                console.log(point);
                 if(point && point.pl)
                     scodeToIDMap[point.pl.servicePointCode] = point.pl._id;
             });
@@ -151,13 +150,11 @@ module.exports = function (paramService, esbMessage) {
             importSpecialCaseServices = importSpecialCaseServices.map(function(service){
                 service.persist.pl.PriceList = service.persist.pl.PriceList.map(function(list){
                     var spc = list.servicePoint;
-                    console.log("for",list,":",spc, scodeToIDMap[spc])
                     if( scodeToIDMap[spc])
                         list.servicePoint =  scodeToIDMap[spc];//scodeToIDMap::>  RenamedLZScode -> LZSid
 
                     return list;
                 });
-                console.log("CHANGING ",service.persist.pl.serviceType,"to",serviceTypeMap[service.persist.pl.serviceType])
                 if(serviceTypeMap[service.persist.pl.serviceType])
                     service.persist.pl.serviceType = serviceTypeMap[service.persist.pl.serviceType];
                 else
@@ -186,7 +183,6 @@ module.exports = function (paramService, esbMessage) {
                 res.forEach(function(ele){
                     serviceNameMap[ele.pl.serviceName.text] = ele.pl.serviceName._id
                 })
-                console.log("SNM MAP", serviceNameMap);
             importSpecialCaseActivities = importSpecialCaseActivities.map(function(input) {
                 var req;
                 if(input.upload && input.persist.op == "_persistForm")//we have to handle a bucket upload
@@ -794,9 +790,9 @@ module.exports = function (paramService, esbMessage) {
                     }
                 })
             })
-            //TODO - Handle 'no more' case and close response
             //FINISH TRANSACTION
             .then(function resolve(r) {
+                //TODO - Handle 'no more' case and close response
                 if (transactionid) {
                     console.log("COMMITTING TRANSACTION", transactionid.pl.transaction._id);
                     return _commitTransaction({pl: {transactionid: transactionid.pl.transaction._id}});
