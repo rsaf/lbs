@@ -268,64 +268,14 @@ module.exports = function(paramService, esbMessage)
             break;
         }
         if(isSpecial >= 0) {
-            var responseObjectToReturn;
             return _issueFirstOrderForResponse(request)
+                //PROCESS AUTOMATICALLY
                 .then(function () {
                     return specialCases[isSpecial].fn(request, responseObj, transactionid);
                 })
-                //Update response Status
-                .then(function (r) {
-                    var mypl = {
-                        transactionid: transactionid,
-                        loginName: request.user.lanzheng.loginName,
-                        currentOrganization: request.user.currentOrganization,
-                        response: {
-                            _id: responseObj._id,
-                            rs: 45,
-                            rfc: responseObj.rfc,
-                            fd: r && r.pl ? {fields: {heyanjieguo: r.pl.LZBIZDESC}} : undefined
-                        }
-                    };
-                    return esbMessage({
-                        "ns": "bmm",
-                        "op": "bmm_persistResponse",
-                        "pl": mypl
-                    })
-                })
-                //Fetch business record status
-                .then(function (r) {
-                    responseObjectToReturn = r;
-                    return esbMessage({
-                        "ns": "smm",
-                        "op": "smm_fetchBusinessRecord",
-                        "pl": {
-                            ac_code: ac_code,
-                            rc_code: responseObj.rc
-                        }
-                    })
-                })
-                //Update business record status
-                .then(function (r) {
-                    var myr = r;
-                    myr.st = 50;
-                    var mypl = {
-                        query: {
-                            "ac": ac_code,
-                            "rc": responseObj.rc
-                        },
-                        response: myr,
-                        transactionid: {
-                            _id: transactionid
-                        }
-                    };
-                    return esbMessage({
-                        "ns": "smm",
-                        "op": "smm_spawnBusinessRecord",
-                        "pl": mypl
-                    })
-                })
+                //EXIT
                 .then(function success(r) {
-                    return responseObjectToReturn;
+                    return r;
                 }, function failure(err) {
                     console.log("FAILED WITH ERROR handling special case order", err);
                     throw err;
@@ -447,6 +397,9 @@ module.exports = function(paramService, esbMessage)
             });
     }
     function _handleSingleIdValidationResponse(request,responseObj,transactionid){
+        var ac_code = lib.digFor(responseObj,"acn");
+        var sv_code = lib.digFor(responseObj,"sb.0.svn");
+        var responseObjectToReturn;
         return q()
             //Hit UPM to validate
             .then(function(){
@@ -462,28 +415,68 @@ module.exports = function(paramService, esbMessage)
                     }
                 });
             })
-            //Update Business Record on Success
-            .then(function (r){
-                //TODO: should I fork logic path if id validation returns 'incorrect'?
-                if(r.pl && !r.er)
-                {
-                    console.log("INFO VALID");
-                }
-                else if(r.pl){
-                    console.log("INFO INVALID:", r.pl.er);
-                }
-                return r;
+            //Update response Status
+            .then(function (r) {
+                return esbMessage({
+                    "ns": "bmm",
+                    "op": "bmm_persistResponse",
+                    "pl": {
+                        transactionid: transactionid,
+                        loginName: request.user.lanzheng.loginName,
+                        currentOrganization: request.user.currentOrganization,
+                        response: {
+                            _id: responseObj._id,
+                            rs: 45,
+                            rfc: responseObj.rfc,
+                            fd: r && r.pl ? {fields: {heyanjieguo: r.pl.LZBIZDESC}} : undefined
+                        }
+                    }
+                })
+            })
+            //Fetch business record status
+            .then(function (r) {
+                responseObjectToReturn = r;
+                return esbMessage({
+                    "ns": "smm",
+                    "op": "smm_fetchBusinessRecord",
+                    "pl": {
+                        ac_code: ac_code,
+                        rc_code: responseObj.rc
+                    }
+                })
+            })
+            //Update business record status
+            .then(function (r) {
+                var myr = r;
+                myr.st = 50;
+                var mypl = {
+                    query: {
+                        "ac": ac_code,
+                        "rc": responseObj.rc
+                    },
+                    response: myr,
+                    transactionid: {
+                        _id: transactionid
+                    }
+                };
+                return esbMessage({
+                    "ns": "smm",
+                    "op": "smm_spawnBusinessRecord",
+                    "pl": mypl
+                })
             })
             //EXIT
             .then(function resolve(r){
-                return r;
+                return responseObjectToReturn;
             }  ,  function failure(r){
                 console.log("Unable to issue (special case) order (rolling back):",r);
                 return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
             });
     }
     function _handlePhotoValidationResponse(request,responseObj, transactionid){
+        var responseObjectToReturn;
         return q()
+            //Hit UPM to validate
             .then(function(){
                 return esbMessage({
                     "transactionid" : transactionid,
@@ -497,13 +490,71 @@ module.exports = function(paramService, esbMessage)
                     }
                 })
             })
+            //Update response Status
+            .then(function (r) {
+                return esbMessage({
+                    "ns": "bmm",
+                    "op": "bmm_persistResponse",
+                    "pl": {
+                        transactionid: transactionid,
+                        loginName: request.user.lanzheng.loginName,
+                        currentOrganization: request.user.currentOrganization,
+                        response: {
+                            _id: responseObj._id,
+                            rs: 45,
+                            rfc: responseObj.rfc,
+                            fd: r && r.pl ? {fields: {heyanjieguo: r.pl.LZBIZDESC}} : undefined
+                        }
+                    }
+                })
+            })
+            //Fetch business record status
+            .then(function (r) {
+                responseObjectToReturn = r;
+                return esbMessage({
+                    "ns": "smm",
+                    "op": "smm_fetchBusinessRecord",
+                    "pl": {
+                        ac_code: ac_code,
+                        rc_code: responseObj.rc
+                    }
+                })
+            })
+            //Update business record status
+            .then(function (r) {
+                var myr = r;
+                myr.st = 50;
+                var mypl = {
+                    query: {
+                        "ac": ac_code,
+                        "rc": responseObj.rc
+                    },
+                    response: myr,
+                    transactionid: {
+                        _id: transactionid
+                    }
+                };
+                return esbMessage({
+                    "ns": "smm",
+                    "op": "smm_spawnBusinessRecord",
+                    "pl": mypl
+                })
+            })
+            //EXIT
+            .then(function resolve(r){
+                return responseObjectToReturn;
+            }  ,  function failure(r){
+                console.log("Unable to issue (special case) order (rolling back):",r);
+                return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
+            });
+        /*
             //EXIT
             .then(function resolve(r){
                 return r;
             }  ,  function failure(r){
                 console.log("Unable to issue (special case) order (rolling back):",r);
                 return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
-            });
+            });*/
     }
   return fmmRouter;
 };
