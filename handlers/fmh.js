@@ -108,23 +108,23 @@ module.exports = function(paramService, esbMessage)
  * makes payment to account ?? for all the services
  */
   fmmRouter.post('/responsepayment.json', function(paramRequest, paramResponse, paramNext){
-    var varAccountID  = null,
-        m = {},
+    var r = {er:null,pl:null},
         transactionid = false,
         responseInfo = null,
-        r = {er:null,pl:null},
-        phone = undefined,
         reqPayload=false,
+        finalResult = undefined,
         refCode = undefined;
-    q().then(function(){
+    q()
+    //FETCH RESPONSE & BEGIN TRANSACTION
+    .then(function(){
       //get a transaction id from wmm
       reqPayload = JSON.parse(paramRequest.body.json);
-        phone = reqPayload.pl.phone;
-        refCode = lib.generateResponseReferenceCode();
-      m.pl=reqPayload.pl;
-      m.op='bmm_getResponse';
+      refCode = lib.generateResponseReferenceCode();
       return q.all([
-        esbMessage(m), //get the response details
+        esbMessage({
+          op:"bmm_getResponse",
+          pl:reqPayload.pl
+        }), //get the response details
         esbMessage({  //and a transactionid
           op:"createTransaction",
           pl:{
@@ -138,50 +138,58 @@ module.exports = function(paramService, esbMessage)
         })
       ]);
     })
+    //STOW ASIDE HELPFUL INFO
+    .then(function(msg) {
+        responseInfo = msg[0];
+        transactionid = msg[1].pl.transaction._id;
+        return;
+    })
+    //MAKE PAYMENT
+    .then(function(){
+        var serviceBookings = responseInfo.sb,
+            orders = [],
+            i = serviceBookings.length,
+            varAccountID;
+        if(paramRequest.user.userType==='admin'){
+            varAccountID = "F00001";
+        }
+        else {
+            varAccountID = paramRequest.user.lanzheng.loginName;
+        }
+        //create an order for each selected pricelist in this activity (service booking)
+        while((i-=1)>-1){
+            orders.push({
+                "transactionId" : responseInfo.rc,
+                "serviceId" : serviceBookings[i].plid,//serviceid is the pricelist id
+                "serviceType" : "ACTIVITY",
+                "serviceName" : serviceBookings[i].svn,
+                "serviceProviderId" : serviceBookings[i].spid,
+                //"agentId" : "not implemented",
+                "orderAmount" : serviceBookings[i].sdp,
+                "platformCommissionAmount" : 0,//@todo: not implented
+                "agentCommissionAmount" : 0,//@todo: not implented
+                "corporationId" : serviceBookings[i].spc,//creator of the service point
+                "userAccountId" : varAccountID,// login name not the id
+                "paymentType" : "online"
+            });
+        }
+        //update response sp and set payment status to paid
+        return esbMessage({
+            "ns":"fmm",
+            "op": "fmm_makeDirectPayment",
+            "pl": {orders : orders}
+        });
+    })
+    //UPDATE RESPONSE STATUS TO PAID
     .then(function(msg){
-      responseInfo = msg[0];
-      transactionid = msg[1].pl.transaction._id;
-      var serviceBookings = msg[0].sb,
-          orders = [],
-          i = serviceBookings.length;
-      if(paramRequest.user.userType==='admin'){
-          varAccountID = "F00001";
-      }
-      else {
-          varAccountID = paramRequest.user.lanzheng.loginName;
-      }
-      //create an order for each selected pricelist in this activity (service booking)
-      while((i-=1)>-1){
-        orders.push({
-            "transactionId" : msg[0].rc,
-            "serviceId" : serviceBookings[i].plid,//serviceid is the pricelist id
-            "serviceType" : "ACTIVITY",
-            "serviceName" : serviceBookings[i].svn,
-            "serviceProviderId" : serviceBookings[i].spid,
-            //"agentId" : "not implemented",
-            "orderAmount" : serviceBookings[i].sdp,
-            "platformCommissionAmount" : 0,//@todo: not implented
-            "agentCommissionAmount" : 0,//@todo: not implented
-            "corporationId" : serviceBookings[i].spc,//creator of the service point
-            "userAccountId" : varAccountID,// login name not the id
-            "paymentType" : "online"
-          });
-      }
-      //update response sp and set payment status to paid
-      m = {
-          "ns":"fmm",
-          "op": "fmm_makeDirectPayment",
-          "pl": {orders : orders}
-      };
-
-      var m1 = {  //update the response and set payment status to 'paid'
+      return esbMessage({  //update the response and set payment status to 'paid'
           op : "bmm_persistResponse",
           pl:{
               transactionid : transactionid,
               loginName : paramRequest.user.lanzheng.loginName,
               currentOrganization : paramRequest.user.currentOrganization,
               response : {
-                  _id : msg[0]._id,
+                  _id : responseInfo._id,
                   rs:30,
                   sp:{
                       ps:'paid'
@@ -189,34 +197,45 @@ module.exports = function(paramService, esbMessage)
                   rfc:refCode
               }
           }
-      };
-            if(orders && orders.length == 0)
-            {
-                m = m1;
-            }
-            else m = esbMessage(m);
-      return q.all([
-        m,//parameters to save orders and insert payment records
-        esbMessage(m1)
-      ]);
+      });
     })
+    //COMMIT TRANSACTION
     .then(function(msg){
-      //create orders and move money around, if this fails we can roll back the response
-      return lib.digFor(msg,"0.op")?esbMessage(msg[0]):msg[0];
-    })
-    .then(function(msg){
-      r.pl = msg[1];
+      r.pl = msg;
       return _commitTransaction({pl:{transactionid : transactionid}});
     })
+    //SCHEDULE/ACTIVATE SERVICES
     .then(function() {
       return _issueOrders(responseInfo, paramRequest, transactionid);
     })
+    //SEND SMS/MAIL/NOTIFICATIONs & EXIT
     .then(function(z){
-      var mail = paramRequest.user.lanzheng.loginName;
-      _sendSMS(mail, phone, refCode);
-            console.log("Z IS ",z);
-      oHelpers.sendResponse(paramResponse,200,z);
+        finalResult = z;
+        return esbMessage({
+            ns: 'mdm',
+            vs: '1.0',
+            op: 'sendNotification',
+            pl: {
+                recipients: [{
+                    inmail: {to: paramRequest.user.lanzheng.loginName},
+                    weixin: {to: null},
+                    sms: {to: reqPayload.pl.phone},
+                    email: {to: null}
+                }]
+                , notification: {
+                    subject : '您事务响应蓝正吗为',
+                    notificationType : '事务通知',
+                    from : '系统',
+                    body : refCode
+                }
+            }
+        })
+    //EXIT
+    .then(function(smsResponse){
+            console.log("Completed Payment Click. Final Result:",finalResult);
+      oHelpers.sendResponse(paramResponse,200,finalResult);
     })
+    //FAIL
     .then(null,function reject(err){
       var code = 501;
       r.er={ec:10012,em:"Could not make payment"};
@@ -228,34 +247,10 @@ module.exports = function(paramService, esbMessage)
         _rollBackTransaction({pl:{transactionid : transactionid}});
       }
       oHelpers.sendResponse(paramResponse,code,r);
-    });
+    })
   });
-    function _sendSMS(mail, phone, refCode){
-        var m = {
-            ns: 'mdm',
-            vs: '1.0',
-            op: 'sendNotification',
-            pl: {
-                recipients: [{
-                    inmail: {to: mail},
-                    weixin: {to: null},
-                    sms: {to: phone},
-                    email: {to: null}
-                }]
-                , notification: {}
-            }
-        };
+  });
 
-        m.pl.notification.subject = '您事务响应蓝正吗为';
-        m.pl.notification.notificationType = '事务通知';
-        m.pl.notification.from = '系统';
-        m.pl.notification.body = refCode;
-
-        esbMessage(m)
-            .then(function (r) {
-                console.log("Sent sms... r = ",r);
-            });
-    }
     function _issueOrders(responseObj, request, transactionid){
         var specialCases = [
                 {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
@@ -330,7 +325,6 @@ module.exports = function(paramService, esbMessage)
                     })
                 })
                 .then(function success(r) {
-                    console.log("SUCCESS with handling special case order", r);
                     return responseObjectToReturn;
                 }, function failure(err) {
                     console.log("FAILED WITH ERROR handling special case order", err);
@@ -339,65 +333,6 @@ module.exports = function(paramService, esbMessage)
         }
         else
             return _issueFirstOrderForResponse(request);
-    }
-    function _handleSingleIdValidationResponse(request,responseObj,transactionid){
-        return q()
-            //Hit UPM to validate
-            .then(function(){
-                return esbMessage({
-                    ns:"upm",
-                    op:"upm_validateUserInfo",
-                    pl:{
-                        "transactionid":transactionid,
-                        "method":"validateID",
-                        "sfz": responseObj.fd.fields["shenfenzhenghaoma"], //shenfenzheng or user national id number
-                        "xm": responseObj.fd.fields["xingming"],  //xingming or user full name
-                        "zz": ""   //zhengzhao or user id photo buffer //must be provided when executing the validatePhoto method.
-                    }
-                });
-            })
-            //Update Business Record on Success
-            .then(function (r){
-                //TODO: should I fork logic path if id validation returns 'incorrect'?
-                if(r.pl && !r.er)
-                {
-                    console.log("INFO VALID");
-                }
-                else if(r.pl){
-                    console.log("INFO INVALID:", r.pl.er);
-                }
-                return r;
-            })
-            //EXIT
-            .then(function resolve(r){
-                return r;
-            }  ,  function failure(r){
-                console.log("Unable to issue (special case) order (rolling back):",r);
-                return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
-            });
-    }
-    function _handlePhotoValidationResponse(request,responseObj, transactionid){
-        return q()
-            .then(function(){
-                return esbMessage({
-                    "transactionid" : transactionid,
-                    ns:"upm",
-                    op:"upm_validateUserInfo",
-                    pl:{
-                        "method":"validatePhoto",
-                        "sfz": responseObj.fd.fields["shenfenzhenghaoma"],
-                        "xm" : responseObj.fd.fields["xingming"],
-                        "zz" : responseObj.pt[0].pp
-                    }
-                })
-            })
-            //EXIT
-            .then(function resolve(r){
-                return r;
-            }  ,  function failure(r){
-                console.log("Unable to issue (special case) order (rolling back):",r);
-                return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
-            });
     }
     function _issueFirstOrderForResponse(request){
         var ln = request.user.lanzheng.loginName,
@@ -496,8 +431,8 @@ module.exports = function(paramService, esbMessage)
                 })
             })
             //COMMIT TRANSACTION
-            //TODO handle no-service case
             .then(function (){
+                //TODO handle no-service case
                 if(transactionid){
                     return _commitTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
                 }
@@ -508,6 +443,65 @@ module.exports = function(paramService, esbMessage)
                 return r;
             }  ,  function failure(r){
                 console.log("Unable to issue order (rolling back):",r);
+                return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
+            });
+    }
+    function _handleSingleIdValidationResponse(request,responseObj,transactionid){
+        return q()
+            //Hit UPM to validate
+            .then(function(){
+                return esbMessage({
+                    ns:"upm",
+                    op:"upm_validateUserInfo",
+                    pl:{
+                        "transactionid":transactionid,
+                        "method":"validateID",
+                        "sfz": responseObj.fd.fields["shenfenzhenghaoma"], //shenfenzheng or user national id number
+                        "xm": responseObj.fd.fields["xingming"],  //xingming or user full name
+                        "zz": ""   //zhengzhao or user id photo buffer //must be provided when executing the validatePhoto method.
+                    }
+                });
+            })
+            //Update Business Record on Success
+            .then(function (r){
+                //TODO: should I fork logic path if id validation returns 'incorrect'?
+                if(r.pl && !r.er)
+                {
+                    console.log("INFO VALID");
+                }
+                else if(r.pl){
+                    console.log("INFO INVALID:", r.pl.er);
+                }
+                return r;
+            })
+            //EXIT
+            .then(function resolve(r){
+                return r;
+            }  ,  function failure(r){
+                console.log("Unable to issue (special case) order (rolling back):",r);
+                return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
+            });
+    }
+    function _handlePhotoValidationResponse(request,responseObj, transactionid){
+        return q()
+            .then(function(){
+                return esbMessage({
+                    "transactionid" : transactionid,
+                    ns:"upm",
+                    op:"upm_validateUserInfo",
+                    pl:{
+                        "method":"validatePhoto",
+                        "sfz": responseObj.fd.fields["shenfenzhenghaoma"],
+                        "xm" : responseObj.fd.fields["xingming"],
+                        "zz" : responseObj.pt[0].pp
+                    }
+                })
+            })
+            //EXIT
+            .then(function resolve(r){
+                return r;
+            }  ,  function failure(r){
+                console.log("Unable to issue (special case) order (rolling back):",r);
                 return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
             });
     }
