@@ -108,175 +108,176 @@ module.exports = function(paramService, esbMessage)
  * makes payment to account ?? for all the services
  */
   fmmRouter.post('/responsepayment.json', function(paramRequest, paramResponse, paramNext){
-    var r = {er:null,pl:null},
-        transactionid = false,
-        responseInfo = null,
-        reqPayload=false,
-        finalResult = undefined,
-        refCode = undefined,
-        specialCases = [
-          {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
-          {ac:"LZB102",sv:"LZS101",fn:_handlePhotoValidationResponse}
-        ];
-    q()
-    //FETCH RESPONSE & BEGIN TRANSACTION
-    .then(function(){
-      //get a transaction id from wmm
-      reqPayload = JSON.parse(paramRequest.body.json);
-      refCode = lib.generateResponseReferenceCode();
-      return q.all([
-        esbMessage({
-          op:"bmm_getResponse",
-          pl:reqPayload.pl
-        }), //get the response details
-        esbMessage({  //and a transactionid
-          op:"createTransaction",
-          pl:{
-            loginName : paramRequest.user.lanzheng.loginName,
-            currentOrganization : paramRequest.user.currentOrganization,
-            transaction:{
-              description:'Pay for response'
-              ,modules:['bmm']
-            }
-          }
-        })
-      ]);
-    })
-    //STOW ASIDE HELPFUL INFO
-    .then(function(msg) {
-        responseInfo = msg[0];
-        transactionid = msg[1].pl.transaction._id;
-        return;
-    })
-    //MAKE PAYMENT
-    .then(function(){
-        var serviceBookings = responseInfo.sb,
-            orders = [],
-            i = serviceBookings.length,
-            varAccountID;
-        if(paramRequest.user.userType==='admin'){
-            varAccountID = "F00001";
-        }
-        else {
-            varAccountID = paramRequest.user.lanzheng.loginName;
-        }
-        //create an order for each selected pricelist in this activity (service booking)
-        while((i-=1)>-1){
-            orders.push({
-                "transactionId" : responseInfo.rc,
-                "serviceId" : serviceBookings[i].plid,//serviceid is the pricelist id
-                "serviceType" : "ACTIVITY",
-                "serviceName" : serviceBookings[i].svn,
-                "serviceProviderId" : serviceBookings[i].spid,
-                //"agentId" : "not implemented",
-                "orderAmount" : serviceBookings[i].sdp,
-                "platformCommissionAmount" : 0,//@todo: not implented
-                "agentCommissionAmount" : 0,//@todo: not implented
-                "corporationId" : serviceBookings[i].spc,//creator of the service point
-                "userAccountId" : varAccountID,// login name not the id
-                "paymentType" : "online"
-            });
-        }
-        //update response sp and set payment status to paid
-        return esbMessage({
-            "ns":"fmm",
-            "op": "fmm_makeDirectPayment",
-            "pl": {orders : orders}
-        });
-    })
-    //UPDATE RESPONSE STATUS TO PAID
-    .then(function(msg){
-      return esbMessage({  //update the response and set payment status to 'paid'
-          op : "bmm_persistResponse",
-          pl:{
-              transactionid : transactionid,
-              loginName : paramRequest.user.lanzheng.loginName,
-              currentOrganization : paramRequest.user.currentOrganization,
-              response : {
-                  _id : responseInfo._id,
-                  rs:30,
-                  sp:{
-                      ps:'paid'
-                  },
-                  rfc:refCode
-              }
-          }
-      });
-    })
-    //COMMIT TRANSACTION
-    .then(function(msg){
-      r.pl = msg;
-      return _commitTransaction({pl:{transactionid : transactionid}});
-    })
-    //SCHEDULE/ACTIVATE SERVICES
-    .then(function() {
-        ac_code = lib.digFor(responseInfo,"acn"),
-        sv_code = lib.digFor(responseInfo,"sb.0.svn"),
-        isSpecial = -1;
+        var r = {er:null,pl:null},
+            transactionid = false,
+            responseInfo = null,
+            reqPayload=false,
+            finalResult = undefined,
+            refCode = undefined,
+            specialCases = [
+              {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
+              {ac:"LZB102",sv:"LZS101",fn:_handlePhotoValidationResponse}
+            ];
 
-        for(var i = 0; i < specialCases.length; i++)
-        {
-            var tgt = specialCases[i];
-            if(!ac_code || tgt.ac != ac_code /*|| !sv_code  || tgt.sv != sv_code*/) continue;
-            isSpecial = i;
-            break;
-        }
-        return _issueFirstOrderForResponse(paramRequest)
-            //RUN AUTOMATION IF SPECIAL
-            .then(function(r){
-                if(isSpecial >= 0)
-                    return specialCases[isSpecial].fn(paramRequest, responseInfo, transactionid);
-                return r
+        return q()
+            //FETCH RESPONSE & BEGIN TRANSACTION
+            .then(function(){
+              //get a transaction id from wmm
+              reqPayload = JSON.parse(paramRequest.body.json);
+              refCode = lib.generateResponseReferenceCode();
+              return q.all([
+                esbMessage({
+                  op:"bmm_getResponse",
+                  pl:reqPayload.pl
+                }), //get the response details
+                esbMessage({  //and a transactionid
+                  op:"createTransaction",
+                  pl:{
+                    loginName : paramRequest.user.lanzheng.loginName,
+                    currentOrganization : paramRequest.user.currentOrganization,
+                    transaction:{
+                      description:'Pay for response'
+                      ,modules:['bmm']
+                    }
+                  }
+                })
+              ]);
+            })
+            //STOW ASIDE HELPFUL INFO
+            .then(function(msg) {
+                responseInfo = msg[0];
+                transactionid = msg[1].pl.transaction._id;
+                return;
+            })
+            //MAKE PAYMENT
+            .then(function(){
+                var serviceBookings = responseInfo.sb,
+                    orders = [],
+                    i = serviceBookings.length,
+                    varAccountID;
+                if(paramRequest.user.userType==='admin'){
+                    varAccountID = "F00001";
+                }
+                else {
+                    varAccountID = paramRequest.user.lanzheng.loginName;
+                }
+                //create an order for each selected pricelist in this activity (service booking)
+                while((i-=1)>-1){
+                    orders.push({
+                        "transactionId" : responseInfo.rc,
+                        "serviceId" : serviceBookings[i].plid,//serviceid is the pricelist id
+                        "serviceType" : "ACTIVITY",
+                        "serviceName" : serviceBookings[i].svn,
+                        "serviceProviderId" : serviceBookings[i].spid,
+                        //"agentId" : "not implemented",
+                        "orderAmount" : serviceBookings[i].sdp,
+                        "platformCommissionAmount" : 0,//@todo: not implented
+                        "agentCommissionAmount" : 0,//@todo: not implented
+                        "corporationId" : serviceBookings[i].spc,//creator of the service point
+                        "userAccountId" : varAccountID,// login name not the id
+                        "paymentType" : "online"
+                    });
+                }
+                //update response sp and set payment status to paid
+                return esbMessage({
+                    "ns":"fmm",
+                    "op": "fmm_makeDirectPayment",
+                    "pl": {orders : orders}
+                });
+            })
+            //UPDATE RESPONSE STATUS TO PAID
+            .then(function(msg){
+              return esbMessage({  //update the response and set payment status to 'paid'
+                  op : "bmm_persistResponse",
+                  pl:{
+                      transactionid : transactionid,
+                      loginName : paramRequest.user.lanzheng.loginName,
+                      currentOrganization : paramRequest.user.currentOrganization,
+                      response : {
+                          _id : responseInfo._id,
+                          rs:30,
+                          sp:{
+                              ps:'paid'
+                          },
+                          rfc:refCode
+                      }
+                  }
+              });
+            })
+            //COMMIT TRANSACTION
+            .then(function(msg){
+              r.pl = msg;
+              return _commitTransaction({pl:{transactionid : transactionid}});
+            })
+            //SCHEDULE/ACTIVATE SERVICES
+            .then(function() {
+                ac_code = lib.digFor(responseInfo,"acn"),
+                sv_code = lib.digFor(responseInfo,"sb.0.svn"),
+                isSpecial = -1;
+
+                for(var i = 0; i < specialCases.length; i++)
+                {
+                    var tgt = specialCases[i];
+                    if(!ac_code || tgt.ac != ac_code /*|| !sv_code  || tgt.sv != sv_code*/) continue;
+                    isSpecial = i;
+                    break;
+                }
+                return _issueFirstOrderForResponse(paramRequest)
+                    //RUN AUTOMATION IF SPECIAL
+                    .then(function(r){
+                        if(isSpecial >= 0)
+                            return specialCases[isSpecial].fn(paramRequest, responseInfo, transactionid);
+                        return r
+                    })
+                    //EXIT
+                    .then(function success(r) {
+                        return r;
+                    }, function failure(err) {
+                        console.log("FAILED WITH ERROR handling special case order", err);
+                        throw err;
+                    })
+            })
+            //SEND SMS/MAIL/NOTIFICATIONs & EXIT
+            .then(function(z) {
+                    finalResult = z;
+                    return esbMessage({
+                        ns: 'mdm',
+                        vs: '1.0',
+                        op: 'sendNotification',
+                        pl: {
+                            recipients: [{
+                                inmail: {to: paramRequest.user.lanzheng.loginName},
+                                weixin: {to: null},
+                                sms: {to: reqPayload.pl.phone},
+                                email: {to: null}
+                            }]
+                            , notification: {
+                                subject: '您事务响应蓝正吗为',
+                                notificationType: '事务通知',
+                                from: '系统',
+                                body: refCode
+                            }
+                        }
+                    })
             })
             //EXIT
-            .then(function success(r) {
-                return r;
-            }, function failure(err) {
-                console.log("FAILED WITH ERROR handling special case order", err);
-                throw err;
+            .then(function(smsResponse){
+                    console.log("Completed Payment Click. Final Result:",finalResult);
+              oHelpers.sendResponse(paramResponse,200,finalResult);
             })
-    })
-    //SEND SMS/MAIL/NOTIFICATIONs & EXIT
-    .then(function(z) {
-            finalResult = z;
-            return esbMessage({
-                ns: 'mdm',
-                vs: '1.0',
-                op: 'sendNotification',
-                pl: {
-                    recipients: [{
-                        inmail: {to: paramRequest.user.lanzheng.loginName},
-                        weixin: {to: null},
-                        sms: {to: reqPayload.pl.phone},
-                        email: {to: null}
-                    }]
-                    , notification: {
-                        subject: '您事务响应蓝正吗为',
-                        notificationType: '事务通知',
-                        from: '系统',
-                        body: refCode
-                    }
-                }
+            //FAIL
+            .then(null,function reject(err){
+              var code = 501;
+              r.er={ec:10012,em:"Could not make payment"};
+              //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+              if(err.er && err.er ==='Insufficient funds'){
+                r.er={ec:10011,em:err.er};
+                code = 403;
+              }else{
+                _rollBackTransaction({pl:{transactionid : transactionid}});
+              }
+              oHelpers.sendResponse(paramResponse,code,r);
             })
-    })
-    //EXIT
-    .then(function(smsResponse){
-            console.log("Completed Payment Click. Final Result:",finalResult);
-      oHelpers.sendResponse(paramResponse,200,finalResult);
-    })
-    //FAIL
-    .then(null,function reject(err){
-      var code = 501;
-      r.er={ec:10012,em:"Could not make payment"};
-      //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-      if(err.er && err.er ==='Insufficient funds'){
-        r.er={ec:10011,em:err.er};
-        code = 403;
-      }else{
-        _rollBackTransaction({pl:{transactionid : transactionid}});
-      }
-      oHelpers.sendResponse(paramResponse,code,r);
-    })
   });
 
     function _issueFirstOrderForResponse(request){
@@ -392,9 +393,10 @@ module.exports = function(paramService, esbMessage)
             });
     }
     function _handleSingleIdValidationResponse(request,responseObj,transactionid){
-        var ac_code = lib.digFor(responseObj,"acn");
-        var sv_code = lib.digFor(responseObj,"sb.0.svn");
-        var responseObjectToReturn;
+        var ac_code = lib.digFor(responseObj,"acn"),
+            sv_code = lib.digFor(responseObj,"sb.0.svn"),
+            responseObjectToReturn;
+
         return q()
             //Hit UPM to validate
             .then(function(){
@@ -469,7 +471,10 @@ module.exports = function(paramService, esbMessage)
             });
     }
     function _handlePhotoValidationResponse(request,responseObj, transactionid){
-        var responseObjectToReturn;
+        var ac_code = lib.digFor(responseObj,"acn"),
+            sv_code = lib.digFor(responseObj,"sb.0.svn"),
+            responseObjectToReturn;
+
         return q()
             //Hit UPM to validate
             .then(function(){
@@ -551,5 +556,6 @@ module.exports = function(paramService, esbMessage)
                 return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
             });*/
     }
-  return fmmRouter;
+
+    return fmmRouter;
 };
