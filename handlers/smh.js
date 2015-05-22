@@ -174,11 +174,11 @@ module.exports = function (paramService, esbMessage) {
             var servicePointTypeMap = {};
             stypes.pl.forEach(function (type) {
                 servicePointTypeMap[type.text] = type._id;
-            })
+            });
             importSpecialCaseServicePoints = importSpecialCaseServicePoints.map(function (ele) {
-                ele.servicePointType = servicePointTypeMap;
+                ele.persist.pl.servicePointType = servicePointTypeMap[ele.persist.pl.servicePointType];
                 return ele;
-            })
+            });
             //Persist
             return q.all(importSpecialCaseServicePoints.map(function(ele){
                 return esbMessage({
@@ -251,8 +251,9 @@ module.exports = function (paramService, esbMessage) {
         })
         //CREATE ACTIVITIES
         .then(function(res) {
-           return bmh_prepopulateSpecialCaseActivities(serviceNameMap);
-                /*
+           //return bmh_prepopulateSpecialCaseActivities(serviceNameMap);
+
+                //*
             importSpecialCaseActivities = importSpecialCaseActivities.map(function(input) {
                 var req;
                 if(input.upload && input.persist.op == "_persistForm")//we have to handle a bucket upload
@@ -341,7 +342,7 @@ module.exports = function (paramService, esbMessage) {
             })
 
             return q.all(importSpecialCaseActivities);
-            */
+            //*/
         })
         .then(function(res){
             console.log("Completed Special Case Creation");
