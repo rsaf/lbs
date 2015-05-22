@@ -154,7 +154,7 @@
         ],
         "status": 0,
         "serviceFromSL": "5548375f02f7c81622e557a5",
-        "serviceType": "证照服务",
+        "serviceType": "信息核验",
         "standardPayment": ["1"],
         "standardServicePrice": "0",
         "standardPricing": "0",
