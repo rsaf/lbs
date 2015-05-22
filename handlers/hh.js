@@ -249,6 +249,7 @@ module.exports = function (paramService, esbMessage) {
         q().then(function () {
           m.pl = {readyOnly:true};
           m.op = 'bmm_getActivities';
+            m.mt = {p:paramRequest.query.p,ps:paramRequest.query.ps}
           return esbMessage(m);
         }).then(function resolve(msg) {
           paramResponse.writeHead(200, {
