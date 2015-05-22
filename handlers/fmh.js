@@ -113,7 +113,11 @@ module.exports = function(paramService, esbMessage)
         responseInfo = null,
         reqPayload=false,
         finalResult = undefined,
-        refCode = undefined;
+        refCode = undefined,
+        specialCases = [
+          {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
+          {ac:"LZB102",sv:"LZS101",fn:_handlePhotoValidationResponse}
+        ];
     q()
     //FETCH RESPONSE & BEGIN TRANSACTION
     .then(function(){
@@ -206,30 +210,55 @@ module.exports = function(paramService, esbMessage)
     })
     //SCHEDULE/ACTIVATE SERVICES
     .then(function() {
-      return _issueOrders(responseInfo, paramRequest, transactionid);
+        ac_code = lib.digFor(responseInfo,"acn"),
+        sv_code = lib.digFor(responseInfo,"sb.0.svn"),
+        isSpecial = -1;
+
+        for(var i = 0; i < specialCases.length; i++)
+        {
+            var tgt = specialCases[i];
+            if(!ac_code || tgt.ac != ac_code /*|| !sv_code  || tgt.sv != sv_code*/) continue;
+            isSpecial = i;
+            break;
+        }
+        return _issueFirstOrderForResponse(paramRequest)
+            //RUN AUTOMATION IF SPECIAL
+            .then(function(r){
+                if(isSpecial >= 0)
+                    return specialCases[isSpecial].fn(paramRequest, responseInfo, transactionid);
+                return r
+            })
+            //EXIT
+            .then(function success(r) {
+                return r;
+            }, function failure(err) {
+                console.log("FAILED WITH ERROR handling special case order", err);
+                throw err;
+            })
     })
     //SEND SMS/MAIL/NOTIFICATIONs & EXIT
-    .then(function(z){
-        finalResult = z;
-        return esbMessage({
-            ns: 'mdm',
-            vs: '1.0',
-            op: 'sendNotification',
-            pl: {
-                recipients: [{
-                    inmail: {to: paramRequest.user.lanzheng.loginName},
-                    weixin: {to: null},
-                    sms: {to: reqPayload.pl.phone},
-                    email: {to: null}
-                }]
-                , notification: {
-                    subject : '您事务响应蓝正吗为',
-                    notificationType : '事务通知',
-                    from : '系统',
-                    body : refCode
+    .then(function(z) {
+            finalResult = z;
+            return esbMessage({
+                ns: 'mdm',
+                vs: '1.0',
+                op: 'sendNotification',
+                pl: {
+                    recipients: [{
+                        inmail: {to: paramRequest.user.lanzheng.loginName},
+                        weixin: {to: null},
+                        sms: {to: reqPayload.pl.phone},
+                        email: {to: null}
+                    }]
+                    , notification: {
+                        subject: '您事务响应蓝正吗为',
+                        notificationType: '事务通知',
+                        from: '系统',
+                        body: refCode
+                    }
                 }
-            }
-        })
+            })
+    })
     //EXIT
     .then(function(smsResponse){
             console.log("Completed Payment Click. Final Result:",finalResult);
@@ -249,41 +278,7 @@ module.exports = function(paramService, esbMessage)
       oHelpers.sendResponse(paramResponse,code,r);
     })
   });
-  });
 
-    function _issueOrders(responseObj, request, transactionid){
-        var specialCases = [
-                {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
-                {ac:"LZB102",sv:"LZS101",fn:_handlePhotoValidationResponse}
-            ],
-            ac_code = lib.digFor(responseObj,"acn");
-            sv_code = lib.digFor(responseObj,"sb.0.svn"),
-            isSpecial = -1;
-
-        for(var i = 0; i < specialCases.length; i++)
-        {
-            var tgt = specialCases[i];
-            if(!ac_code || tgt.ac != ac_code /*|| !sv_code  || tgt.sv != sv_code*/) continue;
-            isSpecial = i;
-            break;
-        }
-        if(isSpecial >= 0) {
-            return _issueFirstOrderForResponse(request)
-                //PROCESS AUTOMATICALLY
-                .then(function () {
-                    return specialCases[isSpecial].fn(request, responseObj, transactionid);
-                })
-                //EXIT
-                .then(function success(r) {
-                    return r;
-                }, function failure(err) {
-                    console.log("FAILED WITH ERROR handling special case order", err);
-                    throw err;
-                })
-        }
-        else
-            return _issueFirstOrderForResponse(request);
-    }
     function _issueFirstOrderForResponse(request){
         var ln = request.user.lanzheng.loginName,
             org = request.user.currentOrganization,
