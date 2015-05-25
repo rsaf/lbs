@@ -172,6 +172,8 @@ module.exports = function (paramService, esbMessage) {
                 }).then(function(inUse){
                     if(!inUse)
                         return _persistSpecialCaseWithTransaction(ele);
+                    else
+                        console.log("IN USE!");
                 } , function(err){
                     console.log("FAILED",err);
                 })
@@ -181,6 +183,7 @@ module.exports = function (paramService, esbMessage) {
         //CREATE ACTIVITIES
         .then(function(res) {
                 res.forEach(function(ele){
+                    if(ele && ele.pl && ele.pl.serviceName)
                     serviceNameMap[ele.pl.serviceName.text] = ele.pl.serviceName._id
                 })
             importSpecialCaseActivities = importSpecialCaseActivities.map(function(input) {
@@ -298,7 +301,6 @@ module.exports = function (paramService, esbMessage) {
             })
             .then(function persistSpecialCase(msg) {
                 transactionid = msg.pl.transaction._id;
-
                 var m = {
                     "ns": input.persist.ns,
                     "op": input.persist.op,
@@ -310,6 +312,7 @@ module.exports = function (paramService, esbMessage) {
                 return esbMessage(m);
             })
             .then(function rename(m) {
+                console.log("Result set was",m);
                 resultset = m;
                 return esbMessage({
                     "ns": input.rename.ns,
@@ -322,7 +325,6 @@ module.exports = function (paramService, esbMessage) {
                 })
             })
             .then(function commitTransaction(cnt) {
-                console.log("FOO");
                 if(cnt == 1 && input.persist.tgtField == "servicePoint")
                 {
                     resultset.pl.servicePointCode = input.rename.pl;
