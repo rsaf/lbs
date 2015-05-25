@@ -806,6 +806,42 @@ module.exports = function(paramPS, paramESBMessage) {
 
 
 
+
+
+
+    //post workspace/v1/profiles/corporate/validation.json
+    upRouter.post('/corporate/validation.json',function(paramRequest, paramResponse){
+
+
+        console.log('paramRequest.body--',paramRequest.body);
+
+
+        var  m = {
+            ns: 'upm',
+            op:'upm_getCorporateDataFromValidationResponse',
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            pl:paramRequest.body
+        };
+
+        esbMessage(m)
+            .then(function(r) {
+                console.log('uph save corporate data successfull');
+                oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('uph sailed to save corporate data error:-----',r);
+                var r = {pl:null, er:{ec:404,em:"could not find navigation"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+
+    });
+
+
+
+
+
 //get workspace/v1/profiles/navigation.json
     upRouter.get('/navigation.json', function(paramRequest, paramResponse){
 

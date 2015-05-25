@@ -436,7 +436,7 @@ module.exports = function (paramService, esbMessage) {
       });
       homeRouter.post('/uploadphoto.json', function(paramRequest, paramResponse){
 
-        console.log('uploading image from response form--------')
+        console.log('uploading image from response form--------');
 
         q()
         .then(function(){
