@@ -181,6 +181,7 @@ module.exports = function (paramService, esbMessage) {
         //CREATE ACTIVITIES
         .then(function(res) {
                 res.forEach(function(ele){
+                    if(ele && ele.pl && ele.pl.serviceName)
                     serviceNameMap[ele.pl.serviceName.text] = ele.pl.serviceName._id
                 })
             importSpecialCaseActivities = importSpecialCaseActivities.map(function(input) {
@@ -298,7 +299,6 @@ module.exports = function (paramService, esbMessage) {
             })
             .then(function persistSpecialCase(msg) {
                 transactionid = msg.pl.transaction._id;
-
                 var m = {
                     "ns": input.persist.ns,
                     "op": input.persist.op,
@@ -310,6 +310,7 @@ module.exports = function (paramService, esbMessage) {
                 return esbMessage(m);
             })
             .then(function rename(m) {
+                console.log("Result set was",m);
                 resultset = m;
                 return esbMessage({
                     "ns": input.rename.ns,
@@ -1102,7 +1103,6 @@ module.exports = function (paramService, esbMessage) {
                 });
                 oHelpers.sendResponse(paramResponse, 200, records);
             }, function failure(err) {
-                console.log("ERROR in getting records by organization:\n",err);
                 oHelpers.sendResponse(paramResponse, 400, err)
             })
     });

@@ -246,5 +246,129 @@
         "__v": 0
       }
     }
+  },
+  {
+    "_comment": "LZF 103",
+    "persist": {
+      "ns": "bmm",
+      "op": "_persistForm",
+      "tgtField": "form",
+      "pl": {
+        "_id": "5550085d59e1aab16964de37",
+        "fc": "LZF103",
+        "fd": {
+          "fmn": "Identification Form",
+          "uuid": "04904f81-86c1-4d12-b311-8bbc162bdb02",
+          "uri": "/forms/04904f81-86c1-4d12-b311-8bbc162bdb02.html",
+          "fcd": "2015-05-11T01:39:41.364Z",
+          "pt": [],
+          "fields": [
+            {
+              "nm": "ffz",
+              "_id": "5550085d59e1aab16964de39",
+              "nv": false
+            },
+            {
+              "nm": "xm",
+              "_id": "5550085d59e1aab16964de38",
+              "nv": false
+            },
+            {
+              "nm": "zz",
+              "_id": "5550085d59e1aab16964de38",
+              "nv": false
+            }
+          ]
+        },
+        "siv": [],
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000",
+          "lu": "2015-05-11T01:39:41.365Z"
+        },
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000",
+          "cd": "2015-05-11T01:39:41.364Z"
+        },
+        "__v": 0
+      }
+    },
+    "rename": {
+      "ns": "bmm",
+      "find": "bmm_formMetaCodeInUse",
+      "op": "bmm_changeFormMetaCode",
+      "tgtField": "fc",
+      "pl": "LZF103"
+    },
+    "upload":{
+      "ns" : "bmm",
+      "link" : {
+        "linker" : "LZB103",
+        "op" : "bmm_changeActivityFormRef"
+      },
+      "content":
+      {
+        "form":{"fc":"LZF103","fd":{"fmn":"lzf103"}},
+        "html":""
+      }
+    }
+  },
+  {
+    "_comment" : "LZB 103",
+    "rename": {
+      "ns": "bmm",
+      "find": "bmm_activityCodeInUse",
+      "op": "bmm_changeActivityCode",
+      "tgtField": "abd.ac",
+      "pl": "LZB103"
+    },
+    "persist": {
+      "ns": "bmm",
+      "op": "_persistActivity",
+      "tgtField": "activity",
+      "pl": {
+        "ds": false,
+        "sqc": [
+          {
+            "sn": "蓝证证照核验服务2",
+            "ui" : {
+              "serviceCode" : "LZS103",
+              "price" : "0元",
+              "serviceName" : "蓝证证照核验服务2",
+              "servicePointName" : "蓝证平台2"
+            }
+          }
+        ],
+        "arc": {
+          "pc": []
+        },
+        "abd": {
+          "ac": "LZB103",
+          "an": "个人实名认证",
+          "fdn": "Test 1.2.0",
+          "apm": "在线支付",
+          "at": "1",
+          "asd": "2015-05-01T00:00:00Z",
+          "acd": "2015-05-29T00:00:00Z",
+          "vc": "",
+          "arv": "",
+          "aiv": "",
+          "apt": "10",
+          "aps": 30
+        },
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000",
+          "lu": "2015-05-04T05:46:36.947Z"
+        },
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000",
+          "cd": "2015-05-04T03:19:15.179Z"
+        },
+        "__v": 0
+      }
+    }
   }
 ]

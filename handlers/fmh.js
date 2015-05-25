@@ -33,7 +33,39 @@ module.exports = function(paramService, esbMessage)
       return q.reject('In bmh _rollBackTransaction:',err);
     });
   }
-  
+  function _initRequestMessage(paramRequest,type,code,adminOrg){
+        var col,mod='bmm',
+            message,url;
+        if(type==='Response'){
+            col='responses';
+            url='/workspace/publishing/responses';
+            message="事务 response validation";
+        }
+        return {
+            rdo: adminOrg
+            ,rc: 'code'
+            ,rt: message + '申请 ' + code
+            ,rsu: paramRequest.user.lanzheng.loginName
+            ,rso: paramRequest.user.currentOrganization
+            ,rs: 10
+            ,rb: 'message'
+            ,rtr: type
+            ,ei:[{
+                col:col
+                ,mod:mod
+                ,ei:code
+            }]
+            ,url:url,
+            "md" : {
+                "uID" : "a1ed",
+                "oID" : "200000000000000000000000"
+            },
+            "ct" : {
+                "uID" : "a1ed",
+                "oID" : "200000000000000000000000"
+            }
+        };
+    }
   
   var fmmRouter = paramService.Router();
 
@@ -116,7 +148,8 @@ module.exports = function(paramService, esbMessage)
             refCode = undefined,
             specialCases = [
               {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
-              {ac:"LZB102",sv:"LZS101",fn:_handlePhotoValidationResponse}
+              {ac:"LZB102",sv:"LZS102",fn:_handlePhotoValidationResponse},
+              {ac:"LZB103",sv:"LZS103",fn:_handleCorporateValidationResponse}
             ];
 
         return q()
@@ -212,19 +245,21 @@ module.exports = function(paramService, esbMessage)
             //SCHEDULE/ACTIVATE SERVICES
             .then(function() {
                 ac_code = lib.digFor(responseInfo,"acn"),
-                sv_code = lib.digFor(responseInfo,"sb.0.svn"),
+                sv_code = responseInfo && responseInfo.sb && responseInfo.sb[0] ? responseInfo.sb[0].serviceCode : undefined;
                 isSpecial = -1;
 
                 for(var i = 0; i < specialCases.length; i++)
                 {
                     var tgt = specialCases[i];
-                    if(!ac_code || tgt.ac != ac_code /*|| !sv_code  || tgt.sv != sv_code*/) continue;
+                    console.log("SV_CODE SV:",sv_code,responseInfo);
+                    if(!sv_code  || tgt.sv != sv_code) continue;
                     isSpecial = i;
                     break;
                 }
                 return _issueFirstOrderForResponse(paramRequest)
                     //RUN AUTOMATION IF SPECIAL
                     .then(function(r){
+                        console.log("SPECIAL CASE?",isSpecial,specialCases[isSpecial]);
                         if(isSpecial >= 0)
                             return specialCases[isSpecial].fn(paramRequest, responseInfo, transactionid);
                         return r
@@ -556,6 +591,31 @@ module.exports = function(paramService, esbMessage)
                 return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
             });*/
     }
+    function _handleCorporateValidationResponse(request,responseObj, transactionid){
+        var responseObjectToReturn;
 
+        return q()
+            .then(function(){
+                return esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})
+            })
+            //Generate request
+            .then(function(adminid){
+                console.log("ADMINID",adminid);
+                return esbMessage({
+                    "ns":"rmm",
+                    "op":"rmm_persistRequestMessage",
+                    "pl": {request: _initRequestMessage(request,"Response","103",adminid.pl.oID)}
+                });
+            })
+            //EXIT
+            .then(function resolve(r){
+                responseObjectToReturn = {pl:r,er:null};
+                console.log("DID THE CORPORATE VALIDATION RESPONSE");
+                return responseObjectToReturn;
+            }  ,  function failure(r){
+                console.log("Unable to issue (special case -> Corporate Validation) order (rolling back):",r);
+                return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
+            });
+    }
     return fmmRouter;
 };
