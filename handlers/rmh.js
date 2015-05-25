@@ -77,8 +77,23 @@ module.exports = function(paramService, esbMessage){
       m.pl.transactionid=msg.pl.transaction._id;
       return esbMessage(m);
     })
+    .then(function(msg){
+        dbRequest = msg;
+        if(dbRequest._doc && dbRequest._doc.rtr == "Response" &&
+            dbRequest._doc.ei && dbRequest._doc.ei.length>0 && dbRequest._doc.ei[0].ei !== undefined) {
+            console.log("foo",dbRequest._doc.ei[0].ei);
+            return esbMessage({
+                "ns":"bmm",
+                "op":"bmm_getResponse",
+                "pl":{
+                    code : dbRequest._doc.ei[0].ei
+                }
+            })
+        }
+        else return undefined;
+    })
     .then(function(ret) {
-      dbRequest=ret;
+      //dbRequest=ret;
       if(!request.rs){
         return;
       }
@@ -90,11 +105,13 @@ module.exports = function(paramService, esbMessage){
           ,col:dbRequest.ei[i].col
           , status:request.rs
           , transactionid:m.pl.transactionid
+          , response : ret
         };
         promises.push(esbMessage(m));
       }
       return Q.all(promises);
-    }).then(function(ret) {
+    })
+    .then(function(ret) {
             if(dbRequest._doc && dbRequest._doc.rtr == "Activity" && //request is an activity publish request
                 dbRequest._doc.ei && dbRequest._doc.ei.length>0 && dbRequest._doc.ei[0].ei !== undefined) //publish request has an activity code
             {
@@ -118,9 +135,11 @@ module.exports = function(paramService, esbMessage){
                     });
             }
             else return true;
-    }).then(function(ret) {
+    })
+    .then(function(ret) {
       return _commitTransaction({pl:{transactionid:m.pl.transactionid}});
-    }).then(function(ret) {
+    })
+    .then(function(ret) {
       if(!request.rs){
         return;
       }
@@ -139,7 +158,8 @@ module.exports = function(paramService, esbMessage){
               notificationType:'申请通知'}
         }};
         esbMessage(m);
-    }).then(
+    })
+    .then(
       function resolve(ret) {
         paramResponse.writeHead(200, {"Content-Type": "application/json"});
         paramResponse.end(JSON.stringify(dbRequest));

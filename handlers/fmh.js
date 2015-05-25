@@ -34,11 +34,11 @@ module.exports = function(paramService, esbMessage)
     });
   }
   function _initRequestMessage(paramRequest,type,code,adminOrg){
-        var col,mod='bmm',
+        var col,mod='upm',
             message,url;
         if(type==='Response'){
             col='responses';
-            url='/workspace/publishing/responses';
+            url='/workspace/activities/application/';
             message="事务 response validation";
         }
         return {
@@ -600,11 +600,10 @@ module.exports = function(paramService, esbMessage)
             })
             //Generate request
             .then(function(adminid){
-                console.log("ADMINID",adminid);
                 return esbMessage({
                     "ns":"rmm",
                     "op":"rmm_persistRequestMessage",
-                    "pl": {request: _initRequestMessage(request,"Response","103",adminid.pl.oID)}
+                    "pl": {request: _initRequestMessage(request,"Response",responseObj.rc,adminid.pl.oID)}
                 });
             })
             //EXIT

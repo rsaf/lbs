@@ -11,7 +11,7 @@ var formidable = require('formidable');
 var fs = require('fs');
 
 function _initRequestMessage(paramRequest, type, code, adminOrg) {
-    var col, mod = 'smm',
+    var col, mod = 'bmm',
         message, url;
     if (type === 'Service') {
         col = 'services';

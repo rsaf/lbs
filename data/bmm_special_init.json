@@ -248,7 +248,7 @@
     }
   },
   {
-    "_comment": "LZF 103",
+    "_comment": "LZF103",
     "persist": {
       "ns": "bmm",
       "op": "_persistForm",
