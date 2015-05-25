@@ -331,7 +331,7 @@ module.exports = function(paramService, esbMessage){
       m.pl.loginName=(paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID;
       m.pl.currentOrganization=(paramRequest.user&&paramRequest.user.currentOrganization)||false;
       m.op='bmm_getResponses';
-      m.mt={p:paramRequest.query.p,ps:paramRequest.query.ps}
+      m.mt={p:paramRequest.body.p,ps:paramRequest.body.ps}
       return esbMessage(m);
     }).then(function(msg){
       oHelpers.sendResponse(paramResponse,200, msg);
