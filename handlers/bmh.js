@@ -746,6 +746,55 @@ module.exports = function(paramService, esbMessage){
     });
 
 
+    //workspace/responses/document/upload.json
+
+    bmRouter.post('/document/upload.json', function(paramRequest, paramResponse){
+
+
+        var m = {ns: 'bmm',op:'bmm_uploadDocument', pl: null};
+        m.pl = {
+            uID:paramRequest.user.lanzheng.loginName,
+            oID:paramRequest.user.currentOrganization,
+            fileData:null,
+            ifm:null
+        };
+
+
+        var form = new formidable.IncomingForm();
+        form.parse(paramRequest, function(err, fields, files) {
+            var old_path = files.file.path,
+                file_ext = files.file.name.split('.').pop();
+
+
+            console.log('file name:----- ', files.file.name);
+
+            fs.readFile(old_path, function(err, data) {
+
+
+                console.log('data-------',data );
+
+                m.pl.fileData= data;
+                m.pl.ifm = file_ext;
+
+                esbMessage(m)
+                    .then(function(r) {
+                        console.log('upload document successfull');
+                        oHelpers.sendResponse(paramResponse,200,r);
+                    })
+                    .fail(function(r) {
+                        console.log('bmh error:-----');
+                        console.log(r.er);
+                        r = {pl:null, er:{ec:404,em:"could not save document to the bucket"}};
+                        oHelpers.sendResponse(paramResponse,404,r);
+                    });
+            });
+
+        });
+
+    });
+
+
+
     bmRouter.post('/activityDetails/upload.json', function(paramRequest, paramResponse){
 
 

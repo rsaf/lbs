@@ -18,16 +18,28 @@ module.exports = function(paramService, esbMessage)
 {
   var operationsLogRouter = paramService.Router();
 
-  operationsLogRouter.get('/all.json', function(paramRequest, paramResponse, paramNext){
+  operationsLogRouter.get('/:type.json', function(paramRequest, paramResponse, paramNext){
 
     //console.log('get all json called  ');
 
-    var m = {
-      "ns":"olm",
-      "op": "readOperationsLog",
-      "pl": {"userAccountID":paramRequest.user.id, "opType":null},
-      "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps}
-    };
+      var type = paramRequest.params.type;
+
+      console.log('type--',type);
+
+      var m = {
+          "ns":"olm",
+          "op": "readOperationsLog",
+          "pl": {"userAccountID":paramRequest.user.id, "opType":null},
+          "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps}
+      };
+
+
+      if(type === 'business'){
+          m.opType = '业务操作';
+      }
+      else if(type === 'access'){
+          m.opType = '授权操作';
+      }
 
     esbMessage(m)
         .then(function(r) {
@@ -37,49 +49,6 @@ module.exports = function(paramService, esbMessage)
         .fail(function(r) {
 
         });
-
-  });
-
-  operationsLogRouter.get('/business.json', function(paramRequest, paramResponse, paramNext){
-    //console.log('get business json called  ');
-
-    var m = {
-      "ns":"olm",
-      "op": "readOperationsLog",
-      "pl": {"userAccountID":paramRequest.user.id, "opType":"业务操作", "pageNumber":1, "pageSize":10}
-    };
-
-    esbMessage(m)
-        .then(function(r) {
-          //console.log(r.pl);
-          paramResponse.writeHead(200, {"Content-Type": "application/json"});
-          paramResponse.end(JSON.stringify(r));
-        })
-        .fail(function(r) {
-          console.log(r.er);
-        });
-
-  });
-
-  operationsLogRouter.get('/access.json',function(paramRequest, paramResponse, paramNext){
-    //console.log('get access json called  ');
-
-    var m = {
-      "ns":"olm",
-      "op": "readOperationsLog",
-      "pl": {"userAccountID":paramRequest.user.id, "opType":"授权操作", "pageNumber":1, "pageSize":10}
-    };
-
-    esbMessage(m)
-        .then(function(r) {
-          //console.log(r.pl);
-          paramResponse.writeHead(200, {"Content-Type": "application/json"});
-          paramResponse.end(JSON.stringify(r));
-        })
-        .fail(function(r) {
-          console.log(r.er);
-        });
-
 
   });
 
