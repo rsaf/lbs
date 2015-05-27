@@ -79,7 +79,9 @@ module.exports = function(paramService, esbMessage)
 
          var varAccountID  = null;
          if(paramRequest.user.userType==='admin'){
-             varAccountID = "F00001";
+             //varAccountID = "F00001";
+
+             varAccountID = 'admin';
          }
          else {
              varAccountID = paramRequest.user.lanzheng.loginName;
@@ -111,7 +113,9 @@ module.exports = function(paramService, esbMessage)
         //userType
         var varAccountID  = null;
         if(paramRequest.user.userType==='admin'){
-            varAccountID = "F00001";
+            //varAccountID = "F00001";
+
+            varAccountID = 'admin';
         }
         else {
             varAccountID = paramRequest.user.lanzheng.loginName;
@@ -189,7 +193,8 @@ module.exports = function(paramService, esbMessage)
                     i = serviceBookings.length,
                     varAccountID;
                 if(paramRequest.user.userType==='admin'){
-                    varAccountID = "F00001";
+                    //varAccountID = "F00001";
+                    varAccountID = 'admin';
                 }
                 else {
                     varAccountID = paramRequest.user.lanzheng.loginName;
@@ -208,7 +213,9 @@ module.exports = function(paramService, esbMessage)
                         "agentCommissionAmount" : 0,//@todo: not implented
                         "corporationId" : serviceBookings[i].spc,//creator of the service point
                         "userAccountId" : varAccountID,// login name not the id
-                        "paymentType" : "online"
+                        "paymentType" : "online",
+                        "activityName" : responseInfo.can
+                        //todo: add activity name
                     });
                 }
                 //update response sp and set payment status to paid

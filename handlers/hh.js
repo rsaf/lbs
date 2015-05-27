@@ -131,7 +131,36 @@ module.exports = function (paramService, esbMessage) {
       registerAndAssociateUser = r[7].pl.fn;
 
       homeRouter.post('/login.json', userloginVerifier());
-      homeRouter.post('/registration.json',  registerUzer());
+      homeRouter.post('/registration.json',  function(paramRequest, paramResponse,paramNext) {
+          return q().then(function () {
+              console.log("creating user handler");
+              return registerUzer()(paramRequest, paramResponse, paramNext)
+          })
+              .then(function (reqFromReg) {
+                  paramRequest = reqFromReg;
+                  var varAccountID = null;
+                  if (paramRequest.user.userType === 'admin') {
+                      //varAccountID = "F00001";
+                      varAccountID = 'admin';
+                  }
+                  else {
+                      varAccountID = paramRequest.user.lanzheng.loginName;
+                  }
+                  var m = {
+                      "ns": "fmm",
+                      "op": "fmm_getUserBalance",
+                      "pl": {"accountId": varAccountID, "accountType": paramRequest.user.userType}
+                  };
+                  // console.log(m);
+                  esbMessage(m)
+                      .then(function (r) {
+                          console.log('success return: ', r);
+                      })
+                      .fail(function (rv) {
+                          console.log("fail return:", rv);
+                      });
+              });
+      });
       //@todo: have this endpoint change owner ship of the response using
       //  a not yet created function in bmm to change ownership of response
       homeRouter.post('/registrationandassociate/:responseCode.json',  function(paramRequest, paramResponse){
@@ -164,6 +193,7 @@ module.exports = function (paramService, esbMessage) {
       homeRouter.get('/user.json', sessionUser());
       homeRouter.get('/logout.json', logoutUser());
       homeRouter.post('/user.json', createUser());
+
       homeRouter.post('/apilogin.json', APILoginVerifier(),  function(paramRequest, paramResponse){
               // Show the upload form
 
