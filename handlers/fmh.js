@@ -113,9 +113,7 @@ module.exports = function(paramService, esbMessage)
         //userType
         var varAccountID  = null;
         if(paramRequest.user.userType==='admin'){
-            //varAccountID = "F00001";
-
-            varAccountID = 'admin';
+            varAccountID = "F00001";
         }
         else {
             varAccountID = paramRequest.user.lanzheng.loginName;
