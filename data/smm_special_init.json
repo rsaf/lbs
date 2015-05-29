@@ -192,7 +192,7 @@
       "pl": {
         "servicePointCode": "400000000000000000000003",
         "servicePointName": "蓝证平台单位核验网点",
-        "status": 0,
+        "status": 30,
         "servicePointAddress": "云端网点",
         "servicePointType": "云端网点",
         "operatingHours": "00:00 - 24:00",
@@ -245,7 +245,7 @@
             }
           }
         ],
-        "status": 0,
+        "status": 30,
         "serviceFromSL": "5548375f02f7c81622e557a5",
         "serviceType": "信息核验",
         "standardPayment": ["1"],
