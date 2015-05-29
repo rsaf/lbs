@@ -88,7 +88,7 @@
               "serviceCode" : "LZS101",
               "price" : "0元",
               "serviceName" : "实名认证服务",
-              "servicePointName" : "蓝证平台"
+              "servicePointName" : "蓝证平台实名认证网点"
             }
           }
         ],
@@ -98,7 +98,7 @@
         "abd": {
           "ac": "LZB101",
           "an": "个人实名认证",
-          "fdn": "Test 1.2.0",
+          "fdn": "个人实名认证",
           "apm": "在线支付",
           "at": "1",
           "asd": "2015-05-01T00:00:00Z",
@@ -212,7 +212,7 @@
               "serviceCode" : "LZS102",
               "price" : "0元",
               "serviceName" : "蓝证证照核验服务",
-              "servicePointName" : "蓝证平台"
+              "servicePointName" : "蓝证平台证照核验网点"
             }
           }
         ],
@@ -221,8 +221,8 @@
         },
         "abd": {
           "ac": "LZB102",
-          "an": "个人证照核验",
-          "fdn": "Test 1.2.0",
+          "an": "蓝证证照核验",
+          "fdn": "蓝证证照核验",
           "apm": "在线支付",
           "at": "1",
           "asd": "2015-05-01T00:00:00Z",
@@ -331,12 +331,12 @@
         "ds": false,
         "sqc": [
           {
-            "sn": "蓝证证照核验服务2",
+            "sn": "蓝证单位信息核验服务",
             "ui" : {
               "serviceCode" : "LZS103",
               "price" : "0元",
-              "serviceName" : "蓝证证照核验服务2",
-              "servicePointName" : "蓝证平台2"
+              "serviceName" : "蓝证单位信息核验服务",
+              "servicePointName" : "蓝证平台单位核验网点"
             }
           }
         ],
@@ -345,8 +345,8 @@
         },
         "abd": {
           "ac": "LZB103",
-          "an": "个人实名认证",
-          "fdn": "Test 1.2.0",
+          "an": "蓝证单位信息核验",
+          "fdn": "蓝证单位信息核验",
           "apm": "在线支付",
           "at": "1",
           "asd": "2015-05-01T00:00:00Z",
