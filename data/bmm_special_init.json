@@ -370,5 +370,129 @@
         "__v": 0
       }
     }
+  },
+  {
+    "_comment": "LZF 104",
+    "persist": {
+      "ns": "bmm",
+      "op": "_persistForm",
+      "tgtField": "form",
+      "pl": {
+        "_id": "5550085d59e1aab16964de37",
+        "fc": "LZF104",
+        "fd": {
+          "fmn": "Corporate Credit Purchasing Form",
+          "uuid": "04904f81-86c1-4d12-b311-8bbc162bdb02",
+          "uri": "/forms/04904f81-86c1-4d12-b311-8bbc162bdb02.html",
+          "fcd": "2015-05-11T01:39:41.364Z",
+          "pt": [],
+          "fields": [
+            {
+              "nm": "ffz",
+              "_id": "5550085d59e1aab16964de39",
+              "nv": false
+            },
+            {
+              "nm": "xm",
+              "_id": "5550085d59e1aab16964de38",
+              "nv": false
+            },
+            {
+              "nm": "zz",
+              "_id": "5550085d59e1aab16964de38",
+              "nv": false
+            }
+          ]
+        },
+        "siv": [],
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000",
+          "lu": "2015-05-11T01:39:41.365Z"
+        },
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000",
+          "cd": "2015-05-11T01:39:41.364Z"
+        },
+        "__v": 0
+      }
+    },
+    "rename": {
+      "ns": "bmm",
+      "find": "bmm_formMetaCodeInUse",
+      "op": "bmm_changeFormMetaCode",
+      "tgtField": "fc",
+      "pl": "LZF104"
+    },
+    "upload":{
+      "ns" : "bmm",
+      "link" : {
+        "linker" : "LZB104",
+        "op" : "bmm_changeActivityFormRef"
+      },
+      "content":
+      {
+        "form":{"fc":"LZF104","fd":{"fmn":"lzf104"}},
+        "html":""
+      }
+    }
+  },
+  {
+    "_comment" : "LZB 104",
+    "rename": {
+      "ns": "bmm",
+      "find": "bmm_activityCodeInUse",
+      "op": "bmm_changeActivityCode",
+      "tgtField": "abd.ac",
+      "pl": "LZB104"
+    },
+    "persist": {
+      "ns": "bmm",
+      "op": "_persistActivity",
+      "tgtField": "activity",
+      "pl": {
+        "ds": false,
+        "sqc": [
+          {
+            "sn": "实名认证服务",
+            "ui" : {
+              "serviceCode" : "LZS104",
+              "price" : "0元",
+              "serviceName" : "实名认证服务",
+              "servicePointName" : "蓝证平台实名认证网点"
+            }
+          }
+        ],
+        "arc": {
+          "pc": []
+        },
+        "abd": {
+          "ac": "LZB104",
+          "an": "个人实名认证",
+          "fdn": "个人实名认证",
+          "apm": "在线支付",
+          "at": "1",
+          "asd": "2015-05-01T00:00:00Z",
+          "acd": "2015-05-29T00:00:00Z",
+          "vc": "",
+          "arv": "",
+          "aiv": "",
+          "apt": "10",
+          "aps": 30
+        },
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000",
+          "lu": "2015-05-04T05:46:36.947Z"
+        },
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000",
+          "cd": "2015-05-04T03:19:15.179Z"
+        },
+        "__v": 0
+      }
+    }
   }
 ]

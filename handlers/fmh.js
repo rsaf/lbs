@@ -79,7 +79,8 @@ module.exports = function(paramService, esbMessage)
             specialCases = [
                 {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
                 {ac:"LZB102",sv:"LZS102",fn:_handlePhotoValidationResponse},
-                {ac:"LZB103",sv:"LZS103",fn:_handleCorporateValidationResponse}
+                {ac:"LZB103",sv:"LZS103",fn:_handleCorporateValidationResponse},
+                {ac:"LZB104",sv:"LZS104",fn:_handleCorporateCreditPurchaseResponse}
             ];
         paramRequest.body.json = JSON.stringify(paramRequest.body.pl.info.reqPayload);
 
@@ -287,9 +288,10 @@ module.exports = function(paramService, esbMessage)
             finalResult = undefined,
             refCode = undefined,
             specialCases = [
-              {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
-              {ac:"LZB102",sv:"LZS102",fn:_handlePhotoValidationResponse},
-              {ac:"LZB103",sv:"LZS103",fn:_handleCorporateValidationResponse}
+                {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
+                {ac:"LZB102",sv:"LZS102",fn:_handlePhotoValidationResponse},
+                {ac:"LZB103",sv:"LZS103",fn:_handleCorporateValidationResponse},
+                {ac:"LZB104",sv:"LZS104",fn:_handleCorporateCreditPurchaseResponse}
             ];
 
         function collateOrders(response){
@@ -796,6 +798,29 @@ module.exports = function(paramService, esbMessage)
             .then(function resolve(r){
                 responseObjectToReturn = {pl:r,er:null};
                 console.log("DID THE CORPORATE VALIDATION RESPONSE");
+                return responseObjectToReturn;
+            }  ,  function failure(r){
+                console.log("Unable to issue (special case -> Corporate Validation) order (rolling back):",r);
+                return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
+            });
+    }
+    function _handleCorporateCreditPurchaseResponse(request,responseObj,transactionid){
+        var responseObjectToReturn;
+        return q()
+            .then(function(){
+                return esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})
+            })
+            //Generate request
+            .then(function(adminid){
+                return esbMessage({
+                    "ns":"rmm",
+                    "op":"rmm_persistRequestMessage",
+                    "pl": {request: _initRequestMessage(request,"Response",responseObj.rc,adminid.pl.oID)}
+                });
+            })
+            //EXIT
+            .then(function resolve(r){
+                responseObjectToReturn = {pl:r,er:null};
                 return responseObjectToReturn;
             }  ,  function failure(r){
                 console.log("Unable to issue (special case -> Corporate Validation) order (rolling back):",r);
