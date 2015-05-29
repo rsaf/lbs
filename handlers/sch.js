@@ -10,20 +10,72 @@ module.exports = function(paramService, esbMessage) {
 
     ///workspace/users/userType
 
+    //photosRouter.get('/:userType.json', function(paramRequest, paramResponse, paramNext){
+    //
+    //
+    //    console.log('inside sch-----------');
+    //
+    //    if (paramRequest.params.userType === 'all'){
+    //
+    //        var m = {
+    //            "ns": "scm",
+    //            "op": "scm_getAllUsers",
+    //            "pl": {
+    //                  currentOrganization:paramRequest.user.currentOrganization
+    //                }
+    //             };
+    //
+    //        esbMessage(m)
+    //            .then(function (r) {
+    //                //console.log('sch response-----all users-',r);
+    //                oHelpers.sendResponse(paramResponse, 200, r);
+    //            })
+    //            .fail(function (r) {
+    //
+    //                console.log('sch error-----',r);
+    //
+    //                oHelpers.sendResponse(paramResponse, 501, r);
+    //            });
+    //
+    //
+    //
+    //       // oHelpers.sendResponse(paramResponse,200,all);
+    //    }
+    //    else if(paramRequest.params.userType === 'groups'){
+    //        oHelpers.sendResponse(paramResponse,200,groups);
+    //    }
+    //    else if(paramRequest.params.userType === 'acl'){
+    //        oHelpers.sendResponse(paramResponse,200,acl);
+    //    }
+    //    else if(paramRequest.params.userType === 'systeminterfaces'){
+    //        oHelpers.sendResponse(paramResponse,200,systeminterfaces);
+    //    }
+    //    else if(paramRequest.params.userType === 'thirdpartyinterfaces'){
+    //        oHelpers.sendResponse(paramResponse,200,thirdpartyinterfaces);
+    //    }
+    //    else if(paramRequest.params.userType === 'interfaceUsers'){
+    //        oHelpers.sendResponse(paramResponse,200,interfaceUsers);
+    //    }
+    //});
+
+
+
+
+    //workspace/users/userType
     photosRouter.get('/:userType.json', function(paramRequest, paramResponse, paramNext){
 
 
-        console.log('inside sch-----------');
+        var userType = paramRequest.params.userType;
+        console.log('inside sch-----------',userType);
 
-        if (paramRequest.params.userType === 'all'){
 
             var m = {
                 "ns": "scm",
-                "op": "scm_getAllUsers",
+                "op": "scm_getByType",
                 "pl": {
-                      currentOrganization:paramRequest.user.currentOrganization
-                    }
-                 };
+                    userType:userType
+                }
+            };
 
             esbMessage(m)
                 .then(function (r) {
@@ -36,26 +88,41 @@ module.exports = function(paramService, esbMessage) {
 
                     oHelpers.sendResponse(paramResponse, 501, r);
                 });
+    });
 
 
 
-           // oHelpers.sendResponse(paramResponse,200,all);
-        }
-        else if(paramRequest.params.userType === 'groups'){
-            oHelpers.sendResponse(paramResponse,200,groups);
-        }
-        else if(paramRequest.params.userType === 'acl'){
-            oHelpers.sendResponse(paramResponse,200,acl);
-        }
-        else if(paramRequest.params.userType === 'systeminterfaces'){
-            oHelpers.sendResponse(paramResponse,200,systeminterfaces);
-        }
-        else if(paramRequest.params.userType === 'thirdpartyinterfaces'){
-            oHelpers.sendResponse(paramResponse,200,thirdpartyinterfaces);
-        }
-        else if(paramRequest.params.userType === 'interfaceUsers'){
-            oHelpers.sendResponse(paramResponse,200,interfaceUsers);
-        }
+    //workspace/users/status/user_id
+    photosRouter.put('/:status/:userType/:user_id.json', function(paramRequest, paramResponse){
+
+
+        var newStatus = paramRequest.params.status;
+        var Id = paramRequest.params.user_id;
+        var type = paramRequest.params.userType;
+        console.log(' sch update user status--------------',newStatus,Id);
+
+
+        var m = {
+            "ns": "scm",
+            "op": "scm_disableEnableUser",
+            "pl": {newStatus:newStatus,
+                    _id:Id,
+                    userType:type
+                }
+        };
+
+
+        esbMessage(m)
+            .then(function (r) {
+                console.log('sch response-----user status-',r);
+                oHelpers.sendResponse(paramResponse, 200, r);
+            })
+            .fail(function (r) {
+
+                console.log('sch error-----',r);
+
+                oHelpers.sendResponse(paramResponse, 501, r);
+            });
     });
 
 
