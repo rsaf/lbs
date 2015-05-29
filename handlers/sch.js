@@ -10,72 +10,20 @@ module.exports = function(paramService, esbMessage) {
 
     ///workspace/users/userType
 
-    //photosRouter.get('/:userType.json', function(paramRequest, paramResponse, paramNext){
-    //
-    //
-    //    console.log('inside sch-----------');
-    //
-    //    if (paramRequest.params.userType === 'all'){
-    //
-    //        var m = {
-    //            "ns": "scm",
-    //            "op": "scm_getAllUsers",
-    //            "pl": {
-    //                  currentOrganization:paramRequest.user.currentOrganization
-    //                }
-    //             };
-    //
-    //        esbMessage(m)
-    //            .then(function (r) {
-    //                //console.log('sch response-----all users-',r);
-    //                oHelpers.sendResponse(paramResponse, 200, r);
-    //            })
-    //            .fail(function (r) {
-    //
-    //                console.log('sch error-----',r);
-    //
-    //                oHelpers.sendResponse(paramResponse, 501, r);
-    //            });
-    //
-    //
-    //
-    //       // oHelpers.sendResponse(paramResponse,200,all);
-    //    }
-    //    else if(paramRequest.params.userType === 'groups'){
-    //        oHelpers.sendResponse(paramResponse,200,groups);
-    //    }
-    //    else if(paramRequest.params.userType === 'acl'){
-    //        oHelpers.sendResponse(paramResponse,200,acl);
-    //    }
-    //    else if(paramRequest.params.userType === 'systeminterfaces'){
-    //        oHelpers.sendResponse(paramResponse,200,systeminterfaces);
-    //    }
-    //    else if(paramRequest.params.userType === 'thirdpartyinterfaces'){
-    //        oHelpers.sendResponse(paramResponse,200,thirdpartyinterfaces);
-    //    }
-    //    else if(paramRequest.params.userType === 'interfaceUsers'){
-    //        oHelpers.sendResponse(paramResponse,200,interfaceUsers);
-    //    }
-    //});
-
-
-
-
-    //workspace/users/userType
     photosRouter.get('/:userType.json', function(paramRequest, paramResponse, paramNext){
 
 
-        var userType = paramRequest.params.userType;
-        console.log('inside sch-----------',userType);
+        console.log('inside sch-----------');
 
+        if (paramRequest.params.userType === 'all'){
 
             var m = {
                 "ns": "scm",
-                "op": "scm_getByType",
+                "op": "scm_getAllUsers",
                 "pl": {
-                    userType:userType
-                }
-            };
+                      currentOrganization:paramRequest.user.currentOrganization
+                    }
+                 };
 
             esbMessage(m)
                 .then(function (r) {
@@ -88,6 +36,76 @@ module.exports = function(paramService, esbMessage) {
 
                     oHelpers.sendResponse(paramResponse, 501, r);
                 });
+
+
+
+           // oHelpers.sendResponse(paramResponse,200,all);
+        }
+        else if(paramRequest.params.userType === 'groups'){
+            oHelpers.sendResponse(paramResponse,200,groups);
+        }
+        else if(paramRequest.params.userType === 'acl'){
+            oHelpers.sendResponse(paramResponse,200,acl);
+        }
+        else if(paramRequest.params.userType === 'systeminterfaces'){
+            oHelpers.sendResponse(paramResponse,200,systeminterfaces);
+        }
+        else if(paramRequest.params.userType === 'thirdpartyinterfaces'){
+            oHelpers.sendResponse(paramResponse,200,thirdpartyinterfaces);
+        }
+        else if(paramRequest.params.userType === 'interfaceUsers'){
+            oHelpers.sendResponse(paramResponse,200,interfaceUsers);
+        }
+    });
+
+
+
+
+    //workspace/users/userType
+    photosRouter.get('/:userType.json', function(paramRequest, paramResponse, paramNext){
+
+
+        var userType = paramRequest.params.userType;
+        console.log('inside sch-----------',userType);
+
+
+
+        if(userType === 'systeminterfaces') {
+
+            oHelpers.sendResponse(paramResponse, 200, systeminterfaces);
+        }
+        else if(userType === 'thirdpartyinterfaces'){
+
+            oHelpers.sendResponse(paramResponse,200,thirdpartyinterfaces);
+        }
+        else if(userType === 'interfaceUsers'){
+            oHelpers.sendResponse(paramResponse,200,interfaceUsers);
+        }
+
+        else{
+
+        var m = {
+            "ns": "scm",
+            "op": "scm_getByType",
+            "pl": {
+                userType:userType
+            }
+        };
+
+            esbMessage(m)
+                .then(function (r) {
+                    //console.log('sch response-----all users-',r);
+                    oHelpers.sendResponse(paramResponse, 200, r);
+                })
+                .fail(function (r) {
+
+                    console.log('sch error-----',r);
+
+                    oHelpers.sendResponse(paramResponse, 501, r);
+                });
+        }
+
+
     });
 
 
