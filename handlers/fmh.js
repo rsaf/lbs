@@ -208,7 +208,7 @@ module.exports = function(paramService, esbMessage)
                 oHelpers.sendResponse(paramResponse,code,err);
             })*/
     })
-     fmmRouter.get('/history.json', function(paramRequest, paramResponse, paramNext){
+    fmmRouter.get('/history.json', function(paramRequest, paramResponse, paramNext){
          /*
           * fmm_getTransactionHistory
           * Queries the transactionHistory table for all the transactions of a given accountId.
@@ -242,6 +242,22 @@ module.exports = function(paramService, esbMessage)
                  oHelpers.sendResponse(paramResponse,404,r);
                  //console.log('failure return',rv.er);
              });
+    });
+
+    //,create_direct_pay_by_user_return_url: '/processes/activities/done'
+    //,create_direct_pay_by_user_notify_url: '/workspace/finance/response'
+    fmmRouter.get('/order/:code.json', function(paramRequest, paramResponse, paramNext){
+    //Alipay will call us to validate user payment after success payment
+    //'/workspace/finance/order/:code.json'
+    oHelpers.sendResponse(paramResponse,200,"ok");
+    });
+
+    fmmRouter.get('/response/:code.json', function(paramRequest, paramResponse, paramNext){
+        //Alipay will redirect users to this endpoint after successful payment
+        ///workspace/finance/response/:code.json'
+        var redirectUrl ='/#/processes/activities/done/' + paramRequest.params.code;
+
+        return paramResponse.redirect(redirectUrl);
     });
 
     //fmm_getUserBalance
