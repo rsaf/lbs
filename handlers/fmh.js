@@ -69,6 +69,138 @@ module.exports = function(paramService, esbMessage)
   
   var fmmRouter = paramService.Router();
 
+    function _confirmAlipay(params, response){
+        var finalResult = null,
+            responseInfo,
+            transactionid = response.tid,
+            refCode = response.rfc,
+            reqPayload = {pl:{code:response.rc}},
+            r = {},
+            specialCases = [
+                {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
+                {ac:"LZB102",sv:"LZS102",fn:_handlePhotoValidationResponse},
+                {ac:"LZB103",sv:"LZS103",fn:_handleCorporateValidationResponse},
+                {ac:"LZB104",sv:"LZS104",fn:_handleCorporateCreditPurchaseResponse}
+            ];
+        params.body = {json : JSON.stringify(reqPayload)};
+        console.log("CONFIRMING ALIPAY with",response);
+        return q()
+            .then(function getResponse(){
+                return esbMessage({
+                    op:"bmm_getResponse",
+                    pl:reqPayload.pl
+                })
+            })
+            .then(function confirmAlipay(res){
+                responseInfo = res;
+                return esbMessage({
+                    "ns":"fmm",
+                    "op":"fmm_verifyAliPayment",
+                    "pl": {
+                        transactionId : transactionid
+                    }
+                })
+            })
+            //UPDATE RESPONSE STATUS TO PAID
+            .then(function(msg){
+                return esbMessage({  //update the response and set payment status to 'paid'
+                    op : "bmm_persistResponse",
+                    pl:{
+                        transactionid : transactionid,
+                        loginName : params.user.lanzheng.loginName,
+                        currentOrganization : params.user.currentOrganization,
+                        response : {
+                            _id : responseInfo._id,
+                            rs:30,
+                            sp:{
+                                ps:'paid'
+                            },
+                            rfc:refCode
+                        }
+                    }
+                });
+            })
+            //COMMIT TRANSACTION
+            .then(function(msg){
+                r.pl = msg;
+                return _commitTransaction({pl:{transactionid : transactionid}});
+            })
+            //SCHEDULE/ACTIVATE SERVICES
+            .then(function() {
+                ac_code = lib.digFor(responseInfo,"acn"),
+                    sv_code = responseInfo && responseInfo.sb && responseInfo.sb[0] ? responseInfo.sb[0].serviceCode : undefined;
+                isSpecial = -1;
+
+                for(var i = 0; i < specialCases.length; i++)
+                {
+                    var tgt = specialCases[i];
+                    console.log("SV_CODE SV:",sv_code,responseInfo);
+                    if(!sv_code  || tgt.sv != sv_code) continue;
+                    isSpecial = i;
+                    break;
+                }
+                return _issueFirstOrderForResponse(paramRequest)
+                    //RUN AUTOMATION IF SPECIAL
+                    .then(function(r){
+                        console.log("SPECIAL CASE?",isSpecial,specialCases[isSpecial]);
+                        if(isSpecial >= 0)
+                            return specialCases[isSpecial].fn(params, responseInfo, transactionid);
+                        return r
+                    })
+                    //EXIT
+                    .then(function success(r) {
+                        return r;
+                    }, function failure(err) {
+                        console.log("FAILED WITH ERROR handling special case order", err);
+                        throw err;
+                    })
+            })
+            //SEND SMS/MAIL/NOTIFICATIONs & EXIT
+            .then(function(z) {
+                finalResult = z;
+                return esbMessage({
+                    ns: 'mdm',
+                    vs: '1.0',
+                    op: 'sendNotification',
+                    pl: {
+                        recipients: [{
+                            inmail: {to: params.user.lanzheng.loginName},
+                            weixin: {to: null},
+                            sms: {to: reqPayload.pl.phone},
+                            email: {to: null}
+                        }]
+                        , notification: {
+                            subject: '您事务响应蓝正吗为',
+                            notificationType: '事务通知',
+                            from: '系统',
+                            body: refCode
+                        }
+                    }
+                })
+            })
+            //EXIT
+            .then(function(smsResponse){
+                console.log("Completed Payment Click. Final Result:",finalResult);
+                //oHelpers.sendResponse(response,200,finalResult);
+                return {ok: true, res: finalResult}
+            })
+            //FAIL
+            .then(null,function reject(err){
+                console.log("ERR",err);
+                var code = 501;
+                r.er={ec:10012,em:"Could not make payment"};
+                //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+                if(err.er && err.er ==='Insufficient funds'){
+                    r.er={ec:10011,em:err.er};
+                    code = 403;
+                }else{
+                    console.log('rolling back',transactionid);
+                    _rollBackTransaction({pl:{transactionid : transactionid}});
+                }
+                //oHelpers.sendResponse(response,code,r);
+                return {ok: false, err: r}
+            });
+    }
     fmmRouter.post('/confirmAlipay.json', function(paramRequest, paramResponse, paramNext){
         var finalResult = null,
             responseInfo,
@@ -247,17 +379,59 @@ module.exports = function(paramService, esbMessage)
     //,create_direct_pay_by_user_return_url: '/processes/activities/done'
     //,create_direct_pay_by_user_notify_url: '/workspace/finance/response'
     fmmRouter.get('/order/:code.json', function(paramRequest, paramResponse, paramNext){
-    //Alipay will call us to validate user payment after success payment
-    //'/workspace/finance/order/:code.json'
-    oHelpers.sendResponse(paramResponse,200,"ok");
+        //Alipay will call us to validate user payment after success payment
+        //'/workspace/finance/order/:code.json'
+        //todo: Hit confirmAlipay code
+        return esbMessage({
+            "ns" : "bmm",
+            "op" : "bmm_getResponse",
+            "pl" : {
+                code : paramRequest.params.code
+            }
+        })
+        //Confirm with alipay and update/schedule/etc
+        .then(function(res){
+            return _confirmAlipay({
+                user : paramRequest.user
+            },res);
+        })
+        //Redirect user to done page
+        .then(function(res){
+            if(res.ok)
+                return paramResponse.redirect(redirectUrl);
+            else
+                return paramResponse.redirect(failureURL);
+            oHelpers.sendResponse(paramResponse,200,"ok");
+        })
     });
 
     fmmRouter.get('/response/:code.json', function(paramRequest, paramResponse, paramNext){
         //Alipay will redirect users to this endpoint after successful payment
         ///workspace/finance/response/:code.json'
+        //todo: Hit confirmAlipay code
+        console.log("hit handler");
         var redirectUrl ='/#/processes/activities/done/' + paramRequest.params.code;
-
-        return paramResponse.redirect(redirectUrl);
+        var failureUrl = '/#/processes/activities/payment/'
+        return esbMessage({
+            "ns" : "bmm",
+            "op" : "bmm_getResponse",
+            "pl" : {
+                code : paramRequest.params.code
+            }
+        })
+        //Confirm with alipay and update/schedule/etc
+        .then(function(res){
+            return _confirmAlipay({
+                user : paramRequest.user
+            },res);
+        })
+        //Redirect user to done page
+        .then(function(res){
+            if(res.ok)
+                return paramResponse.redirect(redirectUrl);
+            else
+                return paramResponse.redirect(failureURL);
+        })
     });
 
     //fmm_getUserBalance
@@ -382,10 +556,29 @@ module.exports = function(paramService, esbMessage)
             .then(function(msg) {
                 responseInfo = msg[0];
                 transactionid = msg[1].pl.transaction._id;
-                return responseInfo.sp.pm;
+                return esbMessage({
+                    "ns" : "bmm",
+                    "op" : "bmm_persistResponse",
+                    "pl" : {
+                        transactionid: transactionid,
+                        loginName: paramRequest.user.lanzheng.loginName,
+                        currentOrganization: paramRequest.user.currentOrganization,
+                        response : {
+                            tid : transactionid
+                        }
+                    }
+                })
+                .then(function(){
+                        console.log("persist response ended");
+                    return responseInfo.sp.pm;
+                }  ,  function(err){
+                        console.log("error?",err)
+                    });
+
             })
             //MAKE PAYMENT
             .then(function(provider){
+                console.log("PROVIDER:",provider);
                 var paymentChain
                 if(provider === "lz")
                 {
@@ -529,7 +722,6 @@ module.exports = function(paramService, esbMessage)
             service,
             responseInfo;
 
-        console.log('made it here 3');
         return q()
             //INIT TRANSACTION
             .then(function(){
