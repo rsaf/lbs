@@ -85,7 +85,6 @@ module.exports = function(paramService, esbMessage)
                 {ac:"LZB104",sv:"LZS104",fn:_handleCorporateCreditPurchaseResponse}
             ];
         params.body = {json : JSON.stringify(reqPayload)};
-        console.log("CONFIRMING ALIPAY with",response);
 
         var deferred = q.defer();
          q().then(function getResponse(){
@@ -114,7 +113,6 @@ module.exports = function(paramService, esbMessage)
             //UPDATE RESPONSE STATUS TO PAID
             .then(function(msg){
                  if(skipping) return;
-                console.log("persisting");
                 return esbMessage({  //update the response and set payment status to 'paid'
                     op : "bmm_persistResponse",
                     pl:{
@@ -135,14 +133,12 @@ module.exports = function(paramService, esbMessage)
             //COMMIT TRANSACTION
             .then(function(msg){
                  if(skipping) return;
-                console.log("committing",transactionid);
                 r.pl = msg;
                 return _commitTransaction({pl:{transactionid : transactionid}});
             })
             //SCHEDULE/ACTIVATE SERVICES
             .then(function() {
                  if(skipping) return;
-                console.log("scheduling");
                 ac_code = lib.digFor(responseInfo,"acn"),
                     sv_code = responseInfo && responseInfo.sb && responseInfo.sb[0] ? responseInfo.sb[0].serviceCode : undefined;
                 isSpecial = -1;
@@ -151,7 +147,7 @@ module.exports = function(paramService, esbMessage)
                 {
                     var tgt = specialCases[i];
                     if(!sv_code  || tgt.sv != sv_code) continue;
-                    console.log("SV_CODE SV:",sv_code,responseInfo);
+                    console.log("Is special case ",i);
                     isSpecial = i;
                     break;
                 }
@@ -175,7 +171,6 @@ module.exports = function(paramService, esbMessage)
             .then(function(z) {
                  if(skipping) return;
                 finalResult = z;
-                console.log("notifyin");
                 return esbMessage({
                     ns: 'mdm',
                     vs: '1.0',

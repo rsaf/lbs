@@ -34,12 +34,12 @@
         },
         "siv": [],
         "md": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "lu": "2015-05-11T01:39:41.365Z"
         },
         "ct": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "cd": "2015-05-11T01:39:41.364Z"
         },
@@ -110,12 +110,12 @@
           "aps": 30
         },
         "md": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "lu": "2015-05-04T05:46:36.947Z"
         },
         "ct": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "cd": "2015-05-04T03:19:15.179Z"
         },
@@ -158,12 +158,12 @@
         },
         "siv": [],
         "md": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "lu": "2015-05-11T01:39:41.365Z"
         },
         "ct": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "cd": "2015-05-11T01:39:41.364Z"
         },
@@ -234,12 +234,12 @@
           "aps": 30
         },
         "md": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "lu": "2015-05-04T05:46:36.947Z"
         },
         "ct": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "cd": "2015-05-04T03:19:15.179Z"
         },
@@ -282,12 +282,12 @@
         },
         "siv": [],
         "md": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "lu": "2015-05-11T01:39:41.365Z"
         },
         "ct": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "cd": "2015-05-11T01:39:41.364Z"
         },
@@ -358,12 +358,12 @@
           "aps": 30
         },
         "md": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "lu": "2015-05-04T05:46:36.947Z"
         },
         "ct": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "cd": "2015-05-04T03:19:15.179Z"
         },
@@ -396,12 +396,12 @@
         },
         "siv": [],
         "md": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "lu": "2015-05-11T01:39:41.365Z"
         },
         "ct": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "cd": "2015-05-11T01:39:41.364Z"
         },
@@ -424,7 +424,7 @@
       "content":
       {
         "form":{"fc":"LZF104","fd":{"fmn":"lzf104"}},
-        "html":"Amount to Purchase:<div><input id=\"t240371\" data-class=\"text\" type=\"text\" data-name=\"amount\" height=\"1\" value=\"\" data-default=\"\" style=\"line-height:1\" data-verification=\"false\" size=\"20\" class=\"form-control\" data-bind=\"entity.fields.amount\"><br></div>"
+        "html":"充值金额:<div><input id=\"t240371\" data-class=\"text\" type=\"text\" data-name=\"amount\" height=\"1\" value=\"\" data-default=\"\" style=\"line-height:1\" data-verification=\"false\" size=\"20\" class=\"form-control\" data-bind=\"entity.fields.amount\"><br></div>"
       }
     }
   },
@@ -445,12 +445,12 @@
         "ds": false,
         "sqc": [
           {
-            "sn": "BUYCREDITS",
+            "sn": "蓝证充值服务",
             "ui" : {
               "serviceCode" : "LZS104",
               "price" : "0元",
-              "serviceName" : "BUYCREDITS",
-              "servicePointName" : "BUYCREDITSPOINT"
+              "serviceName" : "蓝证充值服务",
+              "servicePointName" : "蓝证平台充值网点"
             }
           }
         ],
@@ -459,8 +459,8 @@
         },
         "abd": {
           "ac": "LZB104",
-          "an": "BUY CREDITS!",
-          "fdn": "个人实名认证",
+          "an": "余额充值",
+          "fdn": "余额充值表单",
           "apm": "在线支付",
           "at": "1",
           "asd": "2015-05-01T00:00:00Z",
@@ -472,12 +472,12 @@
           "aps": 30
         },
         "md": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "lu": "2015-05-04T05:46:36.947Z"
         },
         "ct": {
-          "uID": "a1ed",
+          "uID": "sa",
           "oID": "200000000000000000000000",
           "cd": "2015-05-04T03:19:15.179Z"
         },
