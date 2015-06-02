@@ -40,7 +40,7 @@ module.exports = function(paramService, esbMessage)
         if(type==='Response'){
             col='responses';
             url='/workspace/activities/application/';
-            message="事务 response validation";
+            message="";
         }
         return {
             rdo: adminOrg
@@ -180,7 +180,7 @@ module.exports = function(paramService, esbMessage)
                         recipients: [{
                             inmail: {to: params.user.lanzheng.loginName},
                             weixin: {to: null},
-                            sms: {to: reqPayload.pl.phone},
+                            sms: {to: responseInfo.phone},
                             email: {to: null}
                         }]
                         , notification: {
