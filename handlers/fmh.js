@@ -95,7 +95,7 @@ module.exports = function(paramService, esbMessage)
             })
             .then(function confirmAlipay(res){
                 console.log("verifying",res);
-                if(res.rs == 30)//already confirmed
+                if(res.rs >= 30)//already confirmed
                 {
                     console.log("ALREADY VERIFIED");
                     deferred.resolve({ok:"SKIP", res:res});
@@ -585,7 +585,8 @@ module.exports = function(paramService, esbMessage)
                         currentOrganization: paramRequest.user.currentOrganization,
                         response : {
                             _id : responseInfo._id,
-                            tid : transactionid
+                            tid : transactionid,
+                            lk : true
                         }
                     }
                 })
