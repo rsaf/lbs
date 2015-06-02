@@ -15,6 +15,7 @@ module.exports = function(paramService, esbMessage)
     m.pl.transaction = {
       _id:m.pl.transactionid
     };
+      console.log(m.pl.transaction);
     m.op='commitTransaction';
     return esbMessage(m);
   }
@@ -69,13 +70,14 @@ module.exports = function(paramService, esbMessage)
   
   var fmmRouter = paramService.Router();
 
-    function _confirmAlipay(params, response){
+    var _confirmAlipay = function _confirmAlipay(params, response){
         var finalResult = null,
             responseInfo,
             transactionid = response.tid,
             refCode = response.rfc,
             reqPayload = {pl:{code:response.rc}},
             r = {},
+            skipping = false,
             specialCases = [
                 {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
                 {ac:"LZB102",sv:"LZS102",fn:_handlePhotoValidationResponse},
@@ -84,25 +86,35 @@ module.exports = function(paramService, esbMessage)
             ];
         params.body = {json : JSON.stringify(reqPayload)};
         console.log("CONFIRMING ALIPAY with",response);
-        return q()
-            .then(function getResponse(){
+
+        var deferred = q.defer();
+         q().then(function getResponse(){
                 return esbMessage({
                     op:"bmm_getResponse",
                     pl:reqPayload.pl
                 })
             })
             .then(function confirmAlipay(res){
+                console.log("verifying",res);
+                if(res.rs == 30)//already confirmed
+                {
+                    console.log("ALREADY VERIFIED");
+                    deferred.resolve({ok:"SKIP", res:res});
+                    skipping = true;
+                }
                 responseInfo = res;
                 return esbMessage({
                     "ns":"fmm",
                     "op":"fmm_verifyAliPayment",
                     "pl": {
-                        transactionId : transactionid
+                        transactionId : res.rc
                     }
                 })
             })
             //UPDATE RESPONSE STATUS TO PAID
             .then(function(msg){
+                 if(skipping) return;
+                console.log("persisting");
                 return esbMessage({  //update the response and set payment status to 'paid'
                     op : "bmm_persistResponse",
                     pl:{
@@ -122,11 +134,15 @@ module.exports = function(paramService, esbMessage)
             })
             //COMMIT TRANSACTION
             .then(function(msg){
+                 if(skipping) return;
+                console.log("committing",transactionid);
                 r.pl = msg;
                 return _commitTransaction({pl:{transactionid : transactionid}});
             })
             //SCHEDULE/ACTIVATE SERVICES
             .then(function() {
+                 if(skipping) return;
+                console.log("scheduling");
                 ac_code = lib.digFor(responseInfo,"acn"),
                     sv_code = responseInfo && responseInfo.sb && responseInfo.sb[0] ? responseInfo.sb[0].serviceCode : undefined;
                 isSpecial = -1;
@@ -134,12 +150,12 @@ module.exports = function(paramService, esbMessage)
                 for(var i = 0; i < specialCases.length; i++)
                 {
                     var tgt = specialCases[i];
-                    console.log("SV_CODE SV:",sv_code,responseInfo);
                     if(!sv_code  || tgt.sv != sv_code) continue;
+                    console.log("SV_CODE SV:",sv_code,responseInfo);
                     isSpecial = i;
                     break;
                 }
-                return _issueFirstOrderForResponse(paramRequest)
+                return _issueFirstOrderForResponse(params)
                     //RUN AUTOMATION IF SPECIAL
                     .then(function(r){
                         console.log("SPECIAL CASE?",isSpecial,specialCases[isSpecial]);
@@ -157,7 +173,9 @@ module.exports = function(paramService, esbMessage)
             })
             //SEND SMS/MAIL/NOTIFICATIONs & EXIT
             .then(function(z) {
+                 if(skipping) return;
                 finalResult = z;
+                console.log("notifyin");
                 return esbMessage({
                     ns: 'mdm',
                     vs: '1.0',
@@ -180,9 +198,10 @@ module.exports = function(paramService, esbMessage)
             })
             //EXIT
             .then(function(smsResponse){
+                 if(skipping) finalResult = responseInfo;
                 console.log("Completed Payment Click. Final Result:",finalResult);
                 //oHelpers.sendResponse(response,200,finalResult);
-                return {ok: true, res: finalResult}
+                deferred.resolve({ok: true, res: finalResult});
             })
             //FAIL
             .then(null,function reject(err){
@@ -198,8 +217,9 @@ module.exports = function(paramService, esbMessage)
                     _rollBackTransaction({pl:{transactionid : transactionid}});
                 }
                 //oHelpers.sendResponse(response,code,r);
-                return {ok: false, err: r}
+                deferred.reject({ok: false, err: r});
             });
+        return deferred.promise;
     }
     fmmRouter.post('/confirmAlipay.json', function(paramRequest, paramResponse, paramNext){
         var finalResult = null,
@@ -315,6 +335,7 @@ module.exports = function(paramService, esbMessage)
             .then(function(smsResponse){
                 console.log("Completed Payment Click. Final Result:",finalResult);
                 oHelpers.sendResponse(paramResponse,200,finalResult);
+                return finalResult;
             })
             //FAIL
             .then(null,function reject(err){
@@ -330,6 +351,7 @@ module.exports = function(paramService, esbMessage)
                     _rollBackTransaction({pl:{transactionid : transactionid}});
                 }
                 oHelpers.sendResponse(paramResponse,code,r);
+                return r;
             })/*
             .then(function(response){
                 var finalResult = response
@@ -488,8 +510,11 @@ module.exports = function(paramService, esbMessage)
             var serviceBookings = response.sb,
                 orders = [],
                 i = serviceBookings.length,
-                varAccountID = paramRequest.user.userType === 'admin'? 'admin' : paramRequest.user.lanzheng.loginName;
-
+                varAccountID = paramRequest.user.userType === 'admin'? 'admin' : paramRequest.user.lanzheng.loginName,
+                customAmt = undefined;
+            //special case for custom credit amounts
+            if(response.acn == "LZB104")
+                customAmt = Math.abs(parseFloat(response.fd.fields.amount));
             //create an order for each selected pricelist in this activity (service booking)
             while((i-=1)>-1){
                 orders.push({
@@ -499,7 +524,7 @@ module.exports = function(paramService, esbMessage)
                     "serviceName" : serviceBookings[i].svn,
                     "serviceProviderId" : serviceBookings[i].spid,
                     //"agentId" : "not implemented",
-                    "orderAmount" : serviceBookings[i].sdp,
+                    "orderAmount" : customAmt || serviceBookings[i].sdp,
                     "platformCommissionAmount" : 0,//@todo: not implented
                     "agentCommissionAmount" : 0,//@todo: not implented
                     "corporationId" : serviceBookings[i].spc,//creator of the service point
@@ -564,12 +589,13 @@ module.exports = function(paramService, esbMessage)
                         loginName: paramRequest.user.lanzheng.loginName,
                         currentOrganization: paramRequest.user.currentOrganization,
                         response : {
+                            _id : responseInfo._id,
                             tid : transactionid
                         }
                     }
                 })
-                .then(function(){
-                        console.log("persist response ended");
+                .then(function(res){
+                        console.log("persist response ended",res);
                     return responseInfo.sp.pm;
                 }  ,  function(err){
                         console.log("error?",err)
@@ -1014,16 +1040,39 @@ module.exports = function(paramService, esbMessage)
     }
     function _handleCorporateCreditPurchaseResponse(request,responseObj,transactionid){
         var responseObjectToReturn;
+
+        function collateOrders(response){
+            var serviceBookings = response.sb,
+                orders = [],
+                varAccountID = request.user.userType === 'admin'? 'admin' : request.user.lanzheng.loginName,
+                orderAmount = Math.abs(parseFloat(responseObj.fd.fields.amount));
+            //create an order for each selected pricelist in this activity (service booking)
+                orders.push({
+                    "transactionId" : response.rc,
+                    "serviceId" : serviceBookings[0].plid,//serviceid is the pricelist id
+                    "serviceType" : "ACTIVITY",
+                    "serviceName" : serviceBookings[0].svn,
+                    "serviceProviderId" : serviceBookings[0].spid,
+                    //"agentId" : "not implemented",
+                    "orderAmount" : -orderAmount,
+                    "platformCommissionAmount" : 0,//@todo: not implented
+                    "agentCommissionAmount" : 0,//@todo: not implented
+                    "corporationId" : serviceBookings[0].spc,//creator of the service point
+                    "userAccountId" : varAccountID,// login name not the id
+                    "paymentType" : "online",
+                    "activityName" : response.can
+                });
+            return orders;
+        }
+
         return q()
-            .then(function(){
-                return esbMessage({op:'getOrganization',pl:{org:'lanzheng'}})
-            })
-            //Generate request
+            //Add Money
             .then(function(adminid){
+                console.log("trying to make direct payment");
                 return esbMessage({
-                    "ns":"rmm",
-                    "op":"rmm_persistRequestMessage",
-                    "pl": {request: _initRequestMessage(request,"Response",responseObj.rc,adminid.pl.oID)}
+                    "ns":"fmm",
+                    "op":"fmm_makeDirectPayment",
+                    "pl": {orders : collateOrders(responseObj)}
                 });
             })
             //EXIT

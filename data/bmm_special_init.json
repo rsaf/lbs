@@ -388,18 +388,8 @@
           "pt": [],
           "fields": [
             {
-              "nm": "ffz",
+              "nm": "amount",
               "_id": "5550085d59e1aab16964de39",
-              "nv": false
-            },
-            {
-              "nm": "xm",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            },
-            {
-              "nm": "zz",
-              "_id": "5550085d59e1aab16964de38",
               "nv": false
             }
           ]
@@ -434,7 +424,7 @@
       "content":
       {
         "form":{"fc":"LZF104","fd":{"fmn":"lzf104"}},
-        "html":""
+        "html":"Amount to Purchase:<div><input id=\"t240371\" data-class=\"text\" type=\"text\" data-name=\"amount\" height=\"1\" value=\"\" data-default=\"\" style=\"line-height:1\" data-verification=\"false\" size=\"20\" class=\"form-control\" data-bind=\"entity.fields.amount\"><br></div>"
       }
     }
   },
@@ -455,12 +445,12 @@
         "ds": false,
         "sqc": [
           {
-            "sn": "实名认证服务",
+            "sn": "BUYCREDITS",
             "ui" : {
               "serviceCode" : "LZS104",
               "price" : "0元",
-              "serviceName" : "实名认证服务",
-              "servicePointName" : "蓝证平台实名认证网点"
+              "serviceName" : "BUYCREDITS",
+              "servicePointName" : "BUYCREDITSPOINT"
             }
           }
         ],
@@ -469,7 +459,7 @@
         },
         "abd": {
           "ac": "LZB104",
-          "an": "个人实名认证",
+          "an": "BUY CREDITS!",
           "fdn": "个人实名认证",
           "apm": "在线支付",
           "at": "1",
