@@ -602,11 +602,14 @@ module.exports = function(paramService, esbMessage)
             //MAKE PAYMENT
             .then(function(provider){
                 console.log("PROVIDER:",provider,"with total amount = ",responseInfo.sp.pa);
-                var paymentChain
-                if(provider === "ali" && responseInfo.sp.pa > 0)
+                var paymentChain;
+                var orders = collateOrders(responseInfo);
+                var sum = orders.reduce(function(ele){return sum + ele.orderAmount},0);
+
+                if(provider === "ali" && sum > 0)
                 {
                     console.log("ALIPAY PAYMENT");
-                    return alipayPayment(collateOrders(responseInfo))
+                    return alipayPayment(orders)
                         //SEND OFF ALIPAY URL
                         .then(function(response){
                             var finalResult = response
@@ -633,7 +636,7 @@ module.exports = function(paramService, esbMessage)
                 else (provider === "lz")
                 {
                     console.log("LANZHENG PAYMENT");
-                    return directPayment(collateOrders(responseInfo))
+                    return directPayment(orders)
                         //UPDATE RESPONSE STATUS TO PAID
                         .then(function(msg){
                             return esbMessage({  //update the response and set payment status to 'paid'
