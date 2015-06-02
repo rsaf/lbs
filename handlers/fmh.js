@@ -601,9 +601,36 @@ module.exports = function(paramService, esbMessage)
             })
             //MAKE PAYMENT
             .then(function(provider){
-                console.log("PROVIDER:",provider);
+                console.log("PROVIDER:",provider,"with total amount = ",responseInfo.sp.pa);
                 var paymentChain
-                if(provider === "lz")
+                if(provider === "ali" && responseInfo.sp.pa > 0)
+                {
+                    console.log("ALIPAY PAYMENT");
+                    return alipayPayment(collateOrders(responseInfo))
+                        //SEND OFF ALIPAY URL
+                        .then(function(response){
+                            var finalResult = response
+                            response.tid = transactionid;
+                            response.refCode = refCode;
+                            response.reqPayload = reqPayload;
+                            console.log("Sending out Alipay URL.", response);
+                            oHelpers.sendResponse(paramResponse,200,finalResult);
+                        })
+                        //FAIL
+                        .then(null,function reject(err){
+                            var code = 501;
+                            r.er={ec:10012,em:"Could not make payment"};
+                            //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+                            if(err.er && err.er ==='Insufficient funds'){
+                                r.er={ec:10011,em:err.er};
+                                code = 403;
+                            }else{
+                                _rollBackTransaction({pl:{transactionid : transactionid}});
+                            }
+                            oHelpers.sendResponse(paramResponse,code,r);
+                        })
+                }
+                else (provider === "lz")
                 {
                     console.log("LANZHENG PAYMENT");
                     return directPayment(collateOrders(responseInfo))
@@ -687,33 +714,6 @@ module.exports = function(paramService, esbMessage)
                         //EXIT
                         .then(function(smsResponse){
                             console.log("Completed Payment Click. Final Result:",finalResult);
-                            oHelpers.sendResponse(paramResponse,200,finalResult);
-                        })
-                        //FAIL
-                        .then(null,function reject(err){
-                            var code = 501;
-                            r.er={ec:10012,em:"Could not make payment"};
-                            //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-                            if(err.er && err.er ==='Insufficient funds'){
-                                r.er={ec:10011,em:err.er};
-                                code = 403;
-                            }else{
-                                _rollBackTransaction({pl:{transactionid : transactionid}});
-                            }
-                            oHelpers.sendResponse(paramResponse,code,r);
-                        })
-                }
-                else if(provider === "ali")
-                {
-                    console.log("ALIPAY PAYMENT");
-                    return alipayPayment(collateOrders(responseInfo))
-                        //SEND OFF ALIPAY URL
-                        .then(function(response){
-                            var finalResult = response
-                            response.tid = transactionid;
-                            response.refCode = refCode;
-                            response.reqPayload = reqPayload;
-                            console.log("Sending out Alipay URL.", response);
                             oHelpers.sendResponse(paramResponse,200,finalResult);
                         })
                         //FAIL
