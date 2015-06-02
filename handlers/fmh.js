@@ -100,6 +100,7 @@ module.exports = function(paramService, esbMessage)
                     console.log("ALREADY VERIFIED");
                     deferred.resolve({ok:"SKIP", res:res});
                     skipping = true;
+                    return;
                 }
                 responseInfo = res;
                 return esbMessage({

@@ -155,6 +155,7 @@ module.exports = function (paramService, esbMessage) {
 
                     return list;
                 });
+                console.log("setting serviceType:",service.persist.pl.serviceType,"of",serviceTypeMap[service.persist.pl.serviceType])
                 if(serviceTypeMap[service.persist.pl.serviceType])
                     service.persist.pl.serviceType = serviceTypeMap[service.persist.pl.serviceType];
                 else
@@ -310,7 +311,7 @@ module.exports = function (paramService, esbMessage) {
                 return esbMessage(m);
             })
             .then(function rename(m) {
-                console.log("Result set was",m);
+                //console.log("Result set was",m);
                 resultset = m;
                 return esbMessage({
                     "ns": input.rename.ns,
@@ -323,7 +324,6 @@ module.exports = function (paramService, esbMessage) {
                 })
             })
             .then(function commitTransaction(cnt) {
-                console.log("FOO");
                 if(cnt == 1 && input.persist.tgtField == "servicePoint")
                 {
                     resultset.pl.servicePointCode = input.rename.pl;
