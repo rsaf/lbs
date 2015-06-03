@@ -113,6 +113,7 @@ module.exports = function(paramService, esbMessage)
             })
             //UPDATE RESPONSE STATUS TO PAID
             .then(function(msg){
+                 console.log("persisting");
                  if(skipping) return;
                 return esbMessage({  //update the response and set payment status to 'paid'
                     op : "bmm_persistResponse",
@@ -133,12 +134,14 @@ module.exports = function(paramService, esbMessage)
             })
             //COMMIT TRANSACTION
             .then(function(msg){
+                 console.log("committing");
                  if(skipping) return;
                 r.pl = msg;
                 return _commitTransaction({pl:{transactionid : transactionid}});
             })
             //SCHEDULE/ACTIVATE SERVICES
             .then(function() {
+                 console.log("activating");
                  if(skipping) return;
                 ac_code = lib.digFor(responseInfo,"acn"),
                     sv_code = responseInfo && responseInfo.sb && responseInfo.sb[0] ? responseInfo.sb[0].serviceCode : undefined;
@@ -170,6 +173,7 @@ module.exports = function(paramService, esbMessage)
             })
             //SEND SMS/MAIL/NOTIFICATIONs & EXIT
             .then(function(z) {
+                 console.log("notifying");
                  if(skipping) return;
                 finalResult = z;
                 return esbMessage({
@@ -577,6 +581,7 @@ module.exports = function(paramService, esbMessage)
             .then(function(msg) {
                 responseInfo = msg[0];
                 transactionid = msg[1].pl.transaction._id;
+                console.log("persisting on payment click",transactionid);
                 return esbMessage({
                     "ns" : "bmm",
                     "op" : "bmm_persistResponse",
@@ -592,7 +597,7 @@ module.exports = function(paramService, esbMessage)
                     }
                 })
                 .then(function(res){
-                        console.log("persist response ended",res);
+                        console.log("persist response ended",responseInfo,responseInfo.sp.pm);
                     return responseInfo.sp.pm;
                 }  ,  function(err){
                         console.log("error?",err)
@@ -633,7 +638,7 @@ module.exports = function(paramService, esbMessage)
                             oHelpers.sendResponse(paramResponse,code,r);
                         })
                 }
-                else (provider === "lz")
+                else// (provider === "lz")
                 {
                     console.log("LANZHENG PAYMENT");
                     return directPayment(orders)
@@ -939,11 +944,11 @@ module.exports = function(paramService, esbMessage)
                     "transactionid" : transactionid,
                     ns:"upm",
                     op:"upm_validateUserInfo",
+                    "method":"validatePhoto",
                     pl:{
-                        "method":"validatePhoto",
                         "sfz": responseObj.fd.fields["shenfenzhenghaoma"],
                         "xm" : responseObj.fd.fields["xingming"],
-                        "zz" : responseObj.pt[0].pp
+                        "zz" : responseObj.fd.pt[0].pp
                     }
                 })
             })
@@ -1001,7 +1006,7 @@ module.exports = function(paramService, esbMessage)
             .then(function resolve(r){
                 return responseObjectToReturn;
             }  ,  function failure(r){
-                console.log("Unable to issue (special case) order (rolling back):",r);
+                console.log("Unable to issue (special case) order (rolling back):",r,". Transaction id: ",transactionid);
                 return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
             });
         /*
