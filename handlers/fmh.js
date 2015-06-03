@@ -609,8 +609,8 @@ module.exports = function(paramService, esbMessage)
                 console.log("PROVIDER:",provider,"with total amount = ",responseInfo.sp.pa);
                 var paymentChain;
                 var orders = collateOrders(responseInfo);
-                var sum = orders.reduce(function(ele){return sum + ele.orderAmount},0);
-
+                var sum = orders.reduce(function(sum, ele){console.log("ELE:",ele);return sum + ele.orderAmount},0);
+                console.log("SUM IS",sum);
                 if(provider === "ali" && sum > 0)
                 {
                     console.log("ALIPAY PAYMENT");
@@ -699,6 +699,7 @@ module.exports = function(paramService, esbMessage)
                         //SEND SMS/MAIL/NOTIFICATIONs & EXIT
                         .then(function(z) {
                             finalResult = z;
+                            console.log("SENDING SMS (LZ)",reqPayload);
                             return esbMessage({
                                 ns: 'mdm',
                                 vs: '1.0',
