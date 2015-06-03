@@ -1036,7 +1036,7 @@ module.exports = function(paramService, esbMessage)
             })
             //EXIT
             .then(function resolve(r){
-                responseObjectToReturn = {pl:r,er:null};
+                responseObjectToReturn = {pl:responseObj,er:null};
                 console.log("DID THE CORPORATE VALIDATION RESPONSE");
                 return responseObjectToReturn;
             }  ,  function failure(r){
