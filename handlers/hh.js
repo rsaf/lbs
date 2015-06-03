@@ -330,7 +330,8 @@ module.exports = function (paramService, esbMessage) {
             sdp: priceList.discountedPrice,
             spn: priceList.servicePoint.servicePointName,
             spid: priceList.servicePoint._id,
-            spc: priceList.servicePoint.ct.oID
+            spc: priceList.servicePoint.ct.oID,
+            serviceCode: priceList.service.serviceCode
           };
         })
         .then(null,function reject(err){

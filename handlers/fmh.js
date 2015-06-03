@@ -141,12 +141,12 @@ module.exports = function(paramService, esbMessage)
             })
             //SCHEDULE/ACTIVATE SERVICES
             .then(function() {
-                 console.log("activating");
+                 console.log("activating",responseInfo);
                  if(skipping) return;
                 ac_code = lib.digFor(responseInfo,"acn"),
                     sv_code = responseInfo && responseInfo.sb && responseInfo.sb[0] ? responseInfo.sb[0].serviceCode : undefined;
                 isSpecial = -1;
-
+                console.log("ac_code:",ac_code,"sv_code:",sv_code);
                 for(var i = 0; i < specialCases.length; i++)
                 {
                     var tgt = specialCases[i];
@@ -488,8 +488,7 @@ module.exports = function(paramService, esbMessage)
 
     fmmRouter.post('/setServicePointPriceInResponse.json', function(paramRequest, paramResponse, paramNext){
         var rc = paramRequest.body.rc,
-            idx = paramRequest.body.idx,
-            amt = paramRequest.body.amt;
+            idx = paramRequest.body.idx;
 
         return esbMessage({
             "ns":"bmm",
@@ -503,6 +502,7 @@ module.exports = function(paramService, esbMessage)
             console.log("GET RESPONSE IN SP SVP SET IS:",response);
             response.sb[0].svp = response.sb[0].sdp = amount;
             response.sb = response.sb[0];
+
             return esbMessage({
                 "ns": "bmm",
                 "op": "bmm_persistResponse",
