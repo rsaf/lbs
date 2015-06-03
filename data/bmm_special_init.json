@@ -443,6 +443,7 @@
       "tgtField": "activity",
       "pl": {
         "ds": false,
+        "hsf":true,
         "sqc": [
           {
             "sn": "蓝证充值服务",

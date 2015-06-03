@@ -134,6 +134,7 @@ module.exports = function(paramService, esbMessage){
   function _persistRespose(req, res,pnext){
     var m = {},transactionid=false,response={};
     //formHtml
+      console.log('persisting response',req.body.json);
     q().then(function(){
       m.pl=JSON.parse(req.body.json).pl;
       // is user not set then use req.sessionID
