@@ -486,6 +486,42 @@ module.exports = function(paramService, esbMessage)
             });
     });
 
+    fmmRouter.post('/setServicePointPriceInResponse.json', function(paramRequest, paramResponse, paramNext){
+        var rc = paramRequest.body.rc,
+            idx = paramRequest.body.idx,
+            amt = paramRequest.body.amt;
+
+        return esbMessage({
+            "ns":"bmm",
+            "op":"bmm_getResponse",
+            "pl":{
+                code : rc
+            }
+        })
+        .then(function(response) {
+            var amount = parseFloat(response.fd.fields.amount);
+            console.log("GET RESPONSE IN SP SVP SET IS:",response);
+            response.sb[0].svp = response.sb[0].sdp = amount;
+            response.sb = response.sb[0];
+            return esbMessage({
+                "ns": "bmm",
+                "op": "bmm_persistResponse",
+                "pl": {
+                    loginName: paramRequest.user.lanzheng.loginName,
+                    currentOrganization: paramRequest.user.currentOrganization,
+                    response: response
+                }
+            })
+        })
+        .then(function(r) {
+            // console.log('success return: ', r);
+            oHelpers.sendResponse(paramResponse, 200,r);
+        })
+        .fail(function(rv) {
+            var r = {pl:null, er:{ec:404,em:"could not change service point price"}};
+            oHelpers.sendResponse(paramResponse,404,r);
+        });
+    })
 /*
  * Makes payment for a response and creates the order
  * use the response code (or id) to get the response (m.pl.responseCode or m.pl.responseid)
