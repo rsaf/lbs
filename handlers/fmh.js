@@ -85,7 +85,7 @@ module.exports = function(paramService, esbMessage)
                 {ac:"LZB104",sv:"LZS104",fn:_handleCorporateCreditPurchaseResponse}
             ];
         params.body = {json : JSON.stringify(reqPayload)};
-
+        console.log("Confirm Alipay beginning with:",params,response);
         var deferred = q.defer();
          q().then(function getResponse(){
                 return esbMessage({
@@ -94,7 +94,7 @@ module.exports = function(paramService, esbMessage)
                 })
             })
             .then(function confirmAlipay(res){
-                console.log("verifying",res);
+                 console.log("verifying",res);
                 if(res.rs >= 30)//already confirmed
                 {
                     console.log("ALREADY VERIFIED");
@@ -111,9 +111,27 @@ module.exports = function(paramService, esbMessage)
                     }
                 })
             })
+            .then(function doNotificationAccept(res){
+                return esbMessage({
+                    "ns":"fmm",
+                    "op":"fmm_alipayNotification",
+                    "pl":{
+                        transactionId : responseInfo.rc,
+                        accountId : responseInfo.ow.uid,
+                        notifyId : responseInfo.rc //TODO notify_id???
+                    }
+                })
+            })
+            .then(function doLZPayment(res){
+                if(responseInfo.acn === "LZB104"){console.log("bailing on LZ payment for LZB104"); return;}
+                return esbMessage({
+                    "ns":"fmm",
+                    "op": "fmm_makeDirectPayment",
+                    "pl": {orders : collateOrders(responseInfo,params.user,'ACTIVITY')}
+                });
+            })
             //UPDATE RESPONSE STATUS TO PAID
             .then(function(msg){
-                 console.log("persisting");
                  if(skipping) return;
                 return esbMessage({  //update the response and set payment status to 'paid'
                     op : "bmm_persistResponse",
@@ -134,14 +152,12 @@ module.exports = function(paramService, esbMessage)
             })
             //COMMIT TRANSACTION
             .then(function(msg){
-                 console.log("committing");
                  if(skipping) return;
                 r.pl = msg;
                 return _commitTransaction({pl:{transactionid : transactionid}});
             })
             //SCHEDULE/ACTIVATE SERVICES
             .then(function() {
-                 console.log("activating",responseInfo);
                  if(skipping) return;
                 ac_code = lib.digFor(responseInfo,"acn"),
                     sv_code = responseInfo && responseInfo.sb && responseInfo.sb[0] ? responseInfo.sb[0].serviceCode : undefined;
@@ -158,7 +174,6 @@ module.exports = function(paramService, esbMessage)
                 return _issueFirstOrderForResponse(params)
                     //RUN AUTOMATION IF SPECIAL
                     .then(function(r){
-                        console.log("SPECIAL CASE?",isSpecial,specialCases[isSpecial]);
                         if(isSpecial >= 0)
                             return specialCases[isSpecial].fn(params, responseInfo, transactionid);
                         return r
@@ -404,6 +419,7 @@ module.exports = function(paramService, esbMessage)
         //Alipay will call us to validate user payment after success payment
         //'/workspace/finance/order/:code.json'
         //todo: Hit confirmAlipay code
+        console.log(paramRequest.query);
         return esbMessage({
             "ns" : "bmm",
             "op" : "bmm_getResponse",
@@ -542,36 +558,6 @@ module.exports = function(paramService, esbMessage)
                 {ac:"LZB104",sv:"LZS104",fn:_handleCorporateCreditPurchaseResponse}
             ];
 
-        function collateOrders(response){
-            var serviceBookings = response.sb,
-                orders = [],
-                i = serviceBookings.length,
-                varAccountID = paramRequest.user.userType === 'admin'? 'admin' : paramRequest.user.lanzheng.loginName,
-                customAmt = undefined;
-            //special case for custom credit amounts
-            if(response.acn == "LZB104")
-                customAmt = Math.abs(parseFloat(response.fd.fields.amount));
-            //create an order for each selected pricelist in this activity (service booking)
-            while((i-=1)>-1){
-                orders.push({
-                    "transactionId" : response.rc,
-                    "serviceId" : serviceBookings[i].plid,//serviceid is the pricelist id
-                    "serviceType" : "ACTIVITY",
-                    "serviceName" : serviceBookings[i].svn,
-                    "serviceProviderId" : serviceBookings[i].spid,
-                    //"agentId" : "not implemented",
-                    "orderAmount" : customAmt || serviceBookings[i].sdp,
-                    "platformCommissionAmount" : 0,//@todo: not implented
-                    "agentCommissionAmount" : 0,//@todo: not implented
-                    "corporationId" : serviceBookings[i].spc,//creator of the service point
-                    "userAccountId" : varAccountID,// login name not the id
-                    "paymentType" : "online",
-                    "activityName" : response.can
-                });
-            }
-            return orders;
-        }
-
         function directPayment(orders){
           //update response sp and set payment status to paid
           return esbMessage({
@@ -642,18 +628,26 @@ module.exports = function(paramService, esbMessage)
             })
             //MAKE PAYMENT
             .then(function(provider){
-                console.log("PROVIDER:",provider,"with total amount = ",responseInfo.sp.pa);
                 var paymentChain;
-                var orders = collateOrders(responseInfo);
+                var orders = collateOrders(responseInfo,paramRequest.user,provider==="ali"?'CREDIT_PURCHASE':"ACTIVITY");
                 var sum = orders.reduce(function(sum, ele){console.log("ELE:",ele);return sum + ele.orderAmount},0);
                 console.log("SUM IS",sum);
                 if(provider === "ali" && sum > 0)
                 {
                     console.log("ALIPAY PAYMENT");
+                    //condense orders into a single 'buy'
+                    var condensedOrder = orders.reduce(function(agg, ele, idx){
+                        if(idx == 0) return ele;
+                        agg.orderAmount += ele.orderAmount
+                        agg.platformCommissionAmount += ele.platformCommissionAmount;
+                        agg.agentCommissionAmount += ele.agentCommissionAmount;
+                        return agg;
+                    },{})
+                    orders = [condensedOrder];
                     return alipayPayment(orders)
                         //SEND OFF ALIPAY URL
                         .then(function(response){
-                            var finalResult = response
+                            var finalResult = response;
                             response.tid = transactionid;
                             response.refCode = refCode;
                             response.reqPayload = reqPayload;
@@ -777,6 +771,36 @@ module.exports = function(paramService, esbMessage)
                 }
             })
   });
+
+    function collateOrders(response, user, type){
+        var serviceBookings = response.sb,
+            orders = [],
+            i = serviceBookings.length,
+            varAccountID = user.userType === 'admin'? 'admin' : user.lanzheng.loginName,
+            customAmt = undefined;
+        //special case for custom credit amounts
+        if(response.acn == "LZB104")
+            customAmt = Math.abs(parseFloat(response.fd.fields.amount));
+        //create an order for each selected pricelist in this activity (service booking)
+        while((i-=1)>-1){
+            orders.push({
+                "transactionId" : response.rc,
+                "serviceId" : serviceBookings[i].plid,//serviceid is the pricelist id
+                "serviceType" : type,
+                "serviceName" : type == "CREDIT_PURCHASE"?"余额充值":serviceBookings[i].svn,
+                "serviceProviderId" : serviceBookings[i].spid,
+                //"agentId" : "not implemented",
+                "orderAmount" : customAmt || serviceBookings[i].sdp,
+                "platformCommissionAmount" : 0,//@todo: not implented
+                "agentCommissionAmount" : 0,//@todo: not implented
+                "corporationId" : serviceBookings[i].spc,//creator of the service point
+                "userAccountId" : varAccountID,// login name not the id
+                "paymentType" : "online",
+                "activityName" : response.can
+            });
+        }
+        return orders;
+    }
 
     function _issueFirstOrderForResponse(request){
         console.log('made it here',request.body);
@@ -1083,38 +1107,16 @@ module.exports = function(paramService, esbMessage)
     function _handleCorporateCreditPurchaseResponse(request,responseObj,transactionid){
         var responseObjectToReturn;
 
-        function collateOrders(response){
-            var serviceBookings = response.sb,
-                orders = [],
-                varAccountID = request.user.userType === 'admin'? 'admin' : request.user.lanzheng.loginName,
-                orderAmount = Math.abs(parseFloat(responseObj.fd.fields.amount));
-            //create an order for each selected pricelist in this activity (service booking)
-                orders.push({
-                    "transactionId" : response.rc,
-                    "serviceId" : serviceBookings[0].plid,//serviceid is the pricelist id
-                    "serviceType" : "ACTIVITY",
-                    "serviceName" : serviceBookings[0].svn,
-                    "serviceProviderId" : serviceBookings[0].spid,
-                    //"agentId" : "not implemented",
-                    "orderAmount" : -orderAmount,
-                    "platformCommissionAmount" : 0,//@todo: not implented
-                    "agentCommissionAmount" : 0,//@todo: not implented
-                    "corporationId" : serviceBookings[0].spc,//creator of the service point
-                    "userAccountId" : varAccountID,// login name not the id
-                    "paymentType" : "online",
-                    "activityName" : response.can
-                });
-            return orders;
-        }
-
         return q()
             //Add Money
             .then(function(adminid){
+                console.log("skipping direct payment");
+                return;
                 console.log("trying to make direct payment");
                 return esbMessage({
                     "ns":"fmm",
                     "op":"fmm_makeDirectPayment",
-                    "pl": {orders : collateOrders(responseObj)}
+                    "pl": {orders : collateOrders(responseObj,request.user,'ACTIVITY')}
                 });
             })
             //EXIT
@@ -1122,9 +1124,9 @@ module.exports = function(paramService, esbMessage)
                 responseObjectToReturn = {pl:r,er:null};
                 return responseObjectToReturn;
             }  ,  function failure(r){
-                console.log("Unable to issue (special case -> Corporate Validation) order (rolling back):",r);
+                console.log("Unable to issue (special case -> Credit Purchase) order (rolling back):",r);
                 return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
-            });
+            })
     }
     return fmmRouter;
 };
