@@ -722,7 +722,11 @@ module.exports = function (paramPS, esbMessage) {
                 isd: null, // 拍摄日期: // image shooting date                          ?
                 irs: null, // 像素尺寸:84mmX105mm image resolution size                  ?
                 ofs: null, // 文件大小:86Kb //28 original photo size 初始照片文件大小      ===
-                fm: null  // 27 initial format 初始照片格式                              ===
+                fm: null,  // 27 initial format 初始照片格式                              ===
+                urll: null,
+                urlm: null,
+                urls: null,
+                uri: null
             },
             uri: null, // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
             ac: null,
@@ -736,7 +740,10 @@ module.exports = function (paramPS, esbMessage) {
             op: 'bmm_updateResponsePhotoByResponseCode',
             pl: {
                 rc: null,
-                uri: null
+                uri: null,
+                urll: null,
+                urlm: null,
+                urls: null
             }
         }
 
@@ -779,6 +786,9 @@ module.exports = function (paramPS, esbMessage) {
 
                         m2.pl.rc = r.pl.rc;
                         m2.pl.uri = r.pl.uri;
+                        m2.pl.urll = r.pl.urll;
+                        m2.pl.urlm = r.pl.urlm;
+                        m2.pl.urls = r.pl.urls;
 
 
                     })

@@ -7,9 +7,20 @@ var oHelpers= require('../utilities/helpers.js');
 var q = require('q');
 var lib = require('lib');
 
+
 module.exports = function(paramService, esbMessage)
 {
-  
+    //Define code hooks for special activities
+    //todo: ac is defined, but not checked - perhaps isn't needed ever
+    var specialCases =  [
+        {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
+        {ac:"LZB102",sv:"LZS102",fn:_handlePhotoValidationResponse},
+        {ac:"LZB103",sv:"LZS103",fn:_handleCorporateValidationResponse},
+        {ac:"LZB104",sv:"LZS104",fn:_handleCorporateCreditPurchaseResponse},
+        {ac:"LZB102",sv:"LZS105",fn:_handlePhotoInspectionResponse},
+        {ac:"LZB102",sv:"LZS106",fn:_handlePhotoCorrectionResponse}
+    ];
+
   //these could be in the oHelpers
   function _commitTransaction(m){
     m.pl.transaction = {
@@ -77,13 +88,7 @@ module.exports = function(paramService, esbMessage)
             refCode = response.rfc,
             reqPayload = {pl:{code:response.rc}},
             r = {},
-            skipping = false,
-            specialCases = [
-                {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
-                {ac:"LZB102",sv:"LZS102",fn:_handlePhotoValidationResponse},
-                {ac:"LZB103",sv:"LZS103",fn:_handleCorporateValidationResponse},
-                {ac:"LZB104",sv:"LZS104",fn:_handleCorporateCreditPurchaseResponse}
-            ];
+            skipping = false;
         params.body = {json : JSON.stringify(reqPayload)};
         console.log("Confirm Alipay beginning with:",params,response);
         var deferred = q.defer();
@@ -242,13 +247,7 @@ module.exports = function(paramService, esbMessage)
             transactionid = paramRequest.body.pl.info.tid,
             refCode = paramRequest.body.pl.info.refCode,
             reqPayload = paramRequest.body.pl.info.reqPayload,
-            r = {},
-            specialCases = [
-                {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
-                {ac:"LZB102",sv:"LZS102",fn:_handlePhotoValidationResponse},
-                {ac:"LZB103",sv:"LZS103",fn:_handleCorporateValidationResponse},
-                {ac:"LZB104",sv:"LZS104",fn:_handleCorporateCreditPurchaseResponse}
-            ];
+            r = {};
         paramRequest.body.json = JSON.stringify(paramRequest.body.pl.info.reqPayload);
 
         return q()
@@ -550,13 +549,7 @@ module.exports = function(paramService, esbMessage)
             responseInfo = null,
             reqPayload=false,
             finalResult = undefined,
-            refCode = undefined,
-            specialCases = [
-                {ac:"LZB101",sv:"LZS101",fn:_handleSingleIdValidationResponse},
-                {ac:"LZB102",sv:"LZS102",fn:_handlePhotoValidationResponse},
-                {ac:"LZB103",sv:"LZS103",fn:_handleCorporateValidationResponse},
-                {ac:"LZB104",sv:"LZS104",fn:_handleCorporateCreditPurchaseResponse}
-            ];
+            refCode = undefined;
 
         function directPayment(orders){
           //update response sp and set payment status to paid
@@ -1128,5 +1121,34 @@ module.exports = function(paramService, esbMessage)
                 return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
             })
     }
+    function _handlePhotoInspectionResponse(request, responseObj, transactionid){
+        var ac_code = lib.digFor(responseObj,"acn"),
+            sv_code = lib.digFor(responseObj,"sb.0.svn"),
+            responseObjectToReturn = {};
+
+        return q()
+            .then(function resolve(r){
+                console.log("Handled Photo Inspection successfully");
+                return responseObjectToReturn;
+            }  ,  function failure(r){
+                console.log("Unable to issue (special case) order (rolling back):",r);
+                return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
+            });
+    }
+    function _handlePhotoCorrectionResponse(request, responseObj, transactionid){
+        var ac_code = lib.digFor(responseObj,"acn"),
+            sv_code = lib.digFor(responseObj,"sb.0.svn"),
+            responseObjectToReturn = {};
+
+        return q()
+            .then(function resolve(r){
+                console.log("Handled Photo Correction successfully");
+                return responseObjectToReturn;
+            }  ,  function failure(r){
+                console.log("Unable to issue (special case) order (rolling back):",r);
+                return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
+            });
+    }
+
     return fmmRouter;
 };
