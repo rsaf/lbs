@@ -215,6 +215,24 @@
               "serviceName" : "蓝证证照核验服务",
               "servicePointName" : "蓝证平台证照核验网点"
             }
+          },
+          {
+            "sn": "蓝证证照核验服务",
+            "ui" : {
+              "serviceCode" : "LZS105",
+              "price" : "0元",
+              "serviceName" : "蓝证证照核验服务",
+              "servicePointName" : "蓝证平台证照核验网点"
+            }
+          },
+          {
+            "sn": "蓝证证照核验服务",
+            "ui" : {
+              "serviceCode" : "LZS106",
+              "price" : "0元",
+              "serviceName" : "蓝证证照核验服务",
+              "servicePointName" : "蓝证平台证照核验网点"
+            }
           }
         ],
         "arc": {

@@ -18,11 +18,11 @@
         "servicePointDescription": "",
         "postalCode": "230904",
         "ct": {
-          "uID": "sa",
+          "uID": "a1ed",
           "oID": "200000000000000000000000"
         },
         "md": {
-          "uID": "sa",
+          "uID": "a1ed",
           "oID": "200000000000000000000000"
         }
       }
@@ -53,11 +53,11 @@
             "pc": "230904",
             "clientCommandAddNew": true,
             "ct": {
-              "uID": "sa",
+              "uID": "a1ed",
               "oID": "200000000000000000000000"
             },
             "md": {
-              "uID": "sa",
+              "uID": "a1ed",
               "oID": "200000000000000000000000"
             }
           }
@@ -73,7 +73,7 @@
         "serviceName": "实名认证服务",
         "standardReservationRequest": true,
         "ct": {
-          "uID": "sa",
+          "uID": "a1ed",
           "oID": "200000000000000000000000"
         },
         "md": {
@@ -363,6 +363,190 @@
       "tgtField": "serviceCode",
       "pl": "LZS104",
       "reid" : "300000000000000000000003"
+    }
+  },
+  {
+"_comment": "LZP105",
+    "persist": {
+      "ns": "smm",
+      "op": "persistServicePoint",
+      "tgtField": "servicePoint",
+      "pl": {
+        "servicePointCode": "400000000000000000000002",
+        "servicePointName": "INSPECTION_SERVICE_POINT",
+        "servicePointStatus":30,
+        "status": 30,
+        "servicePointAddress": "云端网点",
+        "servicePointType": "INSPECTION",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find" : "smm_servicePointCodeInUse",
+      "op": "smm_changeServicePointCode",
+      "tgtField": "servicePointCode",
+      "pl": "LZP105"
+    }
+  },
+  {
+"_comment":"LZS105",
+    "persist": {
+      "ns": "smm",
+      "op": "persistService",
+      "tgtField": "service",
+      "pl": {
+        "serviceCode": "LZS105",
+        "PriceList": [
+          {
+            "servicePoint": "LZP105",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "0",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "INSPECTION",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "蓝证证照核验",
+        "serviceName": "INSPECTION_SERVICE",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find":"smm_serviceCodeInUse",
+      "op": "smm_changeServiceCode",
+      "tgtField": "serviceCode",
+      "pl": "LZS105",
+      "reid" : "300000000000000000000002"
+    }
+  },
+  {
+"_comment": "LZP106",
+    "persist": {
+      "ns": "smm",
+      "op": "persistServicePoint",
+      "tgtField": "servicePoint",
+      "pl": {
+        "servicePointCode": "400000000000000000000002",
+        "servicePointName": "CORRECTION_SERVICE_POINT",
+        "servicePointStatus":30,
+        "status": 30,
+        "servicePointAddress": "云端网点",
+        "servicePointType": "CORRECTION",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find" : "smm_servicePointCodeInUse",
+      "op": "smm_changeServicePointCode",
+      "tgtField": "servicePointCode",
+      "pl": "LZP106"
+    }
+  },
+  {
+"_comment":"LZS106",
+    "persist": {
+      "ns": "smm",
+      "op": "persistService",
+      "tgtField": "service",
+      "pl": {
+        "serviceCode": "LZS106",
+        "PriceList": [
+          {
+            "servicePoint": "LZP106",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "0",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "CORRECTION",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "蓝证证照核验",
+        "serviceName": "CORRECTION_SERVICE",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find":"smm_serviceCodeInUse",
+      "op": "smm_changeServiceCode",
+      "tgtField": "serviceCode",
+      "pl": "LZS106",
+      "reid" : "300000000000000000000002"
     }
   }
 ]
