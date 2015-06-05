@@ -217,21 +217,21 @@
             }
           },
           {
-            "sn": "蓝证证照核验服务",
+            "sn": "INSPECTION_SERVICE",
             "ui" : {
               "serviceCode" : "LZS105",
               "price" : "0元",
-              "serviceName" : "蓝证证照核验服务",
-              "servicePointName" : "蓝证平台证照核验网点"
+              "serviceName" : "INSPECTION_SERVICE",
+              "servicePointName" : "INSPECTION_SERVICE_POINT"
             }
           },
           {
-            "sn": "蓝证证照核验服务",
+            "sn": "CORRECTION_SERVICE",
             "ui" : {
               "serviceCode" : "LZS106",
               "price" : "0元",
-              "serviceName" : "蓝证证照核验服务",
-              "servicePointName" : "蓝证平台证照核验网点"
+              "serviceName" : "CORRECTION_SERVICE",
+              "servicePointName" : "CORRECTION_SERVICE_POINT"
             }
           }
         ],
