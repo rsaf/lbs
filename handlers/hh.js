@@ -1,6 +1,7 @@
 var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
 var formidable = require('formidable');
+var lib = require('lib');
 var fs = require('fs');
 
 module.exports = function (paramService, esbMessage) {
@@ -54,7 +55,156 @@ module.exports = function (paramService, esbMessage) {
 
   });
 
-  console.log('\nsch: getting security dependencies ...');
+
+
+    //home/user/recover/verification/:mobile.json
+    homeRouter.post('/user/recover/verification/:mobile.json', function(paramRequest, paramResponse){
+
+
+        var mobile = paramRequest.params.mobile;
+
+        var code = lib.generateRandomValue();
+
+        console.log(' sch send verification code--------------',mobile,code);
+
+
+
+
+        var m = {
+            "ns": "scm",
+            "op": "scm_getUserByLoginInfo",
+            "pl": {loginInfo:mobile}
+        };
+
+
+
+
+
+        esbMessage(m)
+            .then(function (r) {
+                console.log('verification code saved');
+
+
+                if(r&&r.pl) {
+
+                    var user = r.pl;
+
+                    var m = {
+                        ns: 'scm',
+                        vs: '1.0',
+                        op: 'scm_saveVerificationCode',
+                        pl: {
+                            code: code,
+                            userInfo:user.lanzheng.loginName
+                        }
+                    };
+
+
+                    esbMessage(m).then(function () {
+
+                        var m = {
+                            ns: 'mdm',
+                            vs: '1.0',
+                            op: 'sendNotification',
+                            pl: {
+                                recipients: [{
+                                    inmail: {to: null},
+                                    weixin: {to: null},
+                                    sms: {to: user.lanzheng.mobile},
+                                    email: {to: null}
+                                }]
+                                , notification: {}
+                            }
+                        };
+
+                        m.pl.notification.subject = '蓝证验证码:';
+                        m.pl.notification.notificationType = '事务通知';
+                        m.pl.notification.from = '系统';
+                        m.pl.notification.body = '您验证码是:' + code;
+
+
+                        esbMessage(m)
+                            .then(function (r) {
+
+                                var r = {pl:{status:true}};
+
+
+                                console.log('sch sent verification code-------', r);
+                                oHelpers.sendResponse(paramResponse, 200, r);
+                            })
+
+                    })
+
+                }
+                else{
+
+                    var r = {pl:{status:false}};
+
+
+                    console.log('hh user not found by phone-------', r);
+                    oHelpers.sendResponse(paramResponse, 200, r);
+                }
+            })
+            .fail(function (r) {
+
+                console.log('hh error-----',r);
+                oHelpers.sendResponse(paramResponse, 501, r);
+            });
+    });
+
+
+    //home/user/verification/:mobile.json
+    homeRouter.post('/user/recover/verification/code/:code.json', function(paramRequest, paramResponse){
+
+
+        var code = paramRequest.params.code;
+        var mobile = paramRequest.body.mobile;
+        var userInfo = paramRequest.body.userInfo;
+        var newPassword = paramRequest.body.newPassword
+
+        console.log(' sch verify code--------------',code,mobile,userInfo,newPassword);
+
+        var m = {
+            ns: 'scm',
+            vs: '1.0',
+            op: 'scm_checkVerificationCodeAndSavePassword',
+            pl: {
+                code:code,
+                mobile:mobile,
+                userInfo:userInfo,
+                newPassword:newPassword
+            }
+        };
+
+
+
+        esbMessage(m)
+            .then(function(r){
+
+                console.log('hh verification code checked-------',r);
+                oHelpers.sendResponse(paramResponse, 200, r);
+
+
+            })
+            .fail(function (r) {
+
+                console.log('hh error-----',r);
+                oHelpers.sendResponse(paramResponse, 501, r);
+            });
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+    console.log('\nsch: getting security dependencies ...');
   var userloginVerifier = null;
   var registerUzer = null;
   var sessionUser = null;
