@@ -17,8 +17,8 @@ module.exports = function(paramService, esbMessage)
         {ac:"LZB102",sv:"LZS102",fn:_handlePhotoValidationResponse},
         {ac:"LZB103",sv:"LZS103",fn:_handleCorporateValidationResponse},
         {ac:"LZB104",sv:"LZS104",fn:_handleCorporateCreditPurchaseResponse},
-        {ac:"LZB102",sv:"LZS105",fn:_handlePhotoInspectionResponse},
-        {ac:"LZB102",sv:"LZS106",fn:_handlePhotoCorrectionResponse}
+        {ac:"LZB105",sv:"LZS105",fn:_handlePhotoInspectionResponse},
+        {ac:"LZB105",sv:"LZS106",fn:_handlePhotoCorrectionResponse}
     ];
 
   //these could be in the oHelpers
