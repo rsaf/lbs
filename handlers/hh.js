@@ -340,6 +340,40 @@ module.exports = function (paramService, esbMessage) {
           }
         });
       });
+      //@todo: have this endpoint change owner ship of the response using
+      //  a not yet created function in bmm to change ownership of response
+      homeRouter.post('/associateResponse/:responseCode.json',  function(paramRequest, paramResponse){
+          var code = paramRequest.params.responseCode;
+          console.log("Associate Resdponse user:",paramRequest.user);
+          if(code && paramRequest.user)
+          {
+
+              var myUsr = {
+                  status: true,
+                  userType: paramRequest.user.userType,
+                  loginName: paramRequest.user.lanzheng.loginName,
+                  loginCount: paramRequest.user.lanzheng.loginCount
+              };
+              esbMessage({
+                  "ns": 'bmm',
+                  "op": 'bmm_associate_response_with_user',
+                  "pl": {
+                      rc:code,
+                      user:myUsr,
+                      registerResponse:myUsr
+                  }
+              }).then(function resolve(r){
+                  paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                  paramResponse.end(JSON.stringify(r.pl.registerResponse));
+              }  ,  function fail(r){
+                  paramResponse.writeHead(1005, {"Content-Type": "application/json"});
+                  paramResponse.end(JSON.stringify(r.pl.registerResponse));
+              });
+          }
+          else{
+
+          }
+      });
       homeRouter.get('/user.json', sessionUser());
       homeRouter.get('/logout.json', logoutUser());
       homeRouter.post('/user.json', createUser());
