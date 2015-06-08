@@ -4,6 +4,7 @@
  * returns static json for all endpoints
  */
 var oHelpers= require('../utilities/helpers.js');
+var lib = require('lib')
 
 module.exports = function(paramService, esbMessage) {
   var photosRouter = paramService.Router();
@@ -91,6 +92,142 @@ module.exports = function(paramService, esbMessage) {
             });
     });
 
+
+
+    //workspace/users/user/mobile.json
+    photosRouter.put('/user/mobile.json', function(paramRequest, paramResponse){
+
+
+        var mobile = paramRequest.body.mobile;
+        var userInfo = paramRequest.body.userInfo;
+        console.log(' sch save user mobile--------------',mobile,userInfo);
+
+
+        var m = {
+            "ns": "scm",
+            "op": "scm_saveUserMobile",
+            "pl": {userInfo:userInfo,
+                   mobile:mobile
+                }
+        };
+
+
+        esbMessage(m)
+            .then(function (r) {
+                console.log('sch user mobile saved-------',r);
+                oHelpers.sendResponse(paramResponse, 200, r);
+            })
+            .fail(function (r) {
+
+                console.log('sch error-----',r);
+                oHelpers.sendResponse(paramResponse, 501, r);
+            });
+    });
+
+//workspace/users/user/:loginInfo.json
+    photosRouter.get('/user/:loginInfo.json', function(paramRequest, paramResponse){
+
+
+        var loginInfo = paramRequest.param.loginInfo;
+        console.log(' sch get user by loginInfo--------------',loginInfo);
+
+
+        var m = {
+            "ns": "scm",
+            "op": "scm_getUserByLoginInfo",
+            "pl": {loginInfo:loginInfo
+            }
+        };
+
+
+        esbMessage(m)
+            .then(function (r) {
+                console.log('sch got user-------',r);
+                oHelpers.sendResponse(paramResponse, 200, r);
+            })
+            .fail(function (r) {
+
+                console.log('sch error-----',r);
+                oHelpers.sendResponse(paramResponse, 501, r);
+            });
+    });
+
+
+
+
+
+
+
+
+
+
+    //workspace/users/user/verification/:mobile.json
+    photosRouter.post('/user/verification/:mobile.json', function(paramRequest, paramResponse){
+
+
+        var mobile = paramRequest.params.mobile;
+
+        var code = lib.generateRandomValue();
+
+        console.log(' sch send verification code--------------',mobile,code);
+
+
+
+        var m = {
+            ns: 'scm',
+            vs: '1.0',
+            op: 'scm_saveVerificationCode',
+            pl: {
+                code:code,
+                userInfo:paramRequest.user.lanzheng.loginName
+            }
+        };
+
+
+
+
+
+        esbMessage(m)
+            .then(function (r) {
+                console.log('verification code saved');
+            }).then(function(){
+
+
+                var m = {
+                    ns: 'mdm',
+                    vs: '1.0',
+                    op: 'sendNotification',
+                    pl: {
+                        recipients: [{
+                            inmail: {to: null},
+                            weixin: {to: null},
+                            sms: {to: mobile},
+                            email: {to: null}
+                        }]
+                        , notification: {}
+                    }
+                };
+
+                m.pl.notification.subject = '蓝证验证码:';
+                m.pl.notification.notificationType = '事务通知';
+                m.pl.notification.from = '系统';
+                m.pl.notification.body = '您验证码是:'+code;
+
+
+                esbMessage(m)
+                    .then(function (r) {
+
+                        console.log('sch sent verification code-------',r);
+                        oHelpers.sendResponse(paramResponse, 200, r);
+                    })
+
+            })
+            .fail(function (r) {
+
+                console.log('sch error-----',r);
+                oHelpers.sendResponse(paramResponse, 501, r);
+            });
+    });
 
 
     return photosRouter;
