@@ -154,13 +154,6 @@ module.exports = function(paramService, esbMessage) {
 
 
 
-
-
-
-
-
-
-
     //workspace/users/user/verification/:mobile.json
     photosRouter.post('/user/verification/:mobile.json', function(paramRequest, paramResponse){
 
@@ -228,6 +221,53 @@ module.exports = function(paramService, esbMessage) {
                 oHelpers.sendResponse(paramResponse, 501, r);
             });
     });
+
+
+
+    //workspace/users/user/verification/:mobile.json
+    photosRouter.post('/user/verification/code/:code.json', function(paramRequest, paramResponse){
+
+
+        var code = paramRequest.params.code;
+        var mobile = paramRequest.body.mobile;
+
+        console.log(' sch verify code--------------',code,mobile);
+
+        var m = {
+            ns: 'scm',
+            vs: '1.0',
+            op: 'scm_checkVerificationCodeAndSaveContact',
+            pl: {
+                code:code,
+                mobile:mobile,
+                userInfo:paramRequest.user.lanzheng.loginName
+            }
+        };
+
+
+
+
+
+        esbMessage(m)
+           .then(function(r){
+
+
+                        console.log('sch verification code checked-------',r);
+                        oHelpers.sendResponse(paramResponse, 200, r);
+
+
+            })
+            .fail(function (r) {
+
+                console.log('sch error-----',r);
+                oHelpers.sendResponse(paramResponse, 501, r);
+            });
+    });
+
+
+
+
+
 
 
     return photosRouter;
