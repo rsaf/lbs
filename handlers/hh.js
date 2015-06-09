@@ -509,6 +509,7 @@ module.exports = function (paramService, esbMessage) {
           return {
             plid: priceList._id,
             svid: priceList.service._id,
+            svnid: priceList.serviceName._id,
             svn: priceList.serviceName.text,
             svp: priceList.servicePrices,
             sdp: priceList.discountedPrice,
@@ -525,25 +526,37 @@ module.exports = function (paramService, esbMessage) {
       function _persistRespose(req, res, pnext) {
           var m = {},
           transactionid = false,
-          response = {};          //formHtml
+          response = {},          //formHtml
+          activity = {};
           q().then(function () {
-            m.pl = JSON.parse(req.body.json).pl;
-            // is user not set then use req.sessionID
-            if(m.pl.response){
-              delete m.pl.response.rs;
-              if(m.pl.response.sp && m.pl.response.sp.ps){
-                delete m.pl.response.sp.ps;
+              m.pl = JSON.parse(req.body.json).pl;
+              // is user not set then use req.sessionID
+              if (m.pl.response) {
+                  delete m.pl.response.rs;
+                  if (m.pl.response.sp && m.pl.response.sp.ps) {
+                      delete m.pl.response.sp.ps;
+                  }
               }
-            }
             if(m.pl.response && m.pl.response.sb){
               //get details for this pricelist
               return _getPriceList(m.pl.response);
             }
           })
           .then(function (priceList) {
-            if(priceList){
-              //set the m.pl.response.sb with the priceList so the user cannot send fake data
-              m.pl.response.sb=priceList;
+            if(priceList) {
+                //set the m.pl.response.sb with the priceList so the user cannot send fake data
+                var activity = undefined;
+                if (activity && activity.sqc && activity.sqc.length) {
+                    priceList.sq = activity.sqc.reduce(function (agg, ele, idx) {
+                        console.log("reducing");
+                        if (agg == null && ele.sn == priceList.svnid)
+                            return idx; //find first service index that matches the service name
+                        return agg;
+                    },null);
+                }
+                delete priceList.svnid;
+                priceList.sq = m.pl.response.sb.sq;//todo I'm trusting the order here for sequence - should be from activity
+                m.pl.response.sb=priceList;
             }
             m.pl.loginName = (req.user && req.user.lanzheng && req.user.lanzheng.loginName) || req.sessionID;
             m.pl.currentOrganization = (req.user && req.user.currentOrganization) || false;

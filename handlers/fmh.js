@@ -176,7 +176,7 @@ module.exports = function(paramService, esbMessage)
                     isSpecial = i;
                     break;
                 }
-                return _issueFirstOrderForResponse(params)
+                return _issueScheduledServiceOrder(params)
                     //RUN AUTOMATION IF SPECIAL
                     .then(function(r){
                         if(isSpecial >= 0)
@@ -306,7 +306,7 @@ module.exports = function(paramService, esbMessage)
                     isSpecial = i;
                     break;
                 }
-                return _issueFirstOrderForResponse(paramRequest)
+                return _issueScheduledServiceOrder(paramRequest)
                     //RUN AUTOMATION IF SPECIAL
                     .then(function(r){
                         console.log("SPECIAL CASE?",isSpecial,specialCases[isSpecial]);
@@ -703,7 +703,7 @@ module.exports = function(paramService, esbMessage)
                                 isSpecial = i;
                                 break;
                             }
-                            return _issueFirstOrderForResponse(paramRequest)
+                            return _issueScheduledServiceOrder(paramRequest)
                                 //RUN AUTOMATION IF SPECIAL
                                 .then(function(r){
                                     console.log("SPECIAL CASE?",isSpecial,specialCases[isSpecial]);
@@ -795,7 +795,7 @@ module.exports = function(paramService, esbMessage)
         return orders;
     }
 
-    function _issueFirstOrderForResponse(request){
+    function _issueScheduledServiceOrder(request){
         console.log('made it here',request.body);
         var ln = request.user.lanzheng.loginName,
             org = request.user.currentOrganization,
@@ -805,7 +805,8 @@ module.exports = function(paramService, esbMessage)
             dbEntity,
             jsonEntity,
             service,
-            responseInfo;
+            responseInfo,
+            tgtScheduleIdx = 10;//default do doing first service
 
         return q()
             //INIT TRANSACTION
@@ -839,12 +840,18 @@ module.exports = function(paramService, esbMessage)
             //FETCH SERVICE INFO
             .then(function(esbResponse) {
                 responseInfo = esbResponse;
+                tgtScheduleIdx = esbResponse.sb.reduce(
+                    function(agg, ele, idx){
+                        if(agg == null && (!ele.cvs || ele.cvs <= 10)) //find first pending service
+                            return idx;
+                        return agg;},null);
+                console.log("TARGET SCHEDULE INDEX IS:",tgtScheduleIdx);
                 if(responseInfo.sb.length <= 0) return false;//no service to issue
                 return esbMessage({
                     ns : "smm",
                     op : "smm_getService",
                     pl : {
-                        qid : responseInfo.sb[0].svid,
+                        qid : responseInfo.sb[tgtScheduleIdx].svid,
                         loginName : ln,
                         currentOrganization : org,
                         transactionid : transactionid
@@ -867,7 +874,7 @@ module.exports = function(paramService, esbMessage)
                             ,st:20// status
                             ,uid:ln// user login account , customer who bought the service
                             ,usn:responseInfo.ow.uid// user name , customer who bought the service
-                            ,svp:responseInfo.sb[0].svp//
+                            ,svp:responseInfo.sb[tgtScheduleIdx].svp//
                             ,service:service._id//{ type: paramMongoose.Schema.Types.ObjectId, ref: 'services',required:true }
                             ,oID:service.ct.oID
                         },
@@ -880,8 +887,8 @@ module.exports = function(paramService, esbMessage)
             //SET FIRST SERVICE TO 'ISSUED'
             .then(function(businessRec){
                 if(lib.digFor(responseInfo,"sb.length") <= 0) return false;//no service
-                responseInfo.sb[0].cvs = 20;
-                responseInfo.sb = responseInfo.sb[0];
+                responseInfo.sb[tgtScheduleIdx].cvs = 20;
+                responseInfo.sb = responseInfo.sb[tgtScheduleIdx];
                 return esbMessage({
                     "ns": "bmm",
                     "op": "bmm_persistResponse",
@@ -978,6 +985,10 @@ module.exports = function(paramService, esbMessage)
                     "pl": mypl
                 })
             })
+            //Immediately schedule next service
+            .then(function(r){
+                return _issueScheduledServiceOrder(request)
+            })
             //EXIT
             .then(function resolve(r){
                 return responseObjectToReturn;
@@ -1056,6 +1067,10 @@ module.exports = function(paramService, esbMessage)
                     "pl": mypl
                 })
             })
+            //Immediately schedule next service
+            .then(function(r){
+                return _issueScheduledServiceOrder(request)
+            })
             //EXIT
             .then(function resolve(r){
                 return responseObjectToReturn;
@@ -1112,6 +1127,10 @@ module.exports = function(paramService, esbMessage)
                     "pl": {orders : collateOrders(responseObj,request.user,'ACTIVITY')}
                 });
             })
+            //Immediately schedule next service
+            .then(function(r){
+                return _issueScheduledServiceOrder(request)
+            })
             //EXIT
             .then(function resolve(r){
                 responseObjectToReturn = {pl:r,er:null};
@@ -1124,7 +1143,7 @@ module.exports = function(paramService, esbMessage)
     function _handlePhotoInspectionResponse(request, responseObj, transactionid){
         var ac_code = lib.digFor(responseObj,"acn"),
             sv_code = lib.digFor(responseObj,"sb.0.svn"),
-            responseObjectToReturn = {};
+            responseObjectToReturn = {pl: {}, er:null};
 
         return q()
             .then(function resolve(r){
