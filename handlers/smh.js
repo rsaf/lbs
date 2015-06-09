@@ -9,6 +9,7 @@ var q = require('q');
 var oHelpers = require('../utilities/helpers.js');
 var formidable = require('formidable');
 var fs = require('fs');
+var lib = require('lib');
 
 function _initRequestMessage(paramRequest, type, code, adminOrg) {
     var col, mod = 'smm',
@@ -526,7 +527,7 @@ module.exports = function (paramService, esbMessage) {
         var sv = paramRequest.body.serviceCode;
         console.log("Hitting perform endpoint with ", sv, "fulfilling", rc);
         q().then(function () {
-            return _onServicePerformed(rc, sv, paramRequest.user)
+            return lib.onServicePerformed(esbMessage, rc, sv, paramRequest.user)
         })
             //Return the payload constructed by the helper
             .then(function resolve(r) {

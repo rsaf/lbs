@@ -703,7 +703,7 @@ module.exports = function(paramService, esbMessage)
                                 isSpecial = i;
                                 break;
                             }
-                            return _issueScheduledServiceOrder(paramRequest)
+                            return lib.triggerNextService(esbMessage, paramRequest)
                                 //RUN AUTOMATION IF SPECIAL
                                 .then(function(r){
                                     console.log("SPECIAL CASE?",isSpecial,specialCases[isSpecial]);
@@ -987,7 +987,7 @@ module.exports = function(paramService, esbMessage)
             })
             //Immediately schedule next service
             .then(function(r){
-                return _issueScheduledServiceOrder(request)
+                return lib.triggerNextService(esbMessage,request)
             })
             //EXIT
             .then(function resolve(r){
@@ -1069,7 +1069,7 @@ module.exports = function(paramService, esbMessage)
             })
             //Immediately schedule next service
             .then(function(r){
-                return _issueScheduledServiceOrder(request)
+                return lib.triggerNextService(esbMessage,request)
             })
             //EXIT
             .then(function resolve(r){
@@ -1129,7 +1129,7 @@ module.exports = function(paramService, esbMessage)
             })
             //Immediately schedule next service
             .then(function(r){
-                return _issueScheduledServiceOrder(request)
+                return lib.triggerNextService(esbMessage,request)
             })
             //EXIT
             .then(function resolve(r){
@@ -1145,7 +1145,26 @@ module.exports = function(paramService, esbMessage)
             sv_code = lib.digFor(responseObj,"sb.0.svn"),
             responseObjectToReturn = {pl: {}, er:null};
 
+
         return q()
+            .then(function getPhotoInfo(){
+                console.log("URI dig yields:",lib.digFor(responseObj,"fd.pt.0.pp.urls"))
+                return esbMessage({
+                    "ns":"pmm",
+                    "op":"pmm_getPhotoByUri",
+                    "pl":{
+                        ac: ac_code ,
+                        uri: lib.digFor(responseObj,"fd.pt.0.pp.urls")?responseObj.fd.pt[0].pp.urls.replace("_s",""):undefined
+                    }
+                })
+            })
+            .then(function(photo){
+                return esbMessage({
+                    ns: 'pmm',
+                    op: "pmm_SubmitPhotoToInspection",
+                    pl: photo.pl
+                })
+            })
             .then(function resolve(r){
                 console.log("Handled Photo Inspection successfully");
                 return responseObjectToReturn;
@@ -1160,6 +1179,23 @@ module.exports = function(paramService, esbMessage)
             responseObjectToReturn = {};
 
         return q()
+            .then(function getPhotoInfo(){
+                return esbMessage({
+                    "ns":"pmm",
+                    "op":"pmm_getPhotoByUri",
+                    "pl":{
+                        ac: ac_code ,
+                        uri: lib.digFor(responseObj,"fd.pt.0.pp.urls")?responseObj.fd.pt[0].pp.urls.replace("_s",""):undefined
+                    }
+                })
+            })
+            .then(function(photo){
+                return esbMessage({
+                    ns: 'pmm',
+                    op: "pmm_SubmitPhotoToCorrection",
+                    pl: photo.pl
+                })
+            })
             .then(function resolve(r){
                 console.log("Handled Photo Correction successfully");
                 return responseObjectToReturn;
