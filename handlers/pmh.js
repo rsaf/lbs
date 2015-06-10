@@ -2,6 +2,7 @@ var oHelpers = require('../utilities/helpers.js');
 var formidable = require('formidable');
 var fs = require('fs');
 var q = require('q');
+var lib = require('lib');
 
 module.exports = function (paramPS, esbMessage) {
     var psRouter = paramPS.Router();
@@ -9,6 +10,11 @@ module.exports = function (paramPS, esbMessage) {
 //get photo by lzcode
     //workspace/phototoservices/v1/idphotos/:lzcode.json
 
+    var _issueScheduledServiceOrder = lib.triggerNextService({
+        commitTransaction: function(){},
+        rollbackTransaction: function(){},
+        esbMessage : esbMessage
+    });
 
     ///workspace/photoservices/inspections/idphotos/lzcode.json
     psRouter.get('/inspections/idphotos/:lzcode.json', function (paramRequest, paramResponse, paramNext) {
@@ -410,7 +416,7 @@ module.exports = function (paramPS, esbMessage) {
             })
             .then(function () {
 
-
+                //todo update sms account
                 if (inspectionStatus === 'unqualified') {
 
                     var m = {
@@ -421,7 +427,7 @@ module.exports = function (paramPS, esbMessage) {
                             recipients: [{
                                 inmail: {to: 'sa'},
                                 weixin: {to: null},
-                                sms: {to: '13917207446'},
+                                sms: {to: '1391720744600'},
                                 email: {to: null}
                             }]
                             , notification: {}
@@ -454,8 +460,12 @@ module.exports = function (paramPS, esbMessage) {
                         });
                 }
                 else{
-
-
+                    paramRequest.body.json = JSON.stringify({pl:{response:paramRequest.body.photo, code:paramRequest.body.photo.rc}});
+                    console.log("Submitting to correction, the json in paramRequest is",paramRequest.body);
+                    _issueScheduledServiceOrder(paramRequest).then(function finish(r){
+                        oHelpers.sendResponse(paramResponse, 200, r);
+                    })
+/*
                     var m = {
                         ns: 'pmm',
                         op: "pmm_SubmitPhotoToCorrection",
@@ -468,7 +478,7 @@ module.exports = function (paramPS, esbMessage) {
                             console.log('photo submitted to correction -------',r);
                             //  oHelpers.sendResponse(paramResponse, 200, r);
                         });
-
+*/
 
                 }
 
@@ -793,8 +803,8 @@ module.exports = function (paramPS, esbMessage) {
 
                     })
                     .then(function (r) {
-
-                        esbMessage(m2)
+                        console.log(m2);
+                        return esbMessage(m2)
                             .then(function (r) {
 
                                 console.log(' pmh updated response photo successful--',r);
@@ -805,6 +815,11 @@ module.exports = function (paramPS, esbMessage) {
                                 oHelpers.sendResponse(paramResponse, 200, r);
 
                             });
+                    })
+                    .then(function (r){
+                        console.log("Scheduling next service from correction completion",paramRequest.body);
+                        paramRequest.body.json = JSON.stringify({pl:{response:paramRequest.body.photo, code:m2.pl.rc}});
+                        _issueScheduledServiceOrder(paramRequest);
                     })
                     .fail(function (r) {
 

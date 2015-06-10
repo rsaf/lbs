@@ -194,16 +194,6 @@ module.exports = function (paramService, esbMessage) {
     });
 
 
-
-
-
-
-
-
-
-
-
-
     console.log('\nsch: getting security dependencies ...');
   var userloginVerifier = null;
   var registerUzer = null;
@@ -702,7 +692,7 @@ module.exports = function (paramService, esbMessage) {
                       r.status = true;
 
                     oHelpers.sendResponse(paramResponse,200,r);
-
+/*
 
                       var m= {
                           ns: 'pmm',
@@ -725,7 +715,7 @@ module.exports = function (paramService, esbMessage) {
                             //oHelpers.sendResponse(paramResponse,501,r);
                             //we do not need to send this response back to client browser... Response have already been sent..
                           });
-
+*/
 
                 })
                 .fail(null,function reject(r) {
