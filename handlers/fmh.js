@@ -7,7 +7,6 @@ var oHelpers= require('../utilities/helpers.js');
 var q = require('q');
 var lib = require('lib');
 
-
 module.exports = function(paramService, esbMessage)
 {
     //Define code hooks for special activities
@@ -20,6 +19,12 @@ module.exports = function(paramService, esbMessage)
         {ac:"LZB105",sv:"LZS105",fn:_handlePhotoInspectionResponse},
         {ac:"LZB105",sv:"LZS106",fn:_handlePhotoCorrectionResponse}
     ];
+
+    var _issueScheduledServiceOrder = lib.triggerNextService({
+        commitTransaction: _commitTransaction,
+        rollbackTransaction: _rollBackTransaction,
+        esbMessage : esbMessage
+    });
 
   //these could be in the oHelpers
   function _commitTransaction(m){
@@ -703,7 +708,7 @@ module.exports = function(paramService, esbMessage)
                                 isSpecial = i;
                                 break;
                             }
-                            return lib.triggerNextService(esbMessage, paramRequest)
+                            return _issueScheduledServiceOrder(paramRequest)
                                 //RUN AUTOMATION IF SPECIAL
                                 .then(function(r){
                                     console.log("SPECIAL CASE?",isSpecial,specialCases[isSpecial]);
@@ -795,6 +800,7 @@ module.exports = function(paramService, esbMessage)
         return orders;
     }
 
+    /*
     function _issueScheduledServiceOrder(request){
         console.log('made it here',request.body);
         var ln = request.user.lanzheng.loginName,
@@ -915,6 +921,7 @@ module.exports = function(paramService, esbMessage)
                 return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
             });
     }
+    */
     function _handleSingleIdValidationResponse(request,responseObj,transactionid){
         var ac_code = lib.digFor(responseObj,"acn"),
             sv_code = lib.digFor(responseObj,"sb.0.svn"),
@@ -987,7 +994,7 @@ module.exports = function(paramService, esbMessage)
             })
             //Immediately schedule next service
             .then(function(r){
-                return lib.triggerNextService(esbMessage,request)
+                return _issueScheduledServiceOrder(request)
             })
             //EXIT
             .then(function resolve(r){
@@ -1069,7 +1076,7 @@ module.exports = function(paramService, esbMessage)
             })
             //Immediately schedule next service
             .then(function(r){
-                return lib.triggerNextService(esbMessage,request)
+                return _issueScheduledServiceOrder(request)
             })
             //EXIT
             .then(function resolve(r){
@@ -1129,7 +1136,7 @@ module.exports = function(paramService, esbMessage)
             })
             //Immediately schedule next service
             .then(function(r){
-                return lib.triggerNextService(esbMessage,request)
+                return _issueScheduledServiceOrder(request)
             })
             //EXIT
             .then(function resolve(r){
@@ -1140,6 +1147,7 @@ module.exports = function(paramService, esbMessage)
                 return _rollBackTransaction({pl:{transactionid : transactionid.pl.transaction._id}});
             })
     }
+
     function _handlePhotoInspectionResponse(request, responseObj, transactionid){
         var ac_code = lib.digFor(responseObj,"acn"),
             sv_code = lib.digFor(responseObj,"sb.0.svn"),

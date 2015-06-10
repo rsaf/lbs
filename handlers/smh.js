@@ -527,7 +527,7 @@ module.exports = function (paramService, esbMessage) {
         var sv = paramRequest.body.serviceCode;
         console.log("Hitting perform endpoint with ", sv, "fulfilling", rc);
         q().then(function () {
-            return lib.onServicePerformed(esbMessage, rc, sv, paramRequest.user)
+            return _onServicePerformed(rc, sv, paramRequest.user)
         })
             //Return the payload constructed by the helper
             .then(function resolve(r) {
@@ -539,7 +539,8 @@ module.exports = function (paramService, esbMessage) {
                 return r;
             });
     })
-
+    var _onServicePerformed = lib.onServicePerformed(esbMessage,_commitTransaction,_rollBackTransaction2);
+  /*
     function _onServicePerformed(responseCode, serviceCode, user) {
         var ln = user && user.lanzheng ? user.lanzheng.loginName : undefined,
             co = user && user.lanzheng ? user.lanzheng.currentOrganization : undefined,
@@ -701,7 +702,9 @@ module.exports = function (paramService, esbMessage) {
                 return _rollBackTransaction2({pl: {transactionid: transactionid.pl.transaction._id}});
             });
     }
-
+*/
+    var _scheduleNextOrder = lib.scheduleNextOrder(esbMessage,_commitTransaction,_rollBackTransaction2);
+    /*
     function _scheduleNextOrder(response, index) {
         var ln = undefined;
         var co = undefined;
@@ -806,7 +809,7 @@ module.exports = function (paramService, esbMessage) {
                 return _rollBackTransaction2({pl: {transactionid: transactionid.pl.transaction._id}, er:r});
             })
     }
-
+*/
     serviceManagementRouter.get('/service.json', function (paramRequest, paramResponse, paramNext) {
         var query = {};
         if (typeof paramRequest.query._id !== 'undefined') {
