@@ -933,9 +933,9 @@ module.exports = function(paramService, esbMessage)
                 return esbMessage({
                     ns:"upm",
                     op:"upm_validateUserInfo",
+                    "method":"validateID",
                     pl:{
                         "transactionid":transactionid,
-                        "method":"validateID",
                         "sfz": responseObj.fd.fields["shenfenzhenghaoma"], //shenfenzheng or user national id number
                         "xm": responseObj.fd.fields["xingming"],  //xingming or user full name
                         "zz": ""   //zhengzhao or user id photo buffer //must be provided when executing the validatePhoto method.
