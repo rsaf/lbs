@@ -1156,13 +1156,15 @@ module.exports = function(paramService, esbMessage)
 
         return q()
             .then(function getPhotoInfo(){
-                console.log("URI dig yields:",lib.digFor(responseObj,"fd.pt.0.pp.urls"))
+                if(responseObj && responseObj.fd && responseObj.fd.pt && responseObj.fd.fd.pt[0] && responseObj.fd.fd.pt[0].pp)
+                    var tgtURLS = responseObj.fd.fd.pt[0].pp.urls
+                console.log("URI dig yields:",tgtURLS)
                 return esbMessage({
                     "ns":"pmm",
                     "op":"pmm_getPhotoByUri",
                     "pl":{
                         ac: ac_code ,
-                        uri: lib.digFor(responseObj,"fd.pt.0.pp.urls")?responseObj.fd.pt[0].pp.urls.replace("_s",""):undefined
+                        uri: tgtURLS?tgtURLS.replace("_s",""):undefined
                     }
                 })
             })
