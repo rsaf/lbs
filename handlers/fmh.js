@@ -36,44 +36,11 @@ module.exports = function(paramService, esbMessage)
       return q.reject('In bmh _rollBackTransaction:',err);
     });
   }
-  function _initRequestMessage(paramRequest,type,code,adminOrg){
-        var col,mod='upm',
-            message,url;
-        if(type==='Response'){
-            col='responses';
-            url='/workspace/activities/application/';
-            message="";
-        }
-        return {
-            rdo: adminOrg
-            ,rc: 'code'
-            ,rt: message + '申请 ' + code
-            ,rsu: paramRequest.user.lanzheng.loginName
-            ,rso: paramRequest.user.currentOrganization
-            ,rs: 10
-            ,rb: 'message'
-            ,rtr: type
-            ,ei:[{
-                col:col
-                ,mod:mod
-                ,ei:code
-            }]
-            ,url:url,
-            "md" : {
-                "uID" : "a1ed",
-                "oID" : "200000000000000000000000"
-            },
-            "ct" : {
-                "uID" : "a1ed",
-                "oID" : "200000000000000000000000"
-            }
-        };
-    }
 
   var workflowManager = new lib.WorkflowManager({
     esbMessage: esbMessage,
-    _commitTransaction: _commitTransaction,
-    _rollbackTransaction: _rollBackTransaction}
+    commitTransaction: _commitTransaction,
+    rollbackTransaction: _rollBackTransaction}
   );
 
   var fmmRouter = paramService.Router();
@@ -161,7 +128,7 @@ module.exports = function(paramService, esbMessage)
             //SCHEDULE/ACTIVATE SERVICES
             .then(function() {
                 if(skipping) return;
-                return workflowManager.triggerNextService(responseInfo.rc, paramRequest.user)
+                return workflowManager.triggerNextService(responseInfo.rc, params.user)
                     //EXIT
                     .then(function success(r) {
                         return r;
@@ -172,7 +139,6 @@ module.exports = function(paramService, esbMessage)
             })
             //SEND SMS/MAIL/NOTIFICATIONs & EXIT
             .then(function(z) {
-                 console.log("notifying");
                  if(skipping) return;
                 finalResult = z;
                 return esbMessage({
