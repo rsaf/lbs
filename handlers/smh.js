@@ -566,14 +566,18 @@ module.exports = function (paramService, esbMessage) {
                 paramResponse.end(JSON.stringify(r));
             });
     });
+
+
     serviceManagementRouter.get('/services.json', function (paramRequest, paramResponse, paramNext) {
         var m = {
-            "op": "servicesByCreator",
+            "op": "smm_getServices",
             "mt": {p:paramRequest.query.p,ps:paramRequest.query.ps},
-            "pl": {}
+            "pl": {which:paramRequest.query.which}
         };
         m.pl.loginName = paramRequest.user.lanzheng.loginName;
         m.pl.currentOrganization = paramRequest.user.currentOrganization;
+
+        console.log('m.pl----', m.pl);
         esbMessage(m)
             .then(function (r) {
                 paramResponse.writeHead(200, {"Content-Type": "application/json"});
