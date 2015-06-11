@@ -70,11 +70,12 @@ module.exports = function(paramService, esbMessage)
         };
     }
 
-    var _issueScheduledServiceOrder = lib.triggerNextService({
-        commitTransaction: _commitTransaction,
-        rollbackTransaction: _rollBackTransaction,
-        esbMessage : esbMessage
-    });
+  var workflowManager = new lib.WorkflowManager({
+    esbMessage: esbMessage,
+    _commitTransaction: _commitTransaction,
+    _rollbackTransaction: _rollBackTransaction}
+  );
+
   var fmmRouter = paramService.Router();
 
     var _confirmAlipay = function _confirmAlipay(params, response){
@@ -159,26 +160,8 @@ module.exports = function(paramService, esbMessage)
             })
             //SCHEDULE/ACTIVATE SERVICES
             .then(function() {
-                 if(skipping) return;
-                ac_code = lib.digFor(responseInfo,"acn"),
-                    sv_code = responseInfo && responseInfo.sb && responseInfo.sb[0] ? responseInfo.sb[0].serviceCode : undefined;
-                isSpecial = -1;
-                console.log("ac_code:",ac_code,"sv_code:",sv_code);
-                for(var i = 0; i < specialCases.length; i++)
-                {
-                    var tgt = specialCases[i];
-                    if(!sv_code  || tgt.sv != sv_code) continue;
-                    console.log("Is special case ",i);
-                    isSpecial = i;
-                    break;
-                }
-                return _issueScheduledServiceOrder(params)
-                    //RUN AUTOMATION IF SPECIAL
-                    .then(function(r){
-                        if(isSpecial >= 0)
-                            return specialCases[isSpecial].fn(params, responseInfo, transactionid);
-                        return r
-                    })
+                if(skipping) return;
+                return workflowManager.triggerNextService(responseInfo.rc, paramRequest.user)
                     //EXIT
                     .then(function success(r) {
                         return r;
@@ -237,141 +220,6 @@ module.exports = function(paramService, esbMessage)
             });
         return deferred.promise;
     }
-    fmmRouter.post('/confirmAlipay.json', function(paramRequest, paramResponse, paramNext){
-        var finalResult = null,
-            responseInfo,
-            transactionid = paramRequest.body.pl.info.tid,
-            refCode = paramRequest.body.pl.info.refCode,
-            reqPayload = paramRequest.body.pl.info.reqPayload,
-            r = {};
-        paramRequest.body.json = JSON.stringify(paramRequest.body.pl.info.reqPayload);
-
-        return q()
-            .then(function getResponse(){
-                return esbMessage({
-                    op:"bmm_getResponse",
-                    pl:reqPayload.pl
-                })
-            })
-            .then(function confirmAlipay(res){
-                responseInfo = res;
-                console.log("responseInfo:",res);
-                return esbMessage({
-                    "ns":"fmm",
-                    "op":"fmm_verifyAliPayment",
-                    "pl": {
-                        transactionId : paramRequest.body.pl.transactionId
-                    }
-                })
-            })
-            //UPDATE RESPONSE STATUS TO PAID
-            .then(function(msg){
-                return esbMessage({  //update the response and set payment status to 'paid'
-                    op : "bmm_persistResponse",
-                    pl:{
-                        transactionid : transactionid,
-                        loginName : paramRequest.user.lanzheng.loginName,
-                        currentOrganization : paramRequest.user.currentOrganization,
-                        response : {
-                            _id : responseInfo._id,
-                            rs:30,
-                            sp:{
-                                ps:'paid'
-                            },
-                            rfc:refCode
-                        }
-                    }
-                });
-            })
-            //COMMIT TRANSACTION
-            .then(function(msg){
-                r.pl = msg;
-                return _commitTransaction({pl:{transactionid : transactionid}});
-            })
-            //SCHEDULE/ACTIVATE SERVICES
-            .then(function() {
-                ac_code = lib.digFor(responseInfo,"acn"),
-                    sv_code = responseInfo && responseInfo.sb && responseInfo.sb[0] ? responseInfo.sb[0].serviceCode : undefined;
-                isSpecial = -1;
-
-                for(var i = 0; i < specialCases.length; i++)
-                {
-                    var tgt = specialCases[i];
-                    console.log("SV_CODE SV:",sv_code,responseInfo);
-                    if(!sv_code  || tgt.sv != sv_code) continue;
-                    isSpecial = i;
-                    break;
-                }
-                return _issueScheduledServiceOrder(paramRequest)
-                    //RUN AUTOMATION IF SPECIAL
-                    .then(function(r){
-                        console.log("SPECIAL CASE?",isSpecial,specialCases[isSpecial]);
-                        if(isSpecial >= 0)
-                            return specialCases[isSpecial].fn(paramRequest, responseInfo, transactionid);
-                        return r
-                    })
-                    //EXIT
-                    .then(function success(r) {
-                        return r;
-                    }, function failure(err) {
-                        console.log("FAILED WITH ERROR handling special case order", err);
-                        throw err;
-                    })
-            })
-            //SEND SMS/MAIL/NOTIFICATIONs & EXIT
-            .then(function(z) {
-                finalResult = z;
-                return esbMessage({
-                    ns: 'mdm',
-                    vs: '1.0',
-                    op: 'sendNotification',
-                    pl: {
-                        recipients: [{
-                            inmail: {to: paramRequest.user.lanzheng.loginName},
-                            weixin: {to: null},
-                            sms: {to: reqPayload.pl.phone},
-                            email: {to: null}
-                        }]
-                        , notification: {
-                            subject: '您事务响应蓝正吗为',
-                            notificationType: '事务通知',
-                            from: '系统',
-                            body: refCode
-                        }
-                    }
-                })
-            })
-            //EXIT
-            .then(function(smsResponse){
-                console.log("Completed Payment Click. Final Result:",finalResult);
-                oHelpers.sendResponse(paramResponse,200,finalResult);
-                return finalResult;
-            })
-            //FAIL
-            .then(null,function reject(err){
-                console.log("ERR",err);
-                var code = 501;
-                r.er={ec:10012,em:"Could not make payment"};
-                //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-                if(err.er && err.er ==='Insufficient funds'){
-                    r.er={ec:10011,em:err.er};
-                    code = 403;
-                }else{
-                    console.log('rolling back',transactionid);
-                    _rollBackTransaction({pl:{transactionid : transactionid}});
-                }
-                oHelpers.sendResponse(paramResponse,code,r);
-                return r;
-            })/*
-            .then(function(response){
-                var finalResult = response
-                oHelpers.sendResponse(paramResponse,200,finalResult);
-            },function reject(err){
-                var code = 200;//todo 501;
-                //r.er={ec:10012,em:"Invalid ALIPAY"};
-                oHelpers.sendResponse(paramResponse,code,err);
-            })*/
-    })
     fmmRouter.get('/history.json', function(paramRequest, paramResponse, paramNext){
          /*
           * fmm_getTransactionHistory
@@ -687,7 +535,7 @@ module.exports = function(paramService, esbMessage)
                         })
                         //SCHEDULE/ACTIVATE SERVICES
                         .then(function() {
-                            return _issueScheduledServiceOrder(paramRequest)
+                            return workflowManager.triggerNextService(responseInfo.rc, paramRequest.user);
                         })
                         //SEND SMS/MAIL/NOTIFICATIONs & EXIT
                         .then(function(z) {

@@ -10,7 +10,7 @@ module.exports = function (paramPS, esbMessage) {
 //get photo by lzcode
     //workspace/phototoservices/v1/idphotos/:lzcode.json
 
-    var _issueScheduledServiceOrder = lib.triggerNextService({
+    var workflowManager = new lib.WorkflowManager({
         commitTransaction: function(){},
         rollbackTransaction: function(){},
         esbMessage : esbMessage
@@ -460,9 +460,7 @@ module.exports = function (paramPS, esbMessage) {
                         });
                 }
                 else{
-                    paramRequest.body.json = JSON.stringify({pl:{response:paramRequest.body.photo, code:paramRequest.body.photo.rc}});
-                    console.log("Submitting to correction, the json in paramRequest is",paramRequest.body);
-                    _issueScheduledServiceOrder(paramRequest).then(function finish(r){
+                    return workflowManager.onServicePerformed(paramRequest.body.photo.rc,"LZS105",paramRequest.user,"DO_NEXT").then(function finish(r){
                         oHelpers.sendResponse(paramResponse, 200, r);
                     })
 /*
@@ -817,9 +815,7 @@ module.exports = function (paramPS, esbMessage) {
                             });
                     })
                     .then(function (r){
-                        console.log("Scheduling next service from correction completion",paramRequest.body);
-                        paramRequest.body.json = JSON.stringify({pl:{response:paramRequest.body.photo, code:m2.pl.rc}});
-                        _issueScheduledServiceOrder(paramRequest);
+                        return workflowManager.onServicePerformed(m2.pl.rc,"LZS106",paramRequest.user,"DO_NEXT");
                     })
                     .fail(function (r) {
 

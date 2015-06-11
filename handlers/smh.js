@@ -78,8 +78,11 @@ module.exports = function (paramService, esbMessage) {
         return esbMessage(m);
     }
 
-    var _onServicePerformed = lib.onServicePerformed(esbMessage,_commitTransaction,_rollBackTransaction2);
-    var _scheduleNextOrder = lib.scheduleNextOrder(esbMessage,_commitTransaction,_rollBackTransaction2);
+    var workflowManager = new lib.WorkflowManager({
+        esbMessage: esbMessage,
+        _commitTransaction: _commitTransaction,
+        _rollbackTransaction: _rollBackTransaction2}
+    );
 
     //todo this variable is bad form
     function _prepopulateSpecialCaseServices(){
@@ -528,19 +531,20 @@ module.exports = function (paramService, esbMessage) {
         var rc = paramRequest.body.responseCode;
         var sv = paramRequest.body.serviceCode;
         console.log("Hitting perform endpoint with ", sv, "fulfilling", rc);
-        q().then(function () {
-            return _onServicePerformed(rc, sv, paramRequest.user)
+        q()
+        .then(function () {
+            return workflowManager.onServicePerformed(rc,sv,paramRequest.user,"DO_NEXT");
         })
-            //Return the payload constructed by the helper
-            .then(function resolve(r) {
-                oHelpers.sendResponse(paramResponse, 200, r);
-                return r;
-            })
-            .fail(function failure(r) {
-                oHelpers.sendResponse(paramResponse, 501, r);
-                return r;
-            });
-    })
+        //Return the payload constructed by the helper
+        .then(function resolve(r) {
+            oHelpers.sendResponse(paramResponse, 200, r);
+            return r;
+        })
+        .fail(function failure(r) {
+            oHelpers.sendResponse(paramResponse, 501, r);
+            return r;
+        });
+    });
 
     serviceManagementRouter.get('/service.json', function (paramRequest, paramResponse, paramNext) {
         var query = {};
