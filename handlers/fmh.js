@@ -535,12 +535,20 @@ module.exports = function(paramService, esbMessage)
                         //FAIL
                         .then(null,function reject(err){
                             var code = 501;
+                            console.log("REjEcTeD with ",err);
                             r.er={ec:10012,em:"Could not make payment"};
                             //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
                             if(err.er && err.er ==='Insufficient funds'){
                                 r.er={ec:10011,em:err.er};
                                 code = 403;
-                            }else{
+                            }
+                            else if(err.er && err.er === 'Order already exists for message: [object Object]') {
+                                console.log("ROLLING BACK: order already existed");
+                                _rollBackTransaction({pl:{transactionid : transactionid}});
+                                return;
+                            }
+                            else
+                            {
                                 _rollBackTransaction({pl:{transactionid : transactionid}});
                             }
                             oHelpers.sendResponse(paramResponse,code,r);
