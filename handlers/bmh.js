@@ -308,14 +308,54 @@ module.exports = function(paramService, esbMessage){
 
     });
 
-
     bmRouter.get('/activityResponseDownload/:activity_code.json', function(paramRequest, paramResponse, paramNext){
+        var ac = paramRequest.params.activity_code;
+        q().then(function() {
+            return esbMessage({
+                "ns": "bmm",
+                "op": "bmm_getActivity",
+                "pl": {
+                    code: ac
+                }
+            })
+        }).then(function(activity){
+            if(!activity) throw "No activity found with activity code"+ac;
+            return esbMessage({
+                "ns":"bmm",
+                "op":"bmm_getFormMeta",
+                "pl":{
+                    fc:activity.fm.fc,
+                    loginName: paramRequest.user.lanzheng.loginName,
+                    currentOrganization: paramRequest.user.currentOrganization
+                }
+            })
+        }).then(function(formmeta){
+            if(!formmeta) throw "No Form Meta found for activity "+ac
+            var fields = formmeta.fd.fields.map(function(ele){return ele.nm})
+            fields.push('rc')
+
+            var uniq = [];
+            var headers = fields.map(function(f){
+                if(uniq.indexOf(f) < 0)
+                {
+                    uniq.push(f)
+                    return f;
+                }
+            }).filter(function(n){ return n != undefined });
+            return headers;
+        }).then(function(radioFieldOptions){
+            oHelpers.sendResponse(paramResponse,200,{pl:radioFieldOptions});
+        }).fail(function(er){
+            oHelpers.sendResponse(paramResponse,501,er);
+        })
+    })
+
+    bmRouter.get('/activityResponseDownload/:field/:activity_code.json', function(paramRequest, paramResponse, paramNext){
         var m = {};
         q().then(function(){
             //paramRequest.query.code
             console.log("Retrieved activity code in download as ",paramRequest.params.activity_code);
-            m.pl={ac:paramRequest.params.activity_code}
-            //m.pl._id=paramRequest.query._id;
+            m.pl={ac:paramRequest.params.activity_code,tgtField:paramRequest.params.field};
             m.op='bmm_download_activity_data';
             return esbMessage(m);
         }).then(function(msg){
