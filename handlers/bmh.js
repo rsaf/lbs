@@ -342,8 +342,6 @@ module.exports = function(paramService, esbMessage){
                     return f;
                 }
             }).filter(function(n){ return n != undefined });
-
-            console.log("MYFIELDS",headers);
             return headers;
         }).then(function(radioFieldOptions){
             oHelpers.sendResponse(paramResponse,200,{pl:radioFieldOptions});
@@ -357,8 +355,7 @@ module.exports = function(paramService, esbMessage){
         q().then(function(){
             //paramRequest.query.code
             console.log("Retrieved activity code in download as ",paramRequest.params.activity_code);
-            m.pl={ac:paramRequest.params.activity_code}
-            //m.pl._id=paramRequest.query._id;
+            m.pl={ac:paramRequest.params.activity_code,tgtField:paramRequest.params.field};
             m.op='bmm_download_activity_data';
             return esbMessage(m);
         }).then(function(msg){
