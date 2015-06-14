@@ -85,7 +85,7 @@ module.exports = function(paramPS, paramESBMessage) {
         var m = {
             "ns":"upm",
             "op": "readPersonalProfileByUserID",
-            "pl":{"userAccountID":paramRequest.user.id}
+            "pl":{"userAccountID":paramRequest.user.lanzheng.loginName}
         };
 
         esbMessage(m)
@@ -125,7 +125,7 @@ module.exports = function(paramPS, paramESBMessage) {
         var m = {
             "ns":"upm",
             "op": "readPersonalProfileByUserID",
-            "pl":{userAccountID:paramRequest.user.id}
+            "pl":{userAccountID:paramRequest.user.lanzheng.loginName}
         };
 
         esbMessage(m)
