@@ -623,7 +623,7 @@ module.exports = function (paramPS, esbMessage) {
         //photoData
 
         var workflowPayload = {
-            request : paramRequest,
+            formidableResults : undefined,
             toSet : {
                 uID: paramRequest.user.lanzheng.loginName,
                 oID: paramRequest.user.currentOrganization,
@@ -654,20 +654,26 @@ module.exports = function (paramPS, esbMessage) {
                 rc: null,
                 ifm: null
             }
-        }
+        };
 
         return q().then(function(){
             var form = new formidable.IncomingForm();
             var deferred = q.defer();
             form.parse(paramRequest, function(err,fields,files){
+                var formidableResults = {
+                    fields : fields,
+                    files : files,
+                    photoname : '/photos/' + JSON.parse(fields.json).pl.photoname,
+                    err : err
+                }
+                workflowPayload.formidableResults = formidableResults;
                 if(!err)
-                    deferred.resolve('/photos/' + JSON.parse(fields.json).pl.photoname);
+                    deferred.resolve(formidableResults.photoname);
                 else
                     deferred.reject(err)
-            })
+            });
             return deferred.promise;
         }).then(function(photoname){
-            console.log("DOING DONE on",photoname);
             return esbMessage({
             "ns":"pmm",
             "op":"pmm_getPhotoByUri",
@@ -677,7 +683,7 @@ module.exports = function (paramPS, esbMessage) {
             }});
         }).then(function(photo){
             console.log("Finishing photo ","(",paramRequest.params.photoname,"):",photo);
-            return workflowManager.completeService(photo.pl.rc,"LZS106",workflowPayload,paramRequest.user,"DO_NEXT")
+            return workflowManager.completeService(photo.pl.rc,"LZS106",workflowPayload,paramRequest.user,"DO_NEXT");
         }).then(function finish(r){
             oHelpers.sendResponse(paramResponse, r.returnCode, r.responsePayload);
         }  ,  function reject(r){
