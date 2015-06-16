@@ -533,7 +533,7 @@ module.exports = function (paramService, esbMessage) {
         console.log("Hitting perform endpoint with ", sv, "fulfilling", rc);
         q()
         .then(function () {
-            return workflowManager.onServicePerformed(rc,sv,paramRequest.user,"DO_NEXT");
+            return workflowManager.completeService(rc,sv,{},paramRequest.user,"DO_NEXT");
         })
         //Return the payload constructed by the helper
         .then(function resolve(r) {

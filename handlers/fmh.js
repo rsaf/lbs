@@ -128,7 +128,7 @@ module.exports = function(paramService, esbMessage)
             //SCHEDULE/ACTIVATE SERVICES
             .then(function() {
                 if(skipping) return;
-                return workflowManager.triggerNextService(responseInfo.rc, params.user)
+                return workflowManager.scheduleService(responseInfo.rc,{}, params.user)
                     //EXIT
                     .then(function success(r) {
                         return r;
@@ -501,7 +501,7 @@ module.exports = function(paramService, esbMessage)
                         })
                         //SCHEDULE/ACTIVATE SERVICES
                         .then(function() {
-                            return workflowManager.triggerNextService(responseInfo.rc, paramRequest.user);
+                            return workflowManager.scheduleService(responseInfo.rc,{}, paramRequest.user);
                         })
                         //SEND SMS/MAIL/NOTIFICATIONs & EXIT
                         .then(function(z) {

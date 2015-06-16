@@ -376,117 +376,29 @@ module.exports = function (paramPS, esbMessage) {
     //workspace/inspection/inspection/:status/:code.json
     psRouter.post('/inspection/:status/:code.json', function (paramRequest, paramResponse) {
 
-
-        console.log('\n-----inspection results data:-----', paramRequest.body.data);
-        console.log('\n-----inspection photo:-----', paramRequest.body.photo);
-
-        var inspectionStatus = paramRequest.params.status;
-
-        var m = {
-            ns: 'pmm',
-            op: "pmm_SetInspectedPhotoStatus",
-            pl: paramRequest.body.photo
+        var workflowPayload = {
+            status : paramRequest.params.status,
+            photo : paramRequest.body.photo,
+            recipients: [{
+                inmail: {to: 'sa'},
+                weixin: {to: null},
+                sms: {to: '1391720744600'},
+                email: {to: null}
+            }],
+            notification: {
+                subject : '蓝正照片不合格提示:',
+                notificationType : '事务通知',
+                from : '系统',
+                body: paramRequest.body.data.reason + (paramRequest.body.data.othersText ? '   ' + paramRequest.body.data.other : "")
+            }
         }
-
-
-        if (inspectionStatus === 'qualified') {
-
-            m.pl.st = '300';
-
-        }
-        else if (inspectionStatus === 'unqualified') {
-
-            m.pl.st = '400';
-        }
-        else {
-
-            console.log(r.er);
-            var r = {pl: null, er: {ec: 404, em: "unknown inspection photo type"}};
-            oHelpers.sendResponse(paramResponse, 404, r);
-
-            return;
-        }
-        //submit inspection status
-
-        esbMessage(m)
-            .then(function (r) {
-
-                console.log('inpected photo status saved---');
-                oHelpers.sendResponse(paramResponse, 200, r);
+        return workflowManager.completeService(paramRequest.body.photo.rc,"LZS105",workflowPayload,paramRequest.user,"DO_NEXT")
+            .then(function finish(r){
+                console.log("Completing inspection with response",r);
+                oHelpers.sendResponse(paramResponse, r.returnCode, r.responsePayload);
+            }  ,  function reject(r){
+                oHelpers.sendResponse(paramResponse, r.returnCode, r.responsePayload);
             })
-            .then(function () {
-
-                //todo update sms account
-                if (inspectionStatus === 'unqualified') {
-
-                    var m = {
-                        ns: 'mdm',
-                        vs: '1.0',
-                        op: 'sendNotification',
-                        pl: {
-                            recipients: [{
-                                inmail: {to: 'sa'},
-                                weixin: {to: null},
-                                sms: {to: '1391720744600'},
-                                email: {to: null}
-                            }]
-                            , notification: {}
-                        }
-                    };
-
-                    m.pl.notification.subject = '蓝正照片不合格提示:';
-                    m.pl.notification.notificationType = '事务通知';
-                    m.pl.notification.from = '系统';
-
-
-
-                    if (paramRequest.body.data&&paramRequest.body.data.reason) {
-
-                        console.log('paramRequest.body.data.reason',paramRequest.body.data.reason);
-
-                        if (paramRequest.body.data.othersText) {
-                            m.pl.notification.body = paramRequest.body.data.reason + '   ' + paramRequest.body.data.other;
-                        }
-                        else{
-                            m.pl.notification.body = paramRequest.body.data.reason;
-                        }
-                    }
-
-                    esbMessage(m)
-                        .then(function (r) {
-
-                            console.log('sumit to correction/send notification done---',r);
-                          //  oHelpers.sendResponse(paramResponse, 200, r);
-                        });
-                }
-                else{
-                    return workflowManager.onServicePerformed(paramRequest.body.photo.rc,"LZS105",paramRequest.user,"DO_NEXT").then(function finish(r){
-                        oHelpers.sendResponse(paramResponse, 200, r);
-                    })
-/*
-                    var m = {
-                        ns: 'pmm',
-                        op: "pmm_SubmitPhotoToCorrection",
-                        pl: paramRequest.body.photo
-                    }
-
-                    esbMessage(m)
-                        .then(function (r) {
-
-                            console.log('photo submitted to correction -------',r);
-                            //  oHelpers.sendResponse(paramResponse, 200, r);
-                        });
-*/
-
-                }
-
-            })
-            .fail(null, function reject(r) {
-                console.log('pmh error:-----', r);
-                r = {pl: null, er: {ec: 100012, em: "Unable to save inspection status----"}};
-                oHelpers.sendResponse(paramResponse, 501, r);
-                //we do not need to send this response back to client browser... Response have already been sent..
-            });
     })
 
 
@@ -710,123 +622,69 @@ module.exports = function (paramPS, esbMessage) {
         //photoName
         //photoData
 
-        var m1 = {ns: 'pmm', op: 'pmm_setCorrectionPhotoAsDone', pl: null};
-        m1.pl = {
-            uID: paramRequest.user.lanzheng.loginName,
-            oID: paramRequest.user.currentOrganization,
-            ow: {//owner of the document, this person can fill out the form is does not have to be the same person as the one who created the response
-                uid: paramRequest.user.lanzheng.loginName,//this is the user login or the session id when this is an anonymous user
-                oid: paramRequest.user.currentOrganization//the current organisation is optional
-            },
-            photoData: null,
-            sg: '30',
-            st: '300',
-            pp: { //other photos properties
-                ign: null, // 照片名称: image name                                      ===
-                igt: null, // 主题类型: 旅游照片 image type                              ===
-                igs: null, // 拍摄方式: 单板相机 image source                            ===
-                isl: null, // 拍摄地点:  image shooting location                        ===
-                rm: null,  // 照片描述: // 30 remarks 备注                               ===
-                isd: null, // 拍摄日期: // image shooting date                          ?
-                irs: null, // 像素尺寸:84mmX105mm image resolution size                  ?
-                ofs: null, // 文件大小:86Kb //28 original photo size 初始照片文件大小      ===
-                fm: null,  // 27 initial format 初始照片格式                              ===
-                urll: null,
-                urlm: null,
-                urls: null,
-                uri: null
-            },
-            uri: null, // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
-            ac: null,
-            rc: null,
-            ifm: null
-        };
-
-
-        var m2 = {
-            ns: 'bmm',
-            op: 'bmm_updateResponsePhotoByResponseCode',
-            pl: {
+        var workflowPayload = {
+            request : paramRequest,
+            toSet : {
+                uID: paramRequest.user.lanzheng.loginName,
+                oID: paramRequest.user.currentOrganization,
+                ow: {//owner of the document, this person can fill out the form is does not have to be the same person as the one who created the response
+                    uid: paramRequest.user.lanzheng.loginName,//this is the user login or the session id when this is an anonymous user
+                    oid: paramRequest.user.currentOrganization//the current organisation is optional
+                },
+                photoData: null,
+                sg: '30',
+                st: '300',
+                pp: { //other photos properties
+                    ign: null, // 照片名称: image name                                      ===
+                    igt: null, // 主题类型: 旅游照片 image type                              ===
+                    igs: null, // 拍摄方式: 单板相机 image source                            ===
+                    isl: null, // 拍摄地点:  image shooting location                        ===
+                    rm: null,  // 照片描述: // 30 remarks 备注                               ===
+                    isd: null, // 拍摄日期: // image shooting date                          ?
+                    irs: null, // 像素尺寸:84mmX105mm image resolution size                  ?
+                    ofs: null, // 文件大小:86Kb //28 original photo size 初始照片文件大小      ===
+                    fm: null,  // 27 initial format 初始照片格式                              ===
+                    urll: null,
+                    urlm: null,
+                    urls: null,
+                    uri: null
+                },
+                uri: null, // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
+                ac: null,
                 rc: null,
-                uri: null,
-                urll: null,
-                urlm: null,
-                urls: null
+                ifm: null
             }
         }
 
-
-        var form = new formidable.IncomingForm();
-        form.parse(paramRequest, function (err, fields, files) {
-
-
-            var old_path = files.file.path,
-                file_size = files.file.size,
-                file_ext = files.file.name.split('.').pop(),
-                file_name = files.file.name;
-
-
-            var jsonData = JSON.parse(fields.json);
-
-            console.log('field------', fields);
-            console.log('jsonData------', jsonData);
-
-            fs.readFile(old_path, function (err, data) {
-                console.log(data);
-                m1.pl.photoData = data;
-                m1.pl.ifm = file_ext;
-                m1.pl.pp.ofs = file_size;
-                m1.pl.pp.isd = Date.now();
-
-                console.log(data);
-
-
-             //   m1.pl.ac = jsonData.pl.foldername;
-                m1.pl.uri = '/photos/' + jsonData.pl.photoname;
-
-
-                console.log('m1---', m1);
-
-                esbMessage(m1)
-                    .then(function (r) {
-
-                        console.log(' pmh save corrected photo saved to bucket',r);
-
-                        m2.pl.rc = r.pl.rc;
-                        m2.pl.uri = r.pl.uri;
-                        m2.pl.urll = r.pl.urll;
-                        m2.pl.urlm = r.pl.urlm;
-                        m2.pl.urls = r.pl.urls;
-
-
-                    })
-                    .then(function (r) {
-                        console.log(m2);
-                        return esbMessage(m2)
-                            .then(function (r) {
-
-                                console.log(' pmh updated response photo successful--',r);
-
-
-                                var r = {pl: {rs: true}, er: null};
-
-                                oHelpers.sendResponse(paramResponse, 200, r);
-
-                            });
-                    })
-                    .then(function (r){
-                        return workflowManager.onServicePerformed(m2.pl.rc,"LZS106",paramRequest.user,"DO_NEXT");
-                    })
-                    .fail(function (r) {
-
-                        console.log(' pmh --error------ ', r);
-                        var r = {pl: {rs: false}, er: null};
-                        oHelpers.sendResponse(paramResponse, 200, r);
-                    });
-            });
-        });
+        return q().then(function(){
+            var form = new formidable.IncomingForm();
+            var deferred = q.defer();
+            form.parse(paramRequest, function(err,fields,files){
+                if(!err)
+                    deferred.resolve('/photos/' + JSON.parse(fields.json).pl.photoname);
+                else
+                    deferred.reject(err)
+            })
+            return deferred.promise;
+        }).then(function(photoname){
+            console.log("DOING DONE on",photoname);
+            return esbMessage({
+            "ns":"pmm",
+            "op":"pmm_getPhotoByUri",
+            "pl":{
+                ac : paramRequest.params.activityCode,
+                uri : photoname
+            }});
+        }).then(function(photo){
+            console.log("Finishing photo ","(",paramRequest.params.photoname,"):",photo);
+            return workflowManager.completeService(photo.pl.rc,"LZS106",workflowPayload,paramRequest.user,"DO_NEXT")
+        }).then(function finish(r){
+            oHelpers.sendResponse(paramResponse, r.returnCode, r.responsePayload);
+        }  ,  function reject(r){
+            console.log("Error completing correction:",r);
+            oHelpers.sendResponse(paramResponse, r.returnCode, r.responsePayload);
+        })
     });
-
 
     psRouter.get('/folders/:stage.json', function (paramRequest, paramResponse, paramNext) {
 
