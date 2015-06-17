@@ -2,6 +2,7 @@
 
 var oHelpers= require('../utilities/helpers.js');
 var Q = require('q');
+var lib = require('lib');
 module.exports = function(paramService, esbMessage){
   function _commitTransaction(m){
     m.pl.transaction = {
@@ -17,6 +18,11 @@ module.exports = function(paramService, esbMessage){
     m.op='wmm_rollBackTransaction';
     return esbMessage(m);
   }
+    var workflowManager = new lib.WorkflowManager({
+            esbMessage: esbMessage,
+            commitTransaction: _commitTransaction,
+            rollbackTransaction: _rollBackTransaction}
+    );
   var requestRouter = paramService.Router();
   function prepareTransaction(loginName,orgid,description,modules){
     var m={};
@@ -54,6 +60,7 @@ module.exports = function(paramService, esbMessage){
     var mods=['rmm'];
     var transactionid;
     var dbRequest;
+    var wasUPM = undefined;
     Q().then(function(){//get the request message
       m = JSON.parse(paramRequest.body.json);
       request=m.pl.request;
@@ -99,6 +106,12 @@ module.exports = function(paramService, esbMessage){
       }
       var i = dbRequest.ei.length,promises=[];
       while(--i>-1){
+          //todo : special casing corporate validation activity....
+          if(dbRequest.ei[i].mod == "upm")
+          {
+              wasUPM = {idx:i,rc:ret.rc,sc:"LZS103"};
+          }
+          //end todo
         m.op=dbRequest.ei[i].mod+ '_updateStatus'
         m.pl={
           ei:dbRequest.ei[i].ei
@@ -135,6 +148,12 @@ module.exports = function(paramService, esbMessage){
                     });
             }
             else return true;
+    })
+    .then(function(){
+        if(wasUPM !== undefined)
+        {
+            return workflowManager.completeService(wasUPM.rc,wasUPM.sc,{},paramRequest.user,"DO_NEXT");
+        }
     })
     .then(function(ret) {
       return _commitTransaction({pl:{transactionid:m.pl.transactionid}});
