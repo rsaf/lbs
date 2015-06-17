@@ -244,10 +244,6 @@ module.exports = function(paramService, esbMessage) {
             }
         };
 
-
-
-
-
         esbMessage(m)
            .then(function(r){
 
@@ -263,12 +259,6 @@ module.exports = function(paramService, esbMessage) {
                 oHelpers.sendResponse(paramResponse, 501, r);
             });
     });
-
-
-
-
-
-
 
     return photosRouter;
 };
@@ -391,44 +381,53 @@ var systeminterfaces = {
       "field2": "正常",
       "field3": true,
       "field4": "2014/07/05 9:23",
-      "field5": "公安局"
+      "field5": "证照"
     }, {
       "field1": "证照核验接口",
       "field2": "正常",
       "field3": true,
       "field4": "2014/07/15 10：10",
-      "field5": "公安局"
-    }, {
-      "field1": "支付宝接口",
-      "field2": "正常",
-      "field3": true,
-      "field4": "2014/07/22 9:40",
-      "field5": "阿里巴巴"
-    }, {
-      "field1": "微信接口",
-      "field2": "不正常",
-      "field3": false,
-      "field4": "2014/08/05 12:23",
-      "field5": "腾讯"
+      "field5": "证照"
     }
-    , {
-      "field1": "短信接口",
-      "field2": "正常",
-      "field3": true,
-      "field4": "2014/09/07 11:30",
-      "field5": "中国移动"
-    }]
+    ]
 };
 
 var thirdpartyinterfaces = {
-  "pl": [{
-      "field1": "蓝证证照接口",
-      "field2": "正常",
-      "field3": true,
-      "field4": "2014/07/05 9:23",
-      "field5": "蓝证平台"
-    }]
+    "pl": [{
+        "field1": "身份证核验接口",
+        "field2": "正常",
+        "field3": true,
+        "field4": "2014/07/05 9:23",
+        "field5": "公安局"
+    }, {
+        "field1": "证照核验接口",
+        "field2": "正常",
+        "field3": true,
+        "field4": "2014/07/15 10：10",
+        "field5": "公安局"
+    }, {
+        "field1": "支付宝接口",
+        "field2": "正常",
+        "field3": "2014/07/05 9:23",
+        "field4": "2014/07/22 9:40",
+        "field5": "阿里巴巴"
+    }
+        , {
+            "field1": "短信接口",
+            "field2": "正常",
+            "field3": "2014/07/05 9:23",
+            "field4": "2014/09/07 11:30",
+            "field5": "中国移动"
+        }]
 };
+
+// {
+//    "field1": "微信接口",
+//        "field2": "不正常",
+//        "field3": "2014/07/05 9:23",
+//        "field4": "2014/08/05 12:23",
+//        "field5": "腾讯"
+//}
 
 var interfaceUsers = {
   "pl": [{
