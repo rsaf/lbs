@@ -22,7 +22,7 @@ function _initRequestMessage(paramRequest, type, code, adminOrg) {
     if (type === 'ServicePoint') {
         col = 'servicepoints';
         url = '/workspace/services/myservicepoints/view/servicepoint';
-        message = "网点"
+        message = "网点";
     }
     return {
 //    rdu: paramRequest.user.id//@todo: this should be set correctly
@@ -80,11 +80,10 @@ module.exports = function (paramService, esbMessage) {
 
     var workflowManager = new lib.WorkflowManager({
         esbMessage: esbMessage,
-        _commitTransaction: _commitTransaction,
-        _rollbackTransaction: _rollBackTransaction2}
+        commitTransaction: _commitTransaction,
+        rollbackTransaction: _rollBackTransaction2}
     );
 
-    //todo this variable is bad form
     function _prepopulateSpecialCaseServices(){
 
         var importSpecialCases = require('../data/smm_special_init.json');
@@ -531,6 +530,7 @@ module.exports = function (paramService, esbMessage) {
         var rc = paramRequest.body.responseCode;
         var sv = paramRequest.body.serviceCode;
         console.log("Hitting perform endpoint with ", sv, "fulfilling", rc);
+        console.log("BODY WAS:",paramRequest.body);
         q()
         .then(function () {
             return workflowManager.completeService(rc,sv,{},paramRequest.user,"DO_NEXT");
