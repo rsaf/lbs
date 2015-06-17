@@ -545,7 +545,8 @@ module.exports = function(paramService, esbMessage)
                             else if(err.er && err.er === 'Order already exists for message: [object Object]') {
                                 console.log("ROLLING BACK: order already existed");
                                 _rollBackTransaction({pl:{transactionid : transactionid}});
-                                return;
+                                code = 200;
+                                r = {pl:"ORDER ALREADY RECIEVED : Error 10012"};
                             }
                             else
                             {
