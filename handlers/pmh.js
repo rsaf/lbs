@@ -395,9 +395,9 @@ module.exports = function (paramPS, esbMessage) {
         return workflowManager.completeService(paramRequest.body.photo.rc,"LZS105",workflowPayload,paramRequest.user,"DO_NEXT")
             .then(function finish(r){
                 console.log("Completing inspection with response",r);
-                oHelpers.sendResponse(paramResponse, r.returnCode, r.responsePayload);
+                oHelpers.sendResponse(paramResponse, r.pl.returnCode, r.pl.responsePayload);
             }  ,  function reject(r){
-                oHelpers.sendResponse(paramResponse, r.returnCode, r.responsePayload);
+                oHelpers.sendResponse(paramResponse, r.pl.returnCode, r.pl.responsePayload);
             })
     })
 
@@ -685,10 +685,11 @@ module.exports = function (paramPS, esbMessage) {
             console.log("Finishing photo ","(",paramRequest.params.photoname,"):",photo);
             return workflowManager.completeService(photo.pl.rc,"LZS106",workflowPayload,paramRequest.user,"DO_NEXT");
         }).then(function finish(r){
-            oHelpers.sendResponse(paramResponse, r.returnCode, r.responsePayload);
+            console.log("Successfully completing correction. Response is", r.pl.responsePayload);
+            oHelpers.sendResponse(paramResponse, r.pl.returnCode, r.pl.responsePayload);
         }  ,  function reject(r){
             console.log("Error completing correction:",r);
-            oHelpers.sendResponse(paramResponse, r.returnCode, r.responsePayload);
+            oHelpers.sendResponse(paramResponse, r.pl.returnCode, r.pl.responsePayload);
         })
     });
 
