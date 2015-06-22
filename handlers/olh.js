@@ -43,10 +43,12 @@ module.exports = function(paramService, esbMessage)
 
     esbMessage(m)
         .then(function(r) {
-          paramResponse.writeHead(200, {"Content-Type": "application/json"});
-          paramResponse.end(JSON.stringify(r));
+          //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+          //paramResponse.end(JSON.stringify(r));
+            oHelpers.sendResponse(paramResponse,200,r);
         })
         .fail(function(r) {
+            oHelpers.sendResponse(paramResponse,501,r);
 
         });
 

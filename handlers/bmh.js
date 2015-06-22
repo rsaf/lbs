@@ -273,11 +273,13 @@ module.exports = function(paramService, esbMessage){
                 console.log('uploading response lists ...', m.pl);
                 esbMessage(m)
                     .then(function (r) {
-                        paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                        //paramResponse.writeHead(200, {"Content-Type": "application/json"});
 
-                        paramResponse.end(JSON.stringify(r));
+                        //paramResponse.end(JSON.stringify(r));
 
-                        console.log("coming backing from uploading response list ...", r);
+                        oHelpers.sendResponse(paramResponse, 200, r);
+
+                        //console.log("coming backing from uploading response list ...", r);
 
                         //@todo tie this to a publish button on the webside
                         /*
@@ -1104,8 +1106,10 @@ module.exports = function(paramService, esbMessage){
             return esbMessage(m);
         })
             .then(function (r) {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(r));
+
+                oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
 

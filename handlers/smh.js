@@ -448,8 +448,9 @@ module.exports = function (paramService, esbMessage) {
                 return _commitTransaction(m);
             })
             .then(function () {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(response));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(response));
+                oHelpers.sendResponse(paramResponse, 200, response);
             })
             .fail(function (r) {
                 //@todo: set roll back wmm (not sure why q.all don't want to play nice. fin is never called when I tried that
@@ -459,11 +460,12 @@ module.exports = function (paramService, esbMessage) {
                     })
                     .fin(function () {
                         _rollBackTransaction(m);
-                        paramResponse.writeHead(501, {"Content-Type": "application/json"});
+                        //paramResponse.writeHead(501, {"Content-Type": "application/json"});
                         if (r.er && r.er.ec && r.er.ec > 1000) {
                             r.er.em = 'Server poblem....';
                         }
-                        paramResponse.end(JSON.stringify(r));
+                       // paramResponse.end(JSON.stringify(r));
+                        oHelpers.sendResponse(paramResponse, 501, response);
                     });
             });
     });
@@ -508,8 +510,9 @@ module.exports = function (paramService, esbMessage) {
             }).then(function () {
                 return _commitTransaction(m)
             }).then(function () {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(response));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(response));
+                oHelpers.sendResponse(paramResponse, 200, response);
             })
             .fail(function (r) {
                 return esbMessage({pl: {transactionid: m.pl.transactionid}, op: 'smm_rollback'})
@@ -517,11 +520,12 @@ module.exports = function (paramService, esbMessage) {
                     })
                     .fin(function () {
                         _rollBackTransaction(m);
-                        paramResponse.writeHead(501, {"Content-Type": "application/json"});
+                        //paramResponse.writeHead(501, {"Content-Type": "application/json"});
                         if (r.er && r.er.ec && r.er.ec > 1000) {
                             r.er.em = 'Server poblem....';
                         }
-                        paramResponse.end(JSON.stringify(r));
+                        //paramResponse.end(JSON.stringify(r));
+                        oHelpers.sendResponse(paramResponse, 501, r);
                     });
             });
     });
@@ -559,15 +563,17 @@ module.exports = function (paramService, esbMessage) {
         };
         esbMessage(m)
             .then(function (r) {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
-                paramResponse.writeHead(501, {"Content-Type": "application/json"});
+                //paramResponse.writeHead(501, {"Content-Type": "application/json"});
                 if (r.er && r.er.ec && r.er.ec > 1000) {
                     r.er.em = 'Server poblem....';
                 }
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 501, r);
             });
     });
 
@@ -584,15 +590,17 @@ module.exports = function (paramService, esbMessage) {
         console.log('m.pl----', m.pl);
         esbMessage(m)
             .then(function (r) {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
-                paramResponse.writeHead(501, {"Content-Type": "application/json"});
+                //paramResponse.writeHead(501, {"Content-Type": "application/json"});
                 if (r.er && r.er.ec && r.er.ec > 1000) {
                     r.er.em = 'Server poblem....';
                 }
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 501, r);
             });
     });
     serviceManagementRouter.post('/services.json', function (paramRequest, paramResponse, paramNext) {
@@ -605,15 +613,17 @@ module.exports = function (paramService, esbMessage) {
             return esbMessage(m);
         })
             .then(function (r) {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
-                paramResponse.writeHead(501, {"Content-Type": "application/json"});
+                //paramResponse.writeHead(501, {"Content-Type": "application/json"});
                 if (r.er && r.er.ec && r.er.ec > 1000) {
                     r.er.em = 'Server poblem....';
                 }
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 501, r);
             });
     });
     serviceManagementRouter.get('/servicenames.json', function (paramRequest, paramResponse, paramNext) {
@@ -623,15 +633,17 @@ module.exports = function (paramService, esbMessage) {
         };
         esbMessage(m)
             .then(function (r) {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
-                paramResponse.writeHead(501, {"Content-Type": "application/json"});
+                //paramResponse.writeHead(501, {"Content-Type": "application/json"});
                 if (r.er && r.er.ec && r.er.ec > 1000) {
                     r.er.em = 'Server poblem....';
                 }
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 501, r);
             });
     });
     serviceManagementRouter.get('/servicetypes.json', function (paramRequest, paramResponse, paramNext) {
@@ -642,15 +654,17 @@ module.exports = function (paramService, esbMessage) {
         };
         esbMessage(m)
             .then(function (r) {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
-                paramResponse.writeHead(501, {"Content-Type": "application/json"});
+                //paramResponse.writeHead(501, {"Content-Type": "application/json"});
                 if (r.er && r.er.ec && r.er.ec > 1000) {
                     r.er.em = 'Server poblem....';
                 }
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 501, r);
             });
     });
     serviceManagementRouter.get('/servicepointtypes.json', function (paramRequest, paramResponse, paramNext) {
@@ -660,15 +674,17 @@ module.exports = function (paramService, esbMessage) {
         };
         esbMessage(m)
             .then(function (r) {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
-                paramResponse.writeHead(501, {"Content-Type": "application/json"});
+                //paramResponse.writeHead(501, {"Content-Type": "application/json"});
                 if (r.er && r.er.ec && r.er.ec > 1000) {
                     r.er.em = 'Server poblem....';
                 }
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 501, r);
             });
     });
     serviceManagementRouter.post('/servicepoint.json', function (paramRequest, paramResponse, paramNext) {
@@ -702,8 +718,9 @@ module.exports = function (paramService, esbMessage) {
             }).then(function () {
                 return _commitTransaction(m);
             }).then(function () {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(response));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(response));
+                oHelpers.sendResponse(paramResponse, 200, response);
             })
             .fail(function (r) {
                 return esbMessage({pl: {transactionid: m.pl.transactionid}, op: 'smm_rollback'})
@@ -712,11 +729,12 @@ module.exports = function (paramService, esbMessage) {
                     })
                     .fin(function () {
                         _rollBackTransaction(m);
-                        paramResponse.writeHead(501, {"Content-Type": "application/json"});
+                        //paramResponse.writeHead(501, {"Content-Type": "application/json"});
                         if (r.er && r.er.ec && r.er.ec > 1000) {
                             r.er.em = 'Server poblem....';
                         }
-                        paramResponse.end(JSON.stringify(r));
+                        //paramResponse.end(JSON.stringify(r));
+                        oHelpers.sendResponse(paramResponse, 501, r);
                     });
             });
     });
@@ -752,8 +770,9 @@ module.exports = function (paramService, esbMessage) {
             }).then(function () {
                 return _commitTransaction(m);
             }).then(function () {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(response));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(response));
+                oHelpers.sendResponse(paramResponse, 200, response);
             })
             .fail(function (r) {
                 //@todo: set roll back wmm (not sure why q.all don't want to play nice. fin is never called when I tried that
@@ -763,11 +782,12 @@ module.exports = function (paramService, esbMessage) {
                     })
                     .fin(function () {
                         _rollBackTransaction(m);
-                        paramResponse.writeHead(501, {"Content-Type": "application/json"});
+                        //paramResponse.writeHead(501, {"Content-Type": "application/json"});
                         if (r.er && r.er.ec && r.er.ec > 1000) {
                             r.er.em = 'Server poblem....';
                         }
-                        paramResponse.end(JSON.stringify(r));
+                        //paramResponse.end(JSON.stringify(r));
+                        oHelpers.sendResponse(paramResponse, 501, r);
                     });
             });
     });
@@ -785,15 +805,17 @@ module.exports = function (paramService, esbMessage) {
         };
         esbMessage(m)
             .then(function (r) {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
-                paramResponse.writeHead(501, {"Content-Type": "application/json"});
+                //paramResponse.writeHead(501, {"Content-Type": "application/json"});
                 if (r.er && r.er.ec && r.er.ec > 1000) {
                     r.er.em = 'Server poblem....';
                 }
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 501, r);
             });
     });
 
@@ -808,15 +830,17 @@ module.exports = function (paramService, esbMessage) {
         m.pl.currentOrganization = paramRequest.user.currentOrganization;
         esbMessage(m)
             .then(function (r) {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
-                paramResponse.writeHead(501, {"Content-Type": "application/json"});
+                //paramResponse.writeHead(501, {"Content-Type": "application/json"});
                 if (r.er && r.er.ec && r.er.ec > 1000) {
                     r.er.em = 'Server poblem....';
                 }
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 501, r);
             });
     });
     serviceManagementRouter.get('/busnessrecords.json', function (paramRequest, paramResponse, paramNext) {
@@ -869,15 +893,17 @@ module.exports = function (paramService, esbMessage) {
         m.pl.currentOrganization = paramRequest.user.currentOrganization;
         esbMessage(m)
             .then(function (r) {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
-                paramResponse.writeHead(501, {"Content-Type": "application/json"});
+                //paramResponse.writeHead(501, {"Content-Type": "application/json"});
                 if (r.er && r.er.ec && r.er.ec > 1000) {
                     r.er.em = 'Server poblem....';
                 }
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.end(JSON.stringify(r));
+                oHelpers.sendResponse(paramResponse, 501, r);
             });
     });
 

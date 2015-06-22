@@ -155,8 +155,10 @@ module.exports = function (paramService, esbMessage)
 
           esbMessage(m)
               .then(function (r) {
-                paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                paramResponse.end(JSON.stringify(r));
+                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                //paramResponse.end(JSON.stringify(r));
+                  oHelpers.sendResponse(paramResponse, 200, r);
+
               })
               .fail(function (r) {
                 console.log(r.er);
@@ -261,11 +263,13 @@ module.exports = function (paramService, esbMessage)
 
                 esbMessage(m)
                     .then(function (r) {
-                        paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                        //paramResponse.writeHead(200, {"Content-Type": "application/json"});
 
-                        console.log('dmh upload successful---',r);
+                        //console.log('dmh upload successful---',r);
 
-                        paramResponse.end(JSON.stringify(r));
+                        //paramResponse.end(JSON.stringify(r));
+
+                        oHelpers.sendResponse(paramResponse, 200, r);
                     })
                     .fail(function (r) {
                         console.log('dmh error-----:',r.er);

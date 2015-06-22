@@ -65,8 +65,9 @@ module.exports = function (paramService, esbMessage)
     esbMessage(m)
             .then(function (r) {
 
-              paramResponse.writeHead(200, {"Content-Type": "application/json"});
-              paramResponse.end(JSON.stringify(r));
+              //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+              //paramResponse.end(JSON.stringify(r));
+            oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
 
@@ -95,8 +96,9 @@ module.exports = function (paramService, esbMessage)
 
               console.log('returned users value -------: ', JSON.stringify(r));
               //console.log('returned users value.users -------: ', r.users);
-              paramResponse.writeHead(200, {"Content-Type": "application/json"});
-              paramResponse.end(JSON.stringify(r));
+              //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+              //paramResponse.end(JSON.stringify(r));
+             oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
 
@@ -145,8 +147,9 @@ module.exports = function (paramService, esbMessage)
 
     esbMessage(m)
             .then(function (r) {
-              paramResponse.writeHead(200, {"Content-Type": "application/json"});
-              paramResponse.end(JSON.stringify(r));
+              //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+              //paramResponse.end(JSON.stringify(r));
+             oHelpers.sendResponse(paramResponse, 200, r);
             })
             .fail(function (r) {
               console.log(r.er);
@@ -170,8 +173,9 @@ module.exports = function (paramService, esbMessage)
 
     esbMessage(m)
     .then(function (r) {
-      paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      paramResponse.end(JSON.stringify(r));
+      //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+      //paramResponse.end(JSON.stringify(r));
+     oHelpers.sendResponse(paramResponse, 200, r);
     })
     .fail(function (r) {
 
@@ -200,8 +204,9 @@ module.exports = function (paramService, esbMessage)
       return esbMessage(m);
     })
     .then(function (r) {
-      paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      paramResponse.end(JSON.stringify(r));
+      //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+      //paramResponse.end(JSON.stringify(r));
+      oHelpers.sendResponse(paramResponse, 200, r);
     })
     .fail(function (r) {
       var r = {pl: null, er: {ec: 404, em: "could not update view state"}};
@@ -229,8 +234,9 @@ module.exports = function (paramService, esbMessage)
     esbMessage(m)
         .then(function (r) {
 
-          paramResponse.writeHead(200, {"Content-Type": "application/json"});
-          paramResponse.end(JSON.stringify(r));
+          //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+          //paramResponse.end(JSON.stringify(r));
+            oHelpers.sendResponse(paramResponse, 200, r);
         })
         .fail(function (r) {
 
@@ -258,8 +264,9 @@ module.exports = function (paramService, esbMessage)
     esbMessage(m)
         .then(function (r) {
 
-          paramResponse.writeHead(200, {"Content-Type": "application/json"});
-          paramResponse.end(JSON.stringify(r));
+          //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+          //paramResponse.end(JSON.stringify(r));
+            oHelpers.sendResponse(paramResponse, 200, r);
         })
         .fail(function (r) {
 
@@ -289,8 +296,9 @@ module.exports = function (paramService, esbMessage)
     esbMessage(m)
         .then(function (r) {
 
-          paramResponse.writeHead(200, {"Content-Type": "application/json"});
-          paramResponse.end(JSON.stringify(r));
+          //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+          //paramResponse.end(JSON.stringify(r));
+            oHelpers.sendResponse(paramResponse, 200, r);
         })
         .fail(function (r) {
 
@@ -317,8 +325,9 @@ module.exports = function (paramService, esbMessage)
     esbMessage(m)
         .then(function (r) {
 
-          paramResponse.writeHead(200, {"Content-Type": "application/json"});
-          paramResponse.end(JSON.stringify(r));
+          //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+          //paramResponse.end(JSON.stringify(r));
+            oHelpers.sendResponse(paramResponse, 200, r);
         })
         .fail(function (r) {
 
