@@ -372,7 +372,7 @@ module.exports = function(paramService, esbMessage){
       m.pl.loginName=(paramRequest.user&&paramRequest.user.lanzheng&&paramRequest.user.lanzheng.loginName)||paramRequest.sessionID;
       m.pl.currentOrganization=(paramRequest.user&&paramRequest.user.currentOrganization)||false;
       m.op='bmm_getResponses';
-      m.mt={p:paramRequest.query.p,ps:paramRequest.query.ps}
+      m.mt={p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
       return esbMessage(m);
     }).then(function(msg){
       oHelpers.sendResponse(paramResponse,200, msg);
@@ -423,7 +423,7 @@ module.exports = function(paramService, esbMessage){
     q().then(function(){
       m.pl={loginName:paramRequest.user.lanzheng.loginName,currentOrganization:paramRequest.user.currentOrganization};
       m.op='bmm_getActivities';
-      m.mt={p:paramRequest.query.p,ps:paramRequest.query.ps}
+      m.mt={p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
       return esbMessage(m);
     })
     .then(function resolve(msg){

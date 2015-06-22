@@ -29,7 +29,7 @@ module.exports = function (paramService, esbMessage)
       ns: 'mdm',
       vs: '1.0',
       op: 'getNotifications',
-      mt: {p:paramRequest.query.p,ps:paramRequest.query.ps},
+      mt: {p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed},
       pl: {
         messageGroup: null, // null
         from:  paramRequest.user.lanzheng.loginName,
