@@ -14,7 +14,7 @@ module.exports.startBS = function(){
     var esb = require('esb');
 
     var oHomeRouter ;               // home
-    var oSearchRouter ;               // home
+    var oSearchRouter ;             // home
     var oUserNotificationRouter;    // workspace/notifications  ==>  mdh.js  mdm
     var oUserRouter;                // workspace/users          ==>  sch.js  scm ///
     var oProfileRouter;             // workspace/profile        ==>  uph.js  upm
@@ -24,12 +24,11 @@ module.exports.startBS = function(){
     var oInspectionRouter;          // workspace/inspection     ==>  pmh.js  pmm //
     var oCorrectionsRouter;         // workspace/corrections    ==>  pmh.js  pmm //
     var oServiceRouter ;            // workspace/services       ==>  smh.js  smm //
-    var oActivitiesRouter;          // workspace/activities.old     ==>  bmh.js  bmm ///
+    var oActivitiesRouter;          // workspace/activities.old ==>  bmh.js  bmm ///
     var oResponsesRouter;           // workspace/responses      ==>  bmh.js  bmm ///
     var oFinanceRouter;             // workspace/finance        ==>  fmh.js  fmm
     var oInterfacesRouter           // workspace/interfaces     ==>  sch.js  scm
     var oOperationsLogRouter ;      // workspace/operationslog  ==>  olh.js  olm
-
     var oPhotoServiceRouter ;       // workspace/photoservices  ==>  pmh.js  pmm
 
     var scmPassportObject = null;
