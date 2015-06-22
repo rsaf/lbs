@@ -575,7 +575,7 @@ module.exports = function (paramService, esbMessage) {
     serviceManagementRouter.get('/services.json', function (paramRequest, paramResponse, paramNext) {
         var m = {
             "op": "smm_getServices",
-            "mt": {p:paramRequest.query.p,ps:paramRequest.query.ps},
+            mt: {p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed},
             "pl": {which:paramRequest.query.which}
         };
         m.pl.loginName = paramRequest.user.lanzheng.loginName;
@@ -801,7 +801,7 @@ module.exports = function (paramService, esbMessage) {
         var m = {
             "ns": "smm",
             "op": "servicePointsByCreator",
-            "mt": {p:paramRequest.query.p,ps:paramRequest.query.ps},
+            "mt": {p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed},
             "pl": {}
         };
         m.pl.loginName = paramRequest.user.lanzheng.loginName;
@@ -831,7 +831,7 @@ module.exports = function (paramService, esbMessage) {
                 return esbMessage({
                     ns: "smm",
                     op: "recordsByOrganization",
-                    mt: {p:paramRequest.query.p,ps:paramRequest.query.ps},
+                    mt: {p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed},
                     pl: {
                         loginName: user,
                         organization: org

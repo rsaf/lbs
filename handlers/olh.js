@@ -30,7 +30,7 @@ module.exports = function(paramService, esbMessage)
           "ns":"olm",
           "op": "readOperationsLog",
           "pl": {"userAccountID":paramRequest.user.id, "opType":null},
-          "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps}
+          "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
       };
 
 
