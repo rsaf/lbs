@@ -479,7 +479,7 @@ module.exports = function(paramService, esbMessage)
                         .then(function(msg){
                             return esbMessage({  //update the response and set payment status to 'paid'
                                 op : "bmm_persistResponse",
-                                pl:{
+                                pl : {
                                     transactionid : transactionid,
                                     loginName : paramRequest.user.lanzheng.loginName,
                                     currentOrganization : paramRequest.user.currentOrganization,
@@ -501,6 +501,10 @@ module.exports = function(paramService, esbMessage)
                         })
                         //SCHEDULE/ACTIVATE SERVICES
                         .then(function() {
+                            if(responseInfo.acn != "LZB101" && responseInfo.acn != "LZB102")
+                            {
+                                oHelpers.sendResponse(paramResponse, 200, {pl:{},er:null});
+                            }
                             return workflowManager.scheduleService(responseInfo.rc,{}, paramRequest.user);
                         })
                         //SEND SMS/MAIL/NOTIFICATIONs & EXIT
@@ -530,7 +534,10 @@ module.exports = function(paramService, esbMessage)
                         //EXIT
                         .then(function(smsResponse){
                             console.log("Completed Payment Click. Final Result:",finalResult);
-                            oHelpers.sendResponse(paramResponse,200,finalResult);
+                            if(responseInfo.acn == "LZB101" || responseInfo.acn == "LZB102")
+                            {
+                                oHelpers.sendResponse(paramResponse,200,finalResult);
+                            }
                         })
                         //FAIL
                         .then(null,function reject(err){
