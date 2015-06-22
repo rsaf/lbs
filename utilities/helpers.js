@@ -53,6 +53,10 @@ exports.testStartPage = function (req, res) {
 
 
 exports.sendResponse = function(paramResponse, paramHeaderCode, paramResponseMessage) {
-    paramResponse.writeHead(paramHeaderCode, { "Content-Type" : "application/json" });
+    paramResponse.writeHead(paramHeaderCode
+        ,{ "Content-Type" : "application/json"
+          ,"Cache-Control": "no-cache, no-store, must-revalidate"
+          ,"Expires": "0"
+          ,"Pragma": "no-cache"});
     paramResponse.end(JSON.stringify(paramResponseMessage));
 };
