@@ -45,9 +45,9 @@ module.exports = function(paramService, esbMessage){
       var m = {
         op:'rmm_getRequests',
         pl:{loginName:req.user.lanzheng.loginName,orgid:req.user.currentOrganization,filter:filter},
-        mt: {p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
+        mt: {p:req.query.p,ps:req.query.ps,sk:req.query.sk,sd:req.query.sd, ed:req.query.ed}
       }
-      return esbMessage(m)      
+      return esbMessage(m);
     });
   }  
   /**
