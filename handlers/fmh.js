@@ -207,7 +207,9 @@ module.exports = function(paramService, esbMessage)
          var m = {
              "ns":"fmm",
              "op": "fmm_getTransactionHistory",
-             "pl": {"accountId": varAccountID}
+             "pl": {"accountId": varAccountID},
+             "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
+
          };
         // console.log(m);
          esbMessage(m)
@@ -297,7 +299,9 @@ module.exports = function(paramService, esbMessage)
         var m = {
             "ns":"fmm",
             "op": "fmm_getUserBalance",
-            "pl": {"accountId": varAccountID, "accountType":paramRequest.user.userType}
+            "pl": {"accountId": varAccountID, "accountType":paramRequest.user.userType},
+            "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
+
         };
        // console.log(m);
         esbMessage(m)

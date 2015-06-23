@@ -188,8 +188,10 @@ module.exports = function (paramPS, esbMessage) {
         var m = {
             "ns": "pmm",
             "op": "pmm_readAllStandards",
-            "pl": null
-        };
+            "pl": null,
+            "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
+
+    };
 
         esbMessage(m)
             .then(function (r) {
@@ -205,7 +207,9 @@ module.exports = function (paramPS, esbMessage) {
         var m = {
             "ns": "pmm",
             "op": "pmm_readAllUsages",
-            "pl": null
+            "pl": null,
+            "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
+
         };
         esbMessage(m)
             .then(function (r) {
@@ -781,7 +785,9 @@ module.exports = function (paramPS, esbMessage) {
             var m = {
                 "ns": "pmm",
                 "op": "pmm_getActivitiesInfo",
-                "pl": {st:null,sg:null}
+                "pl": {st:null,sg:null},
+                "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
+
             };
 
 

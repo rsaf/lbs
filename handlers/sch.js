@@ -38,7 +38,9 @@ module.exports = function(paramService, esbMessage) {
             "op": "scm_getByType",
             "pl": {
                 userType:userType
-            }
+            },
+            "mt": {p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
+
         };
 
             esbMessage(m)
