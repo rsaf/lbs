@@ -302,6 +302,7 @@ module.exports = function (paramService, esbMessage) {
               });
       });
       //@todo: have this endpoint change owner ship of the response using
+      //@todo: you can not pass the entire user object to front end
       //  a not yet created function in bmm to change ownership of response
       homeRouter.post('/registrationandassociate/:responseCode.json',  function(paramRequest, paramResponse){
         registerAndAssociateUser()(paramRequest, paramResponse, function(req,res,user){
@@ -317,11 +318,14 @@ module.exports = function (paramService, esbMessage) {
                 registerResponse:user
               }
             }).then(function resolve(r){
-              paramResponse.writeHead(200, {"Content-Type": "application/json"});
-              paramResponse.end(JSON.stringify(r.pl.registerResponse));
+              //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+              //paramResponse.end(JSON.stringify(r.pl.registerResponse));
+                oHelpers.sendResponse(paramResponse, 200, r.pl.registerResponse);
+
             }  ,  function fail(r){
-              paramResponse.writeHead(1005, {"Content-Type": "application/json"});
-              paramResponse.end(JSON.stringify(r.pl.registerResponse));
+              //paramResponse.writeHead(1005, {"Content-Type": "application/json"});
+              //paramResponse.end(JSON.stringify(r.pl.registerResponse));
+                oHelpers.sendResponse(paramResponse, 1005, r.pl.registerResponse);
             });
           }
           else
@@ -353,11 +357,13 @@ module.exports = function (paramService, esbMessage) {
                       registerResponse:myUsr
                   }
               }).then(function resolve(r){
-                  paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                  paramResponse.end(JSON.stringify(r.pl.registerResponse));
+                  //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+                  //paramResponse.end(JSON.stringify(r.pl.registerResponse));
+                  oHelpers.sendResponse(paramResponse, 200, r.pl.registerResponse);
               }  ,  function fail(r){
-                  paramResponse.writeHead(1005, {"Content-Type": "application/json"});
-                  paramResponse.end(JSON.stringify(r.pl.registerResponse));
+                  //paramResponse.writeHead(1005, {"Content-Type": "application/json"});
+                  //paramResponse.end(JSON.stringify(r.pl.registerResponse));
+                  oHelpers.sendResponse(paramResponse, 1005, r.pl.registerResponse);
               });
           }
           else{
@@ -456,15 +462,14 @@ module.exports = function (paramService, esbMessage) {
             m.mt = {p:paramRequest.query.p,ps:paramRequest.query.ps}
           return esbMessage(m);
         }).then(function resolve(msg) {
-          paramResponse.writeHead(200, {
-            "Content-Type": "application/json"
-          });
-          paramResponse.end(JSON.stringify(msg));
+          //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+          //paramResponse.end(JSON.stringify(msg));
+            oHelpers.sendResponse(paramResponse, 200, msg);
         }, function reject(er) {
-          paramResponse.writeHead(501, {
-            "Content-Type": "application/json"
-          });
-          paramResponse.end(JSON.stringify(er));
+          //paramResponse.writeHead(501, {"Content-Type": "application/json"});
+          //paramResponse.end(JSON.stringify(er));
+            oHelpers.sendResponse(paramResponse, 501, er);
+
         });
       });
 
@@ -638,19 +643,17 @@ module.exports = function (paramService, esbMessage) {
             return esbMessage(m);
           })
           .then(function (r) {
-            paramResponse.writeHead(200, {
-              "Content-Type": "application/json"
-            });
-            paramResponse.end(JSON.stringify(r));
+            //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+            //paramResponse.end(JSON.stringify(r));
+            oHelpers.sendResponse(paramResponse, 200, r);
           })
           .fail(function (r) {
-            paramResponse.writeHead(501, {
-              "Content-Type": "application/json"
-            });
+            //paramResponse.writeHead(501, {"Content-Type": "application/json"});
             if (r.er && r.er.ec && r.er.ec > 1000) {
               r.er.em = 'Server poblem....';
             }
-            paramResponse.end(JSON.stringify(r));
+            //paramResponse.end(JSON.stringify(r));
+           oHelpers.sendResponse(paramResponse, 501, r);
           });
       });
       homeRouter.post('/uploadphoto.json', function(paramRequest, paramResponse){

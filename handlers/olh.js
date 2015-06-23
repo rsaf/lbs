@@ -24,7 +24,7 @@ module.exports = function(paramService, esbMessage)
 
       var type = paramRequest.params.type;
 
-      console.log('type--',type);
+      //console.log('type--',type);
 
       var m = {
           "ns":"olm",
@@ -35,18 +35,20 @@ module.exports = function(paramService, esbMessage)
 
 
       if(type === 'business'){
-          m.opType = '业务操作';
+          m.pl.opType = '业务操作';
       }
       else if(type === 'access'){
-          m.opType = '授权操作';
+          m.pl.opType = '授权操作';
       }
 
     esbMessage(m)
         .then(function(r) {
-          paramResponse.writeHead(200, {"Content-Type": "application/json"});
-          paramResponse.end(JSON.stringify(r));
+          //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+          //paramResponse.end(JSON.stringify(r));
+            oHelpers.sendResponse(paramResponse,200,r);
         })
         .fail(function(r) {
+            oHelpers.sendResponse(paramResponse,501,r);
 
         });
 

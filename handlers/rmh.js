@@ -180,8 +180,9 @@ module.exports = function(paramService, esbMessage){
     })
     .then(
       function resolve(ret) {
-        paramResponse.writeHead(200, {"Content-Type": "application/json"});
-        paramResponse.end(JSON.stringify(dbRequest));
+        //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+        //paramResponse.end(JSON.stringify(dbRequest));
+          oHelpers.sendResponse(paramResponse, 200, dbRequest);
       },function reject(r) {
         //tell the modules to roll back
         var i = mods.length,promises=[];
@@ -197,11 +198,12 @@ module.exports = function(paramService, esbMessage){
           _rollBackTransaction({pl:{transactionid:m.pl.transactionid}});
         })
         .fin(function(){
-          paramResponse.writeHead(501, {"Content-Type": "application/json"});
+          //paramResponse.writeHead(501, {"Content-Type": "application/json"});
           if(r.er && r.er.ec && r.er.ec>1000){
             r.er.em='Server poblem....';
           }
-          paramResponse.end(JSON.stringify(r));
+          //paramResponse.end(JSON.stringify(r));
+        oHelpers.sendResponse(paramResponse, 501, r);
         });
     });
   });
@@ -218,15 +220,17 @@ module.exports = function(paramService, esbMessage){
     };
     esbMessage(m)
     .then(function(r) {
-      paramResponse.writeHead(200, {"Content-Type": "application/json"});
-      paramResponse.end(JSON.stringify(r));
+      //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+      //paramResponse.end(JSON.stringify(r));
+     oHelpers.sendResponse(paramResponse, 200, r);
     })
     .fail(function(r) {
-      paramResponse.writeHead(501, {"Content-Type": "application/json"});
+      //paramResponse.writeHead(501, {"Content-Type": "application/json"});
       if(r.er && r.er.ec && r.er.ec>1000){
         r.er.em='Server poblem....';
       }
-      paramResponse.end(JSON.stringify(r));
+      //paramResponse.end(JSON.stringify(r));
+      oHelpers.sendResponse(paramResponse, 501, r);
     });
   });
   requestRouter.get('/:requestType.json', function(paramRequest, paramResponse, paramNext){
@@ -247,15 +251,17 @@ module.exports = function(paramService, esbMessage){
         }
         if(promise){
           promise.then(function(msg) {
-            paramResponse.writeHead(200, {"Content-Type": "application/json"});
-            paramResponse.end(JSON.stringify(msg));
+            //paramResponse.writeHead(200, {"Content-Type": "application/json"});
+            //paramResponse.end(JSON.stringify(msg));
+              oHelpers.sendResponse(paramResponse, 200, msg);
           })
           .fail(function(r) {
-            paramResponse.writeHead(501, {"Content-Type": "application/json"});
+            //paramResponse.writeHead(501, {"Content-Type": "application/json"});
             if(r.er && r.er.ec && r.er.ec>1000){
               r.er.em='Server poblem....';
             }
-            paramResponse.end(JSON.stringify(r));
+            //paramResponse.end(JSON.stringify(r));
+          oHelpers.sendResponse(paramResponse, 501, r);
           });
         }
 
