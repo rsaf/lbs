@@ -12,7 +12,7 @@
  "mv": null
  }
  */
-
+var oHelpers = require('../utilities/helpers.js');
 
 module.exports = function(paramService, esbMessage)
 {
@@ -45,9 +45,11 @@ module.exports = function(paramService, esbMessage)
         .then(function(r) {
           //paramResponse.writeHead(200, {"Content-Type": "application/json"});
           //paramResponse.end(JSON.stringify(r));
+            console.log("Returning with",r);
             oHelpers.sendResponse(paramResponse,200,r);
         })
         .fail(function(r) {
+            console.log("Returning with error",r);
             oHelpers.sendResponse(paramResponse,501,r);
 
         });
