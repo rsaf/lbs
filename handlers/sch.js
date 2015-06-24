@@ -245,13 +245,24 @@ module.exports = function(paramService, esbMessage) {
                 userInfo:paramRequest.user.lanzheng.loginName
             }
         };
-
+        var firstResponse;
         esbMessage(m)
            .then(function(r){
+                firstResponse = r
+                var m = {
+                    "ns":"upm",
+                    "op": "updatePersonalProfile",
+                    "pl":{
+                        userAccountID : paramRequest.user.lanzheng.loginName,
+                        'contacts.linkToPhone.value' : mobile
+                    }
+                };
+                return esbMessage(m);
+            })
+            .then(function(r){
 
-
-                        console.log('sch verification code checked-------',r);
-                        oHelpers.sendResponse(paramResponse, 200, r);
+                console.log('sch verification code checked-------',firstResponse);
+                        oHelpers.sendResponse(paramResponse, 200, firstResponse);
 
 
             })

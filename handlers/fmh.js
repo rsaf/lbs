@@ -507,7 +507,7 @@ module.exports = function(paramService, esbMessage)
                         .then(function() {
                             if(responseInfo.acn != "LZB101" && responseInfo.acn != "LZB102")
                             {
-                                oHelpers.sendResponse(paramResponse, 200, {pl:{},er:null});
+                                oHelpers.sendResponse(paramResponse, 200, {pl:{ow:{sc:responseInfo.ow && responseInfo.ow.sc}},er:null});
                             }
                             return workflowManager.scheduleService(responseInfo.rc,{}, paramRequest.user);
                         })
