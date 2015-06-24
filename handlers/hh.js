@@ -459,7 +459,8 @@ module.exports = function (paramService, esbMessage) {
         q().then(function () {
           m.pl = {readyOnly:true};
           m.op = 'bmm_getActivities';
-            m.mt = {p:paramRequest.query.p,ps:paramRequest.query.ps}
+          m.mt={p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
+
           return esbMessage(m);
         }).then(function resolve(msg) {
           //paramResponse.writeHead(200, {"Content-Type": "application/json"});
@@ -468,6 +469,7 @@ module.exports = function (paramService, esbMessage) {
         }, function reject(er) {
           //paramResponse.writeHead(501, {"Content-Type": "application/json"});
           //paramResponse.end(JSON.stringify(er));
+            console.log("Error is",er);
             oHelpers.sendResponse(paramResponse, 501, er);
 
         });

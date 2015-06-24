@@ -606,7 +606,8 @@ module.exports = function (paramService, esbMessage) {
     serviceManagementRouter.post('/services.json', function (paramRequest, paramResponse, paramNext) {
         var m = {
             "op": "smm_queryServices",
-            "pl": {}
+            "pl": {},
+            "mt": {p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
         };
         q().then(function () {
             m.pl = JSON.parse(paramRequest.body.json);
