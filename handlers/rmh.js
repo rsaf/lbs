@@ -88,7 +88,6 @@ module.exports = function(paramService, esbMessage){
         dbRequest = msg;
         if(dbRequest._doc && dbRequest._doc.rtr == "Response" &&
             dbRequest._doc.ei && dbRequest._doc.ei.length>0 && dbRequest._doc.ei[0].ei !== undefined) {
-            console.log("foo",dbRequest._doc.ei[0].ei);
             return esbMessage({
                 "ns":"bmm",
                 "op":"bmm_getResponse",
@@ -185,6 +184,12 @@ module.exports = function(paramService, esbMessage){
           oHelpers.sendResponse(paramResponse, 200, dbRequest);
       },function reject(r) {
         //tell the modules to roll back
+        if(r.er && r.er.ec && r.er.ec>1000){
+            r.er.em='Server poblem....';
+        }
+        //paramResponse.end(JSON.stringify(r));
+        oHelpers.sendResponse(paramResponse, 501, r);
+
         var i = mods.length,promises=[];
         var m = {pl:{transactionid:m.pl.transactionid}};
         while(--i>-1){
@@ -197,14 +202,6 @@ module.exports = function(paramService, esbMessage){
         .then(function(){
           _rollBackTransaction({pl:{transactionid:m.pl.transactionid}});
         })
-        .fin(function(){
-          //paramResponse.writeHead(501, {"Content-Type": "application/json"});
-          if(r.er && r.er.ec && r.er.ec>1000){
-            r.er.em='Server poblem....';
-          }
-          //paramResponse.end(JSON.stringify(r));
-        oHelpers.sendResponse(paramResponse, 501, r);
-        });
     });
   });
   requestRouter.get ('/request.json', function(paramRequest, paramResponse, paramNext){

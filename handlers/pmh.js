@@ -11,8 +11,8 @@ module.exports = function (paramPS, esbMessage) {
     //workspace/phototoservices/v1/idphotos/:lzcode.json
 
     var workflowManager = new lib.WorkflowManager({
-        commitTransaction: function(){},
-        rollbackTransaction: function(){},
+        commitTransaction: function(){return q().then(function(){console.log("commiting"); return;})},
+        rollbackTransaction: function(){return q().then(function(){console.log("rollbacking"); return;})},
         esbMessage : esbMessage
     });
 
@@ -402,7 +402,8 @@ module.exports = function (paramPS, esbMessage) {
                 console.log("Completing inspection with response",r);
                 oHelpers.sendResponse(paramResponse, r.pl.returnCode, r.pl.responsePayload);
             }  ,  function reject(r){
-                oHelpers.sendResponse(paramResponse, r.pl.returnCode, r.pl.responsePayload);
+                console.log("Failing inspection with response",r)
+                oHelpers.sendResponse(paramResponse, 501, r);
             })
     })
 

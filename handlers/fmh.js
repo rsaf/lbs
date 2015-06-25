@@ -547,7 +547,8 @@ module.exports = function(paramService, esbMessage)
                         .then(null,function reject(err){
                             var code = 501;
                             console.log("REjEcTeD with ",err);
-                            r.er={ec:10012,em:"Could not make payment"};
+                            r.pl={ow:{sc:{}}}
+                            r.er={ec:10012,em:err?err:"Could not make payment"};
                             //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
                             if(err.er && err.er ==='Insufficient funds'){
                                 r.er={ec:10011,em:err.er};
@@ -555,15 +556,13 @@ module.exports = function(paramService, esbMessage)
                             }
                             else if(err.er && err.er === 'Order already exists for message: [object Object]') {
                                 console.log("ROLLING BACK: order already existed");
-                                _rollBackTransaction({pl:{transactionid : transactionid}});
                                 code = 200;
                                 r = {pl:"ORDER ALREADY RECIEVED : Error 10012"};
                             }
-                            else
-                            {
-                                _rollBackTransaction({pl:{transactionid : transactionid}});
-                            }
                             oHelpers.sendResponse(paramResponse,code,r);
+
+                            if(err.er && err.er !== 'Insufficient funds')
+                                _rollBackTransaction({pl:{transactionid : transactionid}});
                         })
                 }
             })
