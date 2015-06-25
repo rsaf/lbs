@@ -507,14 +507,15 @@ module.exports = function(paramService, esbMessage)
                         .then(function() {
                             if(responseInfo.acn != "LZB101" && responseInfo.acn != "LZB102")
                             {
-                                oHelpers.sendResponse(paramResponse, 200, {pl:{ow:{sc:responseInfo.ow && responseInfo.ow.sc}},er:null});
+                                oHelpers.sendResponse(paramResponse, 200, {pl:{ow:{sc:reqPayload.pl.phone}},er:null});
                             }
                             return workflowManager.scheduleService(responseInfo.rc,{}, paramRequest.user);
                         })
                         //SEND SMS/MAIL/NOTIFICATIONs & EXIT
                         .then(function(z) {
-                            finalResult = z;
-                            console.log("SENDING SMS (LZ)",reqPayload);
+                            finalResult = z.pl;
+                            finalResult.pl = {ow : {sc : reqPayload.pl.phone}};
+                            console.log("SENDING SMS (LZ)",reqPayload,"WITH FR",finalResult,reqPayload.pl);
                             return esbMessage({
                                 ns: 'mdm',
                                 vs: '1.0',
@@ -537,7 +538,6 @@ module.exports = function(paramService, esbMessage)
                         })
                         //EXIT
                         .then(function(smsResponse){
-                            console.log("Completed Payment Click. Final Result:",finalResult);
                             if(responseInfo.acn == "LZB101" || responseInfo.acn == "LZB102")
                             {
                                 oHelpers.sendResponse(paramResponse,200,finalResult);
@@ -547,7 +547,7 @@ module.exports = function(paramService, esbMessage)
                         .then(null,function reject(err){
                             var code = 501;
                             console.log("REjEcTeD with ",err);
-                            r.pl={ow:{sc:{}}}
+                            r.pl={ow:{sc:reqPayload.pl.phone}}
                             r.er={ec:10012,em:err?err:"Could not make payment"};
                             //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
                             if(err.er && err.er ==='Insufficient funds'){
