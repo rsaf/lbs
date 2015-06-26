@@ -260,7 +260,7 @@ module.exports = function(paramService, esbMessage)
         //todo: Hit confirmAlipay code
         console.log("hit handler");
         var redirectUrl ='/#/processes/activities/done/' + paramRequest.params.code;
-        var failureUrl = '/#/processes/activities/payment/'
+        var failureUrl = '/#/processes/activities/payment/';
         return esbMessage({
             "ns" : "bmm",
             "op" : "bmm_getResponse",
@@ -411,6 +411,9 @@ module.exports = function(paramService, esbMessage)
                 responseInfo = msg[0];
                 transactionid = msg[1].pl.transaction._id;
                 console.log("persisting on payment click",transactionid);
+                var ow = responseInfo.ow;
+                ow.sc = reqPayload.pl.phone;
+                console.log("DING UP OW:",ow.sc);
                 return esbMessage({
                     "ns" : "bmm",
                     "op" : "bmm_persistResponse",
@@ -421,7 +424,8 @@ module.exports = function(paramService, esbMessage)
                         response : {
                             _id : responseInfo._id,
                             tid : transactionid,
-                            lk : true
+                            lk : true,
+                            ow : ow
                         }
                     }
                 })
@@ -507,15 +511,25 @@ module.exports = function(paramService, esbMessage)
                         .then(function() {
                             if(responseInfo.acn != "LZB101" && responseInfo.acn != "LZB102")
                             {
-                                oHelpers.sendResponse(paramResponse, 200, {pl:{ow:{sc:reqPayload.pl.phone}},er:null});
+                                oHelpers.sendResponse(paramResponse, 200, {pl:{ow:{sc:reqPayload.pl.phone},can:responseInfo.can},er:null});
                             }
                             return workflowManager.scheduleService(responseInfo.rc,{}, paramRequest.user);
+                        })
+                        //Update ResponseInfo
+                        .then(function(z){
+                            return esbMessage({
+                                op:"bmm_getResponse",
+                                pl:reqPayload.pl
+                            }).then(function(r){
+                                responseInfo = r;
+                                return z;
+                            })
                         })
                         //SEND SMS/MAIL/NOTIFICATIONs & EXIT
                         .then(function(z) {
                             finalResult = z.pl;
-                            finalResult.pl = {ow : {sc : reqPayload.pl.phone}};
-                            console.log("SENDING SMS (LZ)",reqPayload,"WITH FR",finalResult,reqPayload.pl);
+                            finalResult.pl = {ow : {sc : reqPayload.pl.phone},can:responseInfo.can,fd: responseInfo.fd,acn:responseInfo.acn};
+                            console.log("SENDING SMS (LZ)",reqPayload);
                             return esbMessage({
                                 ns: 'mdm',
                                 vs: '1.0',
@@ -540,6 +554,7 @@ module.exports = function(paramService, esbMessage)
                         .then(function(smsResponse){
                             if(responseInfo.acn == "LZB101" || responseInfo.acn == "LZB102")
                             {
+                                console.log("SENDING WITH 200 for 101/102:",finalResult);
                                 oHelpers.sendResponse(paramResponse,200,finalResult);
                             }
                         })
