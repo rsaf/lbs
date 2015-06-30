@@ -27,7 +27,9 @@ module.exports = function (paramPS, esbMessage) {
             "op": "pmm_getPhotosForInspection",
             "pl": {
                 ac: paramRequest.params.lzcode
-            }
+            },
+            "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
+
         };
 
         esbMessage(m)
@@ -62,8 +64,10 @@ module.exports = function (paramPS, esbMessage) {
             "pl": {
                 ac: ac,
                 st:null
-            }
-        };
+            },
+            "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
+
+    };
 
         if (phototype === 'unprocessed') {
 
@@ -426,7 +430,9 @@ module.exports = function (paramPS, esbMessage) {
                     oid: paramRequest.user.currentOrganization
                 },
                 ac: activity_id
-            }
+            },
+            "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
+
         };
 
 
