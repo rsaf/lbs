@@ -496,7 +496,15 @@ module.exports = function(paramService, esbMessage){
             "pl":{ac:paramRequest.params.activityDetail_id}
         };
 
-        console.log('paramRequest.params.activity_id-----------',paramRequest.params.activityDetail_id);
+
+       if(paramRequest.user){
+
+           m.pl.uID = paramRequest.user.lanzheng.loginName;
+           m.pl.oID = paramRequest.user.currentOrganization;
+       }
+
+
+       console.log('paramRequest.params.activity_id-----------',paramRequest.params.activityDetail_id);
 
 
         esbMessage(m)
