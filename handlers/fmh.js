@@ -472,7 +472,8 @@ module.exports = function(paramService, esbMessage)
                     //condense orders into a single 'buy'
                     var condensedOrder = orders.reduce(function(agg, ele, idx){
                         if(idx == 0) return ele;
-                        agg.orderAmount += ele.orderAmount
+                        agg.offlineAmount += ele.offlineAmount;
+                        agg.orderAmount += ele.orderAmount;
                         agg.platformCommissionAmount += ele.platformCommissionAmount;
                         agg.agentCommissionAmount += ele.agentCommissionAmount;
                         return agg;
@@ -617,23 +618,31 @@ module.exports = function(paramService, esbMessage)
             customAmt = Math.abs(parseFloat(response.fd.fields.amount));
         if(activity.abd.apm == "预付款统一结算")//prepaid
         {
-            varAccountID = activity.ct.uid;
+            console.log("USING PREPAID",activity.ct);
+            varAccountID = activity.ct.uID;
         }
         else if(activity.abd.apm == "后付款统一结算")//postpaid
         {
-            varAccountID = activity.ct.uid;
+            console.log("USING POSTPAID");
+            varAccountID = activity.ct.uID;
         }
         else //charge the user
         {
+            console.log("USER PAYS");
             varAccountID = user.userType === 'admin'? 'admin' : user.lanzheng.loginName;
         }
         //create an order for each selected pricelist in this activity (service booking)
         while((i-=1)>-1){
             var owedAmount;
-            if(serviceBookings[i].paymentMethod && serviceBookings[i].paymentMethod.contains(2))//offline
+            if(activity.abd.apm == "后付款统一结算" || serviceBookings[i].paymentMethod && serviceBookings[i].paymentMethod.contains(2))//offline or postpaid
+            {
+                console.log("OFFLINE PAY")
                 owedAmount = 0;
-            else
+            }
+            else {
+                console.log("ONLINE PAY")
                 owedAmount = customAmt || serviceBookings[i].sdp;
+            }
             orders.push({
                 "transactionId" : response.rc,
                 "serviceId" : serviceBookings[i].plid,//serviceid is the pricelist id
@@ -641,6 +650,7 @@ module.exports = function(paramService, esbMessage)
                 "serviceName" : type == "CREDIT_PURCHASE" ? "余额充值" : serviceBookings[i].svn,
                 "serviceProviderId" : serviceBookings[i].spid,
                 //"agentId" : "not implemented",
+                "offlineAmount": customAmt || serviceBookings[i].sdp || 0,
                 "orderAmount" : owedAmount,
                 "platformCommissionAmount" : 0,//@todo: not implented
                 "agentCommissionAmount" : 0,//@todo: not implented
