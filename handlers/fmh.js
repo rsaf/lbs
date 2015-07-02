@@ -48,6 +48,7 @@ module.exports = function(paramService, esbMessage)
     var _confirmAlipay = function _confirmAlipay(params, response){
         var finalResult = null,
             responseInfo,
+            activityInfo,
             transactionid = response.tid,
             refCode = response.rfc,
             reqPayload = {pl:{code:response.rc}},
@@ -80,7 +81,16 @@ module.exports = function(paramService, esbMessage)
                     }
                 })
             })
+             .then(function getActivity(){
+                 return esbMessage({
+                     "ns":"bmm",
+                     "op":"bmm_getActivity",
+                     "pl":{
+                         code : responseInfo.acn
+                     }})
+             })
             .then(function doNotificationAccept(res){
+                 activityInfo = res;
                 return esbMessage({
                     "ns":"fmm",
                     "op":"fmm_alipayNotification",
@@ -96,7 +106,7 @@ module.exports = function(paramService, esbMessage)
                 return esbMessage({
                     "ns":"fmm",
                     "op": "fmm_makeDirectPayment",
-                    "pl": {orders : collateOrders(responseInfo,params.user,'ACTIVITY')}
+                    "pl": {orders : collateOrders(responseInfo,activityInfo, params.user,'ACTIVITY')}
                 });
             })
             //UPDATE RESPONSE STATUS TO PAID
@@ -361,6 +371,7 @@ module.exports = function(paramService, esbMessage)
         var r = {er:null,pl:null},
             transactionid = false,
             responseInfo = null,
+            activityInfo = null,
             reqPayload=false,
             finalResult = undefined,
             refCode = undefined;
@@ -429,6 +440,18 @@ module.exports = function(paramService, esbMessage)
                         }
                     }
                 })
+                .then(function (res){
+                    return esbMessage({
+                        "ns":"bmm",
+                        "op":"bmm_getActivity",
+                        "pl":{
+                            code : responseInfo.acn
+                        }
+                    }).then(function(act){
+                        activityInfo = act;
+                        return res;
+                    })
+                })
                 .then(function(res){
                         console.log("persist response ended",responseInfo,responseInfo.sp.pm);
                     return responseInfo.sp.pm;
@@ -440,7 +463,7 @@ module.exports = function(paramService, esbMessage)
             //MAKE PAYMENT
             .then(function(provider){
                 var paymentChain;
-                var orders = collateOrders(responseInfo,paramRequest.user,provider==="ali"?'CREDIT_PURCHASE':"ACTIVITY");
+                var orders = collateOrders(responseInfo, activityInfo, paramRequest.user,provider==="ali"?'CREDIT_PURCHASE':"ACTIVITY");
                 var sum = orders.reduce(function(sum, ele){console.log("ELE:",ele);return sum + ele.orderAmount},0);
                 console.log("SUM IS",sum);
                 if(provider === "ali" && sum > 0)
@@ -583,25 +606,42 @@ module.exports = function(paramService, esbMessage)
             })
   });
 
-    function collateOrders(response, user, type){
+    function collateOrders(response, activity, user, type){
         var serviceBookings = response.sb,
             orders = [],
             i = serviceBookings.length,
-            varAccountID = user.userType === 'admin'? 'admin' : user.lanzheng.loginName,
+            varAccountID,
             customAmt = undefined;
         //special case for custom credit amounts
         if(response.acn == "LZB104")
             customAmt = Math.abs(parseFloat(response.fd.fields.amount));
+        if(activity.abd.apm == "预付款统一结算")//prepaid
+        {
+            varAccountID = activity.ct.uid;
+        }
+        else if(activity.abd.apm == "后付款统一结算")//postpaid
+        {
+            varAccountID = activity.ct.uid;
+        }
+        else //charge the user
+        {
+            varAccountID = user.userType === 'admin'? 'admin' : user.lanzheng.loginName;
+        }
         //create an order for each selected pricelist in this activity (service booking)
         while((i-=1)>-1){
+            var owedAmount;
+            if(serviceBookings[i].paymentMethod && serviceBookings[i].paymentMethod.contains(2))//offline
+                owedAmount = 0;
+            else
+                owedAmount = customAmt || serviceBookings[i].sdp;
             orders.push({
                 "transactionId" : response.rc,
                 "serviceId" : serviceBookings[i].plid,//serviceid is the pricelist id
                 "serviceType" : type,
-                "serviceName" : type == "CREDIT_PURCHASE"?"余额充值":serviceBookings[i].svn,
+                "serviceName" : type == "CREDIT_PURCHASE" ? "余额充值" : serviceBookings[i].svn,
                 "serviceProviderId" : serviceBookings[i].spid,
                 //"agentId" : "not implemented",
-                "orderAmount" : customAmt || serviceBookings[i].sdp,
+                "orderAmount" : owedAmount,
                 "platformCommissionAmount" : 0,//@todo: not implented
                 "agentCommissionAmount" : 0,//@todo: not implented
                 "corporationId" : serviceBookings[i].spc,//creator of the service point
