@@ -138,6 +138,9 @@ module.exports = function(paramService, esbMessage)
             //SCHEDULE/ACTIVATE SERVICES
             .then(function() {
                 if(skipping) return;
+
+                if(activityInfo.abd.ac != "LZB101" && activityInfo.abd.ac != "LZB102")
+                    deferred.resolve({ok: true, res: finalResult});
                 return workflowManager.scheduleService(responseInfo.rc,{}, params.user)
                     //EXIT
                     .then(function success(r) {
@@ -175,8 +178,7 @@ module.exports = function(paramService, esbMessage)
             .then(function(smsResponse){
                  if(skipping) finalResult = responseInfo;
                 console.log("Completed Payment Click. Final Result:",finalResult);
-                //oHelpers.sendResponse(response,200,finalResult);
-                deferred.resolve({ok: true, res: finalResult});
+                 deferred.resolve({ok: true, res: finalResult});
             })
             //FAIL
             .then(null,function reject(err){
@@ -290,7 +292,10 @@ module.exports = function(paramService, esbMessage)
                 return paramResponse.redirect(redirectUrl);
             else
                 return paramResponse.redirect(failureURL);
-        })
+        }, function(err){
+                console.log("FOOOO");
+                return paramResponse.redirect(redirectUrl);
+            })
     });
 
     //fmm_getUserBalance
@@ -454,6 +459,8 @@ module.exports = function(paramService, esbMessage)
                 })
                 .then(function(res){
                         console.log("persist response ended",responseInfo,responseInfo.sp.pm);
+                        if(activityInfo.abd && activityInfo.abd.apm == '响应用户付款')//prepaid, don't send user to alipay!
+                            return 'lz';
                     return responseInfo.sp.pm;
                 }  ,  function(err){
                         console.log("error?",err)
@@ -656,7 +663,7 @@ module.exports = function(paramService, esbMessage)
                 "agentCommissionAmount" : 0,//@todo: not implented
                 "corporationId" : serviceBookings[i].spc,//creator of the service point
                 "userAccountId" : varAccountID,// login name not the id
-                "paymentType" : "online",
+                "paymentType" : activity.abd.apm == "后付款统一结算" || serviceBookings[i].spm == 2 ? "offline" : "online",
                 "activityName" : response.can
             });
         }
