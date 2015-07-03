@@ -293,7 +293,6 @@ module.exports = function(paramService, esbMessage)
             else
                 return paramResponse.redirect(failureURL);
         }, function(err){
-                console.log("FOOOO");
                 return paramResponse.redirect(redirectUrl);
             })
     });
@@ -426,10 +425,8 @@ module.exports = function(paramService, esbMessage)
             .then(function(msg) {
                 responseInfo = msg[0];
                 transactionid = msg[1].pl.transaction._id;
-                console.log("persisting on payment click",transactionid);
                 var ow = responseInfo.ow;
                 ow.sc = reqPayload.pl.phone;
-                console.log("DING UP OW:",ow.sc);
                 return esbMessage({
                     "ns" : "bmm",
                     "op" : "bmm_persistResponse",
@@ -458,9 +455,10 @@ module.exports = function(paramService, esbMessage)
                     })
                 })
                 .then(function(res){
-                        console.log("persist response ended",responseInfo,responseInfo.sp.pm);
-                        if(activityInfo.abd && activityInfo.abd.apm == '响应用户付款')//prepaid, don't send user to alipay!
+                        if(activityInfo.abd && (activityInfo.abd.apm == '后付款统一结算' || activityInfo.abd.apm == '预付款统一结算'))//prepaid or postpaid, don't send user to alipay!
+                        {
                             return 'lz';
+                        }
                     return responseInfo.sp.pm;
                 }  ,  function(err){
                         console.log("error?",err)
@@ -471,7 +469,7 @@ module.exports = function(paramService, esbMessage)
             .then(function(provider){
                 var paymentChain;
                 var orders = collateOrders(responseInfo, activityInfo, paramRequest.user,provider==="ali"?'CREDIT_PURCHASE':"ACTIVITY");
-                var sum = orders.reduce(function(sum, ele){console.log("ELE:",ele);return sum + ele.orderAmount},0);
+                var sum = orders.reduce(function(sum, ele){return sum + ele.orderAmount},0);
                 console.log("SUM IS",sum);
                 if(provider === "ali" && sum > 0)
                 {
@@ -560,7 +558,7 @@ module.exports = function(paramService, esbMessage)
                         .then(function(z) {
                             finalResult = z.pl;
                             finalResult.pl = {ow : {sc : reqPayload.pl.phone},can:responseInfo.can,fd: responseInfo.fd,acn:responseInfo.acn};
-                            console.log("SENDING SMS (LZ)",reqPayload);
+                            console.log("SENDING SMS (LZ) to ",reqPayload.pl.phone);
                             return esbMessage({
                                 ns: 'mdm',
                                 vs: '1.0',
@@ -585,7 +583,6 @@ module.exports = function(paramService, esbMessage)
                         .then(function(smsResponse){
                             if(responseInfo.acn == "LZB101" || responseInfo.acn == "LZB102")
                             {
-                                console.log("SENDING WITH 200 for 101/102:",finalResult);
                                 oHelpers.sendResponse(paramResponse,200,finalResult);
                             }
                         })
