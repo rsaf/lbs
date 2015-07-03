@@ -634,9 +634,9 @@ module.exports = function(paramService, esbMessage)
         //create an order for each selected pricelist in this activity (service booking)
         while((i-=1)>-1){
             var owedAmount;
-            if(activity.abd.apm == "后付款统一结算" || serviceBookings[i].paymentMethod && serviceBookings[i].paymentMethod.contains(2))//offline or postpaid
+            if(activity.abd.apm == "后付款统一结算" || serviceBookings[i].spm == 2)//offline or postpaid
             {
-                console.log("OFFLINE PAY")
+                console.log(activity.abd.apm == "后付款统一结算" ? "POSTPAID NEVERPAY" : "OFFLINE PAY")
                 owedAmount = 0;
             }
             else {
