@@ -553,6 +553,8 @@ module.exports = function (paramService, esbMessage) {
                 }
                 delete priceList.svnid;
                 priceList.sq = m.pl.response.sb.sq;//todo I'm trusting the order here for sequence - should be from activity
+                priceList.spm = m.pl.response.sb.spm
+                console.log("SETTING SB TO",priceList);
                 m.pl.response.sb=priceList;
             }
             m.pl.loginName = (req.user && req.user.lanzheng && req.user.lanzheng.loginName) || req.sessionID;

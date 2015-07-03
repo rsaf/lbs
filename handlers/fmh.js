@@ -48,6 +48,7 @@ module.exports = function(paramService, esbMessage)
     var _confirmAlipay = function _confirmAlipay(params, response){
         var finalResult = null,
             responseInfo,
+            activityInfo,
             transactionid = response.tid,
             refCode = response.rfc,
             reqPayload = {pl:{code:response.rc}},
@@ -80,7 +81,16 @@ module.exports = function(paramService, esbMessage)
                     }
                 })
             })
+             .then(function getActivity(){
+                 return esbMessage({
+                     "ns":"bmm",
+                     "op":"bmm_getActivity",
+                     "pl":{
+                         code : responseInfo.acn
+                     }})
+             })
             .then(function doNotificationAccept(res){
+                 activityInfo = res;
                 return esbMessage({
                     "ns":"fmm",
                     "op":"fmm_alipayNotification",
@@ -96,7 +106,7 @@ module.exports = function(paramService, esbMessage)
                 return esbMessage({
                     "ns":"fmm",
                     "op": "fmm_makeDirectPayment",
-                    "pl": {orders : collateOrders(responseInfo,params.user,'ACTIVITY')}
+                    "pl": {orders : collateOrders(responseInfo,activityInfo, params.user,'ACTIVITY')}
                 });
             })
             //UPDATE RESPONSE STATUS TO PAID
@@ -361,6 +371,7 @@ module.exports = function(paramService, esbMessage)
         var r = {er:null,pl:null},
             transactionid = false,
             responseInfo = null,
+            activityInfo = null,
             reqPayload=false,
             finalResult = undefined,
             refCode = undefined;
@@ -429,6 +440,18 @@ module.exports = function(paramService, esbMessage)
                         }
                     }
                 })
+                .then(function (res){
+                    return esbMessage({
+                        "ns":"bmm",
+                        "op":"bmm_getActivity",
+                        "pl":{
+                            code : responseInfo.acn
+                        }
+                    }).then(function(act){
+                        activityInfo = act;
+                        return res;
+                    })
+                })
                 .then(function(res){
                         console.log("persist response ended",responseInfo,responseInfo.sp.pm);
                     return responseInfo.sp.pm;
@@ -440,7 +463,7 @@ module.exports = function(paramService, esbMessage)
             //MAKE PAYMENT
             .then(function(provider){
                 var paymentChain;
-                var orders = collateOrders(responseInfo,paramRequest.user,provider==="ali"?'CREDIT_PURCHASE':"ACTIVITY");
+                var orders = collateOrders(responseInfo, activityInfo, paramRequest.user,provider==="ali"?'CREDIT_PURCHASE':"ACTIVITY");
                 var sum = orders.reduce(function(sum, ele){console.log("ELE:",ele);return sum + ele.orderAmount},0);
                 console.log("SUM IS",sum);
                 if(provider === "ali" && sum > 0)
@@ -449,7 +472,8 @@ module.exports = function(paramService, esbMessage)
                     //condense orders into a single 'buy'
                     var condensedOrder = orders.reduce(function(agg, ele, idx){
                         if(idx == 0) return ele;
-                        agg.orderAmount += ele.orderAmount
+                        agg.offlineAmount += ele.offlineAmount;
+                        agg.orderAmount += ele.orderAmount;
                         agg.platformCommissionAmount += ele.platformCommissionAmount;
                         agg.agentCommissionAmount += ele.agentCommissionAmount;
                         return agg;
@@ -583,25 +607,51 @@ module.exports = function(paramService, esbMessage)
             })
   });
 
-    function collateOrders(response, user, type){
+    function collateOrders(response, activity, user, type){
         var serviceBookings = response.sb,
             orders = [],
             i = serviceBookings.length,
-            varAccountID = user.userType === 'admin'? 'admin' : user.lanzheng.loginName,
+            varAccountID,
             customAmt = undefined;
         //special case for custom credit amounts
         if(response.acn == "LZB104")
             customAmt = Math.abs(parseFloat(response.fd.fields.amount));
+        if(activity.abd.apm == "预付款统一结算")//prepaid
+        {
+            console.log("USING PREPAID",activity.ct);
+            varAccountID = activity.ct.uID;
+        }
+        else if(activity.abd.apm == "后付款统一结算")//postpaid
+        {
+            console.log("USING POSTPAID");
+            varAccountID = activity.ct.uID;
+        }
+        else //charge the user
+        {
+            console.log("USER PAYS");
+            varAccountID = user.userType === 'admin'? 'admin' : user.lanzheng.loginName;
+        }
         //create an order for each selected pricelist in this activity (service booking)
         while((i-=1)>-1){
+            var owedAmount;
+            if(activity.abd.apm == "后付款统一结算" || serviceBookings[i].spm == 2)//offline or postpaid
+            {
+                console.log(activity.abd.apm == "后付款统一结算" ? "POSTPAID NEVERPAY" : "OFFLINE PAY")
+                owedAmount = 0;
+            }
+            else {
+                console.log("ONLINE PAY")
+                owedAmount = customAmt || serviceBookings[i].sdp;
+            }
             orders.push({
                 "transactionId" : response.rc,
                 "serviceId" : serviceBookings[i].plid,//serviceid is the pricelist id
                 "serviceType" : type,
-                "serviceName" : type == "CREDIT_PURCHASE"?"余额充值":serviceBookings[i].svn,
+                "serviceName" : type == "CREDIT_PURCHASE" ? "余额充值" : serviceBookings[i].svn,
                 "serviceProviderId" : serviceBookings[i].spid,
                 //"agentId" : "not implemented",
-                "orderAmount" : customAmt || serviceBookings[i].sdp,
+                "offlineAmount": customAmt || serviceBookings[i].sdp || 0,
+                "orderAmount" : owedAmount,
                 "platformCommissionAmount" : 0,//@todo: not implented
                 "agentCommissionAmount" : 0,//@todo: not implented
                 "corporationId" : serviceBookings[i].spc,//creator of the service point
