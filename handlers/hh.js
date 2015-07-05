@@ -694,6 +694,9 @@ module.exports = function (paramService, esbMessage) {
               esbMessage(m)
               .then(function(r) {
 
+
+                      console.log('image uploaded from response++++++++++++++>>>>',r);
+
                       var tempImage = '/commons/images/IDPhotoSubmitedDemo.png';
                       var uri_swap = r.pl.uri;
                       r.pl.uri = tempImage;
