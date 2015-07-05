@@ -687,11 +687,15 @@ module.exports = function (paramService, esbMessage) {
               m.pl.ow = json.ow;
               m.pl.can = json.can;
               m.pl.cat = json.cat;
+              m.pl.tpp = json.tpp;   
 
 
 
               esbMessage(m)
               .then(function(r) {
+
+
+                      console.log('image uploaded from response++++++++++++++>>>>',r);
 
                       var tempImage = '/commons/images/IDPhotoSubmitedDemo.png';
                       var uri_swap = r.pl.uri;
