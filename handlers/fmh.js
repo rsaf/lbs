@@ -609,6 +609,20 @@ module.exports = function(paramService, esbMessage)
                         })
                 }
             })
+            //UPDATE ACTIVITY
+            .then(function(){
+                return esbMessage({
+                    "ns" : "bmm",
+                    "op" : "bmm_logResponseOnActivity",
+                    "pl" : {
+                        code : activityInfo.abd.ac
+                    }
+                }).then(function(){
+                    console.log("LOGGED RESPONSE!");
+                } , function(er){
+                    console.log("Something bad happened:",er)
+                })
+            })
   });
 
     function collateOrders(response, activity, user, type){
