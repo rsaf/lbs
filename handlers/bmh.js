@@ -11,6 +11,7 @@ var oHelpers= require('../utilities/helpers.js');
 var formidable = require('formidable');
 var fs = require('fs');
 var q = require('q');
+var lib = require('lib');
 
 function _initRequestMessage(paramRequest,type,code,adminOrg){
   var col,mod='bmm',
@@ -152,6 +153,11 @@ module.exports = function(paramService, esbMessage){
     );
   }
 
+    var workflowManager = new lib.WorkflowManager({
+            esbMessage: esbMessage,
+            commitTransaction: _commitTransaction,
+            rollbackTransaction: _rollBackTransaction}
+    );
 
   var bmRouter = paramService.Router();
   bmRouter.get('/listtemplate.json', function(paramRequest, paramResponse, paramNext){
@@ -310,6 +316,42 @@ module.exports = function(paramService, esbMessage){
 
     });
 
+    bmRouter.post('/:activity_code/processAllResponses.json', function(paramRequest, paramResponse, paramNext){
+        esbMessage({
+            "ns":"bmm",
+            "op":"bmm_getResponses",
+            "pl":{
+                code : paramRequest.params.activity_code
+            }
+        }).then(function(responses){
+
+            //Create batch list
+            var batchSize = 10;
+            var rcBatchArray = [];
+            for(var i = 0, b = -1; i < responses.length; i++)
+            {
+                if(i % batchSize == 0)
+                    rcBatchArray[++b] = [];
+                rcBatchArray[b].push(responses[i].rc);
+            }
+
+            var promise = q()
+            for(var b = 0; b < rcBatchArray.length; b++)
+            {
+                promise = promise.then(function(){
+                    var batchpromise = rcBatchArray[b].map(function(rc){
+                        return workflowManager.scheduleService(rc,{}, paramRequest.user);
+                    })
+                    return q.all(batchpromise)
+                })
+            }
+            return promise;
+        }).then(function(alldone){
+            oHelpers.sendResponse(paramResponse,200,{pl:{},er:null});
+        }  ,  function(err){
+            oHelpers.sendResponse(paramResponse,501,{pl:null,er:err});
+        })
+    })
     bmRouter.get('/activityResponseDownload/:activity_code.json', function(paramRequest, paramResponse, paramNext){
         var ac = paramRequest.params.activity_code;
         q().then(function() {
