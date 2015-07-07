@@ -316,39 +316,103 @@ module.exports = function(paramService, esbMessage){
 
     });
 
-    bmRouter.post('/:activity_code/processAllResponses.json', function(paramRequest, paramResponse, paramNext){
-        esbMessage({
+    bmRouter.post('/processAllResponses/:activity_code.json', function(paramRequest, paramResponse, paramNext){
+        var responses = undefined;
+        var activity = undefined;
+        var services = undefined;
+        return esbMessage({
             "ns":"bmm",
-            "op":"bmm_getResponses",
+            "op":"bmm_getAllResponsesForActivity",
             "pl":{
                 code : paramRequest.params.activity_code
             }
-        }).then(function(responses){
+        })
+        .then(function(r){
+            responses = r;
+            return esbMessage({
+                "ns":"bmm",
+                "op":"bmm_getActivity",
+                "pl":{
+                    code : paramRequest.params.activity_code
+                }
+            })
+        })
+        .then(function(r){
+            activity = r;
+            return esbMessage({
+                "ns":"smm",
+                "op":"smm_queryServices",
+                "pl":{
+                    query: activity.sqc
+                }
+            })
+        })
+        .then(function(r){
+            services = r.pl.results;
+            services = services.map(function(arr,idx){
+                if(arr.length < 1) return undefined;
+                var first = arr[0];
+                first.sq = idx;
+                return first;
+            })
+            var persistServicesArray = [];
+            for(var i = 0; i < responses.length; i ++)
+            {
+                for(var j = 0; j < 1; j ++)
+                {
+                    persistServicesArray.push(esbMessage({
+                        "ns":"bmm",
+                        "op":"bmm_persistResponse",
+                        "pl":{
+                            response : {
+                                sb : services[j],
+                                _id : responses[i]._id
+                            }
+                        }
+                    }))
+                }
+            }
+            return q.all(persistServicesArray)
+        })
+        .then(function(r){
+            console.log("FOUND ",r.length,"PROCESSES FOR",paramRequest.params.activity_code);
+            var batchSize = 10,
+                rcBatchArray = [],
+                promise = q();
 
-            //Create batch list
-            var batchSize = 10;
-            var rcBatchArray = [];
             for(var i = 0, b = -1; i < responses.length; i++)
             {
-                if(i % batchSize == 0)
+                if(i % batchSize == 0) {
                     rcBatchArray[++b] = [];
+                }
                 rcBatchArray[b].push(responses[i].rc);
             }
-
-            var promise = q()
             for(var b = 0; b < rcBatchArray.length; b++)
             {
+                var k = b;
                 promise = promise.then(function(){
-                    var batchpromise = rcBatchArray[b].map(function(rc){
-                        return workflowManager.scheduleService(rc,{}, paramRequest.user);
+                    var batchpromise = rcBatchArray[k].map(function(rc){
+                        return workflowManager.scheduleService(rc,{}, paramRequest.user)
+                            .then(function(){
+                                return esbMessage({
+                                    "ns":"bmm",
+                                    "op":"bmm_logResponseOnActivity",
+                                    "pl":{
+                                        code:paramRequest.params.activity_code,
+                                        stat:"completed"
+                                    }
+                                })
+                            })
                     })
                     return q.all(batchpromise)
                 })
             }
             return promise;
         }).then(function(alldone){
+            console.log("all done");
             oHelpers.sendResponse(paramResponse,200,{pl:{},er:null});
         }  ,  function(err){
+            console.log(err);
             oHelpers.sendResponse(paramResponse,501,{pl:null,er:err});
         })
     })
