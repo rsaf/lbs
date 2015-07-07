@@ -452,6 +452,8 @@ module.exports = function(paramService, esbMessage)
                     }).then(function(act){
                         activityInfo = act;
                         return res;
+                    },function(err){
+                        throw err;
                     })
                 })
                 .then(function(res){
@@ -462,6 +464,7 @@ module.exports = function(paramService, esbMessage)
                     return responseInfo.sp.pm;
                 }  ,  function(err){
                         console.log("error?",err)
+                        throw err;
                     });
 
             })
@@ -583,16 +586,18 @@ module.exports = function(paramService, esbMessage)
                         .then(function(smsResponse){
                             if(responseInfo.acn == "LZB101" || responseInfo.acn == "LZB102")
                             {
+                                console.log("LZB101/102 finalResult is :",finalResult);
                                 oHelpers.sendResponse(paramResponse,200,finalResult);
                             }
                         })
                         //FAIL
                         .then(null,function reject(err){
                             var code = 501;
-                            console.log("REjEcTeD with ",err);
-                            r.pl={ow:{sc:reqPayload.pl.phone}}
-                            r.er={ec:10012,em:err?err:"Could not make payment"};
-                            //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+                            r = {
+                                pl : {ow:{sc:reqPayload.pl.phone}},
+                                er : {ec:10012,em:err?err:"Could not make payment"}
+                            }
+
                             if(err.er && err.er ==='Insufficient funds'){
                                 r.er={ec:10011,em:err.er};
                                 code = 403;
@@ -602,6 +607,8 @@ module.exports = function(paramService, esbMessage)
                                 code = 200;
                                 r = {pl:"ORDER ALREADY RECIEVED : Error 10012"};
                             }
+
+                            console.log("REjEcTeD with ",err);
                             oHelpers.sendResponse(paramResponse,code,r);
 
                             if(err.er && err.er !== 'Insufficient funds')
@@ -622,6 +629,9 @@ module.exports = function(paramService, esbMessage)
                 } , function(er){
                     console.log("Something bad happened:",er)
                 })
+            } , function(err){
+                console.log("ACK!",err);
+                oHelpers.sendResponse(paramResponse,501,{pl:{},er:err});
             })
   });
 
