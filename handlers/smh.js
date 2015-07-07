@@ -11,7 +11,7 @@ var formidable = require('formidable');
 var fs = require('fs');
 var lib = require('lib');
 
-function _initRequestMessage(paramRequest, type, code, adminOrg) {
+function _initRequestMessage(paramRequest, type, code, adminOrg,orgName) {
     var col, mod = 'smm',
         message, url;
     if (type === 'Service') {
@@ -32,7 +32,8 @@ function _initRequestMessage(paramRequest, type, code, adminOrg) {
         , rsu: paramRequest.user.lanzheng.loginName
         , rso: paramRequest.user.currentOrganization
         , rs: 10
-        , rb: '请审核用户申请，拼同意或者拒绝 '
+        , ric:orgName||''
+        , rb: '请审核'+message+'申请，拼同意或者拒绝 '
         , rtr: type
         , ei: [{
             col: col
@@ -470,6 +471,11 @@ module.exports = function (paramService, esbMessage) {
             });
     });
     serviceManagementRouter.post('/service.json', function (paramRequest, paramResponse, paramNext) {
+
+        var bodyJson = JSON.parse(paramRequest.body.json);
+        var company = bodyJson.company;
+
+
         var m = {};
         var response;
         q().then(function () {
@@ -505,7 +511,7 @@ module.exports = function (paramService, esbMessage) {
             .then(function (r) {
                 response = r[0];
                 m.op = "rmm_persistRequestMessage";
-                m.pl.request = _initRequestMessage(paramRequest, 'Service', response.pl.serviceCode, r[1].pl.oID);
+                m.pl.request = _initRequestMessage(paramRequest, 'Service', response.pl.serviceCode, r[1].pl.oID,company);
                 return esbMessage(m);
             }).then(function () {
                 return _commitTransaction(m)
@@ -689,6 +695,10 @@ module.exports = function (paramService, esbMessage) {
             });
     });
     serviceManagementRouter.post('/servicepoint.json', function (paramRequest, paramResponse, paramNext) {
+
+        var bodyJson = JSON.parse(paramRequest.body.json);
+        var company = bodyJson.company;
+
         var m = {
             "op": "createTransaction"
             , "pl": {
@@ -714,7 +724,7 @@ module.exports = function (paramService, esbMessage) {
             .then(function (r) {
                 response = r[0];
                 m.op = "rmm_persistRequestMessage";
-                m.pl.request = _initRequestMessage(paramRequest, 'ServicePoint', response.pl.servicePointCode, r[1].pl.oID);
+                m.pl.request = _initRequestMessage(paramRequest, 'ServicePoint', response.pl.servicePointCode, r[1].pl.oID,company);
                 return esbMessage(m);
             }).then(function () {
                 return _commitTransaction(m);
