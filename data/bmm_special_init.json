@@ -84,6 +84,7 @@
         "sqc": [
           {
             "sn": "实名认证服务",
+            "sq":0,
             "ui" : {
               "serviceCode" : "LZS101",
               "price" : "0元",
@@ -209,6 +210,7 @@
         "sqc": [
           {
             "sn": "蓝证证照核验服务",
+            "sq":0,
             "ui" : {
               "serviceCode" : "LZS102",
               "price" : "0元",
@@ -334,6 +336,7 @@
         "sqc": [
           {
             "sn": "蓝证单位信息核验服务",
+            "sq":0,
             "ui" : {
               "serviceCode" : "LZS103",
               "price" : "0元",
@@ -450,6 +453,7 @@
         "sqc": [
           {
             "sn": "蓝证充值服务",
+            "sq":0,
             "ui" : {
               "serviceCode" : "LZS104",
               "price" : "0元",
@@ -542,7 +546,7 @@
       "find": "bmm_formMetaCodeInUse",
       "op": "bmm_changeFormMetaCode",
       "tgtField": "fc",
-      "pl": "LZF102"
+      "pl": "LZF105"
     },
     "upload":{
       "ns" : "bmm",
@@ -575,6 +579,7 @@
         "sqc": [
           {
             "sn": "蓝证证照检测服务",
+            "sq":0,
             "ui" : {
               "serviceCode" : "LZS105",
               "price" : "0元",
@@ -584,6 +589,7 @@
           },
           {
             "sn": "蓝证证照制作服务",
+            "sq":1,
             "ui" : {
               "serviceCode" : "LZS106",
               "price" : "0元",
@@ -593,6 +599,7 @@
           },
           {
             "sn": "蓝证证照核验服务",
+            "sq":2,
             "ui" : {
               "serviceCode" : "LZS102",
               "price" : "0元",

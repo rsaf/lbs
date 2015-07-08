@@ -278,36 +278,31 @@ module.exports = function(paramService, esbMessage){
                 m.pl.fd = data;
                 console.log('uploading response lists ...', m.pl);
                 esbMessage(m)
+                    .then(function (usersmetaobject){
+                        return esbMessage({
+                            "ns":"bmm",
+                            "op":"bmm_getExcelHeadersFromUnzipped",
+                            "pl":{
+                                ac : paramRequest.params.activity_code
+                            }
+                        })
+                    })
+                    .then(function (r){
+                        return esbMessage({
+                            "ns":"bmm",
+                            "op":"bmm_associateUniqueFieldWithFormMeta",
+                            "pl":{
+                                field: "xingming",
+                                ac : paramRequest.params.activity_code
+                            }
+                        })
+                    })
                     .then(function (r) {
-                        //paramResponse.writeHead(200, {"Content-Type": "application/json"});
-
-                        //paramResponse.end(JSON.stringify(r));
-
+                        console.log("Associate Response:",r);
                         oHelpers.sendResponse(paramResponse, 200, r);
-
-                        //console.log("coming backing from uploading response list ...", r);
-
-                        //@todo tie this to a publish button on the webside
-                        /*
-                        console.log('Immediately proceeding to pregenerate responses');
-
-                        var m_p = {
-                            ns: 'bmm',
-                            op: 'bmm_import_responses_data',
-                            activityCode: paramRequest.params.activity_code,
-                            loginName : paramRequest.user.lanzheng.loginName,
-                            currentOrganization : paramRequest.user.currentOrganization
-                        };
-                        esbMessage(m_p)
-                            .then(function onResolve(r){
-                                console.log("Resolved response pregeneration with response: ",r);
-                            },function onRejected(r){
-                                console.log("Failed response pregeneration with respnose2: ", r);
-                            })
-                            */
                     })
                     .fail(function (r) {
-                        console.log('dmh error-----:',r.er);
+                        console.log('dmh error-----:',r);
                         var r = {pl: null, er: {ec: 404, em: "could not save document"}};
                         oHelpers.sendResponse(paramResponse, 404, r);
                     });
@@ -360,12 +355,28 @@ module.exports = function(paramService, esbMessage){
             {
                 for(var j = 0; j < 1; j ++)
                 {
+                    var priceList = services[j]
+                    var objToSend = {
+                        plid: priceList._id,
+                        svid: priceList.service._id,
+                        svn: priceList.serviceName.text,
+                        snid: priceList.serviceName._id,
+                        svp: priceList.servicePrices,
+                        sdp: priceList.discountedPrice,
+                        spn: priceList.servicePoint.servicePointName,
+                        spid: priceList.servicePoint._id,
+                        spc: priceList.servicePoint.ct.oID,
+                        serviceCode : priceList.service.serviceCode,
+                        sq : j,
+                        spm : priceList.paymentMethod[0]
+                    };
+                    console.log("TRYING TO PERSIST",objToSend,"TO SB")
                     persistServicesArray.push(esbMessage({
                         "ns":"bmm",
                         "op":"bmm_persistResponse",
                         "pl":{
                             response : {
-                                sb : services[j],
+                                sb : objToSend,
                                 _id : responses[i]._id
                             }
                         }
@@ -472,6 +483,22 @@ module.exports = function(paramService, esbMessage){
             oHelpers.sendResponse(paramResponse,501,er);
         });
     });
+
+    bmRouter.get('activityResponseUpload/:field/:activity_code.json', function(paramRequest, paramResponse, paramNext){
+        //Associate chosen :field in uploaded excel with the formMeta object for this :activity
+        return esbMessage({
+                "ns":"bmm",
+                "op":"bmm_associateUniqueFieldWithFormMeta",
+                "pl":{
+                    ac : paramRequest.params.activity_code,
+                    field : paramRequest.params.field
+                }
+        }).then(function(msg){
+            oHelpers.sendResponse(paramResponse, 200, {pl:msg});
+        }).fail(function(er){
+            oHelpers.sendResponse(paramResponse, 501, er);
+        });
+    })
 
   bmRouter.get('/responses.json', function(paramRequest, paramResponse, paramNext){
     var m = {pl:{}};
