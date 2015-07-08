@@ -13,7 +13,7 @@ var fs = require('fs');
 var q = require('q');
 var lib = require('lib');
 
-function _initRequestMessage(paramRequest,type,code,adminOrg){
+function _initRequestMessage(paramRequest,type,code,adminOrg,orgName){
   var col,mod='bmm',
     message,url;
   if(type==='Activity'){
@@ -27,8 +27,9 @@ function _initRequestMessage(paramRequest,type,code,adminOrg){
     ,rt: message + '申请 ' + code
     ,rsu: paramRequest.user.lanzheng.loginName
     ,rso: paramRequest.user.currentOrganization
+    ,ric:orgName||''
     ,rs: 10
-    ,rb: 'message'
+    ,rb: '请审核'+message+'申请，拼同意或者拒绝'
     ,rtr: type
     ,ei:[{
         col:col
@@ -83,6 +84,13 @@ module.exports = function(paramService, esbMessage){
   function _persistActivity(paramRequest, paramResponse){
     var m = {},response={}
       ,activity,adminid;
+
+
+      var bodyJson = JSON.parse(paramRequest.body.json);
+      var company = bodyJson.company;
+
+
+
     //formHtml
     q().then(function(){
       m.pl=JSON.parse(paramRequest.body.json).pl;
@@ -109,7 +117,7 @@ module.exports = function(paramService, esbMessage){
       activity = msg;
       if(m.pl.transactionid){
         m.op="rmm_persistRequestMessage";
-        m.pl.request = _initRequestMessage(paramRequest,'Activity',activity.abd.ac,adminid);//org should be admin org
+        m.pl.request = _initRequestMessage(paramRequest,'Activity',activity.abd.ac,adminid,company);//org should be admin org
         return esbMessage(m);
       }
       return false;
