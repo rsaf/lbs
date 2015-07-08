@@ -702,7 +702,7 @@ module.exports = function (paramPS, esbMessage) {
             oHelpers.sendResponse(paramResponse, 200, {pl: {rs: r.pl}, er: r.er});
         }  ,  function reject(r){
             console.log("Error completing correction. Response is ",{pl: {rs: r.pl}, er: r.er});
-            oHelpers.sendResponse(paramResponse, 501, {pl: {rs: r.pl}, er: r.er});
+            oHelpers.sendResponse(paramResponse, 501, {pl: {rs: false}, er: r.er});
         })
     });
 
