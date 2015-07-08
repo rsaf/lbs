@@ -271,13 +271,15 @@ module.exports = function(paramService, esbMessage)
         ///workspace/finance/response/:code.json'
         //todo: Hit confirmAlipay code
         console.log("hit handler");
-        var redirectUrl ='/#/processes/activities/done/' + paramRequest.params.code;
+        var split = paramRequest.params.code.split("T");
+        var responseCodeStripped = split && split.length > 0 ? split[0] : paramRequest.params.code;
+        var redirectUrl ='/#/processes/activities/done/' + responseCodeStripped;
         var failureUrl = '/#/processes/activities/payment/';
         return esbMessage({
             "ns" : "bmm",
             "op" : "bmm_getResponse",
             "pl" : {
-                code : paramRequest.params.code
+                code : responseCodeStripped
             }
         })
         //Confirm with alipay and update/schedule/etc
@@ -396,6 +398,13 @@ module.exports = function(paramService, esbMessage)
                 "pl": {orders : orders}
             })
         }
+      function weixinPayment(orders){
+          return esbMessage({
+              "ns":"fmm",
+              "op":"fmm_generateWechatPayUrl",
+              "pl": {orders : orders}
+          })
+      }
 
         return q()
             //FETCH RESPONSE & BEGIN TRANSACTION
@@ -452,6 +461,8 @@ module.exports = function(paramService, esbMessage)
                     }).then(function(act){
                         activityInfo = act;
                         return res;
+                    },function(err){
+                        throw err;
                     })
                 })
                 .then(function(res){
@@ -462,6 +473,7 @@ module.exports = function(paramService, esbMessage)
                     return responseInfo.sp.pm;
                 }  ,  function(err){
                         console.log("error?",err)
+                        throw err;
                     });
 
             })
@@ -508,6 +520,45 @@ module.exports = function(paramService, esbMessage)
                             oHelpers.sendResponse(paramResponse,code,r);
                         })
                 }
+
+                else if(provider === "weixin" && sum > 0)
+                {
+                    console.log("WEIXIN PAYMENT");
+                    //condense orders into a single 'buy'
+                    var condensedOrder = orders.reduce(function(agg, ele, idx){
+                        if(idx == 0) return ele;
+                        agg.offlineAmount += ele.offlineAmount;
+                        agg.orderAmount += ele.orderAmount;
+                        agg.platformCommissionAmount += ele.platformCommissionAmount;
+                        agg.agentCommissionAmount += ele.agentCommissionAmount;
+                        return agg;
+                    },{})
+                    orders = [condensedOrder];
+                    return weixinPayment(orders)
+                        //SEND OFF WEIXIN URL
+                        .then(function(response){
+                            var finalResult = response;
+                            response.tid = transactionid;
+                            response.refCode = refCode;
+                            response.reqPayload = reqPayload;
+                            console.log("Sending out wexin payment URL.", response);
+                            oHelpers.sendResponse(paramResponse,200,finalResult);
+                        })
+                        //FAIL
+                        .then(null,function reject(err){
+                            var code = 501;
+                            r.er={ec:10012,em:"Could not make payment"};
+                            //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+                            if(err.er && err.er ==='Insufficient funds'){
+                                r.er={ec:10011,em:err.er};
+                                code = 403;
+                            }else{
+                                _rollBackTransaction({pl:{transactionid : transactionid}});
+                            }
+                            oHelpers.sendResponse(paramResponse,code,r);
+                        })
+                }
+
                 else// (provider === "lz")
                 {
                     console.log("LANZHENG PAYMENT");
@@ -583,16 +634,18 @@ module.exports = function(paramService, esbMessage)
                         .then(function(smsResponse){
                             if(responseInfo.acn == "LZB101" || responseInfo.acn == "LZB102")
                             {
+                                console.log("LZB101/102 finalResult is :",finalResult);
                                 oHelpers.sendResponse(paramResponse,200,finalResult);
                             }
                         })
                         //FAIL
                         .then(null,function reject(err){
                             var code = 501;
-                            console.log("REjEcTeD with ",err);
-                            r.pl={ow:{sc:reqPayload.pl.phone}}
-                            r.er={ec:10012,em:err?err:"Could not make payment"};
-                            //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+                            r = {
+                                pl : {ow:{sc:reqPayload.pl.phone}},
+                                er : {ec:10012,em:err?err:"Could not make payment"}
+                            }
+
                             if(err.er && err.er ==='Insufficient funds'){
                                 r.er={ec:10011,em:err.er};
                                 code = 403;
@@ -602,6 +655,8 @@ module.exports = function(paramService, esbMessage)
                                 code = 200;
                                 r = {pl:"ORDER ALREADY RECIEVED : Error 10012"};
                             }
+
+                            console.log("REjEcTeD with ",err);
                             oHelpers.sendResponse(paramResponse,code,r);
 
                             if(err.er && err.er !== 'Insufficient funds')
@@ -622,6 +677,9 @@ module.exports = function(paramService, esbMessage)
                 } , function(er){
                     console.log("Something bad happened:",er)
                 })
+            } , function(err){
+                console.log("ACK!",err);
+                oHelpers.sendResponse(paramResponse,501,{pl:{},er:err});
             })
   });
 

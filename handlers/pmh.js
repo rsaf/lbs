@@ -404,10 +404,10 @@ module.exports = function (paramPS, esbMessage) {
         return workflowManager.completeService(paramRequest.body.photo.rc,"LZS105",workflowPayload,paramRequest.user,"DO_NEXT")
             .then(function finish(r){
                 console.log("Completing inspection with response",r);
-                oHelpers.sendResponse(paramResponse, r.pl.returnCode, r.pl.responsePayload);
+                oHelpers.sendResponse(paramResponse, 200, {pl: r.pl, er: r.er});
             }  ,  function reject(r){
                 console.log("Failing inspection with response",r)
-                oHelpers.sendResponse(paramResponse, 501, r);
+                oHelpers.sendResponse(paramResponse, 501, {pl: r.pl, er: r.er});
             })
     })
 
@@ -698,11 +698,11 @@ module.exports = function (paramPS, esbMessage) {
             console.log("Finishing photo ","(",paramRequest.params.photoname,"):",photo);
             return workflowManager.completeService(photo.pl.rc,"LZS106",workflowPayload,paramRequest.user,"DO_NEXT");
         }).then(function finish(r){
-            console.log("Successfully completing correction. Response is", r.pl.responsePayload);
-            oHelpers.sendResponse(paramResponse, r.pl.returnCode, r.pl.responsePayload);
+            console.log("Successfully completing correction. Response is", {pl: {rs: r.pl}, er: r.er});
+            oHelpers.sendResponse(paramResponse, 200, {pl: {rs: r.pl}, er: r.er});
         }  ,  function reject(r){
-            console.log("Error completing correction:",r);
-            oHelpers.sendResponse(paramResponse, r.returnCode, r.responsePayload);
+            console.log("Error completing correction. Response is ",{pl: {rs: false}, er: r.er});
+            oHelpers.sendResponse(paramResponse, 501, {pl: {rs: false}, er: r.er});
         })
     });
 
