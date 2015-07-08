@@ -294,7 +294,7 @@ module.exports = function(paramService, esbMessage){
                                 ac : paramRequest.params.activity_code
                             }
                         })
-                    })
+                    })/*
                     .then(function (r){
                         return esbMessage({
                             "ns":"bmm",
@@ -304,10 +304,10 @@ module.exports = function(paramService, esbMessage){
                                 ac : paramRequest.params.activity_code
                             }
                         })
-                    })
+                    })*/
                     .then(function (r) {
                         console.log("Associate Response:",r);
-                        oHelpers.sendResponse(paramResponse, 200, r);
+                        oHelpers.sendResponse(paramResponse, 200, {pl:r,er:null});
                     })
                     .fail(function (r) {
                         console.log('dmh error-----:',r);
@@ -492,8 +492,9 @@ module.exports = function(paramService, esbMessage){
         });
     });
 
-    bmRouter.get('activityResponseUpload/:field/:activity_code.json', function(paramRequest, paramResponse, paramNext){
+    bmRouter.get('/activityResponseUpload/:field/:activity_code.json', function(paramRequest, paramResponse, paramNext){
         //Associate chosen :field in uploaded excel with the formMeta object for this :activity
+        console.log("HIT THE ENDPOINT FOR UPLOADING FIELD TO META WITHPARAMS = ",paramRequest.params);
         return esbMessage({
                 "ns":"bmm",
                 "op":"bmm_associateUniqueFieldWithFormMeta",
