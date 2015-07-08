@@ -271,13 +271,15 @@ module.exports = function(paramService, esbMessage)
         ///workspace/finance/response/:code.json'
         //todo: Hit confirmAlipay code
         console.log("hit handler");
-        var redirectUrl ='/#/processes/activities/done/' + paramRequest.params.code;
+        var split = paramRequest.params.code.split("T");
+        var responseCodeStripped = split && split.length > 0 ? split[0] : paramRequest.params.code;
+        var redirectUrl ='/#/processes/activities/done/' + responseCodeStripped;
         var failureUrl = '/#/processes/activities/payment/';
         return esbMessage({
             "ns" : "bmm",
             "op" : "bmm_getResponse",
             "pl" : {
-                code : paramRequest.params.code
+                code : responseCodeStripped
             }
         })
         //Confirm with alipay and update/schedule/etc
