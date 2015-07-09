@@ -385,7 +385,7 @@ module.exports = function(paramService, esbMessage){
             var persistServicesArray = [];
             for(var i = 0; i < responses.length; i ++)
             {
-                if(responses[i].sb.length > 0) {console.log("Skipping autoproc of",responses[i]);continue;} //Don't push service choice on responses that are already begun
+                if(responses[i].sb.length > 0) continue; //Don't push service choice on responses that are already begun
                 for(var j = 0; j < 1; j ++)
                 {
                     var priceList = services[j]
