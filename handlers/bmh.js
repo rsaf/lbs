@@ -378,7 +378,6 @@ module.exports = function(paramService, esbMessage){
                         sq : j,
                         spm : priceList.paymentMethod[0]
                     };
-                    console.log("TRYING TO PERSIST",objToSend,"TO SB")
                     persistServicesArray.push(esbMessage({
                         "ns":"bmm",
                         "op":"bmm_persistResponse",
@@ -412,7 +411,8 @@ module.exports = function(paramService, esbMessage){
                 promise = promise.then(function(){
                     var batchpromise = rcBatchArray[k].map(function(rc){
                         return workflowManager.scheduleService(rc,{}, paramRequest.user)
-                            .then(function(){
+                            .then(function(r){
+                                if(r.pl && r.pl.IS_COMPLETE) return;
                                 return esbMessage({
                                     "ns":"bmm",
                                     "op":"bmm_logResponseOnActivity",

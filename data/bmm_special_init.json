@@ -109,7 +109,8 @@
           "aiv": "",
           "apt": "10",
           "aps": 30,
-          "pcn": "蓝证"
+          "pcn": "蓝证",
+          "mass":true
         },
         "md": {
           "uID": "sa",
@@ -235,7 +236,8 @@
           "aiv": "",
           "apt": "10",
           "aps": 30,
-          "pcn": "蓝证"
+          "pcn": "蓝证",
+          "mass":true
         },
         "md": {
           "uID": "sa",
