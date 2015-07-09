@@ -398,6 +398,13 @@ module.exports = function(paramService, esbMessage)
                 "pl": {orders : orders}
             })
         }
+      function weixinPayment(orders){
+          return esbMessage({
+              "ns":"fmm",
+              "op":"fmm_generateWechatPayUrl",
+              "pl": {orders : orders}
+          })
+      }
 
         return q()
             //FETCH RESPONSE & BEGIN TRANSACTION
@@ -513,6 +520,45 @@ module.exports = function(paramService, esbMessage)
                             oHelpers.sendResponse(paramResponse,code,r);
                         })
                 }
+
+                else if(provider === "weixin" && sum > 0)
+                {
+                    console.log("WEIXIN PAYMENT");
+                    //condense orders into a single 'buy'
+                    var condensedOrder = orders.reduce(function(agg, ele, idx){
+                        if(idx == 0) return ele;
+                        agg.offlineAmount += ele.offlineAmount;
+                        agg.orderAmount += ele.orderAmount;
+                        agg.platformCommissionAmount += ele.platformCommissionAmount;
+                        agg.agentCommissionAmount += ele.agentCommissionAmount;
+                        return agg;
+                    },{})
+                    orders = [condensedOrder];
+                    return weixinPayment(orders)
+                        //SEND OFF WEIXIN URL
+                        .then(function(response){
+                            var finalResult = response;
+                            response.tid = transactionid;
+                            response.refCode = refCode;
+                            response.reqPayload = reqPayload;
+                            console.log("Sending out wexin payment URL.", response);
+                            oHelpers.sendResponse(paramResponse,200,finalResult);
+                        })
+                        //FAIL
+                        .then(null,function reject(err){
+                            var code = 501;
+                            r.er={ec:10012,em:"Could not make payment"};
+                            //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+                            if(err.er && err.er ==='Insufficient funds'){
+                                r.er={ec:10011,em:err.er};
+                                code = 403;
+                            }else{
+                                _rollBackTransaction({pl:{transactionid : transactionid}});
+                            }
+                            oHelpers.sendResponse(paramResponse,code,r);
+                        })
+                }
+
                 else// (provider === "lz")
                 {
                     console.log("LANZHENG PAYMENT");
