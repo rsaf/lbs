@@ -429,6 +429,7 @@ module.exports = function(paramService, esbMessage){
                 }
                 rcBatchArray[b].push(responses[i].rc);
             }
+                console.log("BATCH ARRAY CODES:",JSON.stringify(rcBatchArray));
             for(var b = 0; b < rcBatchArray.length; b++)
             {
                 var k = b;
