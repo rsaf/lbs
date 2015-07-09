@@ -343,6 +343,7 @@ module.exports = function(paramService, esbMessage){
         .then(function(r){
             activity = r;
             if(!activity || !activity.abd || !activity.abd.mass)
+                throw "Mass processing not allowed for activity"+JSON.stringify(activity.abd)
             return esbMessage({
                 "ns":"smm",
                 "op":"smm_queryServices",
@@ -352,6 +353,7 @@ module.exports = function(paramService, esbMessage){
             })
         })
         .then(function(r){
+                console.log("queried services",r);
             services = r.pl.results;
             services = services.map(function(arr,idx){
                 if(arr.length < 1) return undefined;
