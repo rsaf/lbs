@@ -342,6 +342,7 @@ module.exports = function(paramService, esbMessage){
         })
         .then(function(r){
             activity = r;
+            if(!activity || !activity.abd || !activity.abd.mass)
             return esbMessage({
                 "ns":"smm",
                 "op":"smm_queryServices",
