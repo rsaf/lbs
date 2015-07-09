@@ -286,7 +286,39 @@ module.exports = function(paramService, esbMessage){
                 m.pl.fd = data;
                 console.log('uploading response lists ...', m.pl);
                 esbMessage(m)
-                    .then(function (usersmetaobject){
+                    .then(function setMassProcessable(){
+                        var activity;
+                        return esbMessage({
+                            "ns":"bmm",
+                            "op":"bmm_getActivity",
+                            "pl":{
+                                code : paramRequest.params.activity_code
+                            }
+                        }).then(function(act){
+                            activity = act;
+                            return esbMessage({
+                                "ns":"smm",
+                                "op":"smm_queryServices",
+                                "pl":{
+                                    query : act.sqc
+                                }
+                            })
+                        }).then(function(services){
+                            var processable = services.pl.results.length == 1 && services.pl.results[0].reduce(function(agg, val){
+                                var sc = val.service.serviceCode;
+                                return agg && (sc == "LZS101" || sc == "LZS102" ? true : false);
+                            },true);
+                            return esbMessage({
+                                "ns":"bmm",
+                                "op":"bmm_setMassProcessable",
+                                "pl": {
+                                    code : paramRequest.params.activity_code,
+                                    value : processable
+                                }
+                            })
+                        })
+                    })
+                    .then(function returnExcelHeadersToChooseFrom(usersmetaobject){
                         return esbMessage({
                             "ns":"bmm",
                             "op":"bmm_getExcelHeadersFromUnzipped",
@@ -294,23 +326,13 @@ module.exports = function(paramService, esbMessage){
                                 ac : paramRequest.params.activity_code
                             }
                         })
-                    })/*
-                    .then(function (r){
-                        return esbMessage({
-                            "ns":"bmm",
-                            "op":"bmm_associateUniqueFieldWithFormMeta",
-                            "pl":{
-                                field: "xingming",
-                                ac : paramRequest.params.activity_code
-                            }
-                        })
-                    })*/
+                    })
                     .then(function (r) {
                         console.log("Associate Response:",r);
                         oHelpers.sendResponse(paramResponse, 200, {pl:r,er:null});
                     })
                     .fail(function (r) {
-                        console.log('dmh error-----:',r);
+                        console.log('bmh error-----:',r);
                         var r = {pl: null, er: {ec: 404, em: "could not save document"}};
                         oHelpers.sendResponse(paramResponse, 404, r);
                     });
@@ -353,7 +375,6 @@ module.exports = function(paramService, esbMessage){
             })
         })
         .then(function(r){
-                console.log("queried services",r);
             services = r.pl.results;
             services = services.map(function(arr,idx){
                 if(arr.length < 1) return undefined;
@@ -364,6 +385,7 @@ module.exports = function(paramService, esbMessage){
             var persistServicesArray = [];
             for(var i = 0; i < responses.length; i ++)
             {
+                if(responses[i].sb.length > 0) {console.log("Skipping autoproc of",responses[i]);continue;} //Don't push service choice on responses that are already begun
                 for(var j = 0; j < 1; j ++)
                 {
                     var priceList = services[j]
