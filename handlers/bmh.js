@@ -328,7 +328,6 @@ module.exports = function(paramService, esbMessage){
                         })
                     })
                     .then(function (r) {
-                        console.log("Associate Response:",r);
                         oHelpers.sendResponse(paramResponse, 200, {pl:r,er:null});
                     })
                     .fail(function (r) {
@@ -462,6 +461,7 @@ module.exports = function(paramService, esbMessage){
     })
     bmRouter.get('/activityResponseDownload/:activity_code.json', function(paramRequest, paramResponse, paramNext){
         var ac = paramRequest.params.activity_code;
+        var headers;
         q().then(function() {
             return esbMessage({
                 "ns": "bmm",
@@ -481,20 +481,51 @@ module.exports = function(paramService, esbMessage){
                     currentOrganization: paramRequest.user.currentOrganization
                 }
             })
-        }).then(function(formmeta){
-            if(!formmeta) throw "No Form Meta found for activity "+ac
-            var fields = formmeta.fd.fields.map(function(ele){return ele.nm})
-            fields.push('rc')
+        }).then(function(formmeta) {
+            if (!formmeta) throw "No Form Meta found for activity " + ac
+            var fields = formmeta.fd.fields.map(function (ele) {
+                return ele.nm
+            })
 
             var uniq = [];
-            var headers = fields.map(function(f){
-                if(uniq.indexOf(f) < 0)
-                {
+            headers = fields.map(function (f) {
+                if (uniq.indexOf(f) < 0) {
                     uniq.push(f)
                     return f;
                 }
-            }).filter(function(n){ return n != undefined });
-            return headers;
+            }).filter(function (n) {
+                return n != undefined
+            });
+            return esbMessage({
+                "ns":"bmm",
+                "op":"bmm_getAllResponsesForActivity",
+                "pl":{
+                    code : ac
+                }
+            });
+        }).then(function(responses){
+            var headerMap = headers.map(function(val){
+                return {
+                    name : val,
+                    uniqs : [],
+                    isUniq : true
+                }
+            })
+            for(var i = 1; i < responses.length; i ++)
+            {
+                for(var h = 0; h < headerMap.length; h++)
+                {
+                    var responseQuery = responses[i].fd.fields[headerMap[h].name]
+                    for (var q = 0; headerMap[h].isUniq && q < headerMap[h].uniqs.length; q++) {
+                        if (headerMap[h].uniqs[q] == responseQuery) {
+                            headerMap[h].isUniq = false;
+                        }
+                    }
+                    headerMap[h].uniqs.push(responseQuery);
+                }
+            }
+            headerMap.push({name:'rc',isUniq:true})
+            return headerMap.map(function(val){return val.isUniq?val.name:undefined;}).filter(function(val){return val !== undefined});
         }).then(function(radioFieldOptions){
             oHelpers.sendResponse(paramResponse,200,{pl:radioFieldOptions});
         }).fail(function(er){
