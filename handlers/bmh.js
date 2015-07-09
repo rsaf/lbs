@@ -503,7 +503,7 @@ module.exports = function(paramService, esbMessage){
                     code : ac
                 }
             });
-        }).then(function(responses){
+        }).then(function uniqueHeaders(responses){
             var headerMap = headers.map(function(val){
                 return {
                     name : val,
