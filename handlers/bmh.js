@@ -419,7 +419,7 @@ module.exports = function(paramService, esbMessage){
         })
         .then(function(r){
             console.log("FOUND ",r.length,"PROCESSES FOR",paramRequest.params.activity_code);
-            var batchSize = 1,
+            var batchSize = 5,
                 rcBatchArray = [],
                 promise = q();
             //Create an array of form [[rc1,...,rcBatchSize],[rcBatchSize+1,...,2*rcBatchSize],...]
@@ -437,7 +437,7 @@ module.exports = function(paramService, esbMessage){
                         //Schedule service for each code in the batch
                         batch.map(function (rcode) {
                             return workflowManager.scheduleService(rcode, {}, paramRequest.user)
-                                .then(function (scheduleResponse) {
+                                .then(function logActivityResponse(scheduleResponse) {
                                     if (scheduleResponse && scheduleResponse.IS_COMPLETE) return;
                                     return esbMessage({
                                         "ns": "bmm",
@@ -446,8 +446,6 @@ module.exports = function(paramService, esbMessage){
                                             code: paramRequest.params.activity_code,
                                             stat: "completed"
                                         }
-                                    }).then(function () {
-                                        return rcode;
                                     })
                                 })
                         })
