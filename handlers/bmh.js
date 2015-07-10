@@ -340,7 +340,20 @@ module.exports = function(paramService, esbMessage){
         });
 
     });
-
+    bmRouter.get('/getProcessProgress/:activity_code.json', function(paramRequest, paramResponse, paramNext){
+        var ac = paramRequest.params.activity_code;
+        return esbMessage({
+            "ns":"bmm",
+            "op":"bmm_getActivity",
+            "pl":{
+                code : ac
+            }
+        }).then(function(act){
+            oHelpers.sendResponse(paramResponse, 200, {pl:{cnt:act.arc.prc, ttl: act.arc.ptl}})
+        }  ,  function(err){
+            oHelpers.sendResponse(paramResponse,501, {pl:null, er:err});
+        });
+    })
     bmRouter.post('/processAllResponses/:activity_code.json', function(paramRequest, paramResponse, paramNext){
         var responses = undefined;
         var activity = undefined;
@@ -438,13 +451,14 @@ module.exports = function(paramService, esbMessage){
                         batch.map(function (rcode) {
                             return workflowManager.scheduleService(rcode, {}, paramRequest.user)
                                 .then(function logActivityResponse(scheduleResponse) {
-                                    if (scheduleResponse && scheduleResponse.IS_COMPLETE) return;
+                                    if (scheduleResponse && scheduleResponse.pl && scheduleResponse.pl.IS_COMPLETE) return;
                                     return esbMessage({
                                         "ns": "bmm",
                                         "op": "bmm_logResponseOnActivity",
                                         "pl": {
                                             code: paramRequest.params.activity_code,
-                                            stat: "completed"
+                                            stat: "autoprocess",
+                                            ttl: responses.length
                                         }
                                     })
                                 })
