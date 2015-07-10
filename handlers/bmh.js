@@ -419,7 +419,7 @@ module.exports = function(paramService, esbMessage){
         })
         .then(function(r){
             console.log("FOUND ",r.length,"PROCESSES FOR",paramRequest.params.activity_code);
-            var batchSize = 10,
+            var batchSize = 1,
                 rcBatchArray = [],
                 promise = q();
             //Create an array of form [[rc1,...,rcBatchSize],[rcBatchSize+1,...,2*rcBatchSize],...]
