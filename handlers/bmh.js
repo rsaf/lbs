@@ -308,6 +308,7 @@ module.exports = function(paramService, esbMessage){
                                 var sc = val.service.serviceCode;
                                 return agg && (sc == "LZS101" || sc == "LZS102" ? true : false);
                             },true);
+                            console.log("SETTING PROCESSABLE TO",processable);
                             return esbMessage({
                                 "ns":"bmm",
                                 "op":"bmm_setMassProcessable",
@@ -421,7 +422,7 @@ module.exports = function(paramService, esbMessage){
             var batchSize = 10,
                 rcBatchArray = [],
                 promise = q();
-
+            //Create an array of form [[rc1,...,rcBatchSize],[rcBatchSize+1,...,2*rcBatchSize],...]
             for(var i = 0, b = -1; i < responses.length; i++)
             {
                 if(i % batchSize == 0) {
@@ -429,28 +430,31 @@ module.exports = function(paramService, esbMessage){
                 }
                 rcBatchArray[b].push(responses[i].rc);
             }
-            for(var b = 0; b < rcBatchArray.length; b++)
-            {
-                var k = b;
-                promise = promise.then(function(){
-                    var batchpromise = rcBatchArray[k].map(function(rc){
-                        return workflowManager.scheduleService(rc,{}, paramRequest.user)
-                            .then(function(r){
-                                if(r.pl && r.pl.IS_COMPLETE) return;
-                                return esbMessage({
-                                    "ns":"bmm",
-                                    "op":"bmm_logResponseOnActivity",
-                                    "pl":{
-                                        code:paramRequest.params.activity_code,
-                                        stat:"completed"
-                                    }
+            //Create sequential & batched promise chain of scheduling events.
+            return rcBatchArray.map(function(batch){
+                return function batchPromise(){
+                    return q.all(
+                        //Schedule service for each code in the batch
+                        batch.map(function (rcode) {
+                            return workflowManager.scheduleService(rcode, {}, paramRequest.user)
+                                .then(function (scheduleResponse) {
+                                    if (scheduleResponse && scheduleResponse.IS_COMPLETE) return;
+                                    return esbMessage({
+                                        "ns": "bmm",
+                                        "op": "bmm_logResponseOnActivity",
+                                        "pl": {
+                                            code: paramRequest.params.activity_code,
+                                            stat: "completed"
+                                        }
+                                    }).then(function () {
+                                        return rcode;
+                                    })
                                 })
-                            })
-                    })
-                    return q.all(batchpromise)
-                })
-            }
-            return promise;
+                        })
+                    ).then(function (batch) {console.log("BATCH DONE", batch);})
+                }
+            }).reduce(q.when,q())
+
         }).then(function(alldone){
             console.log("all done");
             oHelpers.sendResponse(paramResponse,200,{pl:{},er:null});
