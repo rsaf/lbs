@@ -398,11 +398,11 @@ module.exports = function(paramService, esbMessage)
                 "pl": {orders : orders}
             })
         }
-      function weixinPayment(orders){
+      function weixinPayment(orders, code){
           return esbMessage({
               "ns":"fmm",
               "op":"fmm_generateWechatPayUrl",
-              "pl": {orders : orders}
+              "pl": {orders : orders, code:code}
           })
       }
 
@@ -534,14 +534,18 @@ module.exports = function(paramService, esbMessage)
                         return agg;
                     },{})
                     orders = [condensedOrder];
-                    return weixinPayment(orders)
+                    var wxcode = reqPayload.weixinCode;
+                    return weixinPayment(orders,wxcode)
                         //SEND OFF WEIXIN URL
                         .then(function(response){
+
+
+                            console.log("weixin payment---", response);
+
                             var finalResult = response;
                             response.tid = transactionid;
                             response.refCode = refCode;
                             response.reqPayload = reqPayload;
-                            console.log("Sending out wexin payment URL.", response);
                             oHelpers.sendResponse(paramResponse,200,finalResult);
                         })
                         //FAIL
