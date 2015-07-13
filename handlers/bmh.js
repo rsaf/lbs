@@ -11,6 +11,7 @@ var oHelpers= require('../utilities/helpers.js');
 var formidable = require('formidable');
 var fs = require('fs');
 var q = require('q');
+var lib = require('lib');
 
 function _initRequestMessage(paramRequest,type,code,adminOrg,orgName){
   var col,mod='bmm',
@@ -160,6 +161,11 @@ module.exports = function(paramService, esbMessage){
     );
   }
 
+    var workflowManager = new lib.WorkflowManager({
+            esbMessage: esbMessage,
+            commitTransaction: _commitTransaction,
+            rollbackTransaction: _rollBackTransaction}
+    );
 
   var bmRouter = paramService.Router();
   bmRouter.get('/listtemplate.json', function(paramRequest, paramResponse, paramNext){
@@ -280,36 +286,53 @@ module.exports = function(paramService, esbMessage){
                 m.pl.fd = data;
                 console.log('uploading response lists ...', m.pl);
                 esbMessage(m)
-                    .then(function (r) {
-                        //paramResponse.writeHead(200, {"Content-Type": "application/json"});
-
-                        //paramResponse.end(JSON.stringify(r));
-
-                        oHelpers.sendResponse(paramResponse, 200, r);
-
-                        //console.log("coming backing from uploading response list ...", r);
-
-                        //@todo tie this to a publish button on the webside
-                        /*
-                        console.log('Immediately proceeding to pregenerate responses');
-
-                        var m_p = {
-                            ns: 'bmm',
-                            op: 'bmm_import_responses_data',
-                            activityCode: paramRequest.params.activity_code,
-                            loginName : paramRequest.user.lanzheng.loginName,
-                            currentOrganization : paramRequest.user.currentOrganization
-                        };
-                        esbMessage(m_p)
-                            .then(function onResolve(r){
-                                console.log("Resolved response pregeneration with response: ",r);
-                            },function onRejected(r){
-                                console.log("Failed response pregeneration with respnose2: ", r);
+                    .then(function setMassProcessable(){
+                        var activity;
+                        return esbMessage({
+                            "ns":"bmm",
+                            "op":"bmm_getActivity",
+                            "pl":{
+                                code : paramRequest.params.activity_code
+                            }
+                        }).then(function(act){
+                            activity = act;
+                            return esbMessage({
+                                "ns":"smm",
+                                "op":"smm_queryServices",
+                                "pl":{
+                                    query : act.sqc
+                                }
                             })
-                            */
+                        }).then(function(services){
+                            var processable = services.pl.results.length == 1 && services.pl.results[0].reduce(function(agg, val){
+                                var sc = val.service.serviceCode;
+                                return agg && (sc == "LZS101" || sc == "LZS102" ? true : false);
+                            },true);
+                            console.log("SETTING PROCESSABLE TO",processable);
+                            return esbMessage({
+                                "ns":"bmm",
+                                "op":"bmm_setMassProcessable",
+                                "pl": {
+                                    code : paramRequest.params.activity_code,
+                                    value : processable
+                                }
+                            })
+                        })
+                    })
+                    .then(function returnExcelHeadersToChooseFrom(usersmetaobject){
+                        return esbMessage({
+                            "ns":"bmm",
+                            "op":"bmm_getExcelHeadersFromUnzipped",
+                            "pl":{
+                                ac : paramRequest.params.activity_code
+                            }
+                        })
+                    })
+                    .then(function (r) {
+                        oHelpers.sendResponse(paramResponse, 200, {pl:r,er:null});
                     })
                     .fail(function (r) {
-                        console.log('dmh error-----:',r.er);
+                        console.log('bmh error-----:',r);
                         var r = {pl: null, er: {ec: 404, em: "could not save document"}};
                         oHelpers.sendResponse(paramResponse, 404, r);
                     });
@@ -317,9 +340,144 @@ module.exports = function(paramService, esbMessage){
         });
 
     });
+    bmRouter.get('/getProcessProgress/:activity_code.json', function(paramRequest, paramResponse, paramNext){
+        var ac = paramRequest.params.activity_code;
+        return esbMessage({
+            "ns":"bmm",
+            "op":"bmm_getActivity",
+            "pl":{
+                code : ac
+            }
+        }).then(function(act){
+            oHelpers.sendResponse(paramResponse, 200, {pl:{cnt:act.arc.prc, ttl: act.arc.ptl}})
+        }  ,  function(err){
+            oHelpers.sendResponse(paramResponse,501, {pl:null, er:err});
+        });
+    })
+    bmRouter.post('/processAllResponses/:activity_code.json', function(paramRequest, paramResponse, paramNext){
+        var responses = undefined;
+        var activity = undefined;
+        var services = undefined;
+        return esbMessage({
+            "ns":"bmm",
+            "op":"bmm_getAllResponsesForActivity",
+            "pl":{
+                code : paramRequest.params.activity_code
+            }
+        })
+        .then(function(r){
+            responses = r;
+            return esbMessage({
+                "ns":"bmm",
+                "op":"bmm_getActivity",
+                "pl":{
+                    code : paramRequest.params.activity_code
+                }
+            })
+        })
+        .then(function(r){
+            activity = r;
+            if(!activity || !activity.abd || !activity.abd.mass)
+                throw "Mass processing not allowed for activity"+JSON.stringify(activity.abd)
+            return esbMessage({
+                "ns":"smm",
+                "op":"smm_queryServices",
+                "pl":{
+                    query: activity.sqc
+                }
+            })
+        })
+        .then(function(r){
+            services = r.pl.results;
+            services = services.map(function(arr,idx){
+                if(arr.length < 1) return undefined;
+                var first = arr[0];
+                first.sq = idx;
+                return first;
+            })
+            var persistServicesArray = [];
+            for(var i = 0; i < responses.length; i ++)
+            {
+                if(responses[i].sb.length > 0) continue; //Don't push service choice on responses that are already begun
+                for(var j = 0; j < 1; j ++)
+                {
+                    var priceList = services[j]
+                    var objToSend = {
+                        plid: priceList._id,
+                        svid: priceList.service._id,
+                        svn: priceList.serviceName.text,
+                        snid: priceList.serviceName._id,
+                        svp: priceList.servicePrices,
+                        sdp: priceList.discountedPrice,
+                        spn: priceList.servicePoint.servicePointName,
+                        spid: priceList.servicePoint._id,
+                        spc: priceList.servicePoint.ct.oID,
+                        serviceCode : priceList.service.serviceCode,
+                        sq : j,
+                        spm : priceList.paymentMethod[0]
+                    };
+                    persistServicesArray.push(esbMessage({
+                        "ns":"bmm",
+                        "op":"bmm_persistResponse",
+                        "pl":{
+                            response : {
+                                sb : objToSend,
+                                _id : responses[i]._id
+                            }
+                        }
+                    }))
+                }
+            }
+            return q.all(persistServicesArray)
+        })
+        .then(function(r){
+            console.log("FOUND ",r.length,"PROCESSES FOR",paramRequest.params.activity_code);
+            var batchSize = 1,
+                rcBatchArray = [],
+                promise = q();
+            //Create an array of form [[rc1,...,rcBatchSize],[rcBatchSize+1,...,2*rcBatchSize],...]
+            for(var i = 0, b = -1; i < responses.length; i++)
+            {
+                if(i % batchSize == 0) {
+                    rcBatchArray[++b] = [];
+                }
+                rcBatchArray[b].push(responses[i].rc);
+            }
+            //Create sequential & batched promise chain of scheduling events.
+            return rcBatchArray.map(function(batch){
+                return function batchPromise(){
+                    return q.all(
+                        //Schedule service for each code in the batch
+                        batch.map(function (rcode) {
+                            return workflowManager.scheduleService(rcode, {}, paramRequest.user)
+                                .then(function logActivityResponse(scheduleResponse) {
+                                    if (scheduleResponse && scheduleResponse.pl && scheduleResponse.pl.IS_COMPLETE) return;
+                                    return esbMessage({
+                                        "ns": "bmm",
+                                        "op": "bmm_logResponseOnActivity",
+                                        "pl": {
+                                            code: paramRequest.params.activity_code,
+                                            stat: "autoprocess",
+                                            ttl: responses.length
+                                        }
+                                    })
+                                })
+                        })
+                    ).then(function (batch) {console.log("BATCH DONE", batch);})
+                }
+            }).reduce(q.when,q())
 
+        }).then(function(alldone){
+            console.log("all done");
+            oHelpers.sendResponse(paramResponse,200,{pl:{},er:null});
+        }  ,  function(err){
+            console.log(err);
+            oHelpers.sendResponse(paramResponse,501,{pl:null,er:err});
+        })
+    })
     bmRouter.get('/activityResponseDownload/:activity_code.json', function(paramRequest, paramResponse, paramNext){
         var ac = paramRequest.params.activity_code;
+        var headers;
         q().then(function() {
             return esbMessage({
                 "ns": "bmm",
@@ -339,20 +497,51 @@ module.exports = function(paramService, esbMessage){
                     currentOrganization: paramRequest.user.currentOrganization
                 }
             })
-        }).then(function(formmeta){
-            if(!formmeta) throw "No Form Meta found for activity "+ac
-            var fields = formmeta.fd.fields.map(function(ele){return ele.nm})
-            fields.push('rc')
+        }).then(function(formmeta) {
+            if (!formmeta) throw "No Form Meta found for activity " + ac
+            var fields = formmeta.fd.fields.map(function (ele) {
+                return ele.nm
+            })
 
             var uniq = [];
-            var headers = fields.map(function(f){
-                if(uniq.indexOf(f) < 0)
-                {
+            headers = fields.map(function (f) {
+                if (uniq.indexOf(f) < 0) {
                     uniq.push(f)
                     return f;
                 }
-            }).filter(function(n){ return n != undefined });
-            return headers;
+            }).filter(function (n) {
+                return n != undefined
+            });
+            return esbMessage({
+                "ns":"bmm",
+                "op":"bmm_getAllResponsesForActivity",
+                "pl":{
+                    code : ac
+                }
+            });
+        }).then(function uniqueHeaders(responses){
+            var headerMap = headers.map(function(val){
+                return {
+                    name : val,
+                    uniqs : [],
+                    isUniq : true
+                }
+            })
+            for(var i = 1; i < responses.length; i ++)
+            {
+                for(var h = 0; h < headerMap.length; h++)
+                {
+                    var responseQuery = responses[i].fd.fields[headerMap[h].name]
+                    for (var q = 0; headerMap[h].isUniq && q < headerMap[h].uniqs.length; q++) {
+                        if (headerMap[h].uniqs[q] == responseQuery) {
+                            headerMap[h].isUniq = false;
+                        }
+                    }
+                    headerMap[h].uniqs.push(responseQuery);
+                }
+            }
+            headerMap.push({name:'rc',isUniq:true})
+            return headerMap.map(function(val){return val.isUniq?val.name:undefined;}).filter(function(val){return val !== undefined});
         }).then(function(radioFieldOptions){
             oHelpers.sendResponse(paramResponse,200,{pl:radioFieldOptions});
         }).fail(function(er){
@@ -374,6 +563,23 @@ module.exports = function(paramService, esbMessage){
             oHelpers.sendResponse(paramResponse,501,er);
         });
     });
+
+    bmRouter.get('/activityResponseUpload/:field/:activity_code.json', function(paramRequest, paramResponse, paramNext){
+        //Associate chosen :field in uploaded excel with the formMeta object for this :activity
+        console.log("HIT THE ENDPOINT FOR UPLOADING FIELD TO META WITHPARAMS = ",paramRequest.params);
+        return esbMessage({
+                "ns":"bmm",
+                "op":"bmm_associateUniqueFieldWithFormMeta",
+                "pl":{
+                    ac : paramRequest.params.activity_code,
+                    field : paramRequest.params.field
+                }
+        }).then(function(msg){
+            oHelpers.sendResponse(paramResponse, 200, {pl:msg});
+        }).fail(function(er){
+            oHelpers.sendResponse(paramResponse, 501, er);
+        });
+    })
 
   bmRouter.get('/responses.json', function(paramRequest, paramResponse, paramNext){
     var m = {pl:{}};

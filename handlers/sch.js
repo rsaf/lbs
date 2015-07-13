@@ -9,7 +9,6 @@ var lib = require('lib')
 module.exports = function(paramService, esbMessage) {
   var photosRouter = paramService.Router();
 
-
     //workspace/users/userType
     photosRouter.get('/:userType.json', function(paramRequest, paramResponse, paramNext){
 
@@ -59,8 +58,6 @@ module.exports = function(paramService, esbMessage) {
 
     });
 
-
-
     //workspace/users/status/user_id
     photosRouter.put('/:status/:userType/:user_id.json', function(paramRequest, paramResponse){
 
@@ -94,8 +91,6 @@ module.exports = function(paramService, esbMessage) {
             });
     });
 
-
-
     //workspace/users/user/mobile.json
     photosRouter.put('/user/mobile.json', function(paramRequest, paramResponse){
 
@@ -126,7 +121,7 @@ module.exports = function(paramService, esbMessage) {
             });
     });
 
-//workspace/users/user/:loginInfo.json
+    //workspace/users/user/:loginInfo.json
     photosRouter.get('/user/:loginInfo.json', function(paramRequest, paramResponse){
 
 
@@ -153,8 +148,6 @@ module.exports = function(paramService, esbMessage) {
                 oHelpers.sendResponse(paramResponse, 501, r);
             });
     });
-
-
 
     //workspace/users/user/verification/:mobile.json
     photosRouter.post('/user/verification/:mobile.json', function(paramRequest, paramResponse){
@@ -223,8 +216,6 @@ module.exports = function(paramService, esbMessage) {
                 oHelpers.sendResponse(paramResponse, 501, r);
             });
     });
-
-
 
     //workspace/users/user/verification/:mobile.json
     photosRouter.post('/user/verification/code/:code.json', function(paramRequest, paramResponse){
