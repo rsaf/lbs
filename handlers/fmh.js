@@ -373,7 +373,106 @@ module.exports = function(paramService, esbMessage)
  * Creates an order for each selected service in the response
  * makes payment to account ?? for all the services
  */
-  fmmRouter.post('/responsepayment.json', function(paramRequest, paramResponse, paramNext){
+
+    fmmRouter.post('/:activity_code/:phone/fillAndPostPayResponse.json', function(paramRequest, paramResponse, paramNext) {
+        var ac = paramRequest.params.activity_code;
+        var phone = paramRequest.params.phone;
+        var activity;
+        if (ac !== "LZB106"){
+            oHelpers.sendResponse(paramResponse, 404, {er: "Activity not supported for API response filling."});
+            return;
+        }
+        return esbMessage({
+            "ns":"bmm",
+            "op":"bmm_getActivity",
+            "pl":{
+                code : paramRequest.params.activity_code
+            }
+        })
+        .then(function getServices(act){
+            activity = act;
+            return esbMessage({
+                "ns":"smm",
+                "op":"smm_queryServices",
+                "pl":{
+                    query : act.sqc
+                }
+            })
+        })
+        .then(function persistResponse(services){
+            var priceList = services.pl.results[0][0];
+            var objToSend = {
+                plid: priceList._id,
+                svid: priceList.service._id,
+                svn: priceList.serviceName.text,
+                snid: priceList.serviceName._id,
+                svp: priceList.servicePrices,
+                sdp: priceList.discountedPrice,
+                spn: priceList.servicePoint.servicePointName,
+                spid: priceList.servicePoint._id,
+                spc: priceList.servicePoint.ct.oID,
+                serviceCode : priceList.service.serviceCode,
+                sq : 0,
+                spm : priceList.paymentMethod[0]
+            };
+            var response = JSON.parse(paramRequest.query.json)
+            response.pl.sb = objToSend;
+            return esbMessage({
+                "ns" : "bmm",
+                "op" : "bmm_persistResponse",
+                "pl" : {
+                    response : response.pl,
+                    //transactionid: m.pl.transactionid,
+                    loginName: paramRequest.user.lanzheng.loginName,
+                    currentOrganization: paramRequest.user.currentOrganization,
+                    activityCode: ac
+                }
+            })
+        })
+        .then(function submitPay(r){
+            paramRequest.body.json = JSON.stringify({pl:{code: r.pl.rc, phone: phone}});
+            return doResponsePayment(paramRequest, paramResponse, paramNext, function(code, payload){
+                if(code != 200) return {c: code, x: payload};
+
+                return esbMessage({
+                    "ns" : "bmm",
+                    "op" : "bmm_getResponse",
+                    "pl" : {
+                        code : r.pl.rc
+                    }
+                })
+                .then(function(r){
+                    if(!r || !r.fd || !r.fd.fields)
+                        return {c: code, x: payload};
+                    var alteredPayload = {
+                        pl: {
+                            rc: r.rc,
+                            LZGMSFHM: r.fd.fields.LZGMSFHM, // validation result of the id number
+                            LZBIZDESC: r.fd.fields.LZBIZDESC, // validation result discription
+                            LZXPFS: r.fd.fields.LZXPFS, //similirity number
+                            LZNAME: r.fd.fields.LZNAME, // name to be validated
+                            LZSID: r.fd.fields.LZSID,
+                            LZXM: r.fd.fields.LZXM, // validation result of the name
+                            LZXPFX: r.fd.fields.LZXPFX // conclusion of validation
+                        }
+                    }
+                        console.log("ALTERED PAYLOAD:",alteredPayload);
+                    return {c: code, x: alteredPayload}
+                })
+            })
+        })
+        .then(function resolve(res){
+                console.log("DID API Fillout WITH",res);
+            //oHelpers.sendResponse(paramResponse, 200, {pl : res});
+        }  ,  function reject(err){
+                console.log("FAILED API Fillout WITH",err);
+            oHelpers.sendResponse(paramResponse, 501, {er : err})
+        })
+    })
+
+  fmmRouter.post('/responsepayment.json', doResponsePayment);
+
+    function doResponsePayment(paramRequest, paramResponse, paramNext, responseMutator){
         var r = {er:null,pl:null},
             transactionid = false,
             responseInfo = null,
@@ -381,6 +480,13 @@ module.exports = function(paramService, esbMessage)
             reqPayload=false,
             finalResult = undefined,
             refCode = undefined;
+
+        if(!responseMutator)
+            responseMutator = function(code,payload){
+                return q().then(function(){
+                    return {c: code, x: payload}
+                })
+            }
 
         function directPayment(orders){
           //update response sp and set payment status to paid
@@ -398,7 +504,7 @@ module.exports = function(paramService, esbMessage)
                 "pl": {orders : orders}
             })
         }
-      function weixinPayment(orders){
+        function weixinPayment(orders){
           return esbMessage({
               "ns":"fmm",
               "op":"fmm_generateWechatPayUrl",
@@ -504,7 +610,9 @@ module.exports = function(paramService, esbMessage)
                             response.refCode = refCode;
                             response.reqPayload = reqPayload;
                             console.log("Sending out Alipay URL.", response);
-                            oHelpers.sendResponse(paramResponse,200,finalResult);
+                            responseMutator(200,finalResult).then(function(mut){
+                                oHelpers.sendResponse(paramResponse,mut.c,mut.x);
+                            })
                         })
                         //FAIL
                         .then(null,function reject(err){
@@ -517,7 +625,10 @@ module.exports = function(paramService, esbMessage)
                             }else{
                                 _rollBackTransaction({pl:{transactionid : transactionid}});
                             }
-                            oHelpers.sendResponse(paramResponse,code,r);
+                            //oHelpers.sendResponse(paramResponse,code,r);
+                            responseMutator(code, r).then(function(mut){
+                                oHelpers.sendResponse(paramResponse,mut.c,mut.x);
+                            })
                         })
                 }
 
@@ -542,7 +653,10 @@ module.exports = function(paramService, esbMessage)
                             response.refCode = refCode;
                             response.reqPayload = reqPayload;
                             console.log("Sending out wexin payment URL.", response);
-                            oHelpers.sendResponse(paramResponse,200,finalResult);
+                            //oHelpers.sendResponse(paramResponse,200,finalResult);
+                            responseMutator(200,finalResult).then(function(mut){
+                                oHelpers.sendResponse(paramResponse,mut.c,mut.x);
+                            })
                         })
                         //FAIL
                         .then(null,function reject(err){
@@ -555,7 +669,10 @@ module.exports = function(paramService, esbMessage)
                             }else{
                                 _rollBackTransaction({pl:{transactionid : transactionid}});
                             }
-                            oHelpers.sendResponse(paramResponse,code,r);
+                            //oHelpers.sendResponse(paramResponse,code,r);
+                            responseMutator(code,r).then(function(mut){
+                                oHelpers.sendResponse(paramResponse,mut.c,mut.x);
+                            })
                         })
                 }
 
@@ -589,14 +706,19 @@ module.exports = function(paramService, esbMessage)
                         })
                         //SCHEDULE/ACTIVATE SERVICES
                         .then(function() {
-                            if(responseInfo.acn != "LZB101" && responseInfo.acn != "LZB102")
+                            if(responseInfo.acn != "LZB101" && responseInfo.acn != "LZB102" && responseInfo.acn != "LZB106")
                             {
-                                oHelpers.sendResponse(paramResponse, 200, {pl:{ow:{sc:reqPayload.pl.phone},can:responseInfo.can},er:null});
+                                //oHelpers.sendResponse(paramResponse, 200, {pl:{ow:{sc:reqPayload.pl.phone},can:responseInfo.can},er:null});
+                                responseMutator(200,{pl:{ow:{sc:reqPayload.pl.phone},can:responseInfo.can},er:null}).then(function(mut){
+                                    oHelpers.sendResponse(paramResponse,mut.c,mut.x);
+                                })
                             }
+                            console.log("SCHEDULING",responseInfo.acn);
                             return workflowManager.scheduleService(responseInfo.rc,{}, paramRequest.user);
                         })
                         //Update ResponseInfo
                         .then(function(z){
+                            console.log("POST SCHEDULING");
                             return esbMessage({
                                 op:"bmm_getResponse",
                                 pl:reqPayload.pl
@@ -632,10 +754,20 @@ module.exports = function(paramService, esbMessage)
                         })
                         //EXIT
                         .then(function(smsResponse){
-                            if(responseInfo.acn == "LZB101" || responseInfo.acn == "LZB102")
+                            if(responseInfo.acn == "LZB101" || responseInfo.acn == "LZB102" || responseInfo.acn == "LZB106")
                             {
-                                console.log("LZB101/102 finalResult is :",finalResult);
-                                oHelpers.sendResponse(paramResponse,200,finalResult);
+                                console.log("LZB101/102/106 finalResult is :",finalResult);
+                                //oHelpers.sendResponse(paramResponse,200,finalResult);
+
+                                responseMutator(200,finalResult).then(function(mut){
+                                    console.log("mut is",mut);
+                                    oHelpers.sendResponse(paramResponse,mut.c,mut.x);
+                                }).then(function(){
+                                    console.log("foo?")
+                                },function(err){
+                                    console.log("BAR!",err)
+                                })
+
                             }
                         })
                         //FAIL
@@ -657,7 +789,10 @@ module.exports = function(paramService, esbMessage)
                             }
 
                             console.log("REjEcTeD with ",err);
-                            oHelpers.sendResponse(paramResponse,code,r);
+                            //oHelpers.sendResponse(paramResponse,code,r);
+                            responseMutator(code,r).then(function(mut){
+                                oHelpers.sendResponse(paramResponse,mut.c,mut.x);
+                            })
 
                             if(err.er && err.er !== 'Insufficient funds')
                                 _rollBackTransaction({pl:{transactionid : transactionid}});
@@ -679,9 +814,12 @@ module.exports = function(paramService, esbMessage)
                 })
             } , function(err){
                 console.log("ACK!",err);
-                oHelpers.sendResponse(paramResponse,501,{pl:{},er:err});
+                //oHelpers.sendResponse(paramResponse,501,{pl:{},er:err});
+                responseMutator(501,{pl:{},er:err}).then(function(x,c){
+                    oHelpers.sendResponse(paramResponse,c,x);
+                })
             })
-  });
+  };
 
     function collateOrders(response, activity, user, type){
         var serviceBookings = response.sb,
@@ -738,5 +876,6 @@ module.exports = function(paramService, esbMessage)
         }
         return orders;
     }
+
     return fmmRouter;
 };
