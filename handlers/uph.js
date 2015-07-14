@@ -172,6 +172,40 @@ module.exports = function(paramPS, paramESBMessage) {
 
 
 
+
+
+
+    //post workspace/profiles/v1/personal/weixin.json
+    upRouter.post('/personal/weixin.json', function(paramRequest, paramResponse){
+
+
+        var m = {
+            "ns":"upm",
+            "op": "upm_BindWXuser",
+            "pl":paramRequest.body
+        };
+
+
+         console.log('weixin paramRequest.body----',paramRequest.body);
+
+        esbMessage(m)
+            .then(function(r) {
+
+                console.log('weixin info return---',r);
+
+                //oHelpers.sendResponse(paramResponse,200,r);
+            })
+            .fail(function(r) {
+                console.log('errror'+r);
+                console.log(r.er);
+                var r = {pl:null, er:{ec:404,em:"could not get weixin user info"}};
+                oHelpers.sendResponse(paramResponse,404,r);
+            });
+
+    });
+
+
+
 //get workspace/profiles/v1/corporateDetails/:profileID.json
 //    upRouter.get('/search/corporateDetails/all.json', function(paramRequest, paramResponse){
 //
