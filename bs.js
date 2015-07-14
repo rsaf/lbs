@@ -159,6 +159,7 @@ module.exports.startBS = function(){
             bs.use('/workspace/interfaces',  oInterfacesRouter);          // workspace/interfaces
             bs.use('/workspace/operationslog', oOperationsLogRouter);     // workspace/operationslog
             bs.use('/workspace/photoservices',   oPhotoServiceRouter);    // workspace/photoservices
+            bs.use('/workspace/api/',  oFinanceRouter);                // workspace/finance
 
 
             bs.all('*', oHelpers.four_oh_four);

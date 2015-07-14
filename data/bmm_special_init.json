@@ -641,5 +641,132 @@
         "__v": 0
       }
     }
+  },
+  {
+    "_comment": "LZF 106",
+    "persist": {
+      "ns": "bmm",
+      "op": "_persistForm",
+      "tgtField": "form",
+      "pl": {
+        "_id": "5550085d59e1aab16964de37",
+        "fc": "LZF106",
+        "fd": {
+          "fmn": "Identification Form",
+          "uuid": "04904f81-86c1-4d12-b311-8bbc162bdb02",
+          "uri": "/forms/04904f81-86c1-4d12-b311-8bbc162bdb02.html",
+          "fcd": "2015-05-11T01:39:41.364Z",
+          "pt": [],
+          "fields": [
+            {
+              "nm": "ffz",
+              "_id": "5550085d59e1aab16964de39",
+              "nv": false
+            },
+            {
+              "nm": "xm",
+              "_id": "5550085d59e1aab16964de38",
+              "nv": false
+            },
+            {
+              "nm": "zz",
+              "_id": "5550085d59e1aab16964de38",
+              "nv": false
+            }
+          ]
+        },
+        "siv": [],
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000",
+          "lu": "2015-05-11T01:39:41.365Z"
+        },
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000",
+          "cd": "2015-05-11T01:39:41.364Z"
+        },
+        "__v": 0
+      }
+    },
+    "rename": {
+      "ns": "bmm",
+      "find": "bmm_formMetaCodeInUse",
+      "op": "bmm_changeFormMetaCode",
+      "tgtField": "fc",
+      "pl": "LZF106"
+    },
+    "upload":{
+      "ns" : "bmm",
+      "link" : {
+        "linker" : "LZB106",
+        "op" : "bmm_changeActivityFormRef"
+      },
+      "content":
+      {
+        "form":{"fc":"LZF106","fd":{"fmn":"lzf106"}},
+        "html":"公民身份证姓名:<div><input id=\"t6362354\" data-class=\"text\" type=\"text\" data-name=\"LZNAME\" height=\"1\" value=\"\" data-default=\"\" style=\"line-height:1\" data-verification=\"true\" size=\"20\" class=\"form-control formToolElement\" data-bind=\"entity.fields.LZNAME\"><br></div><div><br></div><div><br></div><div>公民身份证号:</div><div><input id=\"t4241868\" data-class=\"text\" type=\"text\" data-name=\"LZSID\" height=\"1\" value=\"\" data-default=\"\" style=\"line-height:1\" data-verification=\"true\" size=\"20\" class=\"form-control formToolElement\" data-bind=\"entity.fields.LZSID\"><br></div><div><br></div><div><br></div><div class=\"hideFromResponseForm\">姓名校验结果:</div><div class=\"hideFromResponseForm\"><input id=\"t1238096\" data-class=\"text\" type=\"text\" data-name=\"LZXM\" height=\"1\" value=\"\" data-default=\"\" style=\"line-height:1\" data-verification=\"false\" size=\"20\" class=\"form-control formToolElement\" data-bind=\"entity.fields.LZXM\"><br></div><div class=\"hideFromResponseForm\"><br></div><div class=\"hideFromResponseForm\"><br></div><div class=\"hideFromResponseForm\">身份证号校验结果:</div><div class=\"hideFromResponseForm\"><input id=\"t1325402\" data-class=\"text\" type=\"text\" data-name=\"LZGMSFHM\" height=\"1\" value=\"\" data-default=\"\" style=\"line-height:1\" data-verification=\"false\" size=\"20\" class=\"form-control formToolElement\" data-bind=\"entity.fields.LZGMSFHM\"><br></div><div class=\"hideFromResponseForm\"><br></div><div class=\"hideFromResponseForm\"><br></div><div class=\"hideFromResponseForm\">校验结果简要描述:&nbsp;</div><div class=\"hideFromResponseForm\"><textarea id=\"t6913576\" data-class=\"textarea\" data-name=\"LZBIZDESC\" rows=\"3\" cols=\"25\" data-verification=\"false\" maxlength=\"\" value=\"\" data-default=\"\" class=\"formToolElement form-control\" data-bind=\"entity.fields.LZBIZDESC\"></textarea><br></div>"
+      }
+    }
+  },
+  {
+"_comment" : "LZB 106",
+    "rename": {
+      "ns": "bmm",
+      "find": "bmm_activityCodeInUse",
+      "op": "bmm_changeActivityCode",
+      "tgtField": "abd.ac",
+      "pl": "LZB106"
+    },
+    "persist": {
+      "ns": "bmm",
+      "op": "_persistActivity",
+      "tgtField": "activity",
+      "pl": {
+        "ds": false,
+        "sqc": [
+          {
+            "sn": "实名认证服务",
+            "sq":0,
+            "ui" : {
+              "serviceCode" : "LZS101",
+              "price" : "0元",
+              "serviceName" : "实名认证服务",
+              "servicePointName" : "蓝证平台实名认证网点"
+            }
+          }
+        ],
+        "arc": {
+          "pc": []
+        },
+        "abd": {
+          "ac": "LZB106",
+          "an": "API个人实名认证",
+          "fdn": "API个人实名认证",
+          "apm": "后付款统一结算",
+          "at": "1",
+          "asd": "2015-05-01T00:00:00Z",
+          "acd": "2016-05-01T00:00:00Z",
+          "vc": "",
+          "arv": "",
+          "aiv": "",
+          "apt": "10",
+          "aps": 30,
+          "pcn": "蓝证",
+          "mass":true
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000",
+          "lu": "2015-05-04T05:46:36.947Z"
+        },
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000",
+          "cd": "2015-05-04T03:19:15.179Z"
+        },
+        "__v": 0
+      }
+    }
   }
 ]
