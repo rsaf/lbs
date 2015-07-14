@@ -411,6 +411,7 @@ module.exports = function(paramService, esbMessage)
             .then(function(){
               //get a transaction id from wmm
               reqPayload = JSON.parse(paramRequest.body.json);
+                console.log("request payload",reqPayload);
               refCode = lib.generateResponseReferenceCode();
               return q.all([
                 esbMessage({
@@ -534,7 +535,8 @@ module.exports = function(paramService, esbMessage)
                         return agg;
                     },{})
                     orders = [condensedOrder];
-                    var wxcode = reqPayload.weixinCode;
+                    var wxcode = reqPayload.pl.weixinCode;
+
                     return weixinPayment(orders,wxcode)
                         //SEND OFF WEIXIN URL
                         .then(function(response){
