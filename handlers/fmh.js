@@ -374,9 +374,8 @@ module.exports = function(paramService, esbMessage)
  * makes payment to account ?? for all the services
  */
 
-    fmmRouter.post('/:activity_code/:phone/fillAndPostPayResponse.json', function(paramRequest, paramResponse, paramNext) {
+    fmmRouter.post('/:activity_code/fillAndPostPayResponse.json', function(paramRequest, paramResponse, paramNext) {
         var ac = paramRequest.params.activity_code;
-        var phone = paramRequest.params.phone;
         var activity;
         if (ac !== "LZB106"){
             oHelpers.sendResponse(paramResponse, 404, {er: "Activity not supported for API response filling."});
@@ -430,7 +429,7 @@ module.exports = function(paramService, esbMessage)
             })
         })
         .then(function submitPay(r){
-            paramRequest.body.json = JSON.stringify({pl:{code: r.pl.rc, phone: phone}});
+            paramRequest.body.json = JSON.stringify({pl:{code: r.pl.rc, phone: undefined}});
             return doResponsePayment(paramRequest, paramResponse, paramNext, function(code, payload){
                 if(code != 200) return {c: code, x: payload};
 
@@ -456,21 +455,17 @@ module.exports = function(paramService, esbMessage)
                             LZXPFX: r.fd.fields.LZXPFX // conclusion of validation
                         }
                     }
-                        console.log("ALTERED PAYLOAD:",alteredPayload);
                     return {c: code, x: alteredPayload}
                 })
             })
         })
         .then(function resolve(res){
-                console.log("DID API Fillout WITH",res);
-            //oHelpers.sendResponse(paramResponse, 200, {pl : res});
         }  ,  function reject(err){
                 console.log("FAILED API Fillout WITH",err);
             oHelpers.sendResponse(paramResponse, 501, {er : err})
         })
     })
 
-  fmmRouter.post('/responsepayment.json', doResponsePayment);
 
     function doResponsePayment(paramRequest, paramResponse, paramNext, responseMutator){
         var r = {er:null,pl:null},
@@ -761,18 +756,10 @@ module.exports = function(paramService, esbMessage)
                         .then(function(smsResponse){
                             if(responseInfo.acn == "LZB101" || responseInfo.acn == "LZB102" || responseInfo.acn == "LZB106")
                             {
-                                console.log("LZB101/102/106 finalResult is :",finalResult);
                                 //oHelpers.sendResponse(paramResponse,200,finalResult);
-
                                 responseMutator(200,finalResult).then(function(mut){
-                                    console.log("mut is",mut);
                                     oHelpers.sendResponse(paramResponse,mut.c,mut.x);
-                                }).then(function(){
-                                    console.log("foo?")
-                                },function(err){
-                                    console.log("BAR!",err)
                                 })
-
                             }
                         })
                         //FAIL
@@ -813,7 +800,6 @@ module.exports = function(paramService, esbMessage)
                         code : activityInfo.abd.ac
                     }
                 }).then(function(){
-                    console.log("LOGGED RESPONSE!");
                 } , function(er){
                     console.log("Something bad happened:",er)
                 })
@@ -882,5 +868,6 @@ module.exports = function(paramService, esbMessage)
         return orders;
     }
 
+    fmmRouter.post('/responsepayment.json', function(a,b,c){doResponsePayment(a,b,c)});
     return fmmRouter;
 };
