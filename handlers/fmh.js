@@ -375,6 +375,7 @@ module.exports = function(paramService, esbMessage)
  */
 
     fmmRouter.post('/:activity_code/fillAndPostPayResponse.json', function(paramRequest, paramResponse, paramNext) {
+        //Expects a ?json={"si":{...},"pl":{"fd":"fields":{...}}}
         var ac = paramRequest.params.activity_code;
         var activity;
         if (ac !== "LZB106"){
@@ -466,6 +467,7 @@ module.exports = function(paramService, esbMessage)
         })
     })
 
+    fmmRouter.post('/responsepayment.json', function(a,b,c){doResponsePayment(a,b,c)});
 
     function doResponsePayment(paramRequest, paramResponse, paramNext, responseMutator){
         var r = {er:null,pl:null},
@@ -870,6 +872,5 @@ module.exports = function(paramService, esbMessage)
         return orders;
     }
 
-    fmmRouter.post('/responsepayment.json', function(a,b,c){doResponsePayment(a,b,c)});
     return fmmRouter;
 };

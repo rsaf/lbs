@@ -885,6 +885,30 @@ module.exports = function (paramService, esbMessage) {
                 oHelpers.sendResponse(paramResponse, 400, err)
             })
     });
+
+    serviceManagementRouter.get('/downloadBusinessRecords.json', function(paramRequest, paramResponse, paramNext){
+        var businessRecords = busnessrecords//TODO - fill this up
+        var deferred = q.defer(),
+            user = paramRequest.user.lanzheng.loginName;
+        org = paramRequest.user.currentOrganization;
+        return q()
+            .then(function () {
+                return esbMessage({
+                    ns: "smm",
+                    op: "downloadRecordsByOrganization",
+                    mt: {p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed},
+                    pl: {
+                        loginName: user,
+                        organization: org
+                    }
+                })
+            })
+            .then(function resolve(newxl) {
+                oHelpers.sendResponse(paramResponse, 200, {pl:{url:newxl.pl.url}});
+            }, function failure(err) {
+                oHelpers.sendResponse(paramResponse, 400, err)
+            })
+    })
     serviceManagementRouter.get('/:type.json', function (paramRequest, paramResponse, paramNext) {
         if (paramRequest.params.type === 'allbookings') {
             oHelpers.sendResponse(paramResponse, 200, allbookings);
