@@ -29,7 +29,7 @@ function _initRequestMessage(paramRequest,type,code,adminOrg,orgName){
     ,rso: paramRequest.user.currentOrganization
     ,ric:orgName||''
     ,rs: 10
-    ,rb: '请审核'+message+'申请，拼同意或者拒绝'
+    ,rb: '请审核'+message+'申请，同意或者拒绝'
     ,rtr: type
     ,ei:[{
         col:col
