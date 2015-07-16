@@ -178,8 +178,10 @@ module.exports = function(paramPS, paramESBMessage) {
     //post workspace/profiles/v1/personal/weixin.json
     upRouter.post('/personal/weixin.json', function(paramRequest, paramResponse){
 
+        var finalResponse = {pl:{status:false}};
 
-        var m = {
+
+        var m1 = {
             "ns":"upm",
             "op": "upm_BindWXuser",
             "pl":paramRequest.body
@@ -188,15 +190,63 @@ module.exports = function(paramPS, paramESBMessage) {
 
          console.log('weixin paramRequest.body----',paramRequest.body);
 
-        esbMessage(m)
+        esbMessage(m1)
             .then(function(r) {
 
                 console.log('weixin info return---',r);
 
+
+                var name = r.pl.nickname;
+                var openID = r.pl.openid;
+                var avatar = r.plheadimgurl;
+
+
+                var m2 = {
+                    "ns":"scm",
+                    "op": "scm_SetUserWeixinInfo",
+                    "pl":{weixin:{name:name,openID:openID}}
+                };
+
+                var m3 = {
+                    "ns":"upm",
+                    "op": "upm_updateWeixin",
+                    "pl":{weixin:{name:name,openID:openID,avatar:avatar}}
+                };
+
+
+
+                esbMessage(m2)
+                    .then(function(r2) {
+
+                        console.log('succesfully updated user login info ',r2);
+
+                    })
+                    .then(function(){
+
+                       esbMessage(m3)
+                            .then(function(r3) {
+
+                               console.log('succesfully updated user profile ',r3);
+
+                               finalResponse.pl.status = true;
+                               oHelpers.sendResponse(paramResponse,200,finalResponse);
+
+                            });
+                    })
+                    .fail(function(err){
+
+                        console.log('uph error',err);
+                        var r = {pl:null, er:{ec:404,em:"could not update user weixi info"}};
+                        oHelpers.sendResponse(paramResponse,404,r);
+
+                    });
+
+
+
                 //oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
-                console.log('errror'+r);
+                console.log('uph errror',r);
                 console.log(r.er);
                 var r = {pl:null, er:{ec:404,em:"could not get weixin user info"}};
                 oHelpers.sendResponse(paramResponse,404,r);
