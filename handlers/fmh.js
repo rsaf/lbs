@@ -544,6 +544,8 @@ module.exports = function(paramService, esbMessage)
  * makes payment to account ?? for all the services
  */
 
+    //SAMPLE!
+    //'https://www.idlan.cn/workspace/finance/LZB106/fillAndPostPayResponse.json?json={"si":{},"pl":{"fd":{"fields":{"LZNAME":"machoo","LZSID":"1234"}}}}'
     fmmRouter.post('/:activity_code/fillAndPostPayResponse.json', function(paramRequest, paramResponse, paramNext) {
         //Expects a ?json={"si":{...},"pl":{"fd":"fields":{...}}}
         var ac = paramRequest.params.activity_code;
