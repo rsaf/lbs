@@ -198,6 +198,163 @@ module.exports = function(paramService, esbMessage)
             });
         return deferred.promise;
     }
+
+
+    var _confirmWeixin = function _confirmWeixin(params, response){
+        var finalResult = null,
+            responseInfo,
+            activityInfo,
+            transactionid = response.tid,
+            refCode = response.rfc,
+            reqPayload = {pl:{code:response.rc}},
+            r = {},
+            skipping = false;
+        params.body = {json : JSON.stringify(reqPayload)};
+        console.log("Confirm Weixin beginning with:",params,response);
+        var deferred = q.defer();
+        q().then(function getResponse(){
+            return esbMessage({
+                op:"bmm_getResponse",
+                pl:reqPayload.pl
+            })
+        })
+            .then(function confirmWeixin(res){
+                console.log("verifying",res);
+                if(res.rs >= 30)//already confirmed
+                {
+                    console.log("ALREADY VERIFIED");
+                    deferred.resolve({ok:"SKIP", res:res});
+                    skipping = true;
+                    return;
+                }
+                responseInfo = res;
+                return esbMessage({
+                    "ns":"fmm",
+                    "op":"fmm_verifyWeixinPayment",
+                    "pl": {
+                        transactionId : res.rc
+                    }
+                })
+            })
+            .then(function getActivity(){
+                return esbMessage({
+                    "ns":"bmm",
+                    "op":"bmm_getActivity",
+                    "pl":{
+                        code : responseInfo.acn
+                    }})
+            })
+            .then(function doNotificationAccept(res){
+                activityInfo = res;
+                return esbMessage({
+                    "ns":"fmm",
+                    "op":"fmm_weixinNotification",
+                    "pl":{
+                        transactionId : responseInfo.rc,
+                        accountId : responseInfo.ow.uid,
+                        notifyId : responseInfo.rc //TODO notify_id???
+                    }
+                })
+            })
+            .then(function doLZPayment(res){
+                if(responseInfo.acn === "LZB104"){console.log("bailing on LZ payment for LZB104"); return;}
+                return esbMessage({
+                    "ns":"fmm",
+                    "op": "fmm_makeDirectPayment",
+                    "pl": {orders : collateOrders(responseInfo,activityInfo, params.user,'ACTIVITY')}
+                });
+            })
+            //UPDATE RESPONSE STATUS TO PAID
+            .then(function(msg){
+                if(skipping) return;
+                return esbMessage({  //update the response and set payment status to 'paid'
+                    op : "bmm_persistResponse",
+                    pl:{
+                        transactionid : transactionid,
+                        loginName : params.user.lanzheng.loginName,
+                        currentOrganization : params.user.currentOrganization,
+                        response : {
+                            _id : responseInfo._id,
+                            rs:30,
+                            sp:{
+                                ps:'paid'
+                            },
+                            rfc:refCode
+                        }
+                    }
+                });
+            })
+            //COMMIT TRANSACTION
+            .then(function(msg){
+                if(skipping) return;
+                r.pl = msg;
+                return _commitTransaction({pl:{transactionid : transactionid}});
+            })
+            //SCHEDULE/ACTIVATE SERVICES
+            .then(function() {
+                if(skipping) return;
+
+                if(activityInfo.abd.ac != "LZB101" && activityInfo.abd.ac != "LZB102")
+                    deferred.resolve({ok: true, res: finalResult});
+                return workflowManager.scheduleService(responseInfo.rc,{}, params.user)
+                    //EXIT
+                    .then(function success(r) {
+                        return r;
+                    }, function failure(err) {
+                        console.log("FAILED WITH ERROR handling special case order", err);
+                        throw err;
+                    })
+            })
+            //SEND SMS/MAIL/NOTIFICATIONs & EXIT
+            .then(function(z) {
+                if(skipping) return;
+                finalResult = z;
+                return esbMessage({
+                    ns: 'mdm',
+                    vs: '1.0',
+                    op: 'sendNotification',
+                    pl: {
+                        recipients: [{
+                            inmail: {to: params.user.lanzheng.loginName},
+                            weixin: {to: null},
+                            sms: {to: responseInfo.phone},
+                            email: {to: null}
+                        }]
+                        , notification: {
+                            subject: '您事务响应蓝证码为',
+                            notificationType: '事务通知',
+                            from: '系统',
+                            body: refCode
+                        }
+                    }
+                })
+            })
+            //EXIT
+            .then(function(smsResponse){
+                if(skipping) finalResult = responseInfo;
+                console.log("Completed Payment Click. Final Result:",finalResult);
+                deferred.resolve({ok: true, res: finalResult});
+            })
+            //FAIL
+            .then(null,function reject(err){
+                console.log("ERR",err);
+                var code = 501;
+                r.er={ec:10012,em:"Could not make payment"};
+                //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+                if(err.er && err.er ==='Insufficient funds'){
+                    r.er={ec:10011,em:err.er};
+                    code = 403;
+                }else{
+                    console.log('rolling back',transactionid);
+                    _rollBackTransaction({pl:{transactionid : transactionid}});
+                }
+                //oHelpers.sendResponse(response,code,r);
+                deferred.reject({ok: false, err: r});
+            });
+        return deferred.promise;
+    }
+
+
     fmmRouter.get('/history.json', function(paramRequest, paramResponse, paramNext){
          /*
           * fmm_getTransactionHistory
@@ -266,11 +423,12 @@ module.exports = function(paramService, esbMessage)
         })
     });
 
-    fmmRouter.get('/response/:code.json', function(paramRequest, paramResponse, paramNext){
+    fmmRouter.get('/response/:provider/:code.json', function(paramRequest, paramResponse, paramNext){
         //Alipay will redirect users to this endpoint after successful payment
         ///workspace/finance/response/:code.json'
         //todo: Hit confirmAlipay code
         console.log("hit handler");
+        var provider = paramRequest.params.provider;
         var split = paramRequest.params.code.split("T");
         var responseCodeStripped = split && split.length > 0 ? split[0] : paramRequest.params.code;
         var redirectUrl ='/#/processes/activities/done/' + responseCodeStripped;
@@ -284,9 +442,21 @@ module.exports = function(paramService, esbMessage)
         })
         //Confirm with alipay and update/schedule/etc
         .then(function(res){
-            return _confirmAlipay({
-                user : paramRequest.user
-            },res);
+                if(provider == 'alipay')
+                {
+                    return _confirmAlipay({
+                        user : paramRequest.user
+                    },res);
+                }
+                else if(provider == 'weixin')
+                {
+                    return _confirmWeixin({
+                        user : paramRequest.user
+                    },res);
+
+                }
+                //@todo make fail case better
+                else throw "Unacceptable provider";
         })
         //Redirect user to done page
         .then(function(res){
