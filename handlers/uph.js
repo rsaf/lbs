@@ -180,11 +180,13 @@ module.exports = function(paramPS, paramESBMessage) {
 
         var finalResponse = {pl:{status:false}};
 
+        var bodyInfo = paramRequest.body;
+
 
         var m1 = {
             "ns":"upm",
             "op": "upm_BindWXuser",
-            "pl":paramRequest.body
+            "pl":bodyInfo
         };
 
 
@@ -204,7 +206,7 @@ module.exports = function(paramPS, paramESBMessage) {
                 var m2 = {
                     "ns":"scm",
                     "op": "scm_SetUserWeixinInfo",
-                    "pl":{weixin:{name:name,openID:openID}}
+                    "pl":{weixin:{name:name,openID:openID},userInfo:bodyInfo.user}
                 };
 
                 var m3 = {
