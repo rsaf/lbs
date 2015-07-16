@@ -166,7 +166,7 @@ module.exports = function(paramService, esbMessage)
                             email: {to: null}
                         }]
                         , notification: {
-                            subject: '您事务响应蓝证码为',
+                            subject: '您事务响应验证码为',
                             notificationType: '事务通知',
                             from: '系统',
                             body: refCode
@@ -321,7 +321,7 @@ module.exports = function(paramService, esbMessage)
                             email: {to: null}
                         }]
                         , notification: {
-                            subject: '您事务响应蓝证码为',
+                            subject: '您事务响应验证码为',
                             notificationType: '事务通知',
                             from: '系统',
                             body: refCode
@@ -918,7 +918,7 @@ module.exports = function(paramService, esbMessage)
                                         email: {to: null}
                                     }]
                                     , notification: {
-                                        subject: '您事务响应蓝证码为',
+                                        subject: '您事务响应验证码为',
                                         notificationType: '事务通知',
                                         from: '系统',
                                         body: refCode
