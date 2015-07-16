@@ -190,29 +190,26 @@ module.exports = function(paramPS, paramESBMessage) {
         };
 
 
-         console.log('weixin paramRequest.body----',paramRequest.body);
-
         esbMessage(m1)
             .then(function(r) {
 
-                console.log('weixin info return---',r);
 
 
                 var name = r.pl.nickname;
                 var openID = r.pl.openid;
-                var avatar = r.plheadimgurl;
+                var avatar = r.pl.headimgurl;
 
 
                 var m2 = {
                     "ns":"scm",
                     "op": "scm_SetUserWeixinInfo",
-                    "pl":{weixin:{name:name,openID:openID},userInfo:bodyInfo.user}
+                    "pl":{weixin:{name:name,openID:openID},userInfo:bodyInfo.user.loginName}
                 };
 
                 var m3 = {
                     "ns":"upm",
                     "op": "upm_updateWeixin",
-                    "pl":{weixin:{name:name,openID:openID,avatar:avatar}}
+                    "pl":{weixin:{name:name,openID:openID,avatar:avatar},userAccountID:bodyInfo.profile.userAccountID}
                 };
 
 
@@ -220,7 +217,7 @@ module.exports = function(paramPS, paramESBMessage) {
                 esbMessage(m2)
                     .then(function(r2) {
 
-                        console.log('succesfully updated user login info ',r2);
+                        console.log('succesfully updated user login info ');
 
                     })
                     .then(function(){
@@ -228,7 +225,7 @@ module.exports = function(paramPS, paramESBMessage) {
                        esbMessage(m3)
                             .then(function(r3) {
 
-                               console.log('succesfully updated user profile ',r3);
+                               console.log('succesfully updated user profile ');
 
                                finalResponse.pl.status = true;
                                oHelpers.sendResponse(paramResponse,200,finalResponse);
@@ -243,9 +240,6 @@ module.exports = function(paramPS, paramESBMessage) {
 
                     });
 
-
-
-                //oHelpers.sendResponse(paramResponse,200,r);
             })
             .fail(function(r) {
                 console.log('uph errror',r);
