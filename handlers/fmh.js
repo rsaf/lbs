@@ -139,7 +139,7 @@ module.exports = function(paramService, esbMessage)
             .then(function() {
                 if(skipping) return;
 
-                if(activityInfo.abd.ac != "LZB101" && activityInfo.abd.ac != "LZB102")
+                if(activityInfo.abd.ac != "LZB101" && activityInfo.abd.ac != "LZB102" && activityInfo.abd.ac != "LZB106" && activity.abd.ac != "LZB107")
                     deferred.resolve({ok: true, res: finalResult});
                 return workflowManager.scheduleService(responseInfo.rc,{}, params.user)
                     //EXIT
@@ -296,7 +296,7 @@ module.exports = function(paramService, esbMessage)
             .then(function() {
                 if(skipping) return;
 
-                if(activityInfo.abd.ac != "LZB101" && activityInfo.abd.ac != "LZB102")
+                if(activityInfo.abd.ac != "LZB101" && activityInfo.abd.ac != "LZB102"&& activityInfo.abd.ac != "LZB106" && activityInfo.abd.ac != "LZB107")
                     deferred.resolve({ok: true, res: finalResult});
                 return workflowManager.scheduleService(responseInfo.rc,{}, params.user)
                     //EXIT
@@ -554,7 +554,7 @@ module.exports = function(paramService, esbMessage)
         //Expects a ?json={"si":{...},"pl":{"fd":"fields":{...}}}
         var ac = paramRequest.params.activity_code;
         var activity;
-        if (ac !== "LZB106"){
+        if (ac !== "LZB106" && ac !== "LZB108"){
             oHelpers.sendResponse(paramResponse, 404, {er: "Activity not supported for API response filling."});
             return;
         }
@@ -886,7 +886,7 @@ module.exports = function(paramService, esbMessage)
                         })
                         //SCHEDULE/ACTIVATE SERVICES
                         .then(function() {
-                            if(responseInfo.acn != "LZB101" && responseInfo.acn != "LZB102" && responseInfo.acn != "LZB106")
+                            if(responseInfo.acn != "LZB101" && responseInfo.acn != "LZB102" && responseInfo.acn != "LZB106" && responseInfo.acn != "LZB107")
                             {
                                 //oHelpers.sendResponse(paramResponse, 200, {pl:{ow:{sc:reqPayload.pl.phone},can:responseInfo.can},er:null});
                                 responseMutator(200,{pl:{ow:{sc:reqPayload.pl.phone},can:responseInfo.can},er:null}).then(function(mut){
@@ -934,7 +934,7 @@ module.exports = function(paramService, esbMessage)
                         })
                         //EXIT
                         .then(function(smsResponse){
-                            if(responseInfo.acn == "LZB101" || responseInfo.acn == "LZB102" || responseInfo.acn == "LZB106")
+                            if(responseInfo.acn == "LZB101" || responseInfo.acn == "LZB102" || responseInfo.acn == "LZB106" || responseInfo.acn == "LZB107")
                             {
                                 //oHelpers.sendResponse(paramResponse,200,finalResult);
                                 responseMutator(200,finalResult).then(function(mut){
