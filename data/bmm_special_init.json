@@ -726,13 +726,13 @@
         "ds": false,
         "sqc": [
           {
-            "sn": "实名认证服务",
+            "sn": "API实名认证服务",
             "sq":0,
             "ui" : {
-              "serviceCode" : "LZS101",
+              "serviceCode" : "LZS107",
               "price" : "0元",
-              "serviceName" : "实名认证服务",
-              "servicePointName" : "蓝证平台实名认证网点"
+              "serviceName" : "API实名认证服务",
+              "servicePointName" : "API实名认证网点"
             }
           }
         ],
@@ -853,13 +853,13 @@
         "ds": false,
         "sqc": [
           {
-            "sn": "实名认证服务",
+            "sn": "身份认证服务",
             "sq":0,
             "ui" : {
-              "serviceCode" : "LZS101",
+              "serviceCode" : "LZS108",
               "price" : "0元",
-              "serviceName" : "实名认证服务",
-              "servicePointName" : "蓝证平台实名认证网点"
+              "serviceName" : "身份认证服务",
+              "servicePointName" : "蓝证平台身份认证服务网点"
             }
           }
         ],
@@ -868,8 +868,8 @@
         },
         "abd": {
           "ac": "LZB107",
-          "an": "个人实名认证",
-          "fdn": "个人实名认证",
+          "an": "身份实名认证",
+          "fdn": "身份实名认证",
           "apm": "响应用户付款",
           "at": "1",
           "asd": "2015-05-01T00:00:00Z",

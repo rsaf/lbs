@@ -306,7 +306,7 @@ module.exports = function(paramService, esbMessage){
                         }).then(function(services){
                             var processable = services.pl.results.length == 1 && services.pl.results[0].reduce(function(agg, val){
                                 var sc = val.service.serviceCode;
-                                return agg && (sc == "LZS101" || sc == "LZS102" ? true : false);
+                                return agg && (sc == "LZS101" || sc == "LZS102" || sc == "LZS107" || sc == "LZS108" ? true : false);
                             },true);
                             console.log("SETTING PROCESSABLE TO",processable);
                             return esbMessage({
