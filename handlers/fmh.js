@@ -312,7 +312,7 @@ module.exports = function(paramService, esbMessage)
                 console.log("Reached notification phase");
                 if(skipping) return;
                 finalResult = z;
-                console.log("Sending weixin sms to ",responseInfo.phone)
+                console.log("Sending weixin sms to ",responseInfo.ow.sc)
                 return esbMessage({
                     ns: 'mdm',
                     vs: '1.0',
@@ -321,7 +321,7 @@ module.exports = function(paramService, esbMessage)
                         recipients: [{
                             inmail: {to: params.user.lanzheng.loginName},
                             weixin: {to: null},
-                            sms: {to: responseInfo.phone},
+                            sms: {to: responseInfo.ow.sc},
                             email: {to: null}
                         }]
                         , notification: {
