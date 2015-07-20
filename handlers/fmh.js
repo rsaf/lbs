@@ -309,8 +309,10 @@ module.exports = function(paramService, esbMessage)
             })
             //SEND SMS/MAIL/NOTIFICATIONs & EXIT
             .then(function(z) {
+                console.log("Reached notification phase");
                 if(skipping) return;
                 finalResult = z;
+                console.log("Sending weixin sms to ",responseInfo.phone)
                 return esbMessage({
                     ns: 'mdm',
                     vs: '1.0',
