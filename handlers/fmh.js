@@ -210,7 +210,8 @@ module.exports = function(paramService, esbMessage)
             r = {},
             skipping = false;
         params.body = {json : JSON.stringify(reqPayload)};
-        console.log("Confirm Weixin beginning with:",params,response);
+        //console.log("Confirm Weixin beginning with:",params,response);
+        console.log("Confirm Weixin beginning ");
         var deferred = q.defer();
         q().then(function getResponse(){
             return esbMessage({
@@ -246,6 +247,7 @@ module.exports = function(paramService, esbMessage)
             })
             .then(function doNotificationAccept(res){
                 activityInfo = res;
+                console.log("TRIGGERING WEIXIN PAY NOTIFICAITON.. WITH PL",activityInfo );
                 return esbMessage({
                     "ns":"fmm",
                     "op":"fmm_weixinNotification",
@@ -756,7 +758,7 @@ module.exports = function(paramService, esbMessage)
             //MAKE PAYMENT
             .then(function(provider){
                 var paymentChain;
-                var orders = collateOrders(responseInfo, activityInfo, paramRequest.user,provider==="ali"?'CREDIT_PURCHASE':"ACTIVITY");
+                var orders = collateOrders(responseInfo, activityInfo, paramRequest.user,(provider==="ali" || provider==="weixin") ?'CREDIT_PURCHASE':"ACTIVITY");
                 var sum = orders.reduce(function(sum, ele){return sum + ele.orderAmount},0);
                 console.log("SUM IS",sum);
                 if(provider === "ali" && sum > 0)
