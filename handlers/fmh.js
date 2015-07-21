@@ -6,6 +6,8 @@
 var oHelpers= require('../utilities/helpers.js');
 var q = require('q');
 var lib = require('lib');
+var fs = require('fs');
+var formidable = require('formidable');
 
 module.exports = function(paramService, esbMessage)
 {
@@ -555,7 +557,7 @@ module.exports = function(paramService, esbMessage)
         var ac = paramRequest.params.activity_code;
         var activity;
         if (ac !== "LZB106" && ac !== "LZB108"){
-            oHelpers.sendResponse(paramResponse, 404, {er: "Activity not supported for API response filling."});
+            oHelpers.sendResponse(paramResponse, 404, {er: "Activity "+ac+" not supported for API response filling."});
             return;
         }
         return esbMessage({
@@ -565,8 +567,63 @@ module.exports = function(paramService, esbMessage)
                 code : paramRequest.params.activity_code
             }
         })
-        .then(function getServices(act){
+        .then(function postPhoto(act){
             activity = act;
+            if(ac !== "LZB108") return false;
+            var deferred = q.defer();
+            try {
+                var form = new formidable.IncomingForm();
+                form.parse(paramRequest, function (err, fields, files) {
+                    try{
+                        if (err){ deferred.reject(err); return;}
+                        var old_path = files.file.path,
+                            file_ext = files.file.name.split('.').pop();
+                        var json = JSON.parse(fields.json);
+                        console.log('json-----', json);
+
+                        fs.readFile(old_path, function(err, data) {
+                            if (err) q.reject(err);
+
+                            esbMessage({
+                                ns: 'pmm',
+                                op: "pmm_uploadPhoto",
+                                pl: {
+                                    pp: {},
+                                    photoData: data,
+                                    ifm: file_ext,
+                                    ac: json.ac,
+                                    rc: json.rc,
+                                    ow: json.ow,
+                                    can: json.can,
+                                    cat: json.cat,
+                                    tpp: json.tpp
+                                }
+                            }).then(function (r) {
+                                console.log('image uploaded from response++++++++++++++>>>>', r);
+
+                                var tempImage = '/commons/images/IDPhotoSubmitedDemo.png';
+                                var uri_swap = r.pl.uri;
+                                r.pl.uri = tempImage;
+                                r.status = true;
+
+                                deferred.resolve(r.pl.uri);
+
+                            }).fail(null, function reject(r) {
+                                console.log('hh error:Unable to upload photo-----', r);
+                                r = {pl: null, er: {ec: 100012, em: "Unable to upload photo."}};
+                                deferred.reject("Unable to upload photo");
+                            });
+                        });
+                    }catch(e){
+                        deferred.reject();
+                    }
+                });
+            }catch(e){
+                deferred.reject(e);
+            }
+            return deferred.promise;
+        })
+        .then(function getServices(fileURI){
             return esbMessage({
                 "ns":"smm",
                 "op":"smm_queryServices",

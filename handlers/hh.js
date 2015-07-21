@@ -271,6 +271,7 @@ module.exports = function (paramService, esbMessage) {
       registerAndAssociateUser = r[7].pl.fn;
 
       homeRouter.post('/login.json', userloginVerifier());
+
       homeRouter.post('/registration.json',  function(paramRequest, paramResponse,paramNext) {
           return q().then(function () {
               console.log("creating user handler");
@@ -334,6 +335,11 @@ module.exports = function (paramService, esbMessage) {
           }
         });
       });
+      homeRouter.post('/:activity_code/response.json', APILoginVerifier() ,function(paramRequest, paramResponse, paramNext) {
+          var app_secret, app_id, ip;
+          console.log('Endpoint hit with', paramRequest);
+
+      });
       //@todo: have this endpoint change owner ship of the response using
       //  a not yet created function in bmm to change ownership of response
       homeRouter.post('/associateResponse/:responseCode.json',  function(paramRequest, paramResponse){
@@ -373,6 +379,7 @@ module.exports = function (paramService, esbMessage) {
       homeRouter.get('/user.json', sessionUser());
       homeRouter.get('/logout.json', logoutUser());
       homeRouter.post('/user.json', createUser());
+
 
       homeRouter.post('/apilogin.json', APILoginVerifier(),  function(paramRequest, paramResponse){
               // Show the upload form
