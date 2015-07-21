@@ -446,6 +446,7 @@ module.exports = function(paramService, esbMessage)
         })
         //Confirm with alipay and update/schedule/etc
         .then(function(res){
+                res.rfc = lib.generateResponseReferenceCode();
                 if(provider == 'alipay')
                 {
                     return _confirmAlipay({
@@ -728,6 +729,7 @@ module.exports = function(paramService, esbMessage)
                             tid : transactionid,
                             lk : true,
                             ow : ow
+                            //zzzzzzzzzzz
                         }
                     }
                 })
