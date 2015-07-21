@@ -457,7 +457,7 @@ module.exports = function (paramService, esbMessage) {
         var m = {};
         //formHtml
         q().then(function () {
-          m.pl = {readyOnly:true};
+          m.pl = {readyOnly:true,publicOnly:true};
           m.op = 'bmm_getActivities';
           m.mt={p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
 
