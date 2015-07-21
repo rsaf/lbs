@@ -575,6 +575,8 @@ module.exports = function(paramService, esbMessage)
                 var form = new formidable.IncomingForm();
                 form.parse(paramRequest, function (err, fields, files) {
                     try{
+
+                        console.log("Parsing form for API fillout...")
                         if (err){ deferred.reject(err); return;}
                         var old_path = files.file.path,
                             file_ext = files.file.name.split('.').pop();
@@ -582,8 +584,9 @@ module.exports = function(paramService, esbMessage)
                         console.log('json-----', json);
 
                         fs.readFile(old_path, function(err, data) {
-                            if (err) q.reject(err);
+                            if (err) deferred.reject(err);
 
+                            console.log("Uploading photo for API fillout...")
                             esbMessage({
                                 ns: 'pmm',
                                 op: "pmm_uploadPhoto",
@@ -615,7 +618,7 @@ module.exports = function(paramService, esbMessage)
                             });
                         });
                     }catch(e){
-                        deferred.reject();
+                        deferred.reject(e);
                     }
                 });
             }catch(e){
