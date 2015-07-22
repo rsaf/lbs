@@ -85,6 +85,63 @@ module.exports = function (paramService, esbMessage) {
         rollbackTransaction: _rollBackTransaction2}
     );
 
+    function _loadUnlinkedLanzhengData(toImport, ns, op){
+        return q.all(
+            toImport.map(function(ele){
+                return esbMessage({
+                    "ns":ns,
+                    "op":op,
+                    "pl":ele.payload
+                })
+            })
+        ).then(function loadDone(eles){
+            return eles;
+        })
+    }
+    function _linkLanzhengObject(object){
+        var links = object.links,
+            payload = object.payload
+    }
+    function _patchLanzhengInfo(){
+        var lzACT = require('../data/lanzheng_activities.json'),
+            lzSRV = require('../data/lanzheng_services.json'),
+            lzSVP = require('../data/lanzheng_servicepoints.json'),
+            lzFRM = require('../data/lanzheng_forms.json'),
+            serviceTypeMap = {},
+            serviceCodeMap = {},
+            servicePointTypeMap = {}
+        return q.then(function getInfo(){
+            return q.all([
+                esbMessage({
+                    "ns" : "smm",
+                    "op" : "servicePointTypes",
+                    "pl" : {}
+                }),
+                esbMessage({
+                    "ns" : "smm",
+                    "op" : "serviceTypes",
+                    "pl" : {}
+                })
+            ])
+        })
+        .then(function loadUnlinked(types){
+            types[0].pl.forEach(function(type){
+                servicePointTypeMap[type.text] = type._id;
+            });
+            types[1].pl.forEach(function(type){
+                serviceTypeMap[type.text] = type._id;
+                serviceCodeMap[type.text] = type._id;
+            })
+
+            return q.all([
+                _loadUnlinkedLanzhengData(lzSVP,'smm','smm_persistServicePoint', servicePointTypeMap),
+                _loadUnlinkedLanzhengData(lzSRV,'smm','smm_persistService', serviceTypeMap),
+                _loadUnlinkedLanzhengData(lzACT,'bmm','bmm_persistActivity'),
+                _loadUnlinkedLanzhengData(lzFRM,'bmm','bmm_persistForm')
+            ])
+        })
+
+    }
     function _prepopulateSpecialCaseServices(){
 
         var importSpecialCases = require('../data/smm_special_init.json');
