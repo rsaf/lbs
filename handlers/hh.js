@@ -271,6 +271,7 @@ module.exports = function (paramService, esbMessage) {
       registerAndAssociateUser = r[7].pl.fn;
 
       homeRouter.post('/login.json', userloginVerifier());
+
       homeRouter.post('/registration.json',  function(paramRequest, paramResponse,paramNext) {
           return q().then(function () {
               console.log("creating user handler");
@@ -334,6 +335,11 @@ module.exports = function (paramService, esbMessage) {
           }
         });
       });
+      homeRouter.post('/:activity_code/response.json', APILoginVerifier() ,function(paramRequest, paramResponse, paramNext) {
+          var app_secret, app_id, ip;
+          console.log('Endpoint hit with', paramRequest);
+
+      });
       //@todo: have this endpoint change owner ship of the response using
       //  a not yet created function in bmm to change ownership of response
       homeRouter.post('/associateResponse/:responseCode.json',  function(paramRequest, paramResponse){
@@ -373,6 +379,7 @@ module.exports = function (paramService, esbMessage) {
       homeRouter.get('/user.json', sessionUser());
       homeRouter.get('/logout.json', logoutUser());
       homeRouter.post('/user.json', createUser());
+
 
       homeRouter.post('/apilogin.json', APILoginVerifier(),  function(paramRequest, paramResponse){
               // Show the upload form
@@ -738,10 +745,600 @@ module.exports = function (paramService, esbMessage) {
           });
         });
       });
+
+      //SAMPLE!
+      //'https://www.idlan.cn/workspace/finance/LZB106/fillAndPostPayResponse.json?json={"si":{},"pl":{"fd":{"fields":{"LZNAME":"machoo","LZSID":"1234"}}}}'
+      homeRouter.post('/:activity_code/fillAndPostPayResponse.json', APILoginVerifier(), function(paramRequest, paramResponse, paramNext) {
+          //Expects a ?json={"si":{...},"pl":{"fd":"fields":{...}}}
+          var ac = paramRequest.params.activity_code;
+          var activity;
+          if (ac !== "LZB106" && ac !== "LZB108"){
+              oHelpers.sendResponse(paramResponse, 404, {er: "Activity "+ac+" not supported for API response filling."});
+              return;
+          }
+          return esbMessage({
+              "ns":"bmm",
+              "op":"bmm_getActivity",
+              "pl":{
+                  code : paramRequest.params.activity_code
+              }
+          })
+              .then(function postPhoto(act){
+                  activity = act;
+                  if(ac !== "LZB108") return false;
+                  var deferred = q.defer();
+                  try {
+                      var form = new formidable.IncomingForm();
+                      form.parse(paramRequest, function (err, fields, files) {
+                          try{
+
+                              console.log("Parsing form for API fillout...",err,files,fields)
+                              if (err){ deferred.reject(err); return;}
+                              var old_path = files.file.path,
+                                  file_ext = files.file.name.split('.').pop();
+                              var json = JSON.parse(paramRequest.query.photo);
+                              console.log('json-----', json);
+
+                              fs.readFile(old_path, function(err, data) {
+                                  if (err) deferred.reject(err);
+
+                                  console.log("Uploading photo for API fillout...")
+                                  esbMessage({
+                                      ns: 'pmm',
+                                      op: "pmm_uploadPhoto",
+                                      pl: {
+                                          pp: {},
+                                          photoData: data,
+                                          ifm: file_ext,
+                                          ac: json.ac,
+                                          rc: json.rc,
+                                          ow: json.ow,
+                                          can: json.can,
+                                          cat: json.cat,
+                                          tpp: json.tpp
+                                      }
+                                  }).then(function (r) {
+                                      console.log('image uploaded from response++++++++++++++>>>>', r);
+
+                                      var tempImage = '/commons/images/IDPhotoSubmitedDemo.png';
+                                      //var uri_swap = r.pl.uri;
+                                      r.pl.uri = tempImage;
+                                      r.status = true;
+
+                                      deferred.resolve(r);
+
+                                  }).fail(null, function reject(r) {
+                                      console.log('hh error:Unable to upload photo-----', r);
+                                      r = {pl: null, er: {ec: 100012, em: "Unable to upload photo."}};
+                                      deferred.reject("Unable to upload photo");
+                                  });
+                              });
+                          }catch(e){
+                              deferred.reject(e);
+                          }
+                      });
+                  }catch(e){
+                      deferred.reject(e);
+                  }
+                  return deferred.promise;
+              })
+              .then(function getServices(pr){
+                  console.log("Got past the post of photo:",pr,paramRequest.query.json);
+                  var response = JSON.parse(paramRequest.query.json)
+                  response.pl.fd.pt = [{pp:{uri:pr.pl.uri, urll:pr.pl.urll, urlm: pr.pl.urlm, urls: pr.pl.urls}}];
+                  paramRequest.query.json = JSON.stringify(response);
+                  return esbMessage({
+                      "ns":"smm",
+                      "op":"smm_queryServices",
+                      "pl":{
+                          query : activity.sqc
+                      }
+                  })
+              })
+              .then(function persistResponse(services){
+                  var priceList = services.pl.results[0][0];
+                  var objToSend = {
+                      plid: priceList._id,
+                      svid: priceList.service._id,
+                      svn: priceList.serviceName.text,
+                      snid: priceList.serviceName._id,
+                      svp: priceList.servicePrices,
+                      sdp: priceList.discountedPrice,
+                      spn: priceList.servicePoint.servicePointName,
+                      spid: priceList.servicePoint._id,
+                      spc: priceList.servicePoint.ct.oID,
+                      serviceCode : priceList.service.serviceCode,
+                      sq : 0,
+                      spm : priceList.paymentMethod[0]
+                  };
+                  var response = JSON.parse(paramRequest.query.json)
+                  response.pl.sb = objToSend;
+                  return esbMessage({
+                      "ns" : "bmm",
+                      "op" : "bmm_persistResponse",
+                      "pl" : {
+                          response : response.pl,
+                          //transactionid: m.pl.transactionid,
+                          loginName: paramRequest.user.lanzheng.loginName,
+                          currentOrganization: paramRequest.user.currentOrganization,
+                          activityCode: ac
+                      }
+                  })
+              })
+              .then(function submitPay(r){
+                  paramRequest.body.json = JSON.stringify({pl:{code: r.pl.rc, phone: undefined}});
+                  return doResponsePayment(paramRequest, paramResponse, paramNext, function(code, payload){
+                      if(code != 200) return {c: code, x: payload};
+
+                      return esbMessage({
+                          "ns" : "bmm",
+                          "op" : "bmm_getResponse",
+                          "pl" : {
+                              code : r.pl.rc
+                          }
+                      })
+                          .then(function(r){
+                              if(!r || !r.fd || !r.fd.fields)
+                                  return {c: code, x: payload};
+                              var alteredPayload = {
+                                  pl: {
+                                      rc: r.rc,
+                                      LZGMSFHM: r.fd.fields.LZGMSFHM, // validation result of the id number
+                                      LZBIZDESC: r.fd.fields.LZBIZDESC, // validation result discription
+                                      LZXPFS: r.fd.fields.LZXPFS, //similirity number
+                                      LZNAME: r.fd.fields.LZNAME, // name to be validated
+                                      LZSID: r.fd.fields.LZSID,
+                                      LZXM: r.fd.fields.LZXM, // validation result of the name
+                                      LZXPFX: r.fd.fields.LZXPFX // conclusion of validation
+                                  }
+                              }
+                              return {c: code, x: alteredPayload}
+                          })
+                  })
+              })
+              .then(function resolve(res){
+              }  ,  function reject(err){
+                  console.log("FAILED API Fillout WITH",err);
+                  oHelpers.sendResponse(paramResponse, 501, {er : err})
+              })
+      })
     })
     .fail(function (err) {
       console.log('error getting security dependencies..: ' + err);
     });
 
-  return homeRouter;
+
+    function doResponsePayment(paramRequest, paramResponse, paramNext, responseMutator){
+        var r = {er:null,pl:null},
+            transactionid = false,
+            responseInfo = null,
+            activityInfo = null,
+            reqPayload=false,
+            finalResult = undefined,
+            refCode = undefined;
+
+        if(!responseMutator)
+            responseMutator = function(code,payload){
+                return q().then(function(){
+                    return {c: code, x: payload}
+                })
+            }
+
+        function directPayment(orders){
+            //update response sp and set payment status to paid
+            return esbMessage({
+                "ns":"fmm",
+                "op": "fmm_makeDirectPayment",
+                "pl": {orders : orders}
+            });
+        }
+
+        function alipayPayment(orders){
+            return esbMessage({
+                "ns":"fmm",
+                "op":"fmm_generateAlipayUrl",
+                "pl": {orders : orders}
+            })
+        }
+        function weixinPayment(orders, code){
+            return esbMessage({
+                "ns":"fmm",
+                "op":"fmm_generateWechatPayUrl",
+                "pl": {orders : orders, code:code}
+            })
+        }
+
+        return q()
+            //FETCH RESPONSE & BEGIN TRANSACTION
+            .then(function(){
+                //get a transaction id from wmm
+                reqPayload = JSON.parse(paramRequest.body.json);
+                console.log("request payload",reqPayload);
+                refCode = lib.generateResponseReferenceCode();
+                return q.all([
+                    esbMessage({
+                        op:"bmm_getResponse",
+                        pl:reqPayload.pl
+                    }), //get the response details
+                    esbMessage({  //and a transactionid
+                        op:"createTransaction",
+                        pl:{
+                            loginName : paramRequest.user.lanzheng.loginName,
+                            currentOrganization : paramRequest.user.currentOrganization,
+                            transaction:{
+                                description:'Pay for response'
+                                ,modules:['bmm']
+                            }
+                        }
+                    })
+                ]);
+            })
+            //STOW ASIDE HELPFUL INFO
+            .then(function(msg) {
+                responseInfo = msg[0];
+                transactionid = msg[1].pl.transaction._id;
+                var ow = responseInfo.ow;
+                ow.sc = reqPayload.pl.phone;
+                return esbMessage({
+                    "ns" : "bmm",
+                    "op" : "bmm_persistResponse",
+                    "pl" : {
+                        transactionid: transactionid,
+                        loginName: paramRequest.user.lanzheng.loginName,
+                        currentOrganization: paramRequest.user.currentOrganization,
+                        response : {
+                            _id : responseInfo._id,
+                            tid : transactionid,
+                            lk : true,
+                            ow : ow
+                        }
+                    }
+                })
+                    .then(function (res){
+                        return esbMessage({
+                            "ns":"bmm",
+                            "op":"bmm_getActivity",
+                            "pl":{
+                                code : responseInfo.acn
+                            }
+                        }).then(function(act){
+                            activityInfo = act;
+                            return res;
+                        },function(err){
+                            throw err;
+                        })
+                    })
+                    .then(function(res){
+                        if(activityInfo.abd && (activityInfo.abd.apm == '后付款统一结算' || activityInfo.abd.apm == '预付款统一结算'))//prepaid or postpaid, don't send user to alipay!
+                        {
+                            return 'lz';
+                        }
+                        return responseInfo.sp.pm;
+                    }  ,  function(err){
+                        console.log("error?",err)
+                        throw err;
+                    });
+
+            })
+            //MAKE PAYMENT
+            .then(function(provider){
+                var paymentChain;
+                var orders = collateOrders(responseInfo, activityInfo, paramRequest.user,(provider==="ali" || provider==="weixin") ?'CREDIT_PURCHASE':"ACTIVITY");
+                var sum = orders.reduce(function(sum, ele){return sum + ele.orderAmount},0);
+                console.log("SUM IS",sum);
+                if(provider === "ali" && sum > 0)
+                {
+                    console.log("ALIPAY PAYMENT");
+                    //condense orders into a single 'buy'
+                    var condensedOrder = orders.reduce(function(agg, ele, idx){
+                        if(idx == 0) return ele;
+                        agg.offlineAmount += ele.offlineAmount;
+                        agg.orderAmount += ele.orderAmount;
+                        agg.platformCommissionAmount += ele.platformCommissionAmount;
+                        agg.agentCommissionAmount += ele.agentCommissionAmount;
+                        return agg;
+                    },{})
+                    orders = [condensedOrder];
+                    return alipayPayment(orders)
+                        //SEND OFF ALIPAY URL
+                        .then(function(response){
+                            var finalResult = response;
+                            response.tid = transactionid;
+                            response.refCode = refCode;
+                            response.reqPayload = reqPayload;
+                            console.log("Sending out Alipay URL.", response);
+                            responseMutator(200,finalResult).then(function(mut){
+                                oHelpers.sendResponse(paramResponse,mut.c,mut.x);
+                            })
+                        })
+                        //FAIL
+                        .then(null,function reject(err){
+                            var code = 501;
+                            r.er={ec:10012,em:"Could not make payment"};
+                            //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+                            if(err.er && err.er ==='Insufficient funds'){
+                                r.er={ec:10011,em:err.er};
+                                code = 403;
+                            }else{
+                                _rollBackTransaction({pl:{transactionid : transactionid}});
+                            }
+                            //oHelpers.sendResponse(paramResponse,code,r);
+                            responseMutator(code, r).then(function(mut){
+                                oHelpers.sendResponse(paramResponse,mut.c,mut.x);
+                            })
+                        })
+                }
+
+                else if(provider === "weixin" && sum > 0)
+                {
+                    console.log("WEIXIN PAYMENT");
+                    //condense orders into a single 'buy'
+                    var condensedOrder = orders.reduce(function(agg, ele, idx){
+                        if(idx == 0) return ele;
+                        agg.offlineAmount += ele.offlineAmount;
+                        agg.orderAmount += ele.orderAmount;
+                        agg.platformCommissionAmount += ele.platformCommissionAmount;
+                        agg.agentCommissionAmount += ele.agentCommissionAmount;
+                        return agg;
+                    },{})
+                    orders = [condensedOrder];
+                    var wxcode = reqPayload.pl.weixinCode;
+
+                    return weixinPayment(orders,wxcode)
+                        //SEND OFF WEIXIN URL
+                        .then(function(response){
+
+
+                            console.log("weixin payment---", response);
+
+                            var finalResult = response;
+                            response.tid = transactionid;
+                            response.refCode = refCode;
+                            response.reqPayload = reqPayload;
+                            console.log("Sending out wexin payment URL.", response);
+                            //oHelpers.sendResponse(paramResponse,200,finalResult);
+                            responseMutator(200,finalResult).then(function(mut){
+                                oHelpers.sendResponse(paramResponse,mut.c,mut.x);
+                            })
+                        })
+                        //FAIL
+                        .then(null,function reject(err){
+                            var code = 501;
+                            r.er={ec:10012,em:"Could not make payment"};
+                            //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+                            if(err.er && err.er ==='Insufficient funds'){
+                                r.er={ec:10011,em:err.er};
+                                code = 403;
+                            }else{
+                                _rollBackTransaction({pl:{transactionid : transactionid}});
+                            }
+                            //oHelpers.sendResponse(paramResponse,code,r);
+                            responseMutator(code,r).then(function(mut){
+                                oHelpers.sendResponse(paramResponse,mut.c,mut.x);
+                            })
+                        })
+                }
+
+                else// (provider === "lz")
+                {
+                    console.log("LANZHENG PAYMENT");
+                    return directPayment(orders)
+                        //UPDATE RESPONSE STATUS TO PAID
+                        .then(function(msg){
+                            return esbMessage({  //update the response and set payment status to 'paid'
+                                op : "bmm_persistResponse",
+                                pl : {
+                                    transactionid : transactionid,
+                                    loginName : paramRequest.user.lanzheng.loginName,
+                                    currentOrganization : paramRequest.user.currentOrganization,
+                                    response : {
+                                        _id : responseInfo._id,
+                                        rs:30,
+                                        sp:{
+                                            ps:'paid'
+                                        },
+                                        rfc:refCode
+                                    }
+                                }
+                            });
+                        })
+                        //COMMIT TRANSACTION
+                        .then(function(msg){
+                            r.pl = msg;
+                            return _commitTransaction({pl:{transactionid : transactionid}});
+                        })
+                        //SCHEDULE/ACTIVATE SERVICES
+                        .then(function() {
+                            if(responseInfo.acn != "LZB101" && responseInfo.acn != "LZB102" && responseInfo.acn != "LZB106" && responseInfo.acn != "LZB107")
+                            {
+                                //oHelpers.sendResponse(paramResponse, 200, {pl:{ow:{sc:reqPayload.pl.phone},can:responseInfo.can},er:null});
+                                responseMutator(200,{pl:{ow:{sc:reqPayload.pl.phone},can:responseInfo.can},er:null}).then(function(mut){
+                                    oHelpers.sendResponse(paramResponse,mut.c,mut.x);
+                                })
+                            }
+                            console.log("SCHEDULING",responseInfo.acn);
+                            return workflowManager.scheduleService(responseInfo.rc,{}, paramRequest.user);
+                        })
+                        //Update ResponseInfo
+                        .then(function(z){
+                            console.log("POST SCHEDULING");
+                            return esbMessage({
+                                op:"bmm_getResponse",
+                                pl:reqPayload.pl
+                            }).then(function(r){
+                                responseInfo = r;
+                                return z;
+                            })
+                        })
+                        //SEND SMS/MAIL/NOTIFICATIONs & EXIT
+                        .then(function(z) {
+                            finalResult = z.pl;
+                            finalResult.pl = {ow : {sc : reqPayload.pl.phone},can:responseInfo.can,fd: responseInfo.fd,acn:responseInfo.acn};
+                            console.log("SENDING SMS (LZ) to ",reqPayload);
+                            return esbMessage({
+                                ns: 'mdm',
+                                vs: '1.0',
+                                op: 'sendNotification',
+                                pl: {
+                                    recipients: [{
+                                        inmail: {to: paramRequest.user.lanzheng.loginName},
+                                        weixin: {to: null},
+                                        sms: {to: reqPayload.pl.phone},
+                                        email: {to: null}
+                                    }]
+                                    , notification: {
+                                        subject: '您事务响应验证码为',
+                                        notificationType: '事务通知',
+                                        from: '系统',
+                                        body: refCode
+                                    }
+                                }
+                            })
+                        })
+                        //EXIT
+                        .then(function(smsResponse){
+                            if(responseInfo.acn == "LZB101" || responseInfo.acn == "LZB102" || responseInfo.acn == "LZB106" || responseInfo.acn == "LZB107")
+                            {
+                                //oHelpers.sendResponse(paramResponse,200,finalResult);
+                                responseMutator(200,finalResult).then(function(mut){
+                                    oHelpers.sendResponse(paramResponse,mut.c,mut.x);
+                                })
+                            }
+                        })
+                        //FAIL
+                        .then(null,function reject(err){
+                            var code = 501;
+                            r = {
+                                pl : {ow:{sc:reqPayload.pl.phone}},
+                                er : {ec:10012,em:err?err:"Could not make payment"}
+                            }
+
+                            if(err.er && err.er ==='Insufficient funds'){
+                                r.er={ec:10011,em:err.er};
+                                code = 403;
+                            }
+                            else if(err.er && err.er === 'Order already exists for message: [object Object]') {
+                                console.log("ROLLING BACK: order already existed");
+                                code = 200;
+                                r = {pl:"ORDER ALREADY RECIEVED : Error 10012"};
+                            }
+
+                            console.log("REjEcTeD with ",err);
+                            //oHelpers.sendResponse(paramResponse,code,r);
+                            responseMutator(code,r).then(function(mut){
+                                oHelpers.sendResponse(paramResponse,mut.c,mut.x);
+                            })
+
+                            if(err.er && err.er !== 'Insufficient funds')
+                                _rollBackTransaction({pl:{transactionid : transactionid}});
+                        })
+                }
+            })
+            //UPDATE ACTIVITY
+            .then(function(){
+                return esbMessage({
+                    "ns" : "bmm",
+                    "op" : "bmm_logResponseOnActivity",
+                    "pl" : {
+                        code : activityInfo.abd.ac
+                    }
+                }).then(function(){
+                } , function(er){
+                    console.log("Something bad happened:",er)
+                })
+            } , function(err){
+                console.log("ACK!",err);
+                //oHelpers.sendResponse(paramResponse,501,{pl:{},er:err});
+                responseMutator(501,{pl:{},er:err}).then(function(x,c){
+                    oHelpers.sendResponse(paramResponse,c,x);
+                })
+            })
+    };
+
+    function collateOrders(response, activity, user, type){
+        var serviceBookings = response.sb,
+            orders = [],
+            i = serviceBookings.length,
+            varAccountID,
+            customAmt = undefined;
+        //special case for custom credit amounts
+        if(response.acn == "LZB104")
+            customAmt = Math.abs(parseFloat(response.fd.fields.amount));
+        if(activity.abd.apm == "预付款统一结算")//prepaid
+        {
+            console.log("USING PREPAID",activity.ct);
+            varAccountID = activity.ct.uID;
+        }
+        else if(activity.abd.apm == "后付款统一结算")//postpaid
+        {
+            console.log("USING POSTPAID");
+            varAccountID = activity.ct.uID;
+        }
+        else //charge the user
+        {
+            console.log("USER PAYS");
+            varAccountID = user.userType === 'admin'? 'admin' : user.lanzheng.loginName;
+        }
+        //create an order for each selected pricelist in this activity (service booking)
+        while((i-=1)>-1){
+            var owedAmount;
+            if(activity.abd.apm == "后付款统一结算" || serviceBookings[i].spm == 2)//offline or postpaid
+            {
+                console.log(activity.abd.apm == "后付款统一结算" ? "POSTPAID NEVERPAY" : "OFFLINE PAY")
+                owedAmount = 0;
+            }
+            else {
+                console.log("ONLINE PAY")
+                owedAmount = customAmt || serviceBookings[i].sdp;
+            }
+            orders.push({
+                "transactionId" : response.rc,
+                "serviceId" : serviceBookings[i].plid,//serviceid is the pricelist id
+                "serviceType" : type,
+                "serviceName" : type == "CREDIT_PURCHASE" ? "余额充值" : serviceBookings[i].svn,
+                "serviceProviderId" : serviceBookings[i].spid,
+                //"agentId" : "not implemented",
+                "offlineAmount": customAmt || serviceBookings[i].sdp || 0,
+                "orderAmount" : owedAmount,
+                "platformCommissionAmount" : 0,//@todo: not implented
+                "agentCommissionAmount" : 0,//@todo: not implented
+                "corporationId" : serviceBookings[i].spc,//creator of the service point
+                "userAccountId" : varAccountID,// login name not the id
+                "paymentType" : activity.abd.apm == "后付款统一结算" || serviceBookings[i].spm == 2 ? "offline" : "online",
+                "activityName" : response.can
+            });
+        }
+        return orders;
+    }
+    function _commitTransaction(m){
+        m.pl.transaction = {
+            _id:m.pl.transactionid
+        };
+        console.log(m.pl.transaction);
+        m.op='commitTransaction';
+        return esbMessage(m);
+    }
+    function _rollBackTransaction(m){
+        return q()
+            .then(function(){
+                return q.all([
+                    esbMessage({op:'wmm_rollBackTransaction',pl:{transaction:{_id:m.pl.transactionid}}})
+                    ,esbMessage({op:'bmm_rollback',pl:{transactionid:m.pl.transactionid}})
+                ]);
+            })
+            .then(function(){
+                return q.resolve('ok');
+            })
+            .then(null,function reject(err){
+                return q.reject('In bmh _rollBackTransaction:',err);
+            });
+    }
+
+    var workflowManager = new lib.WorkflowManager({
+            esbMessage: esbMessage,
+            commitTransaction: _commitTransaction,
+            rollbackTransaction: _rollBackTransaction}
+    );
+
+    return homeRouter;
 };
