@@ -88,6 +88,7 @@ module.exports = function (paramService, esbMessage) {
     function _loadUnlinkedLanzhengData(toImport, ns, op){
         return q.all(
             toImport.map(function(ele){
+                console.log("persisting\n",ele.payload,"\nin initialization. Op:",op);
                 return esbMessage({
                     "ns":ns,
                     "op":op,
@@ -110,7 +111,7 @@ module.exports = function (paramService, esbMessage) {
             serviceTypeMap = {},
             serviceCodeMap = {},
             servicePointTypeMap = {}
-        return q.then(function getInfo(){
+        return q().then(function getInfo(){
             return q.all([
                 esbMessage({
                     "ns" : "smm",
@@ -124,26 +125,49 @@ module.exports = function (paramService, esbMessage) {
                 })
             ])
         })
-        .then(function loadUnlinked(types){
-            types[0].pl.forEach(function(type){
+        .then(function loadUnlinkedServicePoints(types) {
+            types[0].pl.forEach(function (type) {
                 servicePointTypeMap[type.text] = type._id;
             });
-            types[1].pl.forEach(function(type){
-                serviceTypeMap[type.text] = type._id;
-                serviceCodeMap[type.text] = type._id;
-            })
+
+            lzSVP.forEach(function (ele, idx) {
+                if (ele.links) {
+                    ele.links.forEach(function (link) {
+                        if (link.method == "map") {
+                            console.log("wanna map-lookup", link.path, "with", link.value);
+                            lzSVP[idx].payload[link.path] = servicePointTypeMap[link.value];
+                        }
+                    })
+                }
+            });
+            return _loadUnlinkedLanzhengData(lzSVP,'smm','smm_persistServicePoint');
+        })
+        .then(function loadUnlinkedServices(svp){
+
+        })
+        .then(function loadUnlinkedForms(srv){
+
+        })
+        .then(function loadUnlinkedActivities(frm){
+
+        })
+        /*
 
             return q.all([
-                _loadUnlinkedLanzhengData(lzSVP,'smm','smm_persistServicePoint', servicePointTypeMap),
-                _loadUnlinkedLanzhengData(lzSRV,'smm','smm_persistService', serviceTypeMap),
-                _loadUnlinkedLanzhengData(lzACT,'bmm','bmm_persistActivity'),
-                _loadUnlinkedLanzhengData(lzFRM,'bmm','bmm_persistForm')
-            ])
-        })
+                _loadUnlinkedLanzhengData(lzSVP,'smm','smm_persistServicePoint'),
 
+                //todo _loadUnlinkedLanzhengData(lzSRV,'smm','smm_persistService'),
+
+                //todo _loadUnlinkedLanzhengData(lzACT,'bmm','bmm_persistActivity'),
+
+                //todo _loadUnlinkedLanzhengData(lzFRM,'bmm','bmm_persistForm')
+            ])
+            */
     }
     function _prepopulateSpecialCaseServices(){
 
+        _patchLanzhengInfo();
+        return;
         var importSpecialCases = require('../data/smm_special_init.json');
         var importSpecialCaseActivities = require('../data/bmm_special_init.json');
         var importSpecialCaseServicePoints = importSpecialCases.filter(function(ele){
@@ -239,7 +263,6 @@ module.exports = function (paramService, esbMessage) {
                 } , function(err){
                     console.log("FAILED",err);
                 })
-
             }))
         })
         //CREATE ACTIVITIES

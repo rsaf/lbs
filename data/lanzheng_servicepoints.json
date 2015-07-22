@@ -1,0 +1,288 @@
+[
+  {
+    "_comment": "LZP101x",
+    "payload":{
+      "servicePointCode": "400000000000000000000001",
+      "servicePointName": "蓝证平台实名认证网点",
+      "servicePointStatus":30,
+      "status": 30,
+      "servicePointAddress": "云端网点",
+      "servicePointType": "云端网点",
+      "operatingHours": "00:00 - 24:00",
+      "contactPerson": "",
+      "contactPhone": "",
+      "servicePointDescription": "",
+      "postalCode": "230904",
+      "ct": {
+        "uID": "a1ed",
+        "oID": "200000000000000000000000"
+      },
+      "md": {
+        "uID": "a1ed",
+        "oID": "200000000000000000000000"
+      }
+    },
+    "links": [
+      {
+        "path":"_id",
+			"method":"set",
+        "value":"LZP101"
+      },
+      {
+        "path":"servicePointType",
+        "method":"map",
+        "value":"云端网点"
+      }
+    ]
+  },
+  {
+    "_comment": "LZP102x",
+    "payload":{
+      "servicePointCode": "400000000000000000000002",
+      "servicePointName": "蓝证平台证照核验网点",
+      "servicePointStatus":30,
+      "status": 30,
+      "servicePointAddress": "云端网点",
+      "servicePointType": "云端网点",
+      "operatingHours": "00:00 - 24:00",
+      "contactPerson": "",
+      "contactPhone": "",
+      "servicePointDescription": "",
+      "postalCode": "230904",
+      "ct": {
+        "uID": "sa",
+        "oID": "200000000000000000000000"
+      },
+      "md": {
+        "uID": "sa",
+        "oID": "200000000000000000000000"
+      }
+    },
+    "links": [
+      {
+        "path":"_id",
+		"method":"set",
+        "value":"LZP102"
+      },
+      {
+        "path":"servicePointType",
+        "method":"map",
+        "value":"云端网点"
+      }
+    ]
+  },
+  {
+    "_comment": "LZP103x",
+    "payload":{
+      "servicePointCode": "400000000000000000000003",
+      "servicePointName": "蓝证平台单位核验网点",
+      "status": 30,
+      "servicePointAddress": "云端网点",
+      "servicePointType": "云端网点",
+      "operatingHours": "00:00 - 24:00",
+      "contactPerson": "",
+      "contactPhone": "",
+      "servicePointDescription": "蓝证平台单位核验网点",
+      "postalCode": "230904",
+      "ct": {
+        "uID": "sa",
+        "oID": "200000000000000000000000"
+      },
+      "md": {
+        "uID": "sa",
+        "oID": "200000000000000000000000"
+      }
+    },
+    "links": [
+      {
+        "path":"_id",
+		"method":"set",
+        "value":"LZP103"
+      },
+      {
+        "path":"servicePointType",
+        "method":"map",
+        "value":"云端网点"
+      }
+    ]
+  },
+  {
+    "_comment": "LZP104x",
+    "payload":{
+      "servicePointCode": "400000000000000000000003",
+      "servicePointName": "蓝证平台充值网点",
+      "status": 30,
+      "servicePointAddress": "云端网点",
+      "servicePointType": "云端网点",
+      "operatingHours": "00:00 - 24:00",
+      "contactPerson": "",
+      "contactPhone": "",
+      "servicePointDescription": "蓝证平台充值网点",
+      "postalCode": "230904",
+      "ct": {
+        "uID": "sa",
+        "oID": "200000000000000000000000"
+      },
+      "md": {
+        "uID": "sa",
+        "oID": "200000000000000000000000"
+      }
+    },
+    "links": [
+      {
+        "path":"_id",
+		"method":"set",
+        "value":"LZP104"
+      },
+      {
+        "path":"servicePointType",
+        "method":"map",
+        "value":"云端网点"
+      }
+    ]
+  },
+  {
+    "_comment": "LZP105x",
+    "payload":{
+      "servicePointCode": "400000000000000000000002",
+      "servicePointName": "蓝证证照检测网点",
+      "servicePointStatus":30,
+      "status": 30,
+      "servicePointAddress": "云端网点",
+      "servicePointType": "证照网点",
+      "operatingHours": "00:00 - 24:00",
+      "contactPerson": "",
+      "contactPhone": "",
+      "servicePointDescription": "",
+      "postalCode": "230904",
+      "ct": {
+        "uID": "sa",
+        "oID": "200000000000000000000000"
+      },
+      "md": {
+        "uID": "sa",
+        "oID": "200000000000000000000000"
+      }
+    },
+    "links": [
+      {
+        "path":"_id",
+		"method":"set",
+        "value":"LZP105"
+      },
+      {
+        "path":"servicePointType",
+        "method":"map",
+        "value":"云端网点"
+      }
+    ]
+  },
+  {
+    "_comment": "LZP106x",
+    "payload":{
+      "servicePointCode": "400000000000000000000002",
+      "servicePointName": "蓝证证照制作网点",
+      "servicePointStatus":30,
+      "status": 30,
+      "servicePointAddress": "云端网点",
+      "servicePointType": "证照网店",
+      "operatingHours": "00:00 - 24:00",
+      "contactPerson": "",
+      "contactPhone": "",
+      "servicePointDescription": "",
+      "postalCode": "230904",
+      "ct": {
+        "uID": "sa",
+        "oID": "200000000000000000000000"
+      },
+      "md": {
+        "uID": "sa",
+        "oID": "200000000000000000000000"
+      }
+    },
+    "links": [
+      {
+        "path":"_id",
+		"method":"set",
+        "value":"LZP106"
+      },
+      {
+        "path":"servicePointType",
+        "method":"map",
+        "value":"云端网点"
+      }
+    ]
+  },
+  {
+    "_comment": "LZP107x",
+    "payload":{
+      "servicePointCode": "400000000000000000000001",
+      "servicePointName": "API实名认证网点",
+      "servicePointStatus":30,
+      "status": 30,
+      "servicePointAddress": "云端网点",
+      "servicePointType": "云端网点",
+      "operatingHours": "00:00 - 24:00",
+      "contactPerson": "",
+      "contactPhone": "",
+      "servicePointDescription": "",
+      "postalCode": "230904",
+      "ct": {
+        "uID": "a1ed",
+        "oID": "200000000000000000000000"
+      },
+      "md": {
+        "uID": "a1ed",
+        "oID": "200000000000000000000000"
+      }
+    },
+    "links": [
+      {
+        "path":"_id",
+		"method":"set",
+        "value":"LZP107"
+      },
+      {
+        "path":"servicePointType",
+        "method":"map",
+        "value":"云端网点"
+      }
+    ]
+  },
+  {
+    "_comment": "LZP108x",
+    "payload":{
+      "servicePointCode": "400000000000000000000001",
+      "servicePointName": "蓝证平台身份认证服务网点",
+      "servicePointStatus":30,
+      "status": 30,
+      "servicePointAddress": "云端网点",
+      "servicePointType": "云端网点",
+      "operatingHours": "00:00 - 24:00",
+      "contactPerson": "",
+      "contactPhone": "",
+      "servicePointDescription": "",
+      "postalCode": "230904",
+      "ct": {
+        "uID": "a1ed",
+        "oID": "200000000000000000000000"
+      },
+      "md": {
+        "uID": "a1ed",
+        "oID": "200000000000000000000000"
+      }
+    },
+    "links": [
+      {
+        "path":"_id",
+		"method":"set",
+        "value":"LZP108"
+      },
+      {
+        "path":"servicePointType",
+        "method":"map",
+        "value":"云端网点"
+      }
+    ]
+  }
+]
