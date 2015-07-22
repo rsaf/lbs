@@ -610,19 +610,114 @@ module.exports = function (paramService, esbMessage) {
             });
     });
     serviceManagementRouter.post('/services.json', function (paramRequest, paramResponse, paramNext) {
+
+        var metaInfo = paramRequest.body.meta;
+
         var m = {
             "op": "smm_queryServices",
             "pl": {},
-            "mt": {p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
+            "mt": {p:metaInfo.p,ps:metaInfo.ps,sk:metaInfo.sk,sd:metaInfo.sd, ed:metaInfo.ed}
         };
+
+
+        console.log('m.mt----', m.mt);
+
         q().then(function () {
             m.pl = JSON.parse(paramRequest.body.json);
             return esbMessage(m);
         })
             .then(function (r) {
-                //paramResponse.writeHead(200, {"Content-Type": "application/json"});
-                //paramResponse.end(JSON.stringify(r));
-                oHelpers.sendResponse(paramResponse, 200, r);
+
+                //rebuilding the return json according to the pagination info
+                //here is issume r.pl.totals[0].length <= 5. as the limit on smm_queryServices is set to 5;
+
+
+
+                var finalReturnVal = {pl:null,err:null};
+
+                var finaResults = [[]];  //  use [[]] to keep the nested array format that is comming from smm_queryServices.
+                var finalToltals = [[]];
+                var tempArray  = r.pl.totals[0].concat(r.pl.results[0]);
+                var page = parseInt(metaInfo.p);
+                var pageSize = parseInt(metaInfo.ps);
+                var totalsLength = r.pl.totals[0].length;
+                var resultsLength = r.pl.results[0].length;
+                var TOTALLENGTH = tempArray.length;
+
+                console.log('TOTALLENGTH,totalsLength,resultsLength---',TOTALLENGTH,totalsLength,resultsLength);
+                console.log('page,pageSize---',page,pageSize);
+
+                if(TOTALLENGTH<= pageSize){
+
+                    finalReturnVal.pl = r.pl;
+                    finalReturnVal.meta = metaInfo;
+                    finalReturnVal.meta.tc = TOTALLENGTH;
+
+                    console.log('finalReturnVal1----',finalReturnVal);
+
+                    oHelpers.sendResponse(paramResponse, 200, finalReturnVal);
+
+                }
+                else{
+
+
+                    var skipIndex = page*pageSize;
+                    var skipBoundary = skipIndex+pageSize;
+                    var skipMaxIndex = skipBoundary<TOTALLENGTH?skipBoundary:TOTALLENGTH;
+
+                    var tempArray2  = tempArray.slice(skipIndex,skipMaxIndex);
+
+
+
+                    var maxSliceIndex = (pageSize<tempArray2.length)?pageSize:tempArray2.length;
+
+                     console.log('tempArray2.length-------',tempArray2.length);
+                    console.log('maxSliceIndex,skipIndex,skipMaxIndex-------',maxSliceIndex,skipIndex,skipMaxIndex);
+
+                    if(page!==0){  //no grouping/totals
+
+                        var i = 0;
+
+                        while(i<maxSliceIndex){
+
+                            finaResults[0][i] = tempArray2[i];
+
+                            i = i+1;
+                        }
+
+                    }
+                    else{
+
+                        var i = 0;
+
+                        while(i<totalsLength){
+
+                            finalToltals[0][i] = tempArray2[i];
+
+                            i = i+1;
+                        }
+                        var j = totalsLength;
+                        var k = 0;
+                        while(j<maxSliceIndex){
+
+                            finaResults[0][k] = tempArray2[j];
+
+                            j=j+1;
+                            k=k+1;
+                        }
+                    }
+
+
+
+
+                    finalReturnVal.pl = {totals:finalToltals,results:finaResults};
+                    finalReturnVal.meta = metaInfo;
+                    finalReturnVal.meta.tc = TOTALLENGTH;
+
+                    console.log('finalReturnVal2----',finalReturnVal);
+                    oHelpers.sendResponse(paramResponse, 200, finalReturnVal);
+                }
+
             })
             .fail(function (r) {
                 //paramResponse.writeHead(501, {"Content-Type": "application/json"});
