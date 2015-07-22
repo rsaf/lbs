@@ -776,7 +776,7 @@ module.exports = function (paramService, esbMessage) {
                               if (err){ deferred.reject(err); return;}
                               var old_path = files.file.path,
                                   file_ext = files.file.name.split('.').pop();
-                              var json = JSON.parse(fields.json);
+                              var json = JSON.parse(paramRequest.query.photo);
                               console.log('json-----', json);
 
                               fs.readFile(old_path, function(err, data) {
@@ -823,7 +823,7 @@ module.exports = function (paramService, esbMessage) {
                   return deferred.promise;
               })
               .then(function getServices(pr){
-                  console.log("Got past the post of photo:",pr);
+                  console.log("Got past the post of photo:",pr,paramRequest.query.json);
                   var response = JSON.parse(paramRequest.query.json)
                   response.pl.fd.pt = [{pp:{uri:pr.pl.uri, urll:pr.pl.urll, urlm: pr.pl.urlm, urls: pr.pl.urls}}];
                   paramRequest.query.json = JSON.stringify(response);
