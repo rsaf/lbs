@@ -627,11 +627,9 @@ module.exports = function (paramService, esbMessage) {
             return esbMessage(m);
         })
             .then(function (r) {
-
+                
                 //rebuilding the return json according to the pagination info
                 //here is issume r.pl.totals[0].length <= 5. as the limit on smm_queryServices is set to 5 for 'totals';
-
-
 
                 var finalReturnVal = {pl:null,err:null};
 
@@ -644,73 +642,51 @@ module.exports = function (paramService, esbMessage) {
                 var resultsLength = r.pl.results[0].length;
                 var TOTALLENGTH = tempArray.length;
 
-
                 if(TOTALLENGTH<= pageSize){
-
                     finalReturnVal.pl = r.pl;
                     finalReturnVal.meta = metaInfo;
                     finalReturnVal.meta.tc = TOTALLENGTH;
-
-                    console.log('finalReturnVal1----',finalReturnVal);
-
                     oHelpers.sendResponse(paramResponse, 200, finalReturnVal);
 
                 }
                 else{
-
 
                     var skipIndex = page*pageSize;
                     var skipBoundary = skipIndex+pageSize;
                     var skipMaxIndex = skipBoundary<TOTALLENGTH?skipBoundary:TOTALLENGTH;
 
                     var tempArray2  = tempArray.slice(skipIndex,skipMaxIndex);
-
-
-
                     var maxSliceIndex = (pageSize<tempArray2.length)?pageSize:tempArray2.length;
-
 
                     if(page!==0){  //no grouping/totals
 
                         var i = 0;
 
                         while(i<maxSliceIndex){
-
                             finaResults[0][i] = tempArray2[i];
-
                             i = i+1;
                         }
-
                     }
                     else{
-
                         var i = 0;
 
                         while(i<totalsLength){
-
                             finalToltals[0][i] = tempArray2[i];
-
                             i = i+1;
                         }
                         var j = totalsLength;
                         var k = 0;
+
                         while(j<maxSliceIndex){
-
                             finaResults[0][k] = tempArray2[j];
-
                             j=j+1;
                             k=k+1;
                         }
                     }
-
-
-
-
                     finalReturnVal.pl = {totals:finalToltals,results:finaResults};
                     finalReturnVal.meta = metaInfo;
                     finalReturnVal.meta.tc = TOTALLENGTH;
 
-                    console.log('finalReturnVal2----',finalReturnVal);
                     oHelpers.sendResponse(paramResponse, 200, finalReturnVal);
                 }
 
