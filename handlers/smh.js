@@ -629,7 +629,7 @@ module.exports = function (paramService, esbMessage) {
             .then(function (r) {
 
                 //rebuilding the return json according to the pagination info
-                //here is issume r.pl.totals[0].length <= 5. as the limit on smm_queryServices is set to 5;
+                //here is issume r.pl.totals[0].length <= 5. as the limit on smm_queryServices is set to 5 for 'totals';
 
 
 
@@ -644,8 +644,6 @@ module.exports = function (paramService, esbMessage) {
                 var resultsLength = r.pl.results[0].length;
                 var TOTALLENGTH = tempArray.length;
 
-                console.log('TOTALLENGTH,totalsLength,resultsLength---',TOTALLENGTH,totalsLength,resultsLength);
-                console.log('page,pageSize---',page,pageSize);
 
                 if(TOTALLENGTH<= pageSize){
 
@@ -671,8 +669,6 @@ module.exports = function (paramService, esbMessage) {
 
                     var maxSliceIndex = (pageSize<tempArray2.length)?pageSize:tempArray2.length;
 
-                     console.log('tempArray2.length-------',tempArray2.length);
-                    console.log('maxSliceIndex,skipIndex,skipMaxIndex-------',maxSliceIndex,skipIndex,skipMaxIndex);
 
                     if(page!==0){  //no grouping/totals
 
