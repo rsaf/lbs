@@ -6,6 +6,8 @@
 var oHelpers= require('../utilities/helpers.js');
 var q = require('q');
 var lib = require('lib');
+var fs = require('fs');
+var formidable = require('formidable');
 
 module.exports = function(paramService, esbMessage)
 {
@@ -548,101 +550,6 @@ module.exports = function(paramService, esbMessage)
  * Creates an order for each selected service in the response
  * makes payment to account ?? for all the services
  */
-
-    //SAMPLE!
-    //'https://www.idlan.cn/workspace/finance/LZB106/fillAndPostPayResponse.json?json={"si":{},"pl":{"fd":{"fields":{"LZNAME":"machoo","LZSID":"1234"}}}}'
-    fmmRouter.post('/:activity_code/fillAndPostPayResponse.json', function(paramRequest, paramResponse, paramNext) {
-        //Expects a ?json={"si":{...},"pl":{"fd":"fields":{...}}}
-        var ac = paramRequest.params.activity_code;
-        var activity;
-        if (ac !== "LZB106" && ac !== "LZB108"){
-            oHelpers.sendResponse(paramResponse, 404, {er: "Activity not supported for API response filling."});
-            return;
-        }
-        return esbMessage({
-            "ns":"bmm",
-            "op":"bmm_getActivity",
-            "pl":{
-                code : paramRequest.params.activity_code
-            }
-        })
-        .then(function getServices(act){
-            activity = act;
-            return esbMessage({
-                "ns":"smm",
-                "op":"smm_queryServices",
-                "pl":{
-                    query : act.sqc
-                }
-            })
-        })
-        .then(function persistResponse(services){
-            var priceList = services.pl.results[0][0];
-            var objToSend = {
-                plid: priceList._id,
-                svid: priceList.service._id,
-                svn: priceList.serviceName.text,
-                snid: priceList.serviceName._id,
-                svp: priceList.servicePrices,
-                sdp: priceList.discountedPrice,
-                spn: priceList.servicePoint.servicePointName,
-                spid: priceList.servicePoint._id,
-                spc: priceList.servicePoint.ct.oID,
-                serviceCode : priceList.service.serviceCode,
-                sq : 0,
-                spm : priceList.paymentMethod[0]
-            };
-            var response = JSON.parse(paramRequest.query.json)
-            response.pl.sb = objToSend;
-            return esbMessage({
-                "ns" : "bmm",
-                "op" : "bmm_persistResponse",
-                "pl" : {
-                    response : response.pl,
-                    //transactionid: m.pl.transactionid,
-                    loginName: paramRequest.user.lanzheng.loginName,
-                    currentOrganization: paramRequest.user.currentOrganization,
-                    activityCode: ac
-                }
-            })
-        })
-        .then(function submitPay(r){
-            paramRequest.body.json = JSON.stringify({pl:{code: r.pl.rc, phone: undefined}});
-            return doResponsePayment(paramRequest, paramResponse, paramNext, function(code, payload){
-                if(code != 200) return {c: code, x: payload};
-
-                return esbMessage({
-                    "ns" : "bmm",
-                    "op" : "bmm_getResponse",
-                    "pl" : {
-                        code : r.pl.rc
-                    }
-                })
-                .then(function(r){
-                    if(!r || !r.fd || !r.fd.fields)
-                        return {c: code, x: payload};
-                    var alteredPayload = {
-                        pl: {
-                            rc: r.rc,
-                            LZGMSFHM: r.fd.fields.LZGMSFHM, // validation result of the id number
-                            LZBIZDESC: r.fd.fields.LZBIZDESC, // validation result discription
-                            LZXPFS: r.fd.fields.LZXPFS, //similirity number
-                            LZNAME: r.fd.fields.LZNAME, // name to be validated
-                            LZSID: r.fd.fields.LZSID,
-                            LZXM: r.fd.fields.LZXM, // validation result of the name
-                            LZXPFX: r.fd.fields.LZXPFX // conclusion of validation
-                        }
-                    }
-                    return {c: code, x: alteredPayload}
-                })
-            })
-        })
-        .then(function resolve(res){
-        }  ,  function reject(err){
-                console.log("FAILED API Fillout WITH",err);
-            oHelpers.sendResponse(paramResponse, 501, {er : err})
-        })
-    })
 
     fmmRouter.post('/responsepayment.json', function(a,b,c){doResponsePayment(a,b,c)});
 
