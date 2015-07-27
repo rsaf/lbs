@@ -85,262 +85,253 @@ module.exports = function (paramService, esbMessage) {
         rollbackTransaction: _rollBackTransaction2}
     );
 
-    function _prepopulateSpecialCaseServices(){
-
-        var importSpecialCases = require('../data/smm_special_init.json');
-        var importSpecialCaseActivities = require('../data/bmm_special_init.json');
-        var importSpecialCaseServicePoints = importSpecialCases.filter(function(ele){
-            return ele.persist && ele.persist.tgtField == "servicePoint"
+    function _patchLanzhengInfo(){
+        var lzACT = require('../data/lanzheng_activities.json'),
+            lzSRV = require('../data/lanzheng_services.json'),
+            lzSVP = require('../data/lanzheng_servicepoints.json'),
+            lzFRM = require('../data/lanzheng_forms.json'),
+            serviceTypeMap = {},
+            serviceCodeMap = {},
+            servicePointTypeMap = {},
+            servicesExtant = []
+        return q().then(function getInfo(){
+            return q.all([
+                esbMessage({
+                    "ns" : "smm",
+                    "op" : "servicePointTypes",
+                    "pl" : {}
+                }),
+                esbMessage({
+                    "ns" : "smm",
+                    "op" : "serviceTypes",
+                    "pl" : {}
+                })
+            ])
         })
-        var importSpecialCaseServices = importSpecialCases.filter(function(ele){
-            return ele.persist && ele.persist.tgtField == "service"
-        })
-        var servicePoints;
-        var serviceNameMap = {};
-
-        return q()
-        //GET SERVICE POINT _ID REF INFORMATION
-        .then(function(){
-            return esbMessage({
-                "ns" : "smm",
-                "op" : "servicePointTypes",
-                "pl" : {}
-            })
-        })
-        //FILL IN SERVICE POINT _ID REFS & PERSIST
-        .then(function (stypes){
-            //Fill In
-            var servicePointTypeMap = {};
-            stypes.pl.forEach(function (type) {
+        .then(function loadUnlinkedServicePoints(types) {
+            types[0].pl.forEach(function (type) {
                 servicePointTypeMap[type.text] = type._id;
             });
-            importSpecialCaseServicePoints = importSpecialCaseServicePoints.map(function (ele) {
-                ele.persist.pl.servicePointType = servicePointTypeMap[ele.persist.pl.servicePointType];
-                return ele;
-            });
-            //Persist
-            return q.all(importSpecialCaseServicePoints.map(function(ele){
-                return esbMessage({
-                    "ns" : ele.rename.ns,
-                    "op" : ele.rename.find,
-                    "pl" : {
-                        code : ele.rename.pl
-                    }
-                }).then(function(inUse){
-                    if(!inUse)
-                        return _persistSpecialCaseWithTransaction(ele);
-                })
-            }))
-        })
-        //GET SERVICE TYPES _ID REF INFORMATION
-        .then(function(sps){
-            servicePoints = sps;
-            return esbMessage({
-                "ns" : "smm",
-                "op" : "serviceTypes",
-                "pl" : {}
-            })
-        })
-        //FILL IN SERVICE _ID REFS & PERSIST
-        .then(function(serviceTypes){
-            //Fill In
-            var scodeToIDMap = {}, serviceTypeMap = {};
-            servicePoints.forEach(function(point){
-                if(point && point.pl)
-                    scodeToIDMap[point.pl.servicePointCode] = point.pl._id;
-            });
-            serviceTypes.pl.forEach(function(type){
+            types[1].pl.forEach(function (type) {
                 serviceTypeMap[type.text] = type._id;
-            });
-            //Massage PriceLists to reference their servicePoints
-            importSpecialCaseServices = importSpecialCaseServices.map(function(service){
-                service.persist.pl.PriceList = service.persist.pl.PriceList.map(function(list){
-                    var spc = list.servicePoint;
-                    if( scodeToIDMap[spc])
-                        list.servicePoint =  scodeToIDMap[spc];//scodeToIDMap::>  RenamedLZScode -> LZSid
-
-                    return list;
-                });
-                console.log("setting serviceType:",service.persist.pl.serviceType,"of",serviceTypeMap[service.persist.pl.serviceType])
-                if(serviceTypeMap[service.persist.pl.serviceType])
-                    service.persist.pl.serviceType = serviceTypeMap[service.persist.pl.serviceType];
-                else
-                    service.persist.pl.serviceType = undefined;
-                return service;
             })
-            //Persist
-            return q.all(importSpecialCaseServices.map(function(ele){
-                return esbMessage({
-                    "ns" : ele.rename.ns,
-                    "op" : ele.rename.find,
-                    "pl" : {
-                        code : ele.rename.pl
-                    }
-                }).then(function(inUse){
-                    if(!inUse)
-                        return _persistSpecialCaseWithTransaction(ele);
-                } , function(err){
-                    console.log("FAILED",err);
-                })
 
+            lzSVP.forEach(function (ele, idx) {
+                if (ele.links) {
+                    ele.links.forEach(function (link) {
+                        if (link.method == "map") {
+                            lzSVP[idx].payload.servicePoint[link.path] = servicePointTypeMap[link.value];
+                        }
+                    })
+                }
+            });
+            return q.all(
+                lzSVP.map(function(ele){
+                    var obj = JSON.parse(JSON.stringify(ele.payload));
+                    obj.transactionid = "200000000000000000000000";
+                    obj.override = true;
+                    return esbMessage({
+                        "ns":"smm",
+                        "op":"persistServicePoint",
+                        "pl":obj
+                    })
+                })
+            )
+        })
+        .then(function renameServicePoints(svp){
+            return q.all(svp.map(function(servicePoint, idx){
+                return esbMessage({
+                    "ns":"smm",
+                    "op":"smm_changeServicePointCode",
+                    "pl":{
+                        find: servicePoint.pl.servicePointCode,
+                        code: lzSVP[idx].payload.servicePoint.servicePointCode
+                    }
+                })
             }))
         })
-        //CREATE ACTIVITIES
-        .then(function(res) {
-                res.forEach(function(ele){
-                    if(ele && ele.pl && ele.pl.serviceName)
-                    serviceNameMap[ele.pl.serviceName.text] = ele.pl.serviceName._id
-                })
-            importSpecialCaseActivities = importSpecialCaseActivities.map(function(input) {
-                var req;
-                if(input.upload && input.persist.op == "_persistForm")//we have to handle a bucket upload
-                {
-                    var jsonToUpload = input.upload.content;
-                    req = {
-                        body: {json: JSON.stringify(jsonToUpload)},
-                        user: {
-                            lanzheng: {loginName: "a1ed"},
-                            currentOrganization: "200000000000000000000000"
-                        }
-                    };
-                }
-                else if(input.persist.op == "_persistActivity")
-                {
-                    input.persist.pl.sqc = input.persist.pl.sqc.map(function(ele){
-                        if(serviceNameMap[ele.sn]){
-                            ele.sn = serviceNameMap[ele.sn];
-                        }
-                        return ele;
-                    })
-                    req = {
-
-                        body: {json: JSON.stringify({pl: {activity: input.persist.pl}})},
-                        user: {
-                            lanzheng: {loginName: "a1ed"},
-                            currentOrganization: "200000000000000000000000"
-                        }
-                    };
-                }
-                else {
-                    console.log("Persist action not recognized - needs to be _persistActivity/Form");
-                    return;
-                }
-                var res = {
-                    writeHead: function (code) {},
-                    end: function rename(stringjson) {
-                        var m = JSON.parse(stringjson);
-                        var tgt = m.pl;
-                        input.rename.tgtField.split(".").forEach(function(e){
-                            tgt = tgt[e];
-                        });
-                        esbMessage({
-                            "ns": input.rename.ns,
-                            "op": input.rename.op,
-                            "pl": {
-                                find: tgt,
-                                code: input.rename.pl
-                            }
-                        })
-                            .then(function link(res){
-                                if(m && m.pl && m.pl._id && input.upload && input.upload.link && input.upload.link.linker){
-                                    esbMessage({
-                                        "ns" : input.upload.ns,
-                                        "op" : input.upload.link.op,
-                                        "pl" : {
-                                            find : input.upload.link.linker,
-                                            code : m.pl._id
-                                        }
-                                    });
-                                }
-                            }  ,  function fail(err){
-                                console.err("ERROR IN BMH preinit (link-rename):",err);
-                            });
-                    }
-                };
+        .then(function lookupServices(){
+            return q.all(lzSRV.map(function(service){
                 return esbMessage({
-                    "ns" : input.rename.ns,
-                    "op" : input.rename.find,
-                    "pl" : {
-                        code : input.rename.pl
+                    "ns":"smm",
+                    "op":"smm_getServices",
+                    "pl":
+                    {
+                        which:"all"
+                    },
+                    "mt":
+                    {
+                        sk:service.payload.service.serviceCode
                     }
                 })
-                    //PERSIST IF NOT IN USE
-                    .then(function(inUse){
-                        if(!inUse)
-                        {
-                            if(input.persist.op == "_persistActivity")
-                                _persistActivity(req,res);
-                            else if(input.persist.op == "_persistForm")
-                                _persistForm(req,res);
-                        }
-                    } , function failure(err){
-                        console.log("ERROR PERSISTING:",err);
-                    })
+            })).then(function(services){
+                servicesExtant = services.map(function(service){return service.pl[0]});
             })
-            return q.all(importSpecialCaseActivities);
-            //*/
         })
-        .then(function(res){
-            console.log("Completed Special Case Creation");
-        }  , function error(err){
-            console.log("WHUMP",err);
-        });
-    }
-
-    function _persistSpecialCaseWithTransaction(input){
-        var transactionid = undefined;
-        var resultset;
-        return q()
-            .then(function createTransaction() {
-                return esbMessage({
-                    "op": "createTransaction",
-                    "pl": {
-                        transaction: {
-                            description: 'persist with transaction'
-                            , modules: ['smm']
-                        },
-                        currentOrganization : "200000000000000000000000",
-                        loginName : "a1ed"
-                    }
-                });
-            })
-            .then(function persistSpecialCase(msg) {
-                transactionid = msg.pl.transaction._id;
-                var m = {
-                    "ns": input.persist.ns,
-                    "op": input.persist.op,
-                    "pl":{
-                        transactionid : transactionid
-                    }
-                };
-                m.pl[input.persist.tgtField] = input.persist.pl;
-                return esbMessage(m);
-            })
-            .then(function rename(m) {
-                //console.log("Result set was",m);
-                resultset = m;
-                return esbMessage({
-                    "ns": input.rename.ns,
-                    "op": input.rename.op,
-                    "pl": {
-                        find: m.pl[input.rename.tgtField],
-                        code: input.rename.pl,
-                        reid: input.rename.reid
-                    }
+        .then(function lookupservicepoints(){
+            return q.all(lzSRV.map(function(service){
+                return q.all(service.payload.service.PriceList.map(function(list){
+                    console.log(list);
+                    return esbMessage({
+                        "ns":"smm",
+                        "op":"smm_getServicePointByCode",
+                        "pl":{
+                            code : list.servicePoint
+                        }
+                    });
+                }));
+            }));
+        })
+        .then(function loadUnlinkedServices(svp){
+            var servicePointCodeMap = {};
+            svp.forEach(function(ele){
+                ele.forEach(function(inner){
+                    servicePointCodeMap[inner.servicePointCode] = inner._id;
                 })
             })
-            .then(function commitTransaction(cnt) {
-                if(cnt == 1 && input.persist.tgtField == "servicePoint")
-                {
-                    resultset.pl.servicePointCode = input.rename.pl;
+            lzSRV.forEach(function (ele, idx){
+                if (ele.links) {
+                    ele.links.forEach(function (link) {
+                        if (link.method == "map") {
+                            lzSRV[idx].payload.service[link.path] = serviceTypeMap[link.value];
+                        }
+                    })
                 }
-                return _commitTransaction({pl:{transactionid:transactionid}});
             })
-            .then(function resolve(r) {
-                return resultset;
-            }  ,  function failure(r) {
-                throw r;
+            lzSRV.forEach(function (ele, idx, arr){
+                //find extant if exists
+                var extant = false;
+                var existIndex = -1;
+                servicesExtant.forEach(function(service, index) {
+                    if(!service) return;;
+                    if (service.serviceCode == ele.payload.service.serviceCode)
+                    {
+                        extant = true;
+                        existIndex = index
+                    }
+                })
+                if(!extant) {
+                    ele.payload.service.PriceList.forEach(function (listing, jdx) {
+                        lzSRV[idx].payload.service.PriceList[jdx].servicePoint = servicePointCodeMap[lzSRV[idx].payload.service.PriceList[jdx].servicePoint];
+                    })
+                }
+                else
+                {
+                    ele.payload.service.PriceList.forEach(function (listing, jdx) {
+                        lzSRV[idx].payload.service.PriceList = servicesExtant[existIndex].PriceList;
+                    })
+                }
             })
+            return q.all(
+                lzSRV.map(function(ele){
+                    var obj = JSON.parse(JSON.stringify(ele.payload));
+                    obj.transactionid = "200000000000000000000000";
+                    obj.override = true;
+                    return esbMessage({
+                        "ns":"smm",
+                        "op":"persistService",
+                        "pl":obj
+                    })
+                })
+            )
+        })
+        .then(function renameServiceNames(srv){
+            return q.all(srv.map(function(servicePoint, idx){
+                console.log("Renaming ")
+                return esbMessage({
+                    "ns":"smm",
+                    "op":"smm_changeServiceCode",
+                    "pl":{
+                        find: servicePoint.pl.serviceCode,
+                        code: lzSRV[idx].payload.service.serviceCode
+                    }
+                })
+            }))
+        })
+        .then(function loadUnlinkedForms(srv){
+            return q.all(lzFRM.map(function(form){
+                form.upload.content.override = true;
+                return esbMessage({
+                    "ns":"bmm",
+                    "op": "bmm_persistForm",
+                    "pl": JSON.parse(JSON.stringify(form.upload.content))
+                })
+            }))
+        })
+        .then(function renameForms(frms){
+            return q.all(frms.map(function(form, idx){
+                return esbMessage({
+                    "ns":"bmm",
+                    "op":"bmm_changeFormMetaCode",
+                    "pl":{
+                        find: form.pl.fc,
+                        code: lzFRM[idx].upload.content.form.fc
+                    }
+                })
+            }))
+        })
+        .then(function lookupServicesAgain(){
+            return q.all(lzSRV.map(function(service){
+                return esbMessage({
+                    "ns":"smm",
+                    "op":"smm_getServices",
+                    "pl":
+                    {
+                        which:"all"
+                    },
+                    "mt":
+                    {
+                        sk:service.payload.service.serviceCode
+                    }
+                })
+            }))
+        })
+        .then(function loadUnlinkedActivities(services){
+            var serviceNameMap = {};
+            services.forEach(function(ele){
+                serviceNameMap[ele.pl[0].serviceName.text] = ele.pl[0].serviceName._id;
+            });
+            return q.all(lzACT.map(function(activity,i){
+                activity.payload.sqc.forEach(function(sq,idx){
+                    activity.payload.sqc[idx].sn = serviceNameMap[activity.payload.sqc[idx].sn];
+                });
+                return esbMessage({
+                    "ns":"bmm",
+                    "op":"bmm_getFormMeta",
+                    "pl":{
+                        fc : lzACT[i].form,
+                        currentOrganization: "200000000000000000000000"
+                    }
+                }).then(function(formMeta){
+                    activity.payload.fm = formMeta._id;
+                    return esbMessage({
+                        "ns":"bmm",
+                        "op":"bmm_persistActivity",
+                        "pl":{
+                            activity : JSON.parse(JSON.stringify(activity.payload)),
+                            override : true
+                        }
+                    });
+                });
+            }));
+        })
+        .then(function renameActivities(acts){
+            return q.all(acts.map(function(act, idx){
+                return esbMessage({
+                    "ns":"bmm",
+                    "op":"bmm_changeActivityCode",
+                    "pl":{
+                        find: act.abd.ac,
+                        code: lzACT[idx].payload.abd.ac
+                    }
+                })
+            }))
+        })
+        .then(function success(){
+            console.log("Successfully updated Lanzheng elements");
+        }  ,  function failure(err){
+            console.log("FAILING patching lanzheng:",err);
+        })
     }
 
     function _persistForm(paramRequest, paramResponse){
@@ -1492,7 +1483,7 @@ module.exports = function (paramService, esbMessage) {
 
     //createServicePoint
 
-    _prepopulateSpecialCaseServices();
+    _patchLanzhengInfo();
     return serviceManagementRouter;
 };
 
