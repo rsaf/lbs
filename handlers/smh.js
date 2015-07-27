@@ -125,7 +125,7 @@ module.exports = function (paramService, esbMessage) {
                     })
                 }
             });
-            return q.all(
+            return q.allSettled(
                 lzSVP.map(function(ele){
                     var obj = JSON.parse(JSON.stringify(ele.payload));
                     obj.transactionid = "200000000000000000000000";
@@ -136,10 +136,28 @@ module.exports = function (paramService, esbMessage) {
                         "pl":obj
                     })
                 })
-            )
+            ).then(function(results){
+                    var out = [];
+                    for(var i = 0; i < results.length; i++)
+                    {
+                        if(results[i].state === 'fulfilled')
+                        {
+                            //console.log("INIT MODE ALLOWED YAY")
+                            out.push(results[i].value);
+                        }
+                        else if(results[i].reason.er.em.indexOf("INITIALIZATION MODE KICKOUT") >= 0)
+                        {
+                            //console.log("INIT MODE KICKOUT YAY");
+                            out.push(undefined);
+                        }
+                        else throw results[i].reason
+                    }
+                    return out;
+                })
         })
         .then(function renameServicePoints(svp){
-            return q.all(svp.map(function(servicePoint, idx){
+            return q.allSettled(svp.map(function(servicePoint, idx){
+                if(servicePoint === undefined) return undefined;
                 return esbMessage({
                     "ns":"smm",
                     "op":"smm_changeServicePointCode",
@@ -171,7 +189,6 @@ module.exports = function (paramService, esbMessage) {
         .then(function lookupservicepoints(){
             return q.all(lzSRV.map(function(service){
                 return q.all(service.payload.service.PriceList.map(function(list){
-                    console.log(list);
                     return esbMessage({
                         "ns":"smm",
                         "op":"smm_getServicePointByCode",
@@ -222,7 +239,7 @@ module.exports = function (paramService, esbMessage) {
                     })
                 }
             })
-            return q.all(
+            return q.allSettled(
                 lzSRV.map(function(ele){
                     var obj = JSON.parse(JSON.stringify(ele.payload));
                     obj.transactionid = "200000000000000000000000";
@@ -233,33 +250,68 @@ module.exports = function (paramService, esbMessage) {
                         "pl":obj
                     })
                 })
-            )
+            ).then(function(results){
+                    var out = [];
+                    for(var i = 0; i < results.length; i++)
+                    {
+                        if(results[i].state === 'fulfilled')
+                        {
+                            //console.log("INIT MODE ALLOWED YAY")
+                            out.push(results[i].value);
+                        }
+                        else if(results[i].reason.er.em.indexOf("INITIALIZATION MODE KICKOUT") >= 0)
+                        {
+                            //console.log("INIT MODE KICKOUT YAY");
+                            out.push(undefined);
+                        }
+                        else throw results[i].reason
+                    }
+                    return out;
+                })
         })
         .then(function renameServiceNames(srv){
-            return q.all(srv.map(function(servicePoint, idx){
-                console.log("Renaming ")
+            return q.all(srv.map(function(service, idx){
+                if(service === undefined) return undefined;
                 return esbMessage({
                     "ns":"smm",
                     "op":"smm_changeServiceCode",
                     "pl":{
-                        find: servicePoint.pl.serviceCode,
+                        find: service.pl.serviceCode,
                         code: lzSRV[idx].payload.service.serviceCode
                     }
                 })
             }))
         })
         .then(function loadUnlinkedForms(srv){
-            return q.all(lzFRM.map(function(form){
+            return q.allSettled(lzFRM.map(function(form){
                 form.upload.content.override = true;
                 return esbMessage({
                     "ns":"bmm",
                     "op": "bmm_persistForm",
                     "pl": JSON.parse(JSON.stringify(form.upload.content))
                 })
-            }))
+            })).then(function(results){
+                var out = [];
+                for(var i = 0; i < results.length; i++)
+                {
+                    if(results[i].state === 'fulfilled')
+                    {
+                        //console.log("INIT MODE ALLOWED YAY")
+                        out.push(results[i].value);
+                    }
+                    else if(results[i].reason.er.em.indexOf("INITIALIZATION MODE KICKOUT") >= 0)
+                    {
+                        //console.log("INIT MODE KICKOUT YAY");
+                        out.push(undefined);
+                    }
+                    else throw results[i].reason
+                }
+                return out;
+            })
         })
         .then(function renameForms(frms){
             return q.all(frms.map(function(form, idx){
+                if(form === undefined) return undefined;
                 return esbMessage({
                     "ns":"bmm",
                     "op":"bmm_changeFormMetaCode",
@@ -291,7 +343,7 @@ module.exports = function (paramService, esbMessage) {
             services.forEach(function(ele){
                 serviceNameMap[ele.pl[0].serviceName.text] = ele.pl[0].serviceName._id;
             });
-            return q.all(lzACT.map(function(activity,i){
+            return q.allSettled(lzACT.map(function(activity,i){
                 activity.payload.sqc.forEach(function(sq,idx){
                     activity.payload.sqc[idx].sn = serviceNameMap[activity.payload.sqc[idx].sn];
                 });
@@ -313,10 +365,28 @@ module.exports = function (paramService, esbMessage) {
                         }
                     });
                 });
-            }));
+            })).then(function(results){
+                var out = [];
+                for(var i = 0; i < results.length; i++)
+                {
+                    if(results[i].state === 'fulfilled')
+                    {
+                        //console.log("INIT MODE ALLOWED YAY")
+                        out.push(results[i].value);
+                    }
+                    else if(results[i].reason.er.em.indexOf("INITIALIZATION MODE KICKOUT") >= 0)
+                    {
+                        //console.log("INIT MODE KICKOUT YAY");
+                        out.push(undefined);
+                    }
+                    else throw results[i].reason
+                }
+                return out;
+            });
         })
         .then(function renameActivities(acts){
             return q.all(acts.map(function(act, idx){
+                if(act === undefined) return undefined;
                 return esbMessage({
                     "ns":"bmm",
                     "op":"bmm_changeActivityCode",
