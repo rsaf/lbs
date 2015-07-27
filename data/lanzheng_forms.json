@@ -1,64 +1,7 @@
 [
   {
     "_comment": "LZF 101",
-    "persist": {
-      "ns": "bmm",
-      "op": "_persistForm",
-      "tgtField": "form",
-      "pl": {
-        "_id": "5550085d59e1aab16964de37",
-        "fc": "LZF101",
-        "fd": {
-          "fmn": "Identification Form",
-          "uuid": "04904f81-86c1-4d12-b311-8bbc162bdb02",
-          "uri": "/forms/04904f81-86c1-4d12-b311-8bbc162bdb02.html",
-          "fcd": "2015-05-11T01:39:41.364Z",
-          "pt": [],
-          "fields": [
-            {
-              "nm": "ffz",
-              "_id": "5550085d59e1aab16964de39",
-              "nv": false
-            },
-            {
-              "nm": "xm",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            },
-            {
-              "nm": "zz",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            }
-          ]
-        },
-        "siv": [],
-        "md": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "lu": "2015-05-11T01:39:41.365Z"
-        },
-        "ct": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "cd": "2015-05-11T01:39:41.364Z"
-        },
-        "__v": 0
-      }
-    },
-    "rename": {
-      "ns": "bmm",
-      "find": "bmm_formMetaCodeInUse",
-      "op": "bmm_changeFormMetaCode",
-      "tgtField": "fc",
-      "pl": "LZF101"
-    },
     "upload":{
-      "ns" : "bmm",
-      "link" : {
-        "linker" : "LZB101",
-        "op" : "bmm_changeActivityFormRef"
-      },
       "content":
       {
         "form":{"fc":"LZF101","fd":{"fmn":"lzf101"}},
@@ -68,64 +11,7 @@
   },
   {
     "_comment":"LZF 102",
-    "persist": {
-      "ns": "bmm",
-      "op": "_persistForm",
-      "tgtField": "form",
-      "pl": {
-        "_id": "5550085d59e1aab16964de37",
-        "fc": "LZF102",
-        "fd": {
-          "fmn": "Identification Form",
-          "uuid": "04904f81-86c1-4d12-b311-8bbc162bdb02",
-          "uri": "/forms/04904f81-86c1-4d12-b311-8bbc162bdb02.html",
-          "fcd": "2015-05-11T01:39:41.364Z",
-          "pt": [],
-          "fields": [
-            {
-              "nm": "ffz",
-              "_id": "5550085d59e1aab16964de39",
-              "nv": false
-            },
-            {
-              "nm": "xm",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            },
-            {
-              "nm": "zz",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            }
-          ]
-        },
-        "siv": [],
-        "md": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "lu": "2015-05-11T01:39:41.365Z"
-        },
-        "ct": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "cd": "2015-05-11T01:39:41.364Z"
-        },
-        "__v": 0
-      }
-    },
-    "rename": {
-      "ns": "bmm",
-      "find": "bmm_formMetaCodeInUse",
-      "op": "bmm_changeFormMetaCode",
-      "tgtField": "fc",
-      "pl": "LZF102"
-    },
     "upload":{
-      "ns" : "bmm",
-      "link" : {
-        "linker" : "LZB102",
-        "op" : "bmm_changeActivityFormRef"
-      },
       "content":
       {
         "form":{"fc":"LZF102","fd":{"fmn":"lzf102"}},
@@ -135,64 +21,7 @@
   },
   {
     "_comment": "LZF103",
-    "persist": {
-      "ns": "bmm",
-      "op": "_persistForm",
-      "tgtField": "form",
-      "pl": {
-        "_id": "5550085d59e1aab16964de37",
-        "fc": "LZF103",
-        "fd": {
-          "fmn": "Identification Form",
-          "uuid": "04904f81-86c1-4d12-b311-8bbc162bdb02",
-          "uri": "/forms/04904f81-86c1-4d12-b311-8bbc162bdb02.html",
-          "fcd": "2015-05-11T01:39:41.364Z",
-          "pt": [],
-          "fields": [
-            {
-              "nm": "ffz",
-              "_id": "5550085d59e1aab16964de39",
-              "nv": false
-            },
-            {
-              "nm": "xm",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            },
-            {
-              "nm": "zz",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            }
-          ]
-        },
-        "siv": [],
-        "md": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "lu": "2015-05-11T01:39:41.365Z"
-        },
-        "ct": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "cd": "2015-05-11T01:39:41.364Z"
-        },
-        "__v": 0
-      }
-    },
-    "rename": {
-      "ns": "bmm",
-      "find": "bmm_formMetaCodeInUse",
-      "op": "bmm_changeFormMetaCode",
-      "tgtField": "fc",
-      "pl": "LZF103"
-    },
     "upload":{
-      "ns" : "bmm",
-      "link" : {
-        "linker" : "LZB103",
-        "op" : "bmm_changeActivityFormRef"
-      },
       "content":
       {
         "form":{"fc":"LZF103","fd":{"fmn":"lzf103"}},
@@ -202,121 +31,17 @@
   },
   {
     "_comment": "LZF 104",
-    "persist": {
-      "ns": "bmm",
-      "op": "_persistForm",
-      "tgtField": "form",
-      "pl": {
-        "_id": "5550085d59e1aab16964de37",
-        "fc": "LZF104",
-        "fd": {
-          "fmn": "Corporate Credit Purchasing Form",
-          "uuid": "04904f81-86c1-4d12-b311-8bbc162bdb02",
-          "uri": "/forms/04904f81-86c1-4d12-b311-8bbc162bdb02.html",
-          "fcd": "2015-05-11T01:39:41.364Z",
-          "pt": [],
-          "fields": [
-            {
-              "nm": "amount",
-              "_id": "5550085d59e1aab16964de39",
-              "nv": false
-            }
-          ]
-        },
-        "siv": [],
-        "md": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "lu": "2015-05-11T01:39:41.365Z"
-        },
-        "ct": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "cd": "2015-05-11T01:39:41.364Z"
-        },
-        "__v": 0
-      }
-    },
-    "rename": {
-      "ns": "bmm",
-      "find": "bmm_formMetaCodeInUse",
-      "op": "bmm_changeFormMetaCode",
-      "tgtField": "fc",
-      "pl": "LZF104"
-    },
     "upload":{
-      "ns" : "bmm",
-      "link" : {
-        "linker" : "LZB104",
-        "op" : "bmm_changeActivityFormRef"
-      },
       "content":
       {
-        "form":{"fc":"LZF104","fd":{"fmn":"lzf104"}},
+        "form":{"fc":"LZF104","fd":{"fmn":"lzf104foo"}},
         "html":"充值金额:<div><input id=\"t4361968\" data-class=\"text\" type=\"text\" data-name=\"amount\" height=\"1\" value=\"\" data-default=\"\" style=\"line-height:1\" data-verification=\"true\" size=\"20\" class=\"form-control formToolElement\" data-bind=\"entity.fields.amount\"><br></div>"
       }
     }
   },
   {
     "_comment":"LZF 105",
-    "persist": {
-      "ns": "bmm",
-      "op": "_persistForm",
-      "tgtField": "form",
-      "pl": {
-        "_id": "5550085d59e1aab16964de37",
-        "fc": "LZF105",
-        "fd": {
-          "fmn": "Identification Form",
-          "uuid": "04904f81-86c1-4d12-b311-8bbc162bdb02",
-          "uri": "/forms/04904f81-86c1-4d12-b311-8bbc162bdb02.html",
-          "fcd": "2015-05-11T01:39:41.364Z",
-          "pt": [],
-          "fields": [
-            {
-              "nm": "ffz",
-              "_id": "5550085d59e1aab16964de39",
-              "nv": false
-            },
-            {
-              "nm": "xm",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            },
-            {
-              "nm": "zz",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            }
-          ]
-        },
-        "siv": [],
-        "md": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "lu": "2015-05-11T01:39:41.365Z"
-        },
-        "ct": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "cd": "2015-05-11T01:39:41.364Z"
-        },
-        "__v": 0
-      }
-    },
-    "rename": {
-      "ns": "bmm",
-      "find": "bmm_formMetaCodeInUse",
-      "op": "bmm_changeFormMetaCode",
-      "tgtField": "fc",
-      "pl": "LZF105"
-    },
     "upload":{
-      "ns" : "bmm",
-      "link" : {
-        "linker" : "LZB105",
-        "op" : "bmm_changeActivityFormRef"
-      },
       "content":
       {
         "form":{"fc":"LZF105","fd":{"fmn":"lzf105"}},
@@ -326,64 +51,7 @@
   },
   {
     "_comment": "LZF 106",
-    "persist": {
-      "ns": "bmm",
-      "op": "_persistForm",
-      "tgtField": "form",
-      "pl": {
-        "_id": "5550085d59e1aab16964de37",
-        "fc": "LZF106",
-        "fd": {
-          "fmn": "Identification Form",
-          "uuid": "04904f81-86c1-4d12-b311-8bbc162bdb02",
-          "uri": "/forms/04904f81-86c1-4d12-b311-8bbc162bdb02.html",
-          "fcd": "2015-05-11T01:39:41.364Z",
-          "pt": [],
-          "fields": [
-            {
-              "nm": "ffz",
-              "_id": "5550085d59e1aab16964de39",
-              "nv": false
-            },
-            {
-              "nm": "xm",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            },
-            {
-              "nm": "zz",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            }
-          ]
-        },
-        "siv": [],
-        "md": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "lu": "2015-05-11T01:39:41.365Z"
-        },
-        "ct": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "cd": "2015-05-11T01:39:41.364Z"
-        },
-        "__v": 0
-      }
-    },
-    "rename": {
-      "ns": "bmm",
-      "find": "bmm_formMetaCodeInUse",
-      "op": "bmm_changeFormMetaCode",
-      "tgtField": "fc",
-      "pl": "LZF106"
-    },
     "upload":{
-      "ns" : "bmm",
-      "link" : {
-        "linker" : "LZB106",
-        "op" : "bmm_changeActivityFormRef"
-      },
       "content":
       {
         "form":{"fc":"LZF106","fd":{"fmn":"lzf106"}},
@@ -393,64 +61,7 @@
   },
   {
     "_comment": "LZF 107",
-    "persist": {
-      "ns": "bmm",
-      "op": "_persistForm",
-      "tgtField": "form",
-      "pl": {
-        "_id": "5550085d59e1aab16964de37",
-        "fc": "LZF107",
-        "fd": {
-          "fmn": "Identification Form",
-          "uuid": "04904f81-86c1-4d12-b311-8bbc162bdb02",
-          "uri": "/forms/04904f81-86c1-4d12-b311-8bbc162bdb02.html",
-          "fcd": "2015-05-11T01:39:41.364Z",
-          "pt": [],
-          "fields": [
-            {
-              "nm": "ffz",
-              "_id": "5550085d59e1aab16964de39",
-              "nv": false
-            },
-            {
-              "nm": "xm",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            },
-            {
-              "nm": "zz",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            }
-          ]
-        },
-        "siv": [],
-        "md": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "lu": "2015-05-11T01:39:41.365Z"
-        },
-        "ct": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "cd": "2015-05-11T01:39:41.364Z"
-        },
-        "__v": 0
-      }
-    },
-    "rename": {
-      "ns": "bmm",
-      "find": "bmm_formMetaCodeInUse",
-      "op": "bmm_changeFormMetaCode",
-      "tgtField": "fc",
-      "pl": "LZF107"
-    },
     "upload":{
-      "ns" : "bmm",
-      "link" : {
-        "linker" : "LZB107",
-        "op" : "bmm_changeActivityFormRef"
-      },
       "content":
       {
         "form":{"fc":"LZF107","fd":{"fmn":"lzf107"}},
@@ -460,64 +71,7 @@
   },
   {
     "_comment":"LZF 108",
-    "persist": {
-      "ns": "bmm",
-      "op": "_persistForm",
-      "tgtField": "form",
-      "pl": {
-        "_id": "5550085d59e1aab16964de37",
-        "fc": "LZF108",
-        "fd": {
-          "fmn": "Identification Form",
-          "uuid": "04904f81-86c1-4d12-b311-8bbc162bdb02",
-          "uri": "/forms/04904f81-86c1-4d12-b311-8bbc162bdb02.html",
-          "fcd": "2015-05-11T01:39:41.364Z",
-          "pt": [],
-          "fields": [
-            {
-              "nm": "ffz",
-              "_id": "5550085d59e1aab16964de39",
-              "nv": false
-            },
-            {
-              "nm": "xm",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            },
-            {
-              "nm": "zz",
-              "_id": "5550085d59e1aab16964de38",
-              "nv": false
-            }
-          ]
-        },
-        "siv": [],
-        "md": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "lu": "2015-05-11T01:39:41.365Z"
-        },
-        "ct": {
-          "uID": "sa",
-          "oID": "200000000000000000000000",
-          "cd": "2015-05-11T01:39:41.364Z"
-        },
-        "__v": 0
-      }
-    },
-    "rename": {
-      "ns": "bmm",
-      "find": "bmm_formMetaCodeInUse",
-      "op": "bmm_changeFormMetaCode",
-      "tgtField": "fc",
-      "pl": "LZF108"
-    },
     "upload":{
-      "ns" : "bmm",
-      "link" : {
-        "linker" : "LZB108",
-        "op" : "bmm_changeActivityFormRef"
-      },
       "content":
       {
         "form":{"fc":"LZF108","fd":{"fmn":"lzf108"}},

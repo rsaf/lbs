@@ -1,11 +1,8 @@
 [
   {
     "_comment":"LZS101",
-    "persist": {
-      "ns": "smm",
-      "op": "persistService",
-      "tgtField": "service",
-      "pl": {
+    "payload": {
+      "service": {
         "serviceCode": "LZS101",
         "PriceList": [
           {
@@ -13,7 +10,7 @@
             "servicePrices": "0",
             "discountedPrice": "0",
             "paymentMethod": ["1"],
-            "remark": "0",
+            "remark": "002303003040340",
             "pc": "230904",
             "clientCommandAddNew": true,
             "ct": {
@@ -46,22 +43,18 @@
         }
       }
     },
-    "rename": {
-      "ns": "smm",
-      "find":"smm_serviceCodeInUse",
-      "op": "smm_changeServiceCode",
-      "tgtField": "serviceCode",
-      "pl": "LZS101",
-      "reid" : "300000000000000000000001"
-    }
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"信息核验"
+      }
+    ]
   },
   {
     "_comment":"LZS102",
-    "persist": {
-      "ns": "smm",
-      "op": "persistService",
-      "tgtField": "service",
-      "pl": {
+    "payload": {
+      "service": {
         "serviceCode": "LZS102",
         "PriceList": [
           {
@@ -102,22 +95,18 @@
         }
       }
     },
-    "rename": {
-      "ns": "smm",
-      "find":"smm_serviceCodeInUse",
-      "op": "smm_changeServiceCode",
-      "tgtField": "serviceCode",
-      "pl": "LZS102",
-      "reid" : "300000000000000000000002"
-    }
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"信息核验"
+      }
+    ]
   },
   {
     "_comment":"LZS103",
-    "persist": {
-      "ns": "smm",
-      "op": "persistService",
-      "tgtField": "service",
-      "pl": {
+    "payload": {
+      "service": {
         "serviceCode": "LZS103",
         "PriceList": [
           {
@@ -158,22 +147,18 @@
         }
       }
     },
-    "rename": {
-      "ns": "smm",
-      "find":"smm_serviceCodeInUse",
-      "op": "smm_changeServiceCode",
-      "tgtField": "serviceCode",
-      "pl": "LZS103",
-      "reid" : "300000000000000000000002"
-    }
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"信息核验"
+      }
+    ]
   },
   {
     "_comment":"LZS104",
-    "persist": {
-      "ns": "smm",
-      "op": "persistService",
-      "tgtField": "service",
-      "pl": {
+    "payload": {
+      "service": {
         "serviceCode": "LZS104",
         "PriceList": [
           {
@@ -214,22 +199,18 @@
         }
       }
     },
-    "rename": {
-      "ns": "smm",
-      "find":"smm_serviceCodeInUse",
-      "op": "smm_changeServiceCode",
-      "tgtField": "serviceCode",
-      "pl": "LZS104",
-      "reid" : "300000000000000000000003"
-    }
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"充值服务"
+      }
+    ]
   },
   {
     "_comment":"LZS105",
-    "persist": {
-      "ns": "smm",
-      "op": "persistService",
-      "tgtField": "service",
-      "pl": {
+    "payload": {
+      "service": {
         "serviceCode": "LZS105",
         "PriceList": [
           {
@@ -270,22 +251,18 @@
         }
       }
     },
-    "rename": {
-      "ns": "smm",
-      "find":"smm_serviceCodeInUse",
-      "op": "smm_changeServiceCode",
-      "tgtField": "serviceCode",
-      "pl": "LZS105",
-      "reid" : "300000000000000000000002"
-    }
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"证照服务"
+      }
+    ]
   },
   {
     "_comment":"LZS106",
-    "persist": {
-      "ns": "smm",
-      "op": "persistService",
-      "tgtField": "service",
-      "pl": {
+    "payload": {
+      "service": {
         "serviceCode": "LZS106",
         "PriceList": [
           {
@@ -326,22 +303,18 @@
         }
       }
     },
-    "rename": {
-      "ns": "smm",
-      "find":"smm_serviceCodeInUse",
-      "op": "smm_changeServiceCode",
-      "tgtField": "serviceCode",
-      "pl": "LZS106",
-      "reid" : "300000000000000000000002"
-    }
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"证照服务"
+      }
+    ]
   },
   {
     "_comment":"LZS107",
-    "persist": {
-      "ns": "smm",
-      "op": "persistService",
-      "tgtField": "service",
-      "pl": {
+    "payload": {
+      "service": {
         "serviceCode": "LZS107",
         "PriceList": [
           {
@@ -382,22 +355,18 @@
         }
       }
     },
-    "rename": {
-      "ns": "smm",
-      "find":"smm_serviceCodeInUse",
-      "op": "smm_changeServiceCode",
-      "tgtField": "serviceCode",
-      "pl": "LZS107",
-      "reid" : "300000000000000000000001"
-    }
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"信息核验"
+      }
+    ]
   },
   {
     "_comment":"LZS108",
-    "persist": {
-      "ns": "smm",
-      "op": "persistService",
-      "tgtField": "service",
-      "pl": {
+    "payload": {
+      "service": {
         "serviceCode": "LZS108",
         "PriceList": [
           {
@@ -438,13 +407,12 @@
         }
       }
     },
-    "rename": {
-      "ns": "smm",
-      "find":"smm_serviceCodeInUse",
-      "op": "smm_changeServiceCode",
-      "tgtField": "serviceCode",
-      "pl": "LZS108",
-      "reid" : "300000000000000000000001"
-    }
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"信息核验"
+      }
+    ]
   }
 ]

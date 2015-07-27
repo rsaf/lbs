@@ -85,14 +85,15 @@ module.exports = function (paramService, esbMessage) {
         rollbackTransaction: _rollBackTransaction2}
     );
 
-    function _loadUnlinkedLanzhengData(toImport, ns, op){
+    function _loadUnlinkedLanzhengData(toImport, ns, op, transactionid){
         return q.all(
             toImport.map(function(ele){
-                console.log("persisting\n",ele.payload,"\nin initialization. Op:",op);
+                var obj = JSON.parse(JSON.stringify(ele.payload));
+                obj.transactionid = transactionid;
                 return esbMessage({
                     "ns":ns,
                     "op":op,
-                    "pl":ele.payload
+                    "pl":obj
                 })
             })
         ).then(function loadDone(eles){
@@ -110,7 +111,8 @@ module.exports = function (paramService, esbMessage) {
             lzFRM = require('../data/lanzheng_forms.json'),
             serviceTypeMap = {},
             serviceCodeMap = {},
-            servicePointTypeMap = {}
+            servicePointTypeMap = {},
+            servicesExtant = []
         return q().then(function getInfo(){
             return q.all([
                 esbMessage({
@@ -129,40 +131,226 @@ module.exports = function (paramService, esbMessage) {
             types[0].pl.forEach(function (type) {
                 servicePointTypeMap[type.text] = type._id;
             });
+            types[1].pl.forEach(function (type) {
+                serviceTypeMap[type.text] = type._id;
+            })
 
             lzSVP.forEach(function (ele, idx) {
                 if (ele.links) {
                     ele.links.forEach(function (link) {
                         if (link.method == "map") {
-                            console.log("wanna map-lookup", link.path, "with", link.value);
-                            lzSVP[idx].payload[link.path] = servicePointTypeMap[link.value];
+                            lzSVP[idx].payload.servicePoint[link.path] = servicePointTypeMap[link.value];
                         }
                     })
                 }
             });
-            return _loadUnlinkedLanzhengData(lzSVP,'smm','smm_persistServicePoint');
+            return q.all(
+                lzSVP.map(function(ele){
+                    var obj = JSON.parse(JSON.stringify(ele.payload));
+                    obj.transactionid = "200000000000000000000000";
+                    obj.override = true;
+                    return esbMessage({
+                        "ns":"smm",
+                        "op":"persistServicePoint",
+                        "pl":obj
+                    })
+                })
+            )
+        })
+        .then(function renameServicePoints(svp){
+            return q.all(svp.map(function(servicePoint, idx){
+                return esbMessage({
+                    "ns":"smm",
+                    "op":"smm_changeServicePointCode",
+                    "pl":{
+                        find: servicePoint.pl.servicePointCode,
+                        code: lzSVP[idx].payload.servicePoint.servicePointCode
+                    }
+                })
+            }))
+        })
+        .then(function lookupServices(){
+            return q.all(lzSRV.map(function(service){
+                return esbMessage({
+                    "ns":"smm",
+                    "op":"smm_getServices",
+                    "pl":
+                    {
+                        which:"all"
+                    },
+                    "mt":
+                    {
+                        sk:service.payload.service.serviceCode
+                    }
+                })
+            })).then(function(services){
+                servicesExtant = services.map(function(service){return service.pl[0]});
+            })
+        })
+        .then(function lookupservicepoints(){
+            return q.all(lzSRV.map(function(service){
+                return q.all(service.payload.service.PriceList.map(function(list){
+                    console.log(list);
+                    return esbMessage({
+                        "ns":"smm",
+                        "op":"smm_getServicePointByCode",
+                        "pl":{
+                            code : list.servicePoint
+                        }
+                    });
+                }));
+            }));
         })
         .then(function loadUnlinkedServices(svp){
-
+            var servicePointCodeMap = {};
+            svp.forEach(function(ele){
+                ele.forEach(function(inner){
+                    servicePointCodeMap[inner.servicePointCode] = inner._id;
+                })
+            })
+            lzSRV.forEach(function (ele, idx){
+                if (ele.links) {
+                    ele.links.forEach(function (link) {
+                        if (link.method == "map") {
+                            lzSRV[idx].payload.service[link.path] = serviceTypeMap[link.value];
+                        }
+                    })
+                }
+            })
+            lzSRV.forEach(function (ele, idx, arr){
+                //find extant if exists
+                var extant = false;
+                var existIndex = -1;
+                servicesExtant.forEach(function(service, index) {
+                    if(!service) return;;
+                    if (service.serviceCode == ele.payload.service.serviceCode)
+                    {
+                        extant = true;
+                        existIndex = index
+                    }
+                })
+                if(!extant) {
+                    ele.payload.service.PriceList.forEach(function (listing, jdx) {
+                        lzSRV[idx].payload.service.PriceList[jdx].servicePoint = servicePointCodeMap[lzSRV[idx].payload.service.PriceList[jdx].servicePoint];
+                    })
+                }
+                else
+                {
+                    ele.payload.service.PriceList.forEach(function (listing, jdx) {
+                        lzSRV[idx].payload.service.PriceList = servicesExtant[existIndex].PriceList;
+                    })
+                }
+            })
+            return q.all(
+                lzSRV.map(function(ele){
+                    var obj = JSON.parse(JSON.stringify(ele.payload));
+                    obj.transactionid = "200000000000000000000000";
+                    obj.override = true;
+                    return esbMessage({
+                        "ns":"smm",
+                        "op":"persistService",
+                        "pl":obj
+                    })
+                })
+            )
+        })
+        .then(function renameServiceNames(srv){
+            return q.all(srv.map(function(servicePoint, idx){
+                console.log("Renaming ")
+                return esbMessage({
+                    "ns":"smm",
+                    "op":"smm_changeServiceCode",
+                    "pl":{
+                        find: servicePoint.pl.serviceCode,
+                        code: lzSRV[idx].payload.service.serviceCode
+                    }
+                })
+            }))
         })
         .then(function loadUnlinkedForms(srv){
-
+            return q.all(lzFRM.map(function(form){
+                form.upload.content.override = true;
+                return esbMessage({
+                    "ns":"bmm",
+                    "op": "bmm_persistForm",
+                    "pl": JSON.parse(JSON.stringify(form.upload.content))
+                })
+            }))
         })
-        .then(function loadUnlinkedActivities(frm){
-
+        .then(function renameForms(frms){
+            return q.all(frms.map(function(form, idx){
+                console.log(lzFRM[idx]);
+                return esbMessage({
+                    "ns":"bmm",
+                    "op":"bmm_changeFormMetaCode",
+                    "pl":{
+                        find: form.pl.fc,
+                        code: lzFRM[idx].upload.content.form.fc
+                    }
+                })
+            }))
         })
-        /*
-
-            return q.all([
-                _loadUnlinkedLanzhengData(lzSVP,'smm','smm_persistServicePoint'),
-
-                //todo _loadUnlinkedLanzhengData(lzSRV,'smm','smm_persistService'),
-
-                //todo _loadUnlinkedLanzhengData(lzACT,'bmm','bmm_persistActivity'),
-
-                //todo _loadUnlinkedLanzhengData(lzFRM,'bmm','bmm_persistForm')
-            ])
-            */
+        .then(function lookupServicesAgain(){
+            return q.all(lzSRV.map(function(service){
+                return esbMessage({
+                    "ns":"smm",
+                    "op":"smm_getServices",
+                    "pl":
+                    {
+                        which:"all"
+                    },
+                    "mt":
+                    {
+                        sk:service.payload.service.serviceCode
+                    }
+                })
+            }))
+        })
+        .then(function loadUnlinkedActivities(services){
+            var serviceNameMap = {};
+            services.forEach(function(ele){
+                serviceNameMap[ele.pl[0].serviceName.text] = ele.pl[0].serviceName._id;
+            });
+            return q.all(lzACT.map(function(activity,i){
+                activity.payload.sqc.forEach(function(sq,idx){
+                    activity.payload.sqc[idx].sn = serviceNameMap[activity.payload.sqc[idx].sn];
+                });
+                return esbMessage({
+                    "ns":"bmm",
+                    "op":"bmm_getFormMeta",
+                    "pl":{
+                        fc : lzACT[i].form,
+                        currentOrganization: "200000000000000000000000"
+                    }
+                }).then(function(formMeta){
+                    activity.payload.fm = formMeta._id;
+                    return esbMessage({
+                        "ns":"bmm",
+                        "op":"bmm_persistActivity",
+                        "pl":{
+                            activity : JSON.parse(JSON.stringify(activity.payload)),
+                            override : true
+                        }
+                    });
+                });
+            }));
+        })
+        .then(function renameActivities(acts){
+            return q.all(acts.map(function(act, idx){
+                console.log(act);
+                console.log(act.abd.ac,"to",lzACT[idx].payload.abd.ac);
+                return esbMessage({
+                    "ns":"bmm",
+                    "op":"bmm_changeActivityCode",
+                    "pl":{
+                        find: act.abd.ac,
+                        code: lzACT[idx].payload.abd.ac
+                    }
+                })
+            }))
+        }  ,  function failure(err){
+                console.log("FAILING patching lanzheng:",err);
+            })
     }
     function _prepopulateSpecialCaseServices(){
 
