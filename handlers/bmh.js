@@ -196,9 +196,16 @@ module.exports = function(paramService, esbMessage){
     var m = {};
     //formHtml
     q().then(function(){
-      m.pl={code:paramRequest.query.code};
-      m.pl._id=paramRequest.query._id;
-      m.op='bmm_getResponse';
+      var m = {
+          "ns":"bmm",
+          "op":"bmm_getResponse",
+          "pl":{
+              code : paramRequest.query.code,
+              _id : paramRequest.query._id,
+              loginName : paramRequest.user.lanzheng.loginName,
+              currentOrganization : paramRequest.user.currentOrganization
+          }
+      }
       return esbMessage(m);
     }).then(function(msg){
       oHelpers.sendResponse(paramResponse,200,{pl:msg});

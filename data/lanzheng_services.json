@@ -10,7 +10,7 @@
             "servicePrices": "0",
             "discountedPrice": "0",
             "paymentMethod": ["1"],
-            "remark": "002303003040340",
+            "remark": "",
             "pc": "230904",
             "clientCommandAddNew": true,
             "ct": {
@@ -62,7 +62,7 @@
             "servicePrices": "0",
             "discountedPrice": "0",
             "paymentMethod": ["1"],
-            "remark": "0",
+            "remark": "",
             "pc": "230904",
             "clientCommandAddNew": true,
             "ct": {
@@ -114,7 +114,7 @@
             "servicePrices": "0",
             "discountedPrice": "0",
             "paymentMethod": ["1"],
-            "remark": "0",
+            "remark": "",
             "pc": "230904",
             "clientCommandAddNew": true,
             "ct": {
@@ -166,7 +166,7 @@
             "servicePrices": "0",
             "discountedPrice": "0",
             "paymentMethod": ["1"],
-            "remark": "0",
+            "remark": "",
             "pc": "230904",
             "clientCommandAddNew": true,
             "ct": {
@@ -218,7 +218,7 @@
             "servicePrices": "0",
             "discountedPrice": "0",
             "paymentMethod": ["1"],
-            "remark": "0",
+            "remark": "",
             "pc": "230904",
             "clientCommandAddNew": true,
             "ct": {
@@ -270,7 +270,7 @@
             "servicePrices": "0",
             "discountedPrice": "0",
             "paymentMethod": ["1"],
-            "remark": "0",
+            "remark": "",
             "pc": "230904",
             "clientCommandAddNew": true,
             "ct": {
@@ -322,7 +322,7 @@
             "servicePrices": "0",
             "discountedPrice": "0",
             "paymentMethod": ["1"],
-            "remark": "0",
+            "remark": "",
             "pc": "230904",
             "clientCommandAddNew": true,
             "ct": {
@@ -374,7 +374,7 @@
             "servicePrices": "0",
             "discountedPrice": "0",
             "paymentMethod": ["1"],
-            "remark": "0",
+            "remark": "",
             "pc": "230904",
             "clientCommandAddNew": true,
             "ct": {
