@@ -659,7 +659,10 @@ module.exports = function(paramService, esbMessage){
     var m = {};
     //formHtml
     q().then(function(){
-      m.pl={};
+      m.pl={
+          loginName : paramRequest.user.lanzheng.loginName,
+          currentOrganization : paramRequest.user.currentOrganization
+    };
       m.op='bmm_getActivities';
       return esbMessage(m);
     }).then(function resolve(msg){

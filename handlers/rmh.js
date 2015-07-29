@@ -118,6 +118,8 @@ module.exports = function(paramService, esbMessage){
           , status:request.rs
           , transactionid:m.pl.transactionid
           , response : ret
+          , loginName: m.pl.loginName
+          , currentOrganization:m.pl.currentOrganization
         };
         promises.push(esbMessage(m));
       }
@@ -133,8 +135,10 @@ module.exports = function(paramService, esbMessage){
                     ns: 'bmm',
                     op: 'bmm_import_responses_data',
                     activityCode: dbRequest._doc.ei[0].ei,
-                    loginName : m.pl.loginName,
-                    currentOrganization : m.pl.currentOrganization,
+                    pl: {
+                        loginName: m.pl.loginName,
+                        currentOrganization: m.pl.currentOrganization
+                    },
                     transactionid: m.pl.transactionid
                 };
                 esbMessage(m_p)

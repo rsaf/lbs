@@ -93,7 +93,9 @@ module.exports = function (paramService, esbMessage) {
             serviceTypeMap = {},
             serviceCodeMap = {},
             servicePointTypeMap = {},
-            servicesExtant = []
+            servicesExtant = [],
+            autoUser = "sa",
+            autoOrg = "200000000000000000000000"
         return q().then(function getInfo(){
             return q.all([
                 esbMessage({
@@ -130,6 +132,8 @@ module.exports = function (paramService, esbMessage) {
                     var obj = JSON.parse(JSON.stringify(ele.payload));
                     obj.transactionid = "200000000000000000000000";
                     obj.override = true;
+                    obj.loginName = autoUser;
+                    obj.currentOrganization = autoOrg;
                     return esbMessage({
                         "ns":"smm",
                         "op":"persistServicePoint",
@@ -163,7 +167,9 @@ module.exports = function (paramService, esbMessage) {
                     "op":"smm_changeServicePointCode",
                     "pl":{
                         find: servicePoint.pl.servicePointCode,
-                        code: lzSVP[idx].payload.servicePoint.servicePointCode
+                        code: lzSVP[idx].payload.servicePoint.servicePointCode,
+                        loginName : autoUser,
+                        currentOrganization : autoOrg
                     }
                 })
             }))
@@ -175,7 +181,9 @@ module.exports = function (paramService, esbMessage) {
                     "op":"smm_getServices",
                     "pl":
                     {
-                        which:"all"
+                        which:"all",
+                        loginName : autoUser,
+                        currentOrganization: autoOrg
                     },
                     "mt":
                     {
@@ -193,7 +201,9 @@ module.exports = function (paramService, esbMessage) {
                         "ns":"smm",
                         "op":"smm_getServicePointByCode",
                         "pl":{
-                            code : list.servicePoint
+                            code : list.servicePoint,
+                            loginName : autoUser,
+                            currentOrganization: autoOrg
                         }
                     });
                 }));
@@ -244,6 +254,8 @@ module.exports = function (paramService, esbMessage) {
                     var obj = JSON.parse(JSON.stringify(ele.payload));
                     obj.transactionid = "200000000000000000000000";
                     obj.override = true;
+                    obj.loginName = autoUser;
+                    obj.currentOrganization = autoOrg;
                     return esbMessage({
                         "ns":"smm",
                         "op":"persistService",
@@ -277,7 +289,9 @@ module.exports = function (paramService, esbMessage) {
                     "op":"smm_changeServiceCode",
                     "pl":{
                         find: service.pl.serviceCode,
-                        code: lzSRV[idx].payload.service.serviceCode
+                        code: lzSRV[idx].payload.service.serviceCode,
+                        loginName : autoUser,
+                        currentOrganization: autoOrg
                     }
                 })
             }))
@@ -285,6 +299,8 @@ module.exports = function (paramService, esbMessage) {
         .then(function loadUnlinkedForms(srv){
             return q.allSettled(lzFRM.map(function(form){
                 form.upload.content.override = true;
+                form.upload.content.loginName = autoUser;
+                form.upload.content.currentOrganization = autoOrg;
                 return esbMessage({
                     "ns":"bmm",
                     "op": "bmm_persistForm",
@@ -317,7 +333,9 @@ module.exports = function (paramService, esbMessage) {
                     "op":"bmm_changeFormMetaCode",
                     "pl":{
                         find: form.pl.fc,
-                        code: lzFRM[idx].upload.content.form.fc
+                        code: lzFRM[idx].upload.content.form.fc,
+                        loginName : autoUser,
+                        currentOrganization: autoOrg
                     }
                 })
             }))
@@ -329,7 +347,9 @@ module.exports = function (paramService, esbMessage) {
                     "op":"smm_getServices",
                     "pl":
                     {
-                        which:"all"
+                        which:"all",
+                        loginName : autoUser,
+                        currentOrganization: autoOrg
                     },
                     "mt":
                     {
@@ -352,7 +372,8 @@ module.exports = function (paramService, esbMessage) {
                     "op":"bmm_getFormMeta",
                     "pl":{
                         fc : lzACT[i].form,
-                        currentOrganization: "200000000000000000000000"
+                        loginUser: autoUser,
+                        currentOrganization: autoOrg
                     }
                 }).then(function(formMeta){
                     activity.payload.fm = formMeta._id;
@@ -361,7 +382,9 @@ module.exports = function (paramService, esbMessage) {
                         "op":"bmm_persistActivity",
                         "pl":{
                             activity : JSON.parse(JSON.stringify(activity.payload)),
-                            override : true
+                            override : true,
+                            loginName : autoUser,
+                            currentOrganization: autoOrg
                         }
                     });
                 });
@@ -392,7 +415,9 @@ module.exports = function (paramService, esbMessage) {
                     "op":"bmm_changeActivityCode",
                     "pl":{
                         find: act.abd.ac,
-                        code: lzACT[idx].payload.abd.ac
+                        code: lzACT[idx].payload.abd.ac,
+                        loginName : autoUser,
+                        currentOrganization: autoOrg
                     }
                 })
             }))
