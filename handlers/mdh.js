@@ -35,7 +35,9 @@ module.exports = function (paramService, esbMessage)
         from:  paramRequest.user.lanzheng.loginName,
         to: paramRequest.user.lanzheng.loginName,
         pageNumber: 1,
-        pageSize: 10
+        pageSize: 10,
+        loginName: paramRequest.user.lanzheng.loginName,
+        currentOrganization: paramRequest.user.currentOrganization
       }
     };
 
@@ -137,6 +139,8 @@ module.exports = function (paramService, esbMessage)
         notification: paramRequest.body.notification
       }
     };
+      m.pl.loginName = paramRequest.user.lanzheng.loginName;
+      m.pl.currentOrganization = paramRequest.user.currentOrganization;
     //console.log(m.pl.recipients);
     //console.log(m.pl);
 
@@ -167,7 +171,9 @@ module.exports = function (paramService, esbMessage)
       pl: {
            messageType: paramRequest.body.messageType, // inbox, outbox
            messageID: paramRequest.body.messageID //@Todo we need to check that the MessegeID = guid.. the guid is use in the acl
-        , viewStatus: paramRequest.body.viewState
+        , viewStatus: paramRequest.body.viewState,
+          loginName : paramRequest.user.lanzheng.loginName,
+          currentOrganization : paramRequest.user.currentOrganization
       }
     };
 
@@ -196,7 +202,9 @@ module.exports = function (paramService, esbMessage)
         op: 'persistNotification',
         pl: {
           messageType: paramRequest.params.notificationType,
-          notification: reqMessage.pl.notification
+          notification: reqMessage.pl.notification,
+          loginName : paramRequest.user.lanzheng.loginName,
+          currentOrganization : paramRequest.user.currentOrganization
         }
       };
       console.log('what will be deleted', reqMessage.pl.notification);
@@ -227,7 +235,11 @@ module.exports = function (paramService, esbMessage)
       ns: 'mdm',
       vs: '1.0',
       op: 'mdm_readComment',
-      pl:{tguid:paramRequest.params.targetId}
+      pl:{
+          tguid:paramRequest.params.targetId,
+          loginName : paramRequest.user.lanzheng.loginName,
+          currentOrganization : paramRequest.user.currentOrganization
+      }
     };
 
 
@@ -259,7 +271,8 @@ module.exports = function (paramService, esbMessage)
       op: 'mdm_createComment',
       pl: paramRequest.body
     };
-
+    m.pl.loginName = paramRequest.user.lanzheng.loginName;
+    m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
     esbMessage(m)
         .then(function (r) {
@@ -291,6 +304,8 @@ module.exports = function (paramService, esbMessage)
       op: 'mdm_markCommentAsLiked',
       pl: paramRequest.body
     };
+      m.pl.loginName = paramRequest.user.lanzheng.loginName;
+      m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
 
     esbMessage(m)
@@ -320,6 +335,8 @@ module.exports = function (paramService, esbMessage)
       op: 'mdm_markCommentForDelete',
       pl:{_id:paramRequest.params.commentID, ds:true,ln:paramRequest.user.lanzheng.loginName}
     };
+      m.pl.loginName = paramRequest.user.lanzheng.loginName;
+      m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
 
     esbMessage(m)

@@ -116,7 +116,7 @@ module.exports = function (paramService, esbMessage) {
             });
             types[1].pl.forEach(function (type) {
                 serviceTypeMap[type.text] = type._id;
-            })
+            });
 
             lzSVP.forEach(function (ele, idx) {
                 if (ele.links) {
@@ -141,23 +141,23 @@ module.exports = function (paramService, esbMessage) {
                     })
                 })
             ).then(function(results){
-                    var out = [];
-                    for(var i = 0; i < results.length; i++)
+                var out = [];
+                for(var i = 0; i < results.length; i++)
+                {
+                    if(results[i].state === 'fulfilled')
                     {
-                        if(results[i].state === 'fulfilled')
-                        {
-                            //console.log("INIT MODE ALLOWED YAY")
-                            out.push(results[i].value);
-                        }
-                        else if(results[i].reason.er.em.indexOf("INITIALIZATION MODE KICKOUT") >= 0)
-                        {
-                            //console.log("INIT MODE KICKOUT YAY");
-                            out.push(undefined);
-                        }
-                        else throw results[i].reason
+                        //console.log("INIT MODE ALLOWED YAY")
+                        out.push(results[i].value);
                     }
-                    return out;
-                })
+                    else if(results[i].reason.er.em.indexOf("INITIALIZATION MODE KICKOUT") >= 0)
+                    {
+                        //console.log("INIT MODE KICKOUT YAY");
+                        out.push(undefined);
+                    }
+                    else throw results[i].reason
+                }
+                return out;
+            })
         })
         .then(function renameServicePoints(svp){
             return q.allSettled(svp.map(function(servicePoint, idx){
