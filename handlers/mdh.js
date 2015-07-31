@@ -90,6 +90,8 @@ module.exports = function (paramService, esbMessage)
       op: 'validateUsersList',
       pl: paramRequest.body
     };
+    m.pl.loginName=paramRequest.user.lanzheng.loginName;
+    m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
 
     esbMessage(m)
@@ -139,8 +141,8 @@ module.exports = function (paramService, esbMessage)
         notification: paramRequest.body.notification
       }
     };
-      m.pl.loginName = paramRequest.user.lanzheng.loginName;
-      m.pl.currentOrganization = paramRequest.user.currentOrganization;
+    m.pl.loginName = paramRequest.user.lanzheng.loginName;
+    m.pl.currentOrganization = paramRequest.user.currentOrganization;
     //console.log(m.pl.recipients);
     //console.log(m.pl);
 

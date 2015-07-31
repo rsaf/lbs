@@ -32,6 +32,8 @@ module.exports = function(paramService, esbMessage)
           "pl": {"userAccountID":paramRequest.user.id, "opType":null},
           "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
       };
+      m.pl.loginName=paramRequest.user.lanzheng.loginName;
+      m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
 
       if(type === 'business'){

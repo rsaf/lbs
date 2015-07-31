@@ -477,7 +477,9 @@ module.exports = function(paramService, esbMessage){
                                         "pl": {
                                             code: paramRequest.params.activity_code,
                                             stat: "autoprocess",
-                                            ttl: responses.length
+                                            ttl: responses.length,
+                                            loginName:paramRequest.user.lanzheng.loginName,
+                                            currentOrganization:paramRequest.user.currentOrganization
                                         }
                                     })
                                 })
@@ -684,7 +686,7 @@ module.exports = function(paramService, esbMessage){
       m.pl={
           loginName : paramRequest.user.lanzheng.loginName,
           currentOrganization : paramRequest.user.currentOrganization
-    };
+        };
       m.op='bmm_getActivities';
       return esbMessage(m);
     }).then(function resolve(msg){
@@ -741,12 +743,12 @@ module.exports = function(paramService, esbMessage){
             "op": "bmm_readActivityDetailByID",
             "pl":{ac:paramRequest.params.activityDetail_id}
         };
-       m.pl.loginName = paramRequest.user.lanzheng.loginName;
-       m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
 
        if(paramRequest.user){
 
+           m.pl.loginName = paramRequest.user.lanzheng.loginName;
+           m.pl.currentOrganization = paramRequest.user.currentOrganization;
            m.pl.uID = paramRequest.user.lanzheng.loginName;
            m.pl.oID = paramRequest.user.currentOrganization;
        }

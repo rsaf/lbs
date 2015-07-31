@@ -96,7 +96,7 @@ module.exports = function(paramService, esbMessage){
                 "pl":{
                     code : dbRequest._doc.ei[0].ei,
                     loginName : paramRequest.user.lanzheng.loginName,
-                    currentOrganization : paramRequest.user.currentOrganization
+                    currentOrganization : paramRequest.currentOrganization
                 }
             })
         }
@@ -116,14 +116,15 @@ module.exports = function(paramService, esbMessage){
           }
           //end todo
         m.op=dbRequest.ei[i].mod+ '_updateStatus'
+          console.log("current user:",paramRequest.user.lanzheng.loginName,paramRequest.user.currentOrganization);
         m.pl={
           ei:dbRequest.ei[i].ei
           ,col:dbRequest.ei[i].col
           , status:request.rs
           , transactionid:m.pl.transactionid
           , response : ret
-          , loginName: m.pl.loginName
-          , currentOrganization:m.pl.currentOrganization
+          , loginName: paramRequest.user.lanzheng.loginName
+          , currentOrganization: paramRequest.user.currentOrganization
         };
         promises.push(esbMessage(m));
       }

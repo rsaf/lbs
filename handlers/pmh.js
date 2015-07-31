@@ -26,7 +26,9 @@ module.exports = function (paramPS, esbMessage) {
             "ns": "pmm",
             "op": "pmm_getPhotosForInspection",
             "pl": {
-                ac: paramRequest.params.lzcode
+                ac: paramRequest.params.lzcode,
+                loginName:paramRequest.user.lanzheng.loginName,
+                currentOrganization: paramRequest.user.currentOrganization
             },
             "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
 
@@ -63,7 +65,9 @@ module.exports = function (paramPS, esbMessage) {
             "op": 'pmm_getCorrectionPhotosByStatus',
             "pl": {
                 ac: ac,
-                st:null
+                st:null,
+                loginName:paramRequest.user.lanzheng.loginName,
+                currentOrganization: paramRequest.user.currentOrganization
             },
             "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
 
@@ -137,7 +141,9 @@ module.exports = function (paramPS, esbMessage) {
         var m = {
             "ns": "pmm",
             "op": "pmm_readStandardByCode",
-            "pl": {sc: varStandardCode}
+            "pl": {sc: varStandardCode,
+                loginName:paramRequest.user.lanzheng.loginName,
+                currentOrganization: paramRequest.user.currentOrganization}
         };
 
         esbMessage(m)
@@ -156,7 +162,9 @@ module.exports = function (paramPS, esbMessage) {
         var m = {
             "ns": "pmm",
             "op": "pmm_readStandardByType",
-            "pl": {it: varStandardType}
+            "pl": {it: varStandardType,
+                loginName:paramRequest.user.lanzheng.loginName,
+                currentOrganization: paramRequest.user.currentOrganization}
         };
         esbMessage(m)
             .then(function (r) {
@@ -174,7 +182,9 @@ module.exports = function (paramPS, esbMessage) {
         var m = {
             "ns": "pmm",
             "op": "pmm_readAllStandardsTypes",
-            "pl": {it: null}
+            "pl": {it: null,
+                loginName:paramRequest.user.lanzheng.loginName,
+                currentOrganization: paramRequest.user.currentOrganization}
         };
         esbMessage(m)
             .then(function (r) {
@@ -192,7 +202,9 @@ module.exports = function (paramPS, esbMessage) {
         var m = {
             "ns": "pmm",
             "op": "pmm_readAllStandards",
-            "pl": null,
+            "pl": {
+                loginName:paramRequest.user.lanzheng.loginName,
+                currentOrganization: paramRequest.user.currentOrganization},
             "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
 
     };
@@ -211,7 +223,9 @@ module.exports = function (paramPS, esbMessage) {
         var m = {
             "ns": "pmm",
             "op": "pmm_readAllUsages",
-            "pl": null,
+            "pl": {
+                loginName:paramRequest.user.lanzheng.loginName,
+                currentOrganization: paramRequest.user.currentOrganization},
             "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
 
         };
@@ -229,7 +243,9 @@ module.exports = function (paramPS, esbMessage) {
         var m = {
             "ns": "pmm",
             "op": "pmm_readUsageByCode",
-            "pl": {uc: paramRequest.params.usagecode}
+            "pl": {uc: paramRequest.params.usagecode,
+                loginName:paramRequest.user.lanzheng.loginName,
+                currentOrganization: paramRequest.user.currentOrganization}
         };
 
 
@@ -254,6 +270,8 @@ module.exports = function (paramPS, esbMessage) {
         };
         m.pl.uID = paramRequest.user.id;
         m.pl.oID = paramRequest.user.id;
+        m.pl.loginName = paramRequest.user.lanzheng.loginName
+        m.pl.currentOrganization = paramRequest.user.currentOrganization
 
 
         esbMessage(m)
@@ -279,6 +297,8 @@ module.exports = function (paramPS, esbMessage) {
         };
         m.pl.uID = paramRequest.user.id;
         m.pl.oID = paramRequest.user.id;
+        m.pl.loginName = paramRequest.user.lanzheng.loginName
+        m.pl.currentOrganization = paramRequest.user.currentOrganization
 
 
         esbMessage(m)
@@ -304,6 +324,8 @@ module.exports = function (paramPS, esbMessage) {
 
         m.pl.uID = paramRequest.user.id;
         m.pl.oID = paramRequest.user.id;
+        m.pl.loginName = paramRequest.user.lanzheng.loginName
+        m.pl.currentOrganization = paramRequest.user.currentOrganization
 
         esbMessage(m)
             .then(function (r) {
@@ -332,6 +354,8 @@ module.exports = function (paramPS, esbMessage) {
 
             m.pl.uID = paramRequest.user.id;
             m.pl.oID = paramRequest.user.id;
+            m.pl.loginName = paramRequest.user.lanzheng.loginName
+            m.pl.currentOrganization = paramRequest.user.currentOrganization
 
 
             esbMessage(m)
@@ -367,6 +391,8 @@ module.exports = function (paramPS, esbMessage) {
 
         m.pl.uID = paramRequest.user.id;
         m.pl.oID = paramRequest.user.id;
+        m.pl.loginName = paramRequest.user.lanzheng.loginName
+        m.pl.currentOrganization = paramRequest.user.currentOrganization
 
 
         esbMessage(m)
@@ -434,6 +460,8 @@ module.exports = function (paramPS, esbMessage) {
             "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
 
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName
+        m.pl.currentOrganization = paramRequest.user.currentOrganization
 
 
         if (phototype === 'unqualified') {
@@ -529,6 +557,8 @@ module.exports = function (paramPS, esbMessage) {
             op: "pmm_SetCorrectionPhotoAsInProcess",
             pl: {uri: '/photos/' + photoUrl, ac: ac}
         }
+        m.pl.loginName = paramRequest.user.lanzheng.loginName
+        m.pl.currentOrganization = paramRequest.user.currentOrganization
 
         console.log('m----', m);
 
@@ -569,6 +599,8 @@ module.exports = function (paramPS, esbMessage) {
             op: "pmm_SetCorrectionPhotoAsFailed",
             pl: {uri: '/photos/' + photoUrl, ac: ac}
         }
+        m.pl.loginName = paramRequest.user.lanzheng.loginName
+        m.pl.currentOrganization = paramRequest.user.currentOrganization
 
 
 
@@ -692,7 +724,9 @@ module.exports = function (paramPS, esbMessage) {
             "op":"pmm_getPhotoByUri",
             "pl":{
                 ac : paramRequest.params.activityCode,
-                uri : photoname
+                uri : photoname,
+                loginName : paramRequest.user.lanzheng.loginName,
+                currentOrganization : paramRequest.user.currentOrganization
             }});
         }).then(function(photo){
             console.log("Finishing photo ","(",paramRequest.params.photoname,"):",photo);
@@ -796,6 +830,8 @@ module.exports = function (paramPS, esbMessage) {
                 "mt":{p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
 
             };
+            m.pl.loginName = paramRequest.user.lanzheng.loginName
+            m.pl.currentOrganization = paramRequest.user.currentOrganization
 
 
             if(stage === 'unInspectedFolders'){// inspection
@@ -872,6 +908,8 @@ module.exports = function (paramPS, esbMessage) {
             },
             uri: null // String to physical photo location // AC1279908_SCM15900655434_UC12996987669_OC_2079877898.jpg
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName
+        m.pl.currentOrganization = paramRequest.user.currentOrganization
 
 
         var form = new formidable.IncomingForm();
