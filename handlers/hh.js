@@ -563,7 +563,7 @@ module.exports = function (paramService, esbMessage) {
       function _persistRespose(req, res, pnext) {
           var m = {},
           transactionid = false,
-          response = {},          //formHtml
+          response = {},
           activity = {};
           q().then(function () {
               m.pl = JSON.parse(req.body.json).pl;
@@ -650,13 +650,13 @@ module.exports = function (paramService, esbMessage) {
       homeRouter.post('/response.json', function (req, res, pnext) {
           var usr = (req.user && req.user.lanzheng && req.user.lanzheng.loginName) || req.sessionID;
           var act = JSON.parse(req.body.json).pl.activityCode;
-          console.log("WOOMOOFOO", act);
           esbMessage({
               "ns" : "bmm",
               "op" : "bmm_findUserResponse",
               "pl" : {
                   user : usr,
-                  activity : act
+                  activity : act,
+                  code : req.query.code
               }
           }).then(function(msg){
               if(msg){

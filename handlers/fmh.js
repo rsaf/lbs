@@ -783,7 +783,8 @@ module.exports = function(paramService, esbMessage)
                                         sp:{
                                             ps:'paid'
                                         },
-                                        rfc:refCode
+                                        rfc:refCode,
+                                        s:{lzm:{val:refCode}}
                                     }
                                 }
                             });
