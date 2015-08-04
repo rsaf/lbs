@@ -303,7 +303,9 @@ module.exports = function(paramService, esbMessage){
                             "ns":"bmm",
                             "op":"bmm_getActivity",
                             "pl":{
-                                code : paramRequest.params.activity_code
+                                code : paramRequest.params.activity_code,
+                                loginName : paramRequest.user.lanzheng.loginName,
+                                currentOrganization : paramRequest.user.currentOrganization
                             }
                         }).then(function(act){
                             activity = act;
@@ -311,7 +313,9 @@ module.exports = function(paramService, esbMessage){
                                 "ns":"smm",
                                 "op":"smm_queryServices",
                                 "pl":{
-                                    query : act.sqc
+                                    query : act.sqc,
+                                    loginName : paramRequest.user.lanzheng.loginName,
+                                    currentOrganization : paramRequest.user.currentOrganization
                                 }
                             })
                         }).then(function(services){
@@ -325,7 +329,9 @@ module.exports = function(paramService, esbMessage){
                                 "op":"bmm_setMassProcessable",
                                 "pl": {
                                     code : paramRequest.params.activity_code,
-                                    value : processable
+                                    value : processable,
+                                    loginName : paramRequest.user.lanzheng.loginName,
+                                    currentOrganization : paramRequest.user.currentOrganization
                                 }
                             })
                         })
@@ -335,7 +341,9 @@ module.exports = function(paramService, esbMessage){
                             "ns":"bmm",
                             "op":"bmm_getExcelHeadersFromUnzipped",
                             "pl":{
-                                ac : paramRequest.params.activity_code
+                                ac : paramRequest.params.activity_code,
+                                loginName : paramRequest.user.lanzheng.loginName,
+                                currentOrganization : paramRequest.user.currentOrganization
                             }
                         })
                     })
