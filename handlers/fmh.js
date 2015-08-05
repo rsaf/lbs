@@ -405,7 +405,7 @@ module.exports = function(paramService, esbMessage)
         //Alipay will call us to validate user payment after success payment
         //'/workspace/finance/order/:code.json'
         //todo: Hit confirmAlipay code
-        console.log(paramRequest.query);
+        console.log("HAVING ORDER CONFIRMED",paramRequest.query);
         return esbMessage({
             "ns" : "bmm",
             "op" : "bmm_getResponse",
@@ -433,7 +433,7 @@ module.exports = function(paramService, esbMessage)
         //Alipay will redirect users to this endpoint after successful payment
         ///workspace/finance/response/:code.json'
         //todo: Hit confirmAlipay code
-        console.log("hit handler");
+        console.log("hit payment handler",paramRequest.params);
         var provider = paramRequest.params.provider;
         var split = paramRequest.params.code.split("T");
         var responseCodeStripped = split && split.length > 0 ? split[0] : paramRequest.params.code;
