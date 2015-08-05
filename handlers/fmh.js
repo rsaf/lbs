@@ -401,7 +401,7 @@ module.exports = function(paramService, esbMessage)
 
     //,create_direct_pay_by_user_return_url: '/processes/activities/done'
     //,create_direct_pay_by_user_notify_url: '/workspace/finance/response'
-    fmmRouter.get('/order/:code.json', function(paramRequest, paramResponse, paramNext){
+    fmmRouter.post('/order/:code.json', function(paramRequest, paramResponse, paramNext){
         //Alipay will call us to validate user payment after success payment
         //'/workspace/finance/order/:code.json'
         //todo: Hit confirmAlipay code
