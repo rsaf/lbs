@@ -405,7 +405,8 @@ module.exports = function(paramService, esbMessage)
         //Alipay will call us to validate user payment after success payment
         //'/workspace/finance/order/:code.json'
         //todo: Hit confirmAlipay code
-        console.log("HAVING ORDER CONFIRMED",paramRequest.query);
+        console.log("HAVING ORDER CONFIRMED");
+        console.log("Post is",paramRequest.query);
         return esbMessage({
             "ns" : "bmm",
             "op" : "bmm_getResponse",
