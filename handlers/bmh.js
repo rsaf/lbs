@@ -196,9 +196,16 @@ module.exports = function(paramService, esbMessage){
     var m = {};
     //formHtml
     q().then(function(){
-      m.pl={code:paramRequest.query.code};
-      m.pl._id=paramRequest.query._id;
-      m.op='bmm_getResponse';
+      var m = {
+          "ns":"bmm",
+          "op":"bmm_getResponse",
+          "pl":{
+              code : paramRequest.query.code,
+              _id : paramRequest.query._id,
+              loginName : paramRequest.user.lanzheng.loginName,
+              currentOrganization : paramRequest.user.currentOrganization
+          }
+      }
       return esbMessage(m);
     }).then(function(msg){
       oHelpers.sendResponse(paramResponse,200,{pl:msg});
@@ -211,7 +218,9 @@ module.exports = function(paramService, esbMessage){
             ns : "bmm",
             op : "bmm_getUserMeta",
             pl : {
-                ac_code : paramRequest.params.activity_code
+                ac_code : paramRequest.params.activity_code,
+                loginName : paramRequest.user.lanzheng.loginName,
+                currentOrganization : paramRequest.user.currentOrganization
             }
         }
         return esbMessage(m).then(function(doc){
@@ -257,7 +266,9 @@ module.exports = function(paramService, esbMessage){
             },
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
-            fd:null
+            fd:null,
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
 
@@ -292,7 +303,9 @@ module.exports = function(paramService, esbMessage){
                             "ns":"bmm",
                             "op":"bmm_getActivity",
                             "pl":{
-                                code : paramRequest.params.activity_code
+                                code : paramRequest.params.activity_code,
+                                loginName : paramRequest.user.lanzheng.loginName,
+                                currentOrganization : paramRequest.user.currentOrganization
                             }
                         }).then(function(act){
                             activity = act;
@@ -300,7 +313,9 @@ module.exports = function(paramService, esbMessage){
                                 "ns":"smm",
                                 "op":"smm_queryServices",
                                 "pl":{
-                                    query : act.sqc
+                                    query : act.sqc,
+                                    loginName : paramRequest.user.lanzheng.loginName,
+                                    currentOrganization : paramRequest.user.currentOrganization
                                 }
                             })
                         }).then(function(services){
@@ -314,7 +329,9 @@ module.exports = function(paramService, esbMessage){
                                 "op":"bmm_setMassProcessable",
                                 "pl": {
                                     code : paramRequest.params.activity_code,
-                                    value : processable
+                                    value : processable,
+                                    loginName : paramRequest.user.lanzheng.loginName,
+                                    currentOrganization : paramRequest.user.currentOrganization
                                 }
                             })
                         })
@@ -324,7 +341,9 @@ module.exports = function(paramService, esbMessage){
                             "ns":"bmm",
                             "op":"bmm_getExcelHeadersFromUnzipped",
                             "pl":{
-                                ac : paramRequest.params.activity_code
+                                ac : paramRequest.params.activity_code,
+                                loginName : paramRequest.user.lanzheng.loginName,
+                                currentOrganization : paramRequest.user.currentOrganization
                             }
                         })
                     })
@@ -346,7 +365,9 @@ module.exports = function(paramService, esbMessage){
             "ns":"bmm",
             "op":"bmm_getActivity",
             "pl":{
-                code : ac
+                code : ac,
+                loginName : paramRequest.user.lanzheng.loginName,
+                currentOrganization : paramRequest.user.currentOrganization
             }
         }).then(function(act){
             oHelpers.sendResponse(paramResponse, 200, {pl:{cnt:act.arc.prc, ttl: act.arc.ptl}})
@@ -362,7 +383,9 @@ module.exports = function(paramService, esbMessage){
             "ns":"bmm",
             "op":"bmm_getAllResponsesForActivity",
             "pl":{
-                code : paramRequest.params.activity_code
+                code : paramRequest.params.activity_code,
+                loginName : paramRequest.user.lanzheng.loginName,
+                currentOrganization : paramRequest.user.currentOrganization
             }
         })
         .then(function(r){
@@ -371,7 +394,9 @@ module.exports = function(paramService, esbMessage){
                 "ns":"bmm",
                 "op":"bmm_getActivity",
                 "pl":{
-                    code : paramRequest.params.activity_code
+                    code : paramRequest.params.activity_code,
+                    loginName : paramRequest.user.lanzheng.loginName,
+                    currentOrganization : paramRequest.user.currentOrganization
                 }
             })
         })
@@ -383,7 +408,9 @@ module.exports = function(paramService, esbMessage){
                 "ns":"smm",
                 "op":"smm_queryServices",
                 "pl":{
-                    query: activity.sqc
+                    query: activity.sqc,
+                    loginName : paramRequest.user.lanzheng.loginName,
+                    currentOrganization : paramRequest.user.currentOrganization
                 }
             })
         })
@@ -458,7 +485,9 @@ module.exports = function(paramService, esbMessage){
                                         "pl": {
                                             code: paramRequest.params.activity_code,
                                             stat: "autoprocess",
-                                            ttl: responses.length
+                                            ttl: responses.length,
+                                            loginName:paramRequest.user.lanzheng.loginName,
+                                            currentOrganization:paramRequest.user.currentOrganization
                                         }
                                     })
                                 })
@@ -483,7 +512,9 @@ module.exports = function(paramService, esbMessage){
                 "ns": "bmm",
                 "op": "bmm_getActivity",
                 "pl": {
-                    code: ac
+                    code: ac,
+                    loginName : paramRequest.user.lanzheng.loginName,
+                    currentOrganization : paramRequest.user.currentOrganization
                 }
             })
         }).then(function(activity){
@@ -516,7 +547,9 @@ module.exports = function(paramService, esbMessage){
                 "ns":"bmm",
                 "op":"bmm_getAllResponsesForActivity",
                 "pl":{
-                    code : ac
+                    code : ac,
+                    loginName : paramRequest.user.lanzheng.loginName,
+                    currentOrganization : paramRequest.user.currentOrganization
                 }
             });
         }).then(function uniqueHeaders(responses){
@@ -555,6 +588,8 @@ module.exports = function(paramService, esbMessage){
             //paramRequest.query.code
             console.log("Retrieved activity code in download as ",paramRequest.params.activity_code);
             m.pl={ac:paramRequest.params.activity_code,tgtField:paramRequest.params.field};
+            m.pl.loginName = paramRequest.user.lanzheng.loginName;
+            m.pl.currentOrganization = paramRequest.user.currentOrganization;
             m.op='bmm_download_activity_data';
             return esbMessage(m);
         }).then(function(msg){
@@ -572,7 +607,9 @@ module.exports = function(paramService, esbMessage){
                 "op":"bmm_associateUniqueFieldWithFormMeta",
                 "pl":{
                     ac : paramRequest.params.activity_code,
-                    field : paramRequest.params.field
+                    field : paramRequest.params.field,
+                    loginName : paramRequest.user.lanzheng.loginName,
+                    currentOrganization : paramRequest.user.currentOrganization
                 }
         }).then(function(msg){
             oHelpers.sendResponse(paramResponse, 200, {pl:msg});
@@ -625,6 +662,8 @@ module.exports = function(paramService, esbMessage){
     //formHtml
     q().then(function(){
       m.pl={code:paramRequest.query.code};
+      m.pl.loginName = paramRequest.user.lanzheng.loginName;
+      m.pl.currentOrganization = paramRequest.user.currentOrganization;
       m.op='bmm_getActivity';
       return esbMessage(m);
     }).then(function(msg){
@@ -652,7 +691,10 @@ module.exports = function(paramService, esbMessage){
     var m = {};
     //formHtml
     q().then(function(){
-      m.pl={};
+      m.pl={
+          loginName : paramRequest.user.lanzheng.loginName,
+          currentOrganization : paramRequest.user.currentOrganization
+        };
       m.op='bmm_getActivities';
       return esbMessage(m);
     }).then(function resolve(msg){
@@ -713,6 +755,8 @@ module.exports = function(paramService, esbMessage){
 
        if(paramRequest.user){
 
+           m.pl.loginName = paramRequest.user.lanzheng.loginName;
+           m.pl.currentOrganization = paramRequest.user.currentOrganization;
            m.pl.uID = paramRequest.user.lanzheng.loginName;
            m.pl.oID = paramRequest.user.currentOrganization;
        }
@@ -745,6 +789,8 @@ module.exports = function(paramService, esbMessage){
                 ,pageSize:10
             }
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
         console.log('bmm_readAllActivityDetailByID-----------');
 
@@ -774,6 +820,8 @@ module.exports = function(paramService, esbMessage){
             "op": "bmm_updateActivityDetail",
             "pl":paramRequest.body
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
 
         m.pl.acid = m.pl.acid._id;
@@ -807,6 +855,8 @@ module.exports = function(paramService, esbMessage){
             "op": "bmm_updateActivityDetailFAQ",
             "pl":{}
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
 
         m.pl.uID = paramRequest.user.lanzheng.loginName;
@@ -846,6 +896,8 @@ module.exports = function(paramService, esbMessage){
 
             }
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
         esbMessage(m)
             .then(function(r) {
@@ -871,6 +923,8 @@ module.exports = function(paramService, esbMessage){
             "op": "bmm_updateActivityDetailFAQ",
             "pl":{}
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
 
 
@@ -910,6 +964,8 @@ module.exports = function(paramService, esbMessage){
             op : 'create',
             jsonData:null
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
 
 
@@ -964,6 +1020,8 @@ module.exports = function(paramService, esbMessage){
             _id: paramRequest.params.activityDetail_id,
             jsonData:paramRequest.body
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
         m.pl.jsonData.acid = m.pl.jsonData.acid._id;
         esbMessage(m)
@@ -993,6 +1051,8 @@ module.exports = function(paramService, esbMessage){
             op : 'delete',
             jsonData:{uuid:paramRequest.params.attch_id, _id:paramRequest.params.activityDetail_id}
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
         esbMessage(m)
             .then(function(r) {
@@ -1023,6 +1083,8 @@ module.exports = function(paramService, esbMessage){
             fileData:null,
             ifm:null
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
 
         var form = new formidable.IncomingForm();
@@ -1071,6 +1133,8 @@ module.exports = function(paramService, esbMessage){
             ifm:null,
             jsonData:null
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
 
         var form = new formidable.IncomingForm();
@@ -1125,6 +1189,8 @@ module.exports = function(paramService, esbMessage){
             op : 'create',
             jsonData:null
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
 
         var form = new formidable.IncomingForm();
@@ -1177,6 +1243,8 @@ module.exports = function(paramService, esbMessage){
             op : 'delete',
             jsonData:{uuid:paramRequest.params.img_id, _id:paramRequest.params.activityDetail_id}
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
 
         esbMessage(m)
@@ -1204,6 +1272,8 @@ module.exports = function(paramService, esbMessage){
             op : 'create',
             jsonData:paramRequest.body
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
 
         esbMessage(m)
@@ -1234,6 +1304,8 @@ module.exports = function(paramService, esbMessage){
             op : 'delete',
             jsonData:{uuid:paramRequest.params.vid_id, _id:paramRequest.params.activityDetail_id}
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
         esbMessage(m)
             .then(function(r) {
@@ -1265,6 +1337,8 @@ module.exports = function(paramService, esbMessage){
             op : 'create',
             jsonData:paramRequest.body
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
 
         esbMessage(m)
@@ -1294,6 +1368,8 @@ module.exports = function(paramService, esbMessage){
             op : 'delete',
             jsonData:{uuid:paramRequest.params.audio_id, _id:paramRequest.params.activityDetail_id}
         };
+        m.pl.loginName = paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization = paramRequest.user.currentOrganization;
 
 
         esbMessage(m)
@@ -1323,6 +1399,8 @@ module.exports = function(paramService, esbMessage){
                 op: 'bmm_deleteResponse',
                 pl:  jsonParam.pl.response
             };
+            m.pl.loginName = paramRequest.user.lanzheng.loginName;
+            m.pl.currentOrganization = paramRequest.user.currentOrganization;
             console.log('what will be deleted', jsonParam.pl);
 
             return esbMessage(m);

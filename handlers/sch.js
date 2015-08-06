@@ -41,6 +41,8 @@ module.exports = function(paramService, esbMessage) {
             "mt": {p:paramRequest.query.p,ps:paramRequest.query.ps,sk:paramRequest.query.sk,sd:paramRequest.query.sd, ed:paramRequest.query.ed}
 
         };
+            m.pl.loginName=paramRequest.user.lanzheng.loginName;
+            m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
             esbMessage(m)
                 .then(function (r) {
@@ -76,6 +78,8 @@ module.exports = function(paramService, esbMessage) {
                     userType:type
                 }
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
 
         esbMessage(m)
@@ -107,6 +111,8 @@ module.exports = function(paramService, esbMessage) {
                    mobile:mobile
                 }
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
 
         esbMessage(m)
@@ -135,6 +141,8 @@ module.exports = function(paramService, esbMessage) {
             "pl": {loginInfo:loginInfo
             }
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
 
         esbMessage(m)
@@ -170,6 +178,8 @@ module.exports = function(paramService, esbMessage) {
                 userInfo:paramRequest.user.lanzheng.loginName
             }
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
 
 
@@ -236,6 +246,8 @@ module.exports = function(paramService, esbMessage) {
                 userInfo:paramRequest.user.lanzheng.loginName
             }
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
         var firstResponse;
         esbMessage(m)
            .then(function(r){

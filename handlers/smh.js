@@ -93,18 +93,26 @@ module.exports = function (paramService, esbMessage) {
             serviceTypeMap = {},
             serviceCodeMap = {},
             servicePointTypeMap = {},
-            servicesExtant = []
+            servicesExtant = [],
+            autoUser = "sa",
+            autoOrg = "200000000000000000000000"
         return q().then(function getInfo(){
             return q.all([
                 esbMessage({
                     "ns" : "smm",
                     "op" : "servicePointTypes",
-                    "pl" : {}
+                    "pl" : {
+                        loginName : autoUser,
+                        currentOrganization : autoOrg
+                    }
                 }),
                 esbMessage({
                     "ns" : "smm",
                     "op" : "serviceTypes",
-                    "pl" : {}
+                    "pl" : {
+                        loginName : autoUser,
+                        currentOrganization : autoOrg
+                    }
                 })
             ])
         })
@@ -114,7 +122,7 @@ module.exports = function (paramService, esbMessage) {
             });
             types[1].pl.forEach(function (type) {
                 serviceTypeMap[type.text] = type._id;
-            })
+            });
 
             lzSVP.forEach(function (ele, idx) {
                 if (ele.links) {
@@ -125,27 +133,49 @@ module.exports = function (paramService, esbMessage) {
                     })
                 }
             });
-            return q.all(
+            return q.allSettled(
                 lzSVP.map(function(ele){
                     var obj = JSON.parse(JSON.stringify(ele.payload));
                     obj.transactionid = "200000000000000000000000";
                     obj.override = true;
+                    obj.loginName = autoUser;
+                    obj.currentOrganization = autoOrg;
                     return esbMessage({
                         "ns":"smm",
                         "op":"persistServicePoint",
                         "pl":obj
                     })
                 })
-            )
+            ).then(function(results){
+                var out = [];
+                for(var i = 0; i < results.length; i++)
+                {
+                    if(results[i].state === 'fulfilled')
+                    {
+                        //console.log("INIT MODE ALLOWED YAY")
+                        out.push(results[i].value);
+                    }
+                    else if(results[i].reason.er.em.indexOf("INITIALIZATION MODE KICKOUT") >= 0)
+                    {
+                        //console.log("INIT MODE KICKOUT YAY");
+                        out.push(undefined);
+                    }
+                    else throw results[i].reason
+                }
+                return out;
+            })
         })
         .then(function renameServicePoints(svp){
-            return q.all(svp.map(function(servicePoint, idx){
+            return q.allSettled(svp.map(function(servicePoint, idx){
+                if(servicePoint === undefined) return undefined;
                 return esbMessage({
                     "ns":"smm",
                     "op":"smm_changeServicePointCode",
                     "pl":{
                         find: servicePoint.pl.servicePointCode,
-                        code: lzSVP[idx].payload.servicePoint.servicePointCode
+                        code: lzSVP[idx].payload.servicePoint.servicePointCode,
+                        loginName : autoUser,
+                        currentOrganization : autoOrg
                     }
                 })
             }))
@@ -157,7 +187,9 @@ module.exports = function (paramService, esbMessage) {
                     "op":"smm_getServices",
                     "pl":
                     {
-                        which:"all"
+                        which:"all",
+                        loginName : autoUser,
+                        currentOrganization: autoOrg
                     },
                     "mt":
                     {
@@ -171,12 +203,13 @@ module.exports = function (paramService, esbMessage) {
         .then(function lookupservicepoints(){
             return q.all(lzSRV.map(function(service){
                 return q.all(service.payload.service.PriceList.map(function(list){
-                    console.log(list);
                     return esbMessage({
                         "ns":"smm",
                         "op":"smm_getServicePointByCode",
                         "pl":{
-                            code : list.servicePoint
+                            code : list.servicePoint,
+                            loginName : autoUser,
+                            currentOrganization: autoOrg
                         }
                     });
                 }));
@@ -222,50 +255,95 @@ module.exports = function (paramService, esbMessage) {
                     })
                 }
             })
-            return q.all(
+            return q.allSettled(
                 lzSRV.map(function(ele){
                     var obj = JSON.parse(JSON.stringify(ele.payload));
                     obj.transactionid = "200000000000000000000000";
                     obj.override = true;
+                    obj.loginName = autoUser;
+                    obj.currentOrganization = autoOrg;
                     return esbMessage({
                         "ns":"smm",
                         "op":"persistService",
                         "pl":obj
                     })
                 })
-            )
+            ).then(function(results){
+                    var out = [];
+                    for(var i = 0; i < results.length; i++)
+                    {
+                        if(results[i].state === 'fulfilled')
+                        {
+                            //console.log("INIT MODE ALLOWED YAY")
+                            out.push(results[i].value);
+                        }
+                        else if(results[i].reason.er.em.indexOf("INITIALIZATION MODE KICKOUT") >= 0)
+                        {
+                            //console.log("INIT MODE KICKOUT YAY");
+                            out.push(undefined);
+                        }
+                        else throw results[i].reason
+                    }
+                    return out;
+                })
         })
         .then(function renameServiceNames(srv){
-            return q.all(srv.map(function(servicePoint, idx){
-                console.log("Renaming ")
+            return q.all(srv.map(function(service, idx){
+                if(service === undefined) return undefined;
                 return esbMessage({
                     "ns":"smm",
                     "op":"smm_changeServiceCode",
                     "pl":{
-                        find: servicePoint.pl.serviceCode,
-                        code: lzSRV[idx].payload.service.serviceCode
+                        find: service.pl.serviceCode,
+                        code: lzSRV[idx].payload.service.serviceCode,
+                        loginName : autoUser,
+                        currentOrganization: autoOrg
                     }
                 })
             }))
         })
         .then(function loadUnlinkedForms(srv){
-            return q.all(lzFRM.map(function(form){
+            return q.allSettled(lzFRM.map(function(form){
                 form.upload.content.override = true;
+                form.upload.content.loginName = autoUser;
+                form.upload.content.currentOrganization = autoOrg;
                 return esbMessage({
                     "ns":"bmm",
                     "op": "bmm_persistForm",
-                    "pl": JSON.parse(JSON.stringify(form.upload.content))
+                    "pl": JSON.parse(JSON.stringify(form.upload.content)),
+                    loginName : autoUser,
+                    currentOrganization: autoOrg
                 })
-            }))
+            })).then(function(results){
+                var out = [];
+                for(var i = 0; i < results.length; i++)
+                {
+                    if(results[i].state === 'fulfilled')
+                    {
+                        //console.log("INIT MODE ALLOWED YAY")
+                        out.push(results[i].value);
+                    }
+                    else if(results[i].reason.er.em.indexOf("INITIALIZATION MODE KICKOUT") >= 0)
+                    {
+                        //console.log("INIT MODE KICKOUT YAY");
+                        out.push(undefined);
+                    }
+                    else throw results[i].reason
+                }
+                return out;
+            })
         })
         .then(function renameForms(frms){
             return q.all(frms.map(function(form, idx){
+                if(form === undefined) return undefined;
                 return esbMessage({
                     "ns":"bmm",
                     "op":"bmm_changeFormMetaCode",
                     "pl":{
                         find: form.pl.fc,
-                        code: lzFRM[idx].upload.content.form.fc
+                        code: lzFRM[idx].upload.content.form.fc,
+                        loginName : autoUser,
+                        currentOrganization: autoOrg
                     }
                 })
             }))
@@ -277,7 +355,9 @@ module.exports = function (paramService, esbMessage) {
                     "op":"smm_getServices",
                     "pl":
                     {
-                        which:"all"
+                        which:"all",
+                        loginName : autoUser,
+                        currentOrganization: autoOrg
                     },
                     "mt":
                     {
@@ -291,7 +371,7 @@ module.exports = function (paramService, esbMessage) {
             services.forEach(function(ele){
                 serviceNameMap[ele.pl[0].serviceName.text] = ele.pl[0].serviceName._id;
             });
-            return q.all(lzACT.map(function(activity,i){
+            return q.allSettled(lzACT.map(function(activity,i){
                 activity.payload.sqc.forEach(function(sq,idx){
                     activity.payload.sqc[idx].sn = serviceNameMap[activity.payload.sqc[idx].sn];
                 });
@@ -300,7 +380,8 @@ module.exports = function (paramService, esbMessage) {
                     "op":"bmm_getFormMeta",
                     "pl":{
                         fc : lzACT[i].form,
-                        currentOrganization: "200000000000000000000000"
+                        loginUser: autoUser,
+                        currentOrganization: autoOrg
                     }
                 }).then(function(formMeta){
                     activity.payload.fm = formMeta._id;
@@ -309,20 +390,42 @@ module.exports = function (paramService, esbMessage) {
                         "op":"bmm_persistActivity",
                         "pl":{
                             activity : JSON.parse(JSON.stringify(activity.payload)),
-                            override : true
+                            override : true,
+                            loginName : autoUser,
+                            currentOrganization: autoOrg
                         }
                     });
                 });
-            }));
+            })).then(function(results){
+                var out = [];
+                for(var i = 0; i < results.length; i++)
+                {
+                    if(results[i].state === 'fulfilled')
+                    {
+                        //console.log("INIT MODE ALLOWED YAY")
+                        out.push(results[i].value);
+                    }
+                    else if(results[i].reason.er.em.indexOf("INITIALIZATION MODE KICKOUT") >= 0)
+                    {
+                        //console.log("INIT MODE KICKOUT YAY");
+                        out.push(undefined);
+                    }
+                    else throw results[i].reason
+                }
+                return out;
+            });
         })
         .then(function renameActivities(acts){
             return q.all(acts.map(function(act, idx){
+                if(act === undefined) return undefined;
                 return esbMessage({
                     "ns":"bmm",
                     "op":"bmm_changeActivityCode",
                     "pl":{
                         find: act.abd.ac,
-                        code: lzACT[idx].payload.abd.ac
+                        code: lzACT[idx].payload.abd.ac,
+                        loginName : autoUser,
+                        currentOrganization: autoOrg
                     }
                 })
             }))
@@ -558,6 +661,8 @@ module.exports = function (paramService, esbMessage) {
                 "query": query
             }
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
         esbMessage(m)
             .then(function (r) {
                 //paramResponse.writeHead(200, {"Content-Type": "application/json"});
@@ -609,6 +714,8 @@ module.exports = function (paramService, esbMessage) {
             "pl": {},
             "mt": {p:metaInfo.p,ps:metaInfo.ps,sk:metaInfo.sk,sd:metaInfo.sd, ed:metaInfo.ed}
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
 
         console.log('m.mt----', m.mt);
@@ -694,8 +801,10 @@ module.exports = function (paramService, esbMessage) {
     serviceManagementRouter.get('/servicenames.json', function (paramRequest, paramResponse, paramNext) {
         var m = {
             "op": "serviceNames",
-            "pl": null
+            "pl": {}
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
         esbMessage(m)
             .then(function (r) {
                 //paramResponse.writeHead(200, {"Content-Type": "application/json"});
@@ -715,8 +824,10 @@ module.exports = function (paramService, esbMessage) {
         var m = {
             "ns": "smm",
             "op": "serviceTypes",
-            "pl": null
+            "pl": {}
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
         esbMessage(m)
             .then(function (r) {
                 //paramResponse.writeHead(200, {"Content-Type": "application/json"});
@@ -735,8 +846,10 @@ module.exports = function (paramService, esbMessage) {
     serviceManagementRouter.get('/servicepointtypes.json', function (paramRequest, paramResponse, paramNext) {
         var m = {
             "op": "servicePointTypes",
-            "pl": null
+            "pl": {}
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
         esbMessage(m)
             .then(function (r) {
                 //paramResponse.writeHead(200, {"Content-Type": "application/json"});
@@ -872,6 +985,8 @@ module.exports = function (paramService, esbMessage) {
                 "query": query
             }
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
         esbMessage(m)
             .then(function (r) {
                 //paramResponse.writeHead(200, {"Content-Type": "application/json"});
@@ -1008,6 +1123,8 @@ module.exports = function (paramService, esbMessage) {
             "op": "smm_readServicePointDetailByID",
             "pl": {ac: paramRequest.params.servicepointDetatils_id}
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
         console.log('paramRequest.params.servicepointDetatils_id-----------', paramRequest.params.servicepointDetatils_id);
 
@@ -1037,6 +1154,8 @@ module.exports = function (paramService, esbMessage) {
                 , pageSize: 10
             }
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
         console.log(' smh get all servicePoint Details------');
 
@@ -1071,6 +1190,8 @@ module.exports = function (paramService, esbMessage) {
         m.pl.spbi = m.pl.spbi._id;
         m.pl.uID = paramRequest.user.lanzheng.loginName;
         m.pl.oID = paramRequest.user.currentOrganization;
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
         esbMessage(m)
             .then(function (r) {
@@ -1103,6 +1224,8 @@ module.exports = function (paramService, esbMessage) {
 
         m.pl.uID = paramRequest.user.lanzheng.loginName;
         m.pl.oID = paramRequest.user.currentOrganization;
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
         m.pl.op = 'create';
         m.pl.jsonData = paramRequest.body;
 
@@ -1137,6 +1260,8 @@ module.exports = function (paramService, esbMessage) {
 
             }
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
         esbMessage(m)
             .then(function (r) {
@@ -1166,6 +1291,8 @@ module.exports = function (paramService, esbMessage) {
 
         m.pl.uID = paramRequest.user.lanzheng.loginName;
         m.pl.oID = paramRequest.user.currentOrganization;
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
         m.pl.op = 'update';
         m.pl.jsonData = paramRequest.body;
         //m.pl.spbi = m.pl.spbi._id;
@@ -1198,6 +1325,8 @@ module.exports = function (paramService, esbMessage) {
             op: 'create',
             jsonData: null
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
 
         var form = new formidable.IncomingForm();
@@ -1251,7 +1380,8 @@ module.exports = function (paramService, esbMessage) {
             _id: paramRequest.params.servicepointDetatils_id,
             jsonData: paramRequest.body
         };
-
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
         m.pl.jsonData.spbi = m.pl.jsonData.spbi._id;
         esbMessage(m)
             .then(function (r) {
@@ -1280,6 +1410,8 @@ module.exports = function (paramService, esbMessage) {
             op: 'delete',
             jsonData: {uuid: paramRequest.params.attch_id, _id: paramRequest.params.servicepointDetatils_id}
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
         esbMessage(m)
             .then(function (r) {
@@ -1307,6 +1439,8 @@ module.exports = function (paramService, esbMessage) {
             ifm: null,
             jsonData: null
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
 
         var form = new formidable.IncomingForm();
@@ -1361,6 +1495,8 @@ module.exports = function (paramService, esbMessage) {
             op: 'create',
             jsonData: null
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
 
         var form = new formidable.IncomingForm();
@@ -1413,6 +1549,8 @@ module.exports = function (paramService, esbMessage) {
             op: 'delete',
             jsonData: {uuid: paramRequest.params.img_id, _id: paramRequest.params.servicepointDetatils_id}
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
 
         esbMessage(m)
@@ -1440,6 +1578,8 @@ module.exports = function (paramService, esbMessage) {
             op: 'create',
             jsonData: paramRequest.body
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
 
         esbMessage(m)
@@ -1470,6 +1610,8 @@ module.exports = function (paramService, esbMessage) {
             op: 'delete',
             jsonData: {uuid: paramRequest.params.vid_id, _id: paramRequest.params.servicepointDetatils_id}
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
         esbMessage(m)
             .then(function (r) {
@@ -1501,6 +1643,8 @@ module.exports = function (paramService, esbMessage) {
             op: 'create',
             jsonData: paramRequest.body
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
 
         esbMessage(m)
@@ -1530,6 +1674,8 @@ module.exports = function (paramService, esbMessage) {
             op: 'delete',
             jsonData: {uuid: paramRequest.params.audio_id, _id: paramRequest.params.servicepointDetatils_id}
         };
+        m.pl.loginName=paramRequest.user.lanzheng.loginName;
+        m.pl.currentOrganization=paramRequest.user.currentOrganization;
 
 
         esbMessage(m)

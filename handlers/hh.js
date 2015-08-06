@@ -310,20 +310,38 @@ module.exports = function (paramService, esbMessage) {
           var code = paramRequest.params.responseCode;
           if(code && user)
           {
-            esbMessage({
+              var response;
+            return esbMessage({
               "ns": 'bmm',
               "op": 'bmm_associate_response_with_user',
               "pl": {
                 rc:code,
                 user:user.pl,
-                registerResponse:user
+                registerResponse:user,
+                loginName : user.lanzheng.loginName,
+                currentOrganization : user.currentOrganization
               }
+            })
+            .then(function photosToo(r){
+                console.log("associating photos");
+                response = r;
+                    return esbMessage({
+                        "ns": 'pmm',
+                        "op": "pmm_associate_response_with_user",
+                        "pl": {
+                            rc:code,
+                            loginName : user.lanzheng.loginName,
+                            currentOrganization : user.currentOrganization
+                        }
+                    })
             }).then(function resolve(r){
+                    r = response;
               //paramResponse.writeHead(200, {"Content-Type": "application/json"});
               //paramResponse.end(JSON.stringify(r.pl.registerResponse));
                 oHelpers.sendResponse(paramResponse, 200, r.pl.registerResponse);
 
             }  ,  function fail(r){
+                    r = response;
               //paramResponse.writeHead(1005, {"Content-Type": "application/json"});
               //paramResponse.end(JSON.stringify(r.pl.registerResponse));
                 oHelpers.sendResponse(paramResponse, 1005, r.pl.registerResponse);
@@ -347,7 +365,7 @@ module.exports = function (paramService, esbMessage) {
           console.log("Associate Resdponse user:",paramRequest.user);
           if(code && paramRequest.user)
           {
-
+            var response = undefined;
               var myUsr = {
                   status: true,
                   userType: paramRequest.user.userType,
@@ -360,13 +378,28 @@ module.exports = function (paramService, esbMessage) {
                   "pl": {
                       rc:code,
                       user:myUsr,
-                      registerResponse:myUsr
+                      registerResponse:myUsr,
+                      loginName : paramRequest.user.lanzheng.loginName,
+                      currentOrganization : paramRequest.user.currentOrganization
                   }
-              }).then(function resolve(r){
+              }).then(function photosToo(r){
+                  console.log("associating photos");
+                  response = r;
+                  return esbMessage({
+                      "ns": 'pmm',
+                      "op": "pmm_associate_response_with_user",
+                      "pl": {
+                          rc:code,
+                          loginName : paramRequest.user.lanzheng.loginName,
+                          currentOrganization : paramRequest.user.currentOrganization
+                      }
+                  })}).then(function resolve(r){
+                  r = response;
                   //paramResponse.writeHead(200, {"Content-Type": "application/json"});
                   //paramResponse.end(JSON.stringify(r.pl.registerResponse));
                   oHelpers.sendResponse(paramResponse, 200, r.pl.registerResponse);
               }  ,  function fail(r){
+                  r = response;
                   //paramResponse.writeHead(1005, {"Content-Type": "application/json"});
                   //paramResponse.end(JSON.stringify(r.pl.registerResponse));
                   oHelpers.sendResponse(paramResponse, 1005, r.pl.registerResponse);
@@ -530,7 +563,7 @@ module.exports = function (paramService, esbMessage) {
       function _persistRespose(req, res, pnext) {
           var m = {},
           transactionid = false,
-          response = {},          //formHtml
+          response = {},
           activity = {};
           q().then(function () {
               m.pl = JSON.parse(req.body.json).pl;
@@ -617,13 +650,13 @@ module.exports = function (paramService, esbMessage) {
       homeRouter.post('/response.json', function (req, res, pnext) {
           var usr = (req.user && req.user.lanzheng && req.user.lanzheng.loginName) || req.sessionID;
           var act = JSON.parse(req.body.json).pl.activityCode;
-          console.log("WOOMOOFOO", act);
           esbMessage({
               "ns" : "bmm",
               "op" : "bmm_findUserResponse",
               "pl" : {
                   user : usr,
-                  activity : act
+                  activity : act,
+                  code : req.query.code
               }
           }).then(function(msg){
               if(msg){

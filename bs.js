@@ -40,7 +40,7 @@ module.exports.startBS = function(){
 
     console.log('\nBS: Loading ESB ...');
     return esb.startESB().then(function(r){
-    console.log('\nBS: ESB is fully loaded ...');
+    console.log('\nBS: ESB is fully loaded ...', r);
         esbMessageFunction = r.pl.fn;
 
         var p0 = esbMessageFunction({

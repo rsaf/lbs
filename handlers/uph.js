@@ -37,7 +37,9 @@ module.exports = function(paramPS, paramESBMessage) {
             oID:paramRequest.user.currentOrganization,
             photoData:null,
             ifm:null,
-            profileData:null
+            profileData:null,
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
 
@@ -85,7 +87,9 @@ module.exports = function(paramPS, paramESBMessage) {
         var m = {
             "ns":"upm",
             "op": "readPersonalProfileByUserID",
-            "pl":{"userAccountID":paramRequest.user.lanzheng.loginName}
+            "pl":{"userAccountID":paramRequest.user.lanzheng.loginName,
+                loginName : paramRequest.user.lanzheng.loginName,
+                currentOrganization : paramRequest.user.currentOrganization}
         };
 
         esbMessage(m)
@@ -125,7 +129,9 @@ module.exports = function(paramPS, paramESBMessage) {
         var m = {
             "ns":"upm",
             "op": "readPersonalProfileByUserID",
-            "pl":{userAccountID:paramRequest.user.lanzheng.loginName}
+            "pl":{userAccountID:paramRequest.user.lanzheng.loginName,
+                loginName : paramRequest.user.lanzheng.loginName,
+                currentOrganization : paramRequest.user.currentOrganization}
         };
 
         esbMessage(m)
@@ -150,7 +156,9 @@ module.exports = function(paramPS, paramESBMessage) {
         var m = {
             "ns":"upm",
             "op": "updatePersonalProfile",
-            "pl":paramRequest.body
+            "pl":paramRequest.body,
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
 
@@ -186,7 +194,9 @@ module.exports = function(paramPS, paramESBMessage) {
         var m1 = {
             "ns":"upm",
             "op": "upm_BindWXuser",
-            "pl":bodyInfo
+            "pl":bodyInfo,
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
 
@@ -297,7 +307,9 @@ module.exports = function(paramPS, paramESBMessage) {
             "ns":"upm",
             "op": "readCorporateDetailPageByID",
             "pl":{oID:paramRequest.user.currentOrganization
-                ,uID: paramRequest.user.lanzheng.loginName
+                ,uID: paramRequest.user.lanzheng.loginName,
+                loginName : paramRequest.user.lanzheng.loginName,
+                currentOrganization : paramRequest.user.currentOrganization
                 ,cdc:null//@todo this is the corporate detail code that will be used on the url when the user acces the page from ouside the workspace
             }
         };
@@ -326,8 +338,10 @@ module.exports = function(paramPS, paramESBMessage) {
         var m = {
             "ns":"upm",
             "op": "upm_readCorporateInfo",
-            "pl":{oID:paramRequest.user.currentOrganization
-                ,uID: paramRequest.user.lanzheng.loginName
+            "pl":{oID:paramRequest.user.currentOrganization,
+                uID: paramRequest.user.lanzheng.loginName,
+                loginName : paramRequest.user.lanzheng.loginName,
+                currentOrganization : paramRequest.user.currentOrganization
             }
         };
 
@@ -360,7 +374,8 @@ module.exports = function(paramPS, paramESBMessage) {
             "op": "updateCorporateDetailProfile",
             "pl":paramRequest.body
         };
-
+        m.pl.loginName = paramRequest.user.lanzheng.loginName
+        m.pl.currentOrganization = paramRequest.user.currentOrganization
         m.pl.cb = m.pl.cb._id
 
 
@@ -389,7 +404,10 @@ module.exports = function(paramPS, paramESBMessage) {
         var m = {
             "ns":"upm",
             "op": "upm_updateCorporationDetailsFAQ",
-            "pl":{}
+            "pl":{
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
+            }
         };
 
 
@@ -426,7 +444,9 @@ module.exports = function(paramPS, paramESBMessage) {
               uID:paramRequest.user.lanzheng.loginName,
             oID :paramRequest.user.currentOrganization,
            profileData:{uuid:paramRequest.params.faq_uuid, _id:paramRequest.params.profile_id},
-            op :'delete'
+            op :'delete',
+                loginName : paramRequest.user.lanzheng.loginName,
+                currentOrganization : paramRequest.user.currentOrganization
 
             }
         };
@@ -454,7 +474,9 @@ module.exports = function(paramPS, paramESBMessage) {
         var m = {
             "ns":"upm",
             "op": "upm_updateCorporationDetailsFAQ",
-            "pl":{}
+            "pl":{
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization}
         };
 
         m.pl.uID = paramRequest.user.lanzheng.loginName;
@@ -489,7 +511,9 @@ module.exports = function(paramPS, paramESBMessage) {
             photoData:null,
             ifm:null,
             op : 'create',
-            profileData:null
+            profileData:null,
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
 
@@ -551,7 +575,9 @@ module.exports = function(paramPS, paramESBMessage) {
             oID:paramRequest.user.currentOrganization,
             op : 'update',
            _id: paramRequest.params.profile_id,
-            profileData:paramRequest.body
+            profileData:paramRequest.body,
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
         m.pl.profileData.cb = m.pl.profileData.cb._id;
@@ -581,7 +607,9 @@ module.exports = function(paramPS, paramESBMessage) {
             oID:paramRequest.user.currentOrganization,
             ifm:null,
             op : 'delete',
-            profileData:{uuid:paramRequest.params.attch_id, _id:paramRequest.params.profile_id}
+            profileData:{uuid:paramRequest.params.attch_id, _id:paramRequest.params.profile_id},
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
         esbMessage(m)
@@ -610,7 +638,9 @@ module.exports = function(paramPS, paramESBMessage) {
             oID:paramRequest.user.currentOrganization,
             photoData:null,
             ifm:null,
-            profileData:null
+            profileData:null,
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
 
@@ -662,7 +692,9 @@ module.exports = function(paramPS, paramESBMessage) {
             photoData:null,
             ifm:null,
             op : 'create',
-            profileData:null
+            profileData:null,
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
 
@@ -714,7 +746,9 @@ module.exports = function(paramPS, paramESBMessage) {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
             op : 'delete',
-            profileData:{uuid:paramRequest.params.img_id, _id:paramRequest.params.profile_id}
+            profileData:{uuid:paramRequest.params.img_id, _id:paramRequest.params.profile_id},
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
 
@@ -742,7 +776,9 @@ module.exports = function(paramPS, paramESBMessage) {
             oID:paramRequest.user.currentOrganization,
             ifm:null,
             op : 'create',
-            profileData:paramRequest.body
+            profileData:paramRequest.body,
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
 
@@ -773,7 +809,9 @@ module.exports = function(paramPS, paramESBMessage) {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
             op : 'delete',
-            profileData:{uuid:paramRequest.params.vid_id, _id:paramRequest.params.profile_id}
+            profileData:{uuid:paramRequest.params.vid_id, _id:paramRequest.params.profile_id},
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
            };
 
         esbMessage(m)
@@ -805,7 +843,9 @@ module.exports = function(paramPS, paramESBMessage) {
             oID:paramRequest.user.currentOrganization,
             ifm:null,
             op : 'create',
-            profileData:paramRequest.body
+            profileData:paramRequest.body,
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
 
@@ -834,7 +874,9 @@ module.exports = function(paramPS, paramESBMessage) {
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
             op : 'delete',
-            profileData:{uuid:paramRequest.params.audio_id, _id:paramRequest.params.profile_id}
+            profileData:{uuid:paramRequest.params.audio_id, _id:paramRequest.params.profile_id},
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
 
@@ -869,7 +911,9 @@ module.exports = function(paramPS, paramESBMessage) {
         var m = {
             "ns":"upm",
             "op": "updateUserNavigation",
-            "pl":{ id:paramRequest.user.id,userType:paramRequest.user.userType }
+            "pl":{ id:paramRequest.user.id,userType:paramRequest.user.userType },
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
         esbMessage(m)
@@ -901,7 +945,9 @@ module.exports = function(paramPS, paramESBMessage) {
             op:'upm_getCorporateDataFromValidationResponse',
             uID:paramRequest.user.lanzheng.loginName,
             oID:paramRequest.user.currentOrganization,
-            pl:paramRequest.body
+            pl:paramRequest.body,
+            loginName : paramRequest.user.lanzheng.loginName,
+            currentOrganization : paramRequest.user.currentOrganization
         };
 
         esbMessage(m)

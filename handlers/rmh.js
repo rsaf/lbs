@@ -44,7 +44,7 @@ module.exports = function(paramService, esbMessage){
     return Q().then(function(){
       var m = {
         op:'rmm_getRequests',
-        pl:{loginName:req.user.lanzheng.loginName,orgid:req.user.currentOrganization,filter:filter},
+        pl:{loginName:req.user.lanzheng.loginName,currentOrganization:req.user.currentOrganization,orgid:req.user.currentOrganization,filter:filter},
         mt: {p:req.query.p,ps:req.query.ps,sk:req.query.sk,sd:req.query.sd, ed:req.query.ed}
       }
       return esbMessage(m);
@@ -82,6 +82,8 @@ module.exports = function(paramService, esbMessage){
     .then(function(msg){//updte the request message
       m.op= "rmm_persistRequestMessage";
       m.pl.transactionid=msg.pl.transaction._id;
+      m.pl.loginName = paramRequest.user.lanzheng.loginName;
+      m.pl.currentOrganization = paramRequest.user.currentOrganization;
       return esbMessage(m);
     })
     .then(function(msg){
@@ -92,7 +94,9 @@ module.exports = function(paramService, esbMessage){
                 "ns":"bmm",
                 "op":"bmm_getResponse",
                 "pl":{
-                    code : dbRequest._doc.ei[0].ei
+                    code : dbRequest._doc.ei[0].ei,
+                    loginName : paramRequest.user.lanzheng.loginName,
+                    currentOrganization : paramRequest.currentOrganization
                 }
             })
         }
@@ -112,12 +116,15 @@ module.exports = function(paramService, esbMessage){
           }
           //end todo
         m.op=dbRequest.ei[i].mod+ '_updateStatus'
+          console.log("current user:",paramRequest.user.lanzheng.loginName,paramRequest.user.currentOrganization);
         m.pl={
           ei:dbRequest.ei[i].ei
           ,col:dbRequest.ei[i].col
           , status:request.rs
           , transactionid:m.pl.transactionid
           , response : ret
+          , loginName: paramRequest.user.lanzheng.loginName
+          , currentOrganization: paramRequest.user.currentOrganization
         };
         promises.push(esbMessage(m));
       }
@@ -133,8 +140,10 @@ module.exports = function(paramService, esbMessage){
                     ns: 'bmm',
                     op: 'bmm_import_responses_data',
                     activityCode: dbRequest._doc.ei[0].ei,
-                    loginName : m.pl.loginName,
-                    currentOrganization : m.pl.currentOrganization,
+                    pl: {
+                        loginName: m.pl.loginName,
+                        currentOrganization: m.pl.currentOrganization
+                    },
                     transactionid: m.pl.transactionid
                 };
                 esbMessage(m_p)
@@ -212,7 +221,9 @@ module.exports = function(paramService, esbMessage){
     var m = {
       "op": "rmm_getRequest",
       "pl": {
-        "query":query
+        "query":query,
+        loginName:paramRequest.user.lanzheng.loginName,
+        currentOrganization: paramRequest.user.currentOrganization
       }
     };
     esbMessage(m)

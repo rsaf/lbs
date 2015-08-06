@@ -84,6 +84,7 @@ module.exports = function(paramService, esbMessage)
                 })
             })
              .then(function getActivity(){
+                 console.log("done with alipayment verify");
                  return esbMessage({
                      "ns":"bmm",
                      "op":"bmm_getActivity",
@@ -104,6 +105,7 @@ module.exports = function(paramService, esbMessage)
                 })
             })
             .then(function doLZPayment(res){
+                 console.log("done with notification accept");
                 if(responseInfo.acn === "LZB104"){console.log("bailing on LZ payment for LZB104"); return;}
                 return esbMessage({
                     "ns":"fmm",
@@ -401,39 +403,49 @@ module.exports = function(paramService, esbMessage)
 
     //,create_direct_pay_by_user_return_url: '/processes/activities/done'
     //,create_direct_pay_by_user_notify_url: '/workspace/finance/response'
-    fmmRouter.get('/order/:code.json', function(paramRequest, paramResponse, paramNext){
+    fmmRouter.post('/order/:code.json', function(paramRequest, paramResponse, paramNext){
         //Alipay will call us to validate user payment after success payment
         //'/workspace/finance/order/:code.json'
         //todo: Hit confirmAlipay code
-        console.log(paramRequest.query);
+        console.log("HAVING ORDER CONFIRMED");
+        console.log("Post is",paramRequest.params);
+        var split = paramRequest.params.code.split("T");
+        var responseCodeStripped = split && split.length > 0 ? split[0] : paramRequest.params.code;
         return esbMessage({
             "ns" : "bmm",
             "op" : "bmm_getResponse",
             "pl" : {
-                code : paramRequest.params.code
+                code : responseCodeStripped
             }
         })
         //Confirm with alipay and update/schedule/etc
         .then(function(res){
+                console.log("Response found for order validation is:",res);
             return _confirmAlipay({
                 user : paramRequest.user
             },res);
         })
         //Redirect user to done page
         .then(function(res){
+                console.log("All done confirming!");
+                /*
             if(res.ok)
                 return paramResponse.redirect(redirectUrl);
             else
                 return paramResponse.redirect(failureURL);
+                */
             oHelpers.sendResponse(paramResponse,200,"ok");
-        })
+        }  ,  function fail(err){
+                console.log(err)
+                oHelpers.senResponse(paramResponse,666,"fail");
+            })
     });
 
     fmmRouter.get('/response/:provider/:code.json', function(paramRequest, paramResponse, paramNext){
         //Alipay will redirect users to this endpoint after successful payment
         ///workspace/finance/response/:code.json'
         //todo: Hit confirmAlipay code
-        console.log("hit handler");
+        console.log("hit payment handler",paramRequest.params);
         var provider = paramRequest.params.provider;
         var split = paramRequest.params.code.split("T");
         var responseCodeStripped = split && split.length > 0 ? split[0] : paramRequest.params.code;
@@ -783,7 +795,8 @@ module.exports = function(paramService, esbMessage)
                                         sp:{
                                             ps:'paid'
                                         },
-                                        rfc:refCode
+                                        rfc:refCode,
+                                        s:{lzm:{val:refCode}}
                                     }
                                 }
                             });
