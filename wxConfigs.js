@@ -31,9 +31,6 @@ var wechatConfig = {
         "SHORT_URL": "https://api.mch.weixin.qq.com/tools/shorturl"
     }
 };
-//
-//process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-//export NODE_TLS_REJECT_UNAUTHORIZED=0;
 
 module.exports.getWeixinpayConfig = function(){
    return wechatConfig;
