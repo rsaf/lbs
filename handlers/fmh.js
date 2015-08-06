@@ -425,6 +425,7 @@ module.exports = function(paramService, esbMessage)
         })
         //Redirect user to done page
         .then(function(res){
+                console.log("All done confirming!");
                 /*
             if(res.ok)
                 return paramResponse.redirect(redirectUrl);
