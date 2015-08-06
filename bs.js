@@ -98,33 +98,6 @@ module.exports.startBS = function(){
             oOperationsLogRouter = require('./handlers/olh.js')(exp, esbMessageFunction);      // workspace/operationslog
 
 
-            console.log('BS: self configuring with injected dependencies ....');
-            //bs.set('port', bsPort);
-            //bs.use(expressSession({resave: true, saveUninitialized: true, secret: 'uwotm8'}));
-            bs.use(cookieParser('uwotm8'));
-            bs.use(expressSession(
-                {
-                    secret: 'uwotm8',
-                    store: new redisStore({client: redisClient}),
-                    saveUninitialized: false, // don't create session until something stored,
-                    resave: false // don't save session if unmodified
-                }
-            ));
-
-            bs.use(bodyParser.json({limit: '500kb'})); //todo the form tool may upload images up to 200kb as logo + X Kb placeholder image the for activity's respondants
-            bs.use(bodyParser.urlencoded({extended: true,limit: '500kb'}));
-
-            bs.get('/favicon.ico', oOperationsLogRouter); // this is messing our logger
-            bs.get('/', oHelpers.testStartPage); //use for local testing only
-            bs.use(exp.static('./static')); //use for local testing only
-            bs.use('/photos', exp.static('./photos')); //use for local testing only
-            bs.use('/forms', exp.static('./forms')); //use for local testing only
-            bs.use('/files', exp.static('./files')); //use for local testing only
-            //bs.use('/ecv', ); //use for local testing only
-
-
-            bs.use(errorHandler());
-            bs.use(logger('dev'));
 
 
             //wechat sdk configutiion
@@ -156,11 +129,35 @@ module.exports.startBS = function(){
             });
 
 
+            console.log('BS: self configuring with injected dependencies ....');
+            //bs.set('port', bsPort);
+            //bs.use(expressSession({resave: true, saveUninitialized: true, secret: 'uwotm8'}));
+            bs.use(cookieParser('uwotm8'));
+            bs.use(expressSession(
+                {
+                    secret: 'uwotm8',
+                    store: new redisStore({client: redisClient}),
+                    saveUninitialized: false, // don't create session until something stored,
+                    resave: false // don't save session if unmodified
+                }
+            ));
 
-            console.log('AFTER GETTING CONFIGS STUFFS+++++++++++++++++++++');
-            console.log('AFTER GETTING CONFIGS STUFFS+++++++++++++++++++++');
-            console.log('AFTER GETTING CONFIGS STUFFS+++++++++++++++++++++');
-            console.log('AFTER GETTING CONFIGS STUFFS+++++++++++++++++++++');
+            bs.use(bodyParser.json({limit: '500kb'})); //todo the form tool may upload images up to 200kb as logo + X Kb placeholder image the for activity's respondants
+            bs.use(bodyParser.urlencoded({extended: true,limit: '500kb'}));
+
+            bs.get('/favicon.ico', oOperationsLogRouter); // this is messing our logger
+            bs.get('/', oHelpers.testStartPage); //use for local testing only
+            bs.use(exp.static('./static')); //use for local testing only
+            bs.use('/photos', exp.static('./photos')); //use for local testing only
+            bs.use('/forms', exp.static('./forms')); //use for local testing only
+            bs.use('/files', exp.static('./files')); //use for local testing only
+            //bs.use('/ecv', ); //use for local testing only
+
+
+            bs.use(errorHandler());
+            bs.use(logger('dev'));
+
+
 
 
 
