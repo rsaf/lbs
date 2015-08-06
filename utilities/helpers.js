@@ -26,6 +26,7 @@ function invalid_resource() {
 }
 
 exports.four_oh_four = function(req, res) {
+    console.log("Exiting via four_oh_four");
     res.writeHead(404, { "Content-Type" : "application/json" });
     res.end(JSON.stringify(invalid_resource()) + "\n");
 }

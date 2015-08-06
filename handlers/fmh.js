@@ -84,6 +84,7 @@ module.exports = function(paramService, esbMessage)
                 })
             })
              .then(function getActivity(){
+                 console.log("done with alipayment verify");
                  return esbMessage({
                      "ns":"bmm",
                      "op":"bmm_getActivity",
@@ -104,6 +105,7 @@ module.exports = function(paramService, esbMessage)
                 })
             })
             .then(function doLZPayment(res){
+                 console.log("done with notification accept");
                 if(responseInfo.acn === "LZB104"){console.log("bailing on LZ payment for LZB104"); return;}
                 return esbMessage({
                     "ns":"fmm",
