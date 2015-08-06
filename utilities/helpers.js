@@ -1,8 +1,5 @@
 var fs = require('fs');
-
-exports.version = '0.1.0';
-
- function make_error(err, msg) {
+function make_error(err, msg) {
     var e = new Error(msg);
     e.code = err;
     return e;
@@ -22,7 +19,7 @@ function send_failure(res, err) {
 
 function invalid_resource() {
     return make_error("invalid_resource",
-                              "the requested resource does not exist.");
+        "the requested resource does not exist.");
 }
 
 exports.four_oh_four = function(req, res) {
@@ -56,8 +53,8 @@ exports.testStartPage = function (req, res) {
 exports.sendResponse = function(paramResponse, paramHeaderCode, paramResponseMessage) {
     paramResponse.writeHead(paramHeaderCode
         ,{ "Content-Type" : "application/json"
-          ,"Cache-Control": "no-cache, no-store, must-revalidate"
-          ,"Expires": "0"
-          ,"Pragma": "no-cache"});
+            ,"Cache-Control": "no-cache, no-store, must-revalidate"
+            ,"Expires": "0"
+            ,"Pragma": "no-cache"});
     paramResponse.end(JSON.stringify(paramResponseMessage));
 };
