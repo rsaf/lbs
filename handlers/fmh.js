@@ -406,7 +406,7 @@ module.exports = function(paramService, esbMessage)
         //'/workspace/finance/order/:code.json'
         //todo: Hit confirmAlipay code
         console.log("HAVING ORDER CONFIRMED");
-        console.log("Post is",paramRequest.query);
+        console.log("Post is",paramRequest.params);
         return esbMessage({
             "ns" : "bmm",
             "op" : "bmm_getResponse",
@@ -416,6 +416,7 @@ module.exports = function(paramService, esbMessage)
         })
         //Confirm with alipay and update/schedule/etc
         .then(function(res){
+                console.log("Response found for order validation is:",res);
             return _confirmAlipay({
                 user : paramRequest.user
             },res);
