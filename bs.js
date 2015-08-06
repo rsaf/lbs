@@ -126,6 +126,37 @@ module.exports.startBS = function(){
             bs.use(errorHandler());
             bs.use(logger('dev'));
 
+
+            //wechat sdk configutiion
+            bs.get('/weixin/config.json', function (req, res, next) {
+                console.log('GETTING CONFIGS STUFFS');
+                var wxTicket = require("./wxConfigs.js").getWechatJSAPITicket();
+                console.log(wxTicket);
+                wxTicket(null).then(function(r){
+                    var ticket = r.pl.ticket;
+                    console.log("TICKET", ticket);
+
+                    var sign = require("./sign.js");
+                    var signature = sign(ticket, "https://www.idlan.cn/#/processes/activities/payment/");
+                    //signature = signature.toString('utf8');
+                    //console.log("SIGNATURE ..", signature);
+                    var  rr = {pl: null, er: null};
+                    rr.pl = signature;
+                    rr.pl.appId = r.pl.appId;
+                    console.log("SIGNED PACKAGE ..", rr);
+                    res.writeHead(200, {"Content-Type": "application/json"});
+                    res.end(JSON.stringify(rr));
+
+                });
+
+            });
+
+
+
+
+
+
+
             console.log('\nBS: configuring security middleware...');
             bs.use(scmPassportObject.initialize());
             bs.use(scmPassportObject.session());
