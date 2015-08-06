@@ -103,10 +103,13 @@ module.exports.startBS = function(){
             //wechat sdk configutiion
             bs.get('/weixin/config.json', function (req, res, next) {
 
-                console.log('GETTING CONFIGS STUFFS+++++++++++++++++++++++');
-                console.log('GETTING CONFIGS STUFFS+++++++++++++++++++++++');
-                console.log('GETTING CONFIGS STUFFS+++++++++++++++++++++++');
-                console.log('GETTING CONFIGS STUFFS+++++++++++++++++++++++');
+
+
+                console.log('req.query++++++++++++++======',req.query);
+                console.log('req.query.url++++++++++++++======',req.query.url);
+
+                var  url  = req.query.url;
+
                 var wxTicket = require("./wxConfigs.js").getWechatJSAPITicket();
                 console.log(wxTicket);
                 wxTicket(null).then(function(r){
@@ -114,7 +117,7 @@ module.exports.startBS = function(){
                     console.log("TICKET", ticket);
 
                     var sign = require("./sign.js");
-                    var signature = sign(ticket, "https://www.idlan.cn/#/processes/activities/payment/");
+                    var signature = sign(ticket, url);
                     //signature = signature.toString('utf8');
                     //console.log("SIGNATURE ..", signature);
                     var  rr = {pl: null, er: null};
