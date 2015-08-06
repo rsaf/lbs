@@ -129,7 +129,11 @@ module.exports.startBS = function(){
 
             //wechat sdk configutiion
             bs.get('/weixin/config.json', function (req, res, next) {
-                console.log('GETTING CONFIGS STUFFS');
+
+                console.log('GETTING CONFIGS STUFFS+++++++++++++++++++++++');
+                console.log('GETTING CONFIGS STUFFS+++++++++++++++++++++++');
+                console.log('GETTING CONFIGS STUFFS+++++++++++++++++++++++');
+                console.log('GETTING CONFIGS STUFFS+++++++++++++++++++++++');
                 var wxTicket = require("./wxConfigs.js").getWechatJSAPITicket();
                 console.log(wxTicket);
                 wxTicket(null).then(function(r){
@@ -153,7 +157,10 @@ module.exports.startBS = function(){
 
 
 
-
+            console.log('AFTER GETTING CONFIGS STUFFS+++++++++++++++++++++');
+            console.log('AFTER GETTING CONFIGS STUFFS+++++++++++++++++++++');
+            console.log('AFTER GETTING CONFIGS STUFFS+++++++++++++++++++++');
+            console.log('AFTER GETTING CONFIGS STUFFS+++++++++++++++++++++');
 
 
 
