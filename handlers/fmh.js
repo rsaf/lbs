@@ -407,11 +407,13 @@ module.exports = function(paramService, esbMessage)
         //todo: Hit confirmAlipay code
         console.log("HAVING ORDER CONFIRMED");
         console.log("Post is",paramRequest.params);
+        var split = paramRequest.params.code.split("T");
+        var responseCodeStripped = split && split.length > 0 ? split[0] : paramRequest.params.code;
         return esbMessage({
             "ns" : "bmm",
             "op" : "bmm_getResponse",
             "pl" : {
-                code : paramRequest.params.code
+                code : responseCodeStripped
             }
         })
         //Confirm with alipay and update/schedule/etc
