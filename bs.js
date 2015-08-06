@@ -101,14 +101,15 @@ module.exports.startBS = function(){
 
 
             //wechat sdk configutiion
-            bs.get('/weixin/config.json', function (req, res, next) {
+            bs.get('/weixin/config/:url.json', function (req, res, next) {
 
 
 
-                console.log('req.query++++++++++++++======',req.query);
-                console.log('req.query.url++++++++++++++======',req.query.url);
+                console.log('req.params++++++++++++++======',req.params);
 
-                var  url  = req.query.url;
+                var  url  = req.params.url;
+
+                console.log('url++++++++++++++======',url);
 
                 var wxTicket = require("./wxConfigs.js").getWechatJSAPITicket();
                 console.log(wxTicket);
