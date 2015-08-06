@@ -422,12 +422,17 @@ module.exports = function(paramService, esbMessage)
         })
         //Redirect user to done page
         .then(function(res){
+                /*
             if(res.ok)
                 return paramResponse.redirect(redirectUrl);
             else
                 return paramResponse.redirect(failureURL);
+                */
             oHelpers.sendResponse(paramResponse,200,"ok");
-        })
+        }  ,  function fail(err){
+                console.log(err)
+                oHelpers.senResponse(paramResponse,666,"fail");
+            })
     });
 
     fmmRouter.get('/response/:provider/:code.json', function(paramRequest, paramResponse, paramNext){
