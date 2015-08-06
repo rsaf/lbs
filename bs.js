@@ -101,13 +101,16 @@ module.exports.startBS = function(){
 
 
             //wechat sdk configutiion
-            bs.get('/weixin/config/:url.json', function (req, res, next) {
+            bs.get('/weixin/config.json', function (req, res, next) {
 
 
 
-                console.log('req.params++++++++++++++======',req.params);
+                console.log('   INSIDE WEIXIN CONFIG ROUTE==============-----------');
 
-                var  url  = req.params.url;
+                console.log('req.query++++++++++++++======',req.query);
+
+                var  url  = req.query.url;
+
 
                 console.log('url++++++++++++++======',url);
 
