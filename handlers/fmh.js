@@ -442,6 +442,53 @@ module.exports = function(paramService, esbMessage)
             })
     });
 
+
+
+
+    fmmRouter.post('/order/weixin', function(paramRequest, paramResponse, paramNext){
+
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION paramRequest++++++++++++++++++',paramRequest);
+
+
+
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION paramRequest.body++++++++++++++++++',paramRequest.body);
+
+
+
+    });
+
+
+
+    fmmRouter.get('/order/weixin', function(paramRequest, paramResponse, paramNext){
+
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2 paramRequest++++++++++++++++++',paramRequest);
+
+
+
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2 paramRequest.query++++++++++++++++++',paramRequest.query);
+
+
+
+    });
+
+
+
     fmmRouter.get('/response/:provider/:code.json', function(paramRequest, paramResponse, paramNext){
         //Alipay will redirect users to this endpoint after successful payment
         ///workspace/finance/response/:code.json'
@@ -598,11 +645,11 @@ module.exports = function(paramService, esbMessage)
                 "pl": {orders : orders}
             })
         }
-      function weixinPayment(orders, code){
+      function weixinPayment(orders, code,url){
           return esbMessage({
               "ns":"fmm",
               "op":"fmm_generateWechatPayUrl",
-              "pl": {orders : orders, code:code}
+              "pl": {orders : orders, code:code,url:url}
           })
       }
 
@@ -743,7 +790,9 @@ module.exports = function(paramService, esbMessage)
                     orders = [condensedOrder];
                     var wxcode = reqPayload.pl.weixinCode;
 
-                    return weixinPayment(orders,wxcode)
+                    var currentUrl = reqPayload.pl.url;
+
+                    return weixinPayment(orders,wxcode,currentUrl)
                         //SEND OFF WEIXIN URL
                         .then(function(response){
 

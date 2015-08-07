@@ -126,6 +126,10 @@ module.exports.startBS = function(){
             bs.use(errorHandler());
             bs.use(logger('dev'));
 
+
+
+
+
             console.log('\nBS: configuring security middleware...');
             bs.use(scmPassportObject.initialize());
             bs.use(scmPassportObject.session());
