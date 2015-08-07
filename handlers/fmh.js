@@ -157,7 +157,7 @@ module.exports = function(paramService, esbMessage)
             //SEND SMS/MAIL/NOTIFICATIONs & EXIT
             .then(function(z) {
                  if(skipping) return;
-                 console.log("Going to send SMS to",responseInfo.phone);
+                 console.log("Going to send SMS to",responseInfo && responseInfo.ow ? responseInfo.ow.sc : undefined);
                 finalResult = z;
                 return esbMessage({
                     ns: 'mdm',
@@ -167,7 +167,7 @@ module.exports = function(paramService, esbMessage)
                         recipients: [{
                             inmail: {to: params.user.lanzheng.loginName},
                             weixin: {to: null},
-                            sms: {to: responseInfo.phone},
+                            sms: {to: responseInfo && responseInfo.ow ? responseInfo.ow.sc : undefined},
                             email: {to: null}
                         }]
                         , notification: {
