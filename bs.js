@@ -98,44 +98,6 @@ module.exports.startBS = function(){
             oOperationsLogRouter = require('./handlers/olh.js')(exp, esbMessageFunction);      // workspace/operationslog
 
 
-
-
-            //wechat sdk configutiion
-            bs.get('/weixin/config.json', function (req, res, next) {
-
-
-
-                console.log('   INSIDE WEIXIN CONFIG ROUTE==============-----------');
-
-                console.log('req.query++++++++++++++======',req.query);
-
-                var  url  = req.query.url;
-
-
-                console.log('url++++++++++++++======',url);
-
-                var wxTicket = require("./wxConfigs.js").getWechatJSAPITicket();
-                console.log(wxTicket);
-                wxTicket(null).then(function(r){
-                    var ticket = r.pl.ticket;
-                    console.log("TICKET", ticket);
-
-                    var sign = require("./sign.js");
-                    var signature = sign(ticket, url);
-                    //signature = signature.toString('utf8');
-                    //console.log("SIGNATURE ..", signature);
-                    var  rr = {pl: null, er: null};
-                    rr.pl = signature;
-                    rr.pl.appId = r.pl.appId;
-                    console.log("SIGNED PACKAGE ..", rr);
-                    res.writeHead(200, {"Content-Type": "application/json"});
-                    res.end(JSON.stringify(rr));
-
-                });
-
-            });
-
-
             console.log('BS: self configuring with injected dependencies ....');
             //bs.set('port', bsPort);
             //bs.use(expressSession({resave: true, saveUninitialized: true, secret: 'uwotm8'}));
