@@ -442,6 +442,53 @@ module.exports = function(paramService, esbMessage)
             })
     });
 
+
+
+
+    fmmRouter.post('/order/weixin', function(paramRequest, paramResponse, paramNext){
+
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION paramRequest++++++++++++++++++',paramRequest);
+
+
+
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
+            console.log('WEIXIN PAY NOTIFICATION paramRequest.body++++++++++++++++++',paramRequest.body);
+
+
+
+    });
+
+
+
+    fmmRouter.get('/order/weixin', function(paramRequest, paramResponse, paramNext){
+
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2 paramRequest++++++++++++++++++',paramRequest);
+
+
+
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
+        console.log('WEIXIN PAY NOTIFICATION2 paramRequest.query++++++++++++++++++',paramRequest.query);
+
+
+
+    });
+
+
+
     fmmRouter.get('/response/:provider/:code.json', function(paramRequest, paramResponse, paramNext){
         //Alipay will redirect users to this endpoint after successful payment
         ///workspace/finance/response/:code.json'
