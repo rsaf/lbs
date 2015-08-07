@@ -157,6 +157,7 @@ module.exports = function(paramService, esbMessage)
             //SEND SMS/MAIL/NOTIFICATIONs & EXIT
             .then(function(z) {
                  if(skipping) return;
+                 console.log("Going to send SMS to",responseInfo.phone);
                 finalResult = z;
                 return esbMessage({
                     ns: 'mdm',
