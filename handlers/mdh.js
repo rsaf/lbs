@@ -239,8 +239,8 @@ module.exports = function (paramService, esbMessage)
       op: 'mdm_readComment',
       pl:{
           tguid:paramRequest.params.targetId,
-          loginName : paramRequest.user.lanzheng.loginName,
-          currentOrganization : paramRequest.user.currentOrganization
+          loginName : paramRequest.user ? paramRequest.user.lanzheng.loginName : undefined,
+          currentOrganization : paramRequest.user ? paramRequest.user.currentOrganization : undefined
       }
     };
 

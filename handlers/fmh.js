@@ -408,7 +408,7 @@ module.exports = function(paramService, esbMessage)
         //'/workspace/finance/order/:code.json'
         //todo: Hit confirmAlipay code
         console.log("HAVING ORDER CONFIRMED");
-        console.log("Post is",paramRequest.params);
+        console.log("Post is",paramRequest.params,paramRequest.body,paramRequest);
         var split = paramRequest.params.code.split("T");
         var responseCodeStripped = split && split.length > 0 ? split[0] : paramRequest.params.code;
         return esbMessage({
@@ -437,7 +437,7 @@ module.exports = function(paramService, esbMessage)
             oHelpers.sendResponse(paramResponse,200,"ok");
         }  ,  function fail(err){
                 console.log(err)
-                oHelpers.senResponse(paramResponse,666,"fail");
+                oHelpers.sendResponse(paramResponse,666,"fail");
             })
     });
 
