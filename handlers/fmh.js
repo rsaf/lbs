@@ -450,7 +450,7 @@ module.exports = function(paramService, esbMessage)
 
 
 
-    fmmRouter.post('/order/weixin', function(paramRequest, paramResponse, paramNext){
+    fmmRouter.post('/order/weixin.json', function(paramRequest, paramResponse, paramNext){
 
             console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
             console.log('WEIXIN PAY NOTIFICATION++++++++++++++++++');
@@ -472,7 +472,7 @@ module.exports = function(paramService, esbMessage)
 
 
 
-    fmmRouter.get('/order/weixin', function(paramRequest, paramResponse, paramNext){
+    fmmRouter.get('/order/weixin.json', function(paramRequest, paramResponse, paramNext){
 
         console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
         console.log('WEIXIN PAY NOTIFICATION2++++++++++++++++++');
