@@ -260,5 +260,104 @@
         "value":"云端网点"
       }
     ]
+  },
+  {
+    "_comment": "LZP109x",
+    "payload":{
+      "servicePoint": {
+        "servicePointCode": "LZP109",
+        "servicePointName": "Marathon (Custom ppl)",
+        "servicePointStatus": 30,
+        "status": 30,
+        "servicePointAddress": "云端网点",
+        "servicePointType": "云端网点",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"servicePointType",
+        "method":"map",
+        "value":"云端网点"
+      }
+    ]
+  },
+  {
+    "_comment": "LZP110x",
+    "payload":{
+      "servicePoint": {
+        "servicePointCode": "LZP110",
+        "servicePointName": "Marathon (1 ppl)",
+        "servicePointStatus": 30,
+        "status": 30,
+        "servicePointAddress": "云端网点",
+        "servicePointType": "云端网点",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"servicePointType",
+        "method":"map",
+        "value":"云端网点"
+      }
+    ]
+  },
+  {
+    "_comment": "LZP111x",
+    "payload":{
+      "servicePoint": {
+        "servicePointCode": "LZP111",
+        "servicePointName": "Marathon (2 ppl)",
+        "servicePointStatus": 30,
+        "status": 30,
+        "servicePointAddress": "云端网点",
+        "servicePointType": "云端网点",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"servicePointType",
+        "method":"map",
+        "value":"云端网点"
+      }
+    ]
   }
 ]

@@ -414,5 +414,91 @@
         "value":"信息核验"
       }
     ]
+  },
+  {
+    "_comment":"LZS109",
+    "payload": {
+      "service": {
+        "serviceCode": "LZS109",
+        "PriceList": [
+          {
+            "servicePoint": "LZP109",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          },
+          {
+            "servicePoint": "LZP110",
+            "servicePrices": "3000",
+            "discountedPrice": "3000",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          },
+          {
+            "servicePoint": "LZP111",
+            "servicePrices": "5600",
+            "discountedPrice": "5600",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "信息核验",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "2015 大漠胡杨双人越野挑战赛报名表",
+        "serviceName": "报名服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"信息核验"
+      }
+    ]
   }
 ]

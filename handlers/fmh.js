@@ -726,6 +726,37 @@ module.exports = function(paramService, esbMessage)
                     });
 
             })
+            .then(function(provider){
+                if(responseInfo.acn == "LZB109")
+                {
+                    console.log("checking 109");
+                    return esbMessage({
+                            "ns" : "smm",
+                            "op" : "smm_getService",
+                            "pl" : {
+                                code : "LZS109"
+                            }
+                        }).then(function(service){
+                        console.log("SERVICE FOR 109 is:",service);
+                        if(!service) return provider;
+                        var marathonprices = service.PriceList.map(function(val,idx){
+                            return val.servicePrices;
+                        });
+                        console.log("MARATHON PRICES:",marathonprices);
+                        if(marathonprices.length < 3) return provider;
+                        var claimedPrice = responseInfo.fd.fields.totalPaymentFee,
+                            singles = responseInfo.fd.fields.singlePayment,
+                            pairs = responseInfo.fd.fields.couplePayment,
+                            singlePrice = marathonprices[1],
+                            pairPrice = marathonprices[2],
+                            calculatedPrice = singles * singlePrice + pairs * pairPrice;
+                        if(calculatedPrice != claimedPrice)
+                            throw "Invalid balance for claimed number of registrants:"+claimedPrice+" != "+calculatedPrice;
+                        return provider;
+                    })
+                }
+                return provider
+            })
             //MAKE PAYMENT
             .then(function(provider){
                 var paymentChain;
@@ -973,6 +1004,11 @@ module.exports = function(paramService, esbMessage)
         //special case for custom credit amounts
         if(response.acn == "LZB104")
             customAmt = Math.abs(parseFloat(response.fd.fields.amount));
+        //Marathon special case
+        if(response.acn == "LZB109")
+            customAmt = Math.abs(parseFloat(response.fd.fields.amount));
+        if(response.acn == "LZB109" && customAmt != response.fd.fields.amount)
+            throw "Invalid cash amount for number of registrants";
         if(activity.abd.apm == "预付款统一结算")//prepaid
         {
             console.log("USING PREPAID",activity.ct);
