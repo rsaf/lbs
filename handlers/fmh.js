@@ -107,6 +107,7 @@ module.exports = function(paramService, esbMessage)
             .then(function doLZPayment(res){
                  console.log("done with notification accept");
                 if(responseInfo.acn === "LZB104"){console.log("bailing on LZ payment for LZB104"); return;}
+                 console.log("activityInfo:",activityInfo);
                 return esbMessage({
                     "ns":"fmm",
                     "op": "fmm_makeDirectPayment",
@@ -116,6 +117,7 @@ module.exports = function(paramService, esbMessage)
             //UPDATE RESPONSE STATUS TO PAID
             .then(function(msg){
                  if(skipping) return;
+                 console.log("updating response status to paid");
                 return esbMessage({  //update the response and set payment status to 'paid'
                     op : "bmm_persistResponse",
                     pl:{
@@ -135,15 +137,17 @@ module.exports = function(paramService, esbMessage)
             })
             //COMMIT TRANSACTION
             .then(function(msg){
+                 console.log("commiting transactin");
                  if(skipping) return;
                 r.pl = msg;
                 return _commitTransaction({pl:{transactionid : transactionid}});
             })
             //SCHEDULE/ACTIVATE SERVICES
             .then(function() {
+                 console.log("activating services");
                 if(skipping) return;
 
-                if(activityInfo.abd.ac != "LZB101" && activityInfo.abd.ac != "LZB102" && activityInfo.abd.ac != "LZB106" && activity.abd.ac != "LZB107")
+                if(activityInfo.abd.ac != "LZB101" && activityInfo.abd.ac != "LZB102" && activityInfo.abd.ac != "LZB106" && activityInfo.abd.ac != "LZB107")
                     deferred.resolve({ok: true, res: finalResult});
                 return workflowManager.scheduleService(responseInfo.rc,{}, params.user)
                     //EXIT
@@ -156,6 +160,7 @@ module.exports = function(paramService, esbMessage)
             })
             //SEND SMS/MAIL/NOTIFICATIONs & EXIT
             .then(function(z) {
+                 console.log("sending sms");
                  if(skipping) return;
                  console.log("Going to send SMS to",responseInfo && responseInfo.ow ? responseInfo.ow.sc : undefined);
                 finalResult = z;
@@ -404,7 +409,7 @@ module.exports = function(paramService, esbMessage)
 
     //,create_direct_pay_by_user_return_url: '/processes/activities/done'
     //,create_direct_pay_by_user_notify_url: '/workspace/finance/response'
-    fmmRouter.post('/order/:code.json', function(paramRequest, paramResponse, paramNext){
+    fmmRouter.get('/order/:code.json', function(paramRequest, paramResponse, paramNext){
         //Alipay will call us to validate user payment after success payment
         //'/workspace/finance/order/:code.json'
         //todo: Hit confirmAlipay code
@@ -729,7 +734,6 @@ module.exports = function(paramService, esbMessage)
             .then(function(provider){
                 if(responseInfo.acn == "LZB109")
                 {
-                    console.log("checking 109");
                     return esbMessage({
                             "ns" : "smm",
                             "op" : "smm_getService",
@@ -737,21 +741,20 @@ module.exports = function(paramService, esbMessage)
                                 code : "LZS109"
                             }
                         }).then(function(service){
-                        console.log("SERVICE FOR 109 is:",service);
-                        if(!service) return provider;
-                        var marathonprices = service.PriceList.map(function(val,idx){
-                            return val.servicePrices;
+                        if(!service || !service.pl) return provider;
+                        var marathonprices = [];
+                        service.pl.PriceList.forEach(function(val,idx){
+                            marathonprices.push(val.servicePrices);
                         });
-                        console.log("MARATHON PRICES:",marathonprices);
                         if(marathonprices.length < 3) return provider;
-                        var claimedPrice = responseInfo.fd.fields.totalPaymentFee,
-                            singles = responseInfo.fd.fields.singlePayment,
-                            pairs = responseInfo.fd.fields.couplePayment,
+                        var claimedPrice = Math.abs(parseFloat(responseInfo.fd.fields.amount)),
+                            singles = Math.abs(parseInt(responseInfo.fd.fields.singlePayment)),
+                            pairs = Math.abs(parseInt(responseInfo.fd.fields.couplePayment)),
                             singlePrice = marathonprices[1],
-                            pairPrice = marathonprices[2],
+                            pairPrice = marathonprices[0],
                             calculatedPrice = singles * singlePrice + pairs * pairPrice;
                         if(calculatedPrice != claimedPrice)
-                            throw "Invalid balance for claimed number of registrants:"+claimedPrice+" != "+calculatedPrice;
+                            throw ("Invalid balance for claimed number of registrants:"+claimedPrice+" != "+calculatedPrice);
                         return provider;
                     })
                 }
@@ -1006,9 +1009,7 @@ module.exports = function(paramService, esbMessage)
             customAmt = Math.abs(parseFloat(response.fd.fields.amount));
         //Marathon special case
         if(response.acn == "LZB109")
-            customAmt = Math.abs(parseFloat(response.fd.fields.amount));
-        if(response.acn == "LZB109" && customAmt != response.fd.fields.amount)
-            throw "Invalid cash amount for number of registrants";
+            customAmt = Math.abs(parseFloat(response.fd.fields.totalPaymentFee));
         if(activity.abd.apm == "预付款统一结算")//prepaid
         {
             console.log("USING PREPAID",activity.ct);

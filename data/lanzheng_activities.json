@@ -407,13 +407,53 @@
       "ds": false,
       "sqc": [
         {
-          "sn": "报名服务",
+          "sn": "报名服务Auto",
           "sq":0,
+          "ui" : {
+            "serviceCode" : "LZS112",
+            "price" : "0元",
+            "serviceName" : "报名服务",
+            "servicePointName" : "蓝证网点"
+          }
+        },
+        {
+          "sn": "报名服务",
+          "sq":1,
           "ui" : {
             "serviceCode" : "LZS109",
             "price" : "0元",
             "serviceName" : "报名服务",
             "servicePointName" : "蓝证网点"
+          }
+        },
+        {
+          "sn": "蓝证证照检测服务",
+          "sq":2,
+          "ui" : {
+            "serviceCode" : "LZS105",
+            "price" : "0元",
+            "serviceName" : "蓝证证照检测服务",
+            "servicePointName" : "蓝证证照检测网点"
+          }
+        },
+        {
+          "sn": "蓝证证照制作服务",
+          "sq":3,
+          "ui" : {
+            "serviceCode" : "LZS106",
+            "price" : "0元",
+            "serviceName" : "蓝证证照制作服务",
+            "servicePointName" : "蓝证证照制作网点"
+          }
+        },
+        {
+          "sn": "蓝证证照核验服务",
+          "sq":4,
+          "ui" : {
+            "serviceCode" : "LZS102",
+            "price" : "0元",
+            "serviceName" : "蓝证证照核验服务",
+            "servicePointName" : "蓝证平台证照核验网点"
           }
         }
       ],
@@ -447,6 +487,6 @@
         "cd": "2015-05-04T03:19:15.179Z"
       }
     },
-    "form":"LZF108"
+    "form":"LZF109"
   }
 ]

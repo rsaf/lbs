@@ -359,5 +359,38 @@
         "value":"云端网点"
       }
     ]
+  },
+  {
+    "_comment": "LZP112x",
+    "payload":{
+      "servicePoint": {
+        "servicePointCode": "LZP112",
+        "servicePointName": "Marathon",
+        "servicePointStatus": 30,
+        "status": 30,
+        "servicePointAddress": "云端网点",
+        "servicePointType": "云端网点",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"servicePointType",
+        "method":"map",
+        "value":"云端网点"
+      }
+    ]
   }
 ]
