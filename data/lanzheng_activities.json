@@ -405,6 +405,7 @@
     "_comment":"LZB 109",
     "payload": {
       "ds": false,
+      "hsf":true,
       "sqc": [
         {
           "sn": "报名服务",
