@@ -407,22 +407,22 @@
       "ds": false,
       "sqc": [
         {
-          "sn": "报名服务Auto",
+          "sn": "报名服务",
           "sq":0,
           "ui" : {
-            "serviceCode" : "LZS112",
+            "serviceCode" : "LZS109",
             "price" : "0元",
             "serviceName" : "报名服务",
             "servicePointName" : "蓝证网点"
           }
         },
         {
-          "sn": "报名服务",
+          "sn": "蓝证实名认证",
           "sq":1,
           "ui" : {
-            "serviceCode" : "LZS109",
+            "serviceCode" : "LZS112",
             "price" : "0元",
-            "serviceName" : "报名服务",
+            "serviceName" : "蓝证实名认证",
             "servicePointName" : "蓝证网点"
           }
         },
@@ -462,13 +462,13 @@
       },
       "abd": {
         "ac": "LZB109",
-        "an": "2015 大漠胡杨双人越野挑战赛报名表",
-        "fdn": "2015 大漠胡杨双人越野挑战赛报名表",
+        "an": "2015 大漠胡杨双人越野挑战赛",
+        "fdn": "2015 大漠胡杨双人越野挑战赛",
         "apm": "响应用户付款",
         "at": "1",
         "asd": "2015-05-01T00:00:00Z",
         "acd": "2016-05-21T00:00:00Z",
-        "vc": "HIDDEN",
+        "vc": "",
         "arv": "",
         "aiv": "",
         "apt": "10",

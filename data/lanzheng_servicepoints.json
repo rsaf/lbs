@@ -233,7 +233,7 @@
     "payload":{
       "servicePoint": {
         "servicePointCode": "LZP108",
-        "servicePointName": "蓝证平台身份认证服务网点",
+        "servicePointName": "身份认证服务网点",
         "servicePointStatus": 30,
         "status": 30,
         "servicePointAddress": "云端网点",
@@ -266,7 +266,7 @@
     "payload":{
       "servicePoint": {
         "servicePointCode": "LZP109",
-        "servicePointName": "Marathon (Custom ppl)",
+        "servicePointName": "大漠报名网点",
         "servicePointStatus": 30,
         "status": 30,
         "servicePointAddress": "云端网点",
@@ -299,7 +299,7 @@
     "payload":{
       "servicePoint": {
         "servicePointCode": "LZP110",
-        "servicePointName": "Marathon (1 ppl)",
+        "servicePointName": "大漠胡杨单人网点",
         "servicePointStatus": 30,
         "status": 30,
         "servicePointAddress": "云端网点",
@@ -332,7 +332,7 @@
     "payload":{
       "servicePoint": {
         "servicePointCode": "LZP111",
-        "servicePointName": "Marathon (2 ppl)",
+        "servicePointName": "大漠胡杨双人网点",
         "servicePointStatus": 30,
         "status": 30,
         "servicePointAddress": "云端网点",
@@ -365,7 +365,7 @@
     "payload":{
       "servicePoint": {
         "servicePointCode": "LZP112",
-        "servicePointName": "Marathon",
+        "servicePointName": "身份认证服务网点",
         "servicePointStatus": 30,
         "status": 30,
         "servicePointAddress": "云端网点",
