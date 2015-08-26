@@ -753,6 +753,7 @@ module.exports = function(paramService, esbMessage)
                             singlePrice = marathonprices[1],
                             pairPrice = marathonprices[0],
                             calculatedPrice = singles * singlePrice + pairs * pairPrice;
+                        console.log("Calculated price ",calculatedPrice," = ",singles," * ",singlePrice," + ",pairs," * ",pairPrice);
                         if(calculatedPrice != claimedPrice)
                             throw ("Invalid balance for claimed number of registrants:"+claimedPrice+" != "+calculatedPrice);
                         return provider;
