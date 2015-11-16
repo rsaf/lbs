@@ -1,0 +1,37 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: \n"
+
+#: cbos_components/app_settings/view.html:57
+msgid "Business Canvases"
+msgstr ""
+
+#: cbos.html:9
+msgid "CBOS Cloud Business Operating System"
+msgstr ""
+
+#: cbos_components/frequent_apps/view.html:3
+msgid "Frequently Used Apps"
+msgstr ""
+
+#: cbos_components/app_settings/view.html:4
+msgid "General Settings"
+msgstr ""
+
+#: cbos_components/app_settings/view.html:47
+msgid "Layout Containers"
+msgstr ""
+
+#: cbos_components/app_settings/view.html:36
+msgid "Left Navigation"
+msgstr ""
+
+#: cbos_components/app_settings/view.html:14
+msgid "My Profile"
+msgstr ""
+
+#: cbos_components/app_settings/view.html:25
+msgid "Top Navigation"
+msgstr ""

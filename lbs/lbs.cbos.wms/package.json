@@ -1,0 +1,10 @@
+{
+  "name" : "ccs",
+  "description": "cbos core service",
+  "version" : "1.0.0",
+  "private": true,
+  "dependencies" : {
+    "esb": "git+ssh://git@bitbucket.org:lionleo/lbs.cbos.esb.git#development",
+    "clm": "git+ssh://git@bitbucket.org:lionleo/lbs.cbos.clm.git#development"
+  }
+}

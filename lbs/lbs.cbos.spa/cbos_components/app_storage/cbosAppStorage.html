@@ -1,0 +1,25 @@
+<div class="toolBox closed initClass" id="cbosToolBox"  style=" background: white;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="">
+
+
+
+              <div class="cbos-app-storage-click">
+                    <div *ng-for="#app of apps" style="width: 80%;" >
+                        <div class="appIcon" *ng-if="app.icons.large">
+                            <span class="glyphicon glyphicon-cog"></span>
+                            <div class="appIconIcon"> <img [src]="app.icons.large"></div>
+                            <div class="appIconName"> {{app.name}}</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <a type="button" class="slick-control slick-prev  toolbox-slick-prev"  role="button"></a>
+    <a type="button" class=" slick-control slick-next toolbox-slick-next" role="button"></a>
+</div>

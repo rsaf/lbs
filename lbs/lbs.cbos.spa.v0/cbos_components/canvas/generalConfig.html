@@ -1,0 +1,76 @@
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="form-group col-sm-12">
+            <label for="generalConfigTile" class="col-sm-2 control-label">Canvas Title: </label>
+
+            <div class="col-sm-10">
+
+                <input type="text" id="generalConfigTile" class="form-control" ng-model="canvasTitle" placeholder="business scenario title">
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="row ">
+
+        <div class="form-group col-sm-6">
+
+            <label for="generalConfigCreationDate" class="col-sm-4 control-label"> Creation Date</label>
+
+            <div class="col-sm-8">
+
+                <input type="date" id="generalConfigCreationDate" class="form-control" placeholder="date">
+
+            </div>
+
+        </div>
+
+        <div class="form-group col-sm-6">
+
+            <label for="generalConfigCreator" class="col-sm-4 control-label">Created By </label>
+
+            <div class="col-sm-8">
+
+                <input type="text" id="generalConfigCreator" class="form-control" placeholder="creator's name">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="cbos-tree-view-widget-box"  ng-controller="cbosUiTreeController">
+        <!-- Nested node template -->
+        <script type="text/ng-template" id="nodes_renderer.html">
+            <div ui-tree-handle class="tree-node tree-node-content">
+                <a  ng-if="node.nodes && node.nodes.length > 0" data-nodrag ng-click="toggle(this)"><span
+                        class=" cbos-gray-border cbos-gray glyphicon"
+                        ng-class="{'glyphicon-plus': collapsed,'glyphicon-minus': !collapsed }"></span></a>
+              {{node.title}}
+                <a class="pull-right cbos-gray-border btn-xs" data-nodrag ng-click="remove(this)"><span
+                        class="glyphicon glyphicon-trash"></span></a>
+                <a class="pull-right cbos-gray-border btn-xs" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;"><span
+                        class="glyphicon glyphicon-cog"></span></a></div>
+            <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+                <li ng-repeat="node in node.nodes" ui-tree-node  collapsed="true"  ng-include="'nodes_renderer.html'">
+                </li>
+            </ol>
+        </script>
+        <div class="row">
+            <div class="col-sm-12">
+                <div ui-tree id="tree-root">
+                    <ol ui-tree-nodes ng-model="components_nodes" >
+                        <li ng-repeat="node in components_nodes" ui-tree-node collapsed="true" ng-include="'nodes_renderer.html'"></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

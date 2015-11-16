@@ -1,0 +1,7 @@
+{
+  "template" : {
+    "type" : "templateSeq",
+    "counter" : "1000",
+    "prefix" : "CBW"
+  }
+}

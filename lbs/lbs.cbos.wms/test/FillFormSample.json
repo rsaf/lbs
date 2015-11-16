@@ -1,0 +1,50 @@
+{
+  "name" : "Have user fill form and receive an email confirmation",
+  "tasks" : [
+    {
+      "id" : "CBT-D1S32Z4J",
+      "name" : "Form Input & Submit",
+      "isActive" : true,
+      "initial" : "START",
+      "transitions" : [
+        { "name" : "flowBegin", "from" : "START", "to" : "WAITING_INPUT" },
+        { "name" : "persistBegin", "from" : "WAITING_INPUT", "to" : "PERSISTING_INPUT" },
+        { "name" : "persistDone", "from" : "PERSISTING_INPUT", "to" : "ERROR" },
+        { "name" : "submitBegin", "from" : "WAITING_INPUT", "to" : "SUBMITTING_FORM" },
+        { "name" : "submitDone", "from" : "SUBMITTING_FORM", "to" : "END"},
+        { "name" : "error", "from" : ["PERSISTING_INPUT","SUBMITTING_FORM"], "to": "ERROR"}
+      ],
+      "callbacks" : {
+        "onSTART" : {"op" : "createResponse", "dns" : "cms"},
+        "onWAITING_INPUT" : {"op" : "wms_fooFunc", "pl":"onWaitingInput Foo", "dns" : "wms", "next":"persistBegin","isSettled":false},
+        "onPERSISTING_INPUT" : {"op" : "wms_fooFunc", "pl" : "onPersistingInput Foo", "dns" : "cms", "next":"persistDone", "isSettled":false},
+        "onSUBMITTING_FORM" : {"op" : "submitResponse", "dns" : "cms"},
+        "onEND" : {},
+        "onERROR" : {"op" : "wms_fooFunc", "pl" :"onError Foo", "dns" : "wms"}
+      }
+    },
+    {
+      "id" : "CBT-NS23ML1A",
+      "name" : "Emit Email",
+      "isActive" : false,
+      "initial" : "START",
+      "transitions" : [
+        { "name" : "flowBegin", "from" : "START", "to" : "SENDING_MAIL" },
+        { "name" : "mailDone", "from" : "SENDING_MAIL", "to" : "END"},
+        { "name" : "error", "from" : "SENDING_MAIL", "to" : "ERROR"}
+      ],
+      "callbacks" : {
+        "onSTART" : {},
+        "onSENDING_MAIL" : {
+          "op" : "sendEmail",
+          "dns" : "ups",
+          "pl" : {
+            "body" : "Thanks for your response, {{username}}!"
+          }
+        },
+        "onEND" : {},
+        "onERROR" : {}
+      }
+    }
+  ]
+}

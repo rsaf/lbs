@@ -1,0 +1,76 @@
+{
+  "code": "CBWD20006",
+  "name": "Workflow : Initialize App",
+  "marked": "start",
+  "edges": {
+    "start": [{"dst": "crm"}],
+    "crm": [{"dst": "ordercanvas"}],
+    "ordercanvas": [{"dst": "product"}],
+    "product": [{"dst": "order"}],
+    "order": [{"dst": "iphone"}],
+    "iphone": [{"dst": "end"}]
+  },
+  "nodes": {
+    "start": {
+      "name": "start",
+      "node": "CBN000009",
+      "input": {},
+      "output": {}
+    },
+    "crm": {
+      "name": "crm",
+      "node": "CBN000014",
+      "input": {"app": "pl.app"},
+      "output": {"app": "pl.app"}
+    },
+    "end": {
+      "name": "end",
+      "node": "CBN000010",
+      "input": {},
+      "output": {}
+    },
+    "ordercanvas": {
+      "name": "ordercanvas",
+      "node": "CBN000014",
+      "input": {
+        "canvas": "pl.ordercanvas",
+        "canvas[aid]": "crm.output.app.eid",
+        "canvas[anm]": "crm.output.app.name"
+      },
+      "output": {"canvas": "pl.canvas"}
+    },
+    "product": {
+      "name": "product",
+      "node": "CBN000014",
+      "input": {
+        "table": "pl.product",
+        "table[cid]":"ordercanvas.output.canvas.eid",
+        "table[cnm]":"ordercanvas.output.canvas.name"
+      },
+      "output": {"table": "pl.table"}
+    },
+    "order": {
+      "name": "order",
+      "node": "CBN000014",
+      "input": {
+        "table": "pl.order",
+        "table[cid]":"ordercanvas.output.canvas.eid",
+        "table[cnm]":"ordercanvas.output.canvas.name"
+      },
+      "output": {"table": "pl.table"}
+    },
+    "iphone": {
+      "name": "iphone",
+      "node": "CBN000014",
+      "input": {
+        "row": "pl.iphone",
+        "row[tid]":"product.output.table.eid",
+        "row[tbn]":"product.output.table.name"
+      },
+      "output": {"row": "pl.row"}
+    }
+
+  }
+
+
+}

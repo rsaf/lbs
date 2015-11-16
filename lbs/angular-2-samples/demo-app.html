@@ -1,0 +1,16 @@
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div>
+                <ul class="nav navbar-nav">
+                    <li><a href="http://www.syntaxsuccess.com" class="link">Home</a></li>
+                    <li [class.active]="getLinkStyle('')"><a [router-link]="['/About']" class="link">About</a></li>
+                    <li [class.active]="getLinkStyle('/demo')"><a [router-link]="['/Demo/Spreadsheet']" class="link">Demos</a></li>
+                    <li [class.active]="getLinkStyle('/lazy')"><a [router-link]="['/Lazy']" class="link">Lazy Loaded</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<router-outlet></router-outlet>

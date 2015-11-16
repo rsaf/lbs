@@ -1,0 +1,58 @@
+
+    <div class="form-group">
+        <label  for="deleteEntityNodeName" class="control-label col-sm-3">Node Name:</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="deleteEntityNodeName">
+        </div>
+    </div>
+        <div class="form-group">
+            <label  class="control-label col-sm-3">inputs <span class="glyphicon glyphicon-plus form-add-sign-circle cbos-margin-0"></span> </label>
+            <div class="col-sm-9">
+                    <select class="form-control">
+                        <option> Users</option>
+                        <option> Users</option>
+                        <option> Users</option>
+                    </select>
+            </div>
+        </div>
+
+
+    <div class="cbos-tree-view-widget-box" >
+
+        <!-- Nested node template -->
+        <script type="text/ng-template" id="nodes_renderer.html">
+            <div ui-tree-handle class="tree-node tree-node-content">
+                <a  ng-if="node.nodes && node.nodes.length > 0" data-nodrag ng-click="toggle(this)"><span
+                        class=" cbos-gray-border cbos-gray glyphicon"
+                        ng-class="{'glyphicon-plus': collapsed,'glyphicon-minus': !collapsed }"></span></a>
+                {{node.title}}
+                <a class="pull-right cbos-gray-border btn-xs" data-nodrag ng-click="remove(this)"><span
+                        class="glyphicon glyphicon-trash"></span></a>
+                <a class="pull-right cbos-gray-border btn-xs" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;"><span
+                        class="glyphicon glyphicon-cog"></span></a>
+            </div>
+            <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+                <li ng-repeat="node in node.nodes" ui-tree-node   ng-include="'nodes_renderer.html'">
+                </li>
+            </ol>
+        </script>
+
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div ui-tree id="tree-root">
+                    <ol ui-tree-nodes ng-model="configTreeData" >
+                        <li ng-repeat="node in configTreeData" ui-tree-node collapsed="true" ng-include="'nodes_renderer.html'"></li>
+                    </ol>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+    </div>

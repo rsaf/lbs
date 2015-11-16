@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <base href="/">
+    <!--angular route config base-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0 user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <title translate> CBOS Cloud Business Operating System</title>
+    <!-- bower_components style sheet-->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css"  >
+    <link rel="stylesheet" href="bower_components/bootstrap-select/dist/css/bootstrap-select.css" type="text/css"  >
+    <link rel="stylesheet" href="bower_components/bootstrap-additions/dist/bootstrap-additions.min.css">
+    <!--<link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.min.css">-->
+    <link rel="stylesheet" href="bower_components/swiper/dist/css/swiper.min.css">
+    <link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.min.css">
+    <link rel="stylesheet" href="bower_components/slick-carousel/slick/slick.css">
+    <link rel="stylesheet" href="bower_components/slick-carousel/slick/slick-theme.css">
+
+    <!-- library_components style sheet-->
+    <link rel="stylesheet" href="library_components/css/ngViewAnimation/animation.css"  >
+    <!-- cbos style sheet-->
+    <link rel="stylesheet" href="base/css/style.css" type="text/css">
+    <link rel="stylesheet" href="cbos_components/header/resources/css/header.css">
+    <link rel="stylesheet" href="cbos_components/footer/resources/css/footer.css">
+    <link rel="stylesheet" href="base/css/common.css" type="text/css">
+    <link rel="stylesheet" href="cbos_layouts/login/themes/css/signin.css">
+    <!--scripts-->
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="library_components/js/html5shiv.min.js" type="text/javascript"></script>
+    <script src="library_components/js/respond.min.js" type="text/javascript"></script>
+    <![endif]-->
+
+    <script src="cbos_components/canvas/workflow/resources/js/workflowD3.js" type="text/javascript"></script>
+    <script src="bower_components/lodash/lodash.min.js" type="text/javascript"></script>
+    <script src="bower_components/d3/d3.min.js" type="text/javascript"></script>
+
+    <!-- Load c3.css -->
+    <link rel="stylesheet" href="bower_components/c3/c3.min.css" type="text/css">
+    <!-- Load d3.js and c3.js -->
+    <script src="bower_components/c3/c3.min.js"></script>
+
+
+</head>
+<body ng-controller="bodyController" >
+<div ui-view ng-class="{slide:slideTransition}" style="height: 100%;" >
+</div>
+<script src="bower_components/requirejs/require.js" data-main="cbos.init.js" type="text/javascript"></script>
+<!-- Workflow initiation script to be remove ..   -->
+</body>
+</html>

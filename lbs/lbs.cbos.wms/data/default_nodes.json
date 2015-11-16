@@ -1,0 +1,254 @@
+{
+  "create_app" : {
+    "code" : "CBN000000",
+    "name" : "Node: Create Application",
+    "fsm" : "FSM_MUTATE",
+    "input": {
+      "app": "pl.app"
+    },
+    "output": {
+      "app": "Object"
+    },
+    "params": {
+      "mutator_func": [{"op": "ams_create_entity", "dns": "ams"}]
+    }
+  },
+  "login" : {
+    "code" : "CBN000001",
+    "name" : "Node: Login",
+    "fsm" : "FSM_MUTATE",
+    "input" : {
+      "username" : "pl.username",
+      "password" : "pl.password"
+    },
+    "output" : {
+      "id" : "String"
+    },
+    "params" : {
+      "mutator_func" : [{"op":"ups_verify_user_credentials","dns":"ups"}]
+    }
+  },
+  "persist_entity" : {
+    "code" : "CBN000002",
+    "name" : "Node: Persist",
+    "fsm" : "FSM_MUTATE",
+    "input" : {
+      "payload" : "pl"
+    },
+    "output" : {
+      "res" : "Object"
+    },
+    "params" : {
+      "mutator_func" : [{"op":"cms_persist","dns":"cms"}]
+    }
+  },
+  "send_mail" : {
+    "code" : "CBN000003",
+    "name" : "Node: Send Mail",
+    "fsm" : "FSM_MUTATE",
+    "input" : {
+      "subject" : "pl.subject",
+      "email" : "pl.email",
+      "cc" : "pl.cc",
+      "body" : "pl.body"
+    },
+    "output" : {
+      "res" : "Object"
+    },
+    "params" : {
+      "mutator_func" : [{"op":"ams_send_mail","dns":"ams"}]
+    }
+  },
+  "create_account" : {
+    "code" : "CBN000004",
+    "name" : "Node: Create User Account",
+    "fsm" : "FSM_MUTATE",
+    "input": {
+      "user" : "pl.user"
+    },
+    "output": {
+      "id": "String"
+    },
+    "params": {
+      "mutator_func": [{"op": "ups_create_user", "dns": "ups"}]
+    }
+  },
+  "update_account" : {
+    "code": "CBN000005",
+    "name": "Update user",
+    "fsm" : "FSM_MUTATE",
+    "input": {
+      "user":"pl.user"
+    },
+    "output": {
+      "id": "String"
+    },
+    "params": {
+      "mutator_func": [{"op": "ups_update_user", "dns": "ups"}]
+    }
+  },
+  "calculate" : {
+    "code" : "CBN000007",
+    "name" : "Calculate a value",
+    "fsm" : "FSM_READ",
+    "input" : {
+      "expression" : "pl.expression"
+    },
+    "output" : {
+      "result" : "Number"
+    },
+    "params" : {
+      "accessor_func": [{"op":"wms_substitute_and_evaluate", "dns":"wms"}]
+    }
+  },
+  "debug_print" : {
+    "code" : "CBN00000X",
+    "name" : "Just print something and return a random number",
+    "fsm" : "FSM_READ",
+    "input" : {"toprint":"String"},
+    "output" : {
+      "random" : "Integer"
+    },
+    "params" : {
+      "accessor_func" : [{"op":"wms_debug_print", "dns":"wms"}]
+    }
+  },
+  "wait_for_event" : {
+    "code" : "CBN000008",
+    "name" : "Wait for an event",
+    "fsm" : "FSM_WAIT",
+    "input" : {"expression":"pl.expression"},
+    "output" : {},
+    "params" : {
+      "submission_func": [{"op":"wms_gate_on_expression","dns":"wms"}]
+    }
+  },
+  "start" : {
+    "code" : "CBN000009",
+    "name" : "Start of workflow",
+    "fsm" : "FSM_START",
+    "input" : {},
+    "output" : {},
+    "params" : {
+      "initialize_func": [{"op":"wms_debug_print","dns":"wms"}]
+    }
+  },
+  "end" : {
+    "code" : "CBN000010",
+    "name" : "End of workflow",
+    "fsm" : "FSM_END",
+    "input" : {},
+    "output" : {},
+    "params" : {
+      "initialize_func": [{"op":"wms_debug_print","dns":"wms"}]
+    }
+  },
+  "assign_task" : {
+    "code" : "CBN000011",
+    "name" : "Assign Task",
+    "fsm" : "FSM_MUTATE",
+    "input" : {},
+    "output" : {},
+    "params" : {
+      "mutator_func":[{"op":"wms_debug_print","dns":"wms"}]
+    }
+  },
+  "conditional_branch" : {
+    "code" : "CBN000006",
+    "name" : "Branch Workflow on Condition",
+    "fsm" : "FSM_READ",
+    "input" : {
+      "expression" : "pl.expression"
+    },
+    "output" : {
+      "result" : "Boolean"
+    },
+    "params" : {
+      "accessor_func": [{"op":"wms_conditional_eval", "dns":"wms"}]
+    }
+  },
+  "parallel_branch" : {
+    "code" : "CBN000012",
+    "name" : "Parallel Branch",
+    "fsm" : "FSM_BRANCH",
+    "input" : {},
+    "output" : {},
+    "params" : {
+      "branch_func":[{"op":"wms_debug_print","dns":"wms"}]
+    }
+  },
+  "debranch" : {
+    "code" : "CBN000013",
+    "name" : "Debranch Parallel Nodes. Continue on condition.",
+    "fsm" : "FSM_DEBRANCH",
+    "input" : {},
+    "output" : {},
+    "params" : {
+      "debranch_func":[{"op":"wms_debug_print","dns":"wms"}]
+    }
+  },
+  "create" : {
+    "code" : "CBN000014",
+    "name" : "CRUD Create",
+    "fsm" : "FSM_MUTATE",
+    "params" : {
+      "mutator_func":[{"op":"ams_create_entity","dns":"ams"}]
+    }
+  },
+  "read" : {
+    "code" : "CBN000015",
+    "name" : "CRUD Read",
+    "fsm" : "FSM_READ",
+    "input" : {},
+    "output" : {},
+    "params" : {
+      "mutator_func":[{"op":"wms_debug_print","dns":"wms"}]
+    }
+  },
+  "update" : {
+    "code" : "CBN000016",
+    "name" : "CRUD Update",
+    "fsm" : "FSM_MUTATE",
+    "input" : {},
+    "output" : {},
+    "params" : {
+      "mutator_func":[{"op":"ams_update_entity","dns":"ams"}]
+    }
+  },
+  "delete" : {
+    "code" : "CBN000017",
+    "name" : "CRUD Delete",
+    "fsm" : "FSM_MUTATE",
+    "input" : {},
+    "output" : {},
+    "params" : {
+      "mutator_func":[{"op":"wms_debug_print","dns":"wms"}]
+    }
+  },
+  "mcreate" : {
+    "code" : "CBN000020",
+    "name" : "CRUD Create",
+    "fsm" : "FSM_MUTATE",
+    "params" : {
+      "mutator_func":[{"op":"ams_create_entities","dns":"ams"}]
+    }
+  },
+  "addc" : {
+    "code" : "CBN000021",
+    "name" : "CRUD Create",
+    "fsm" : "FSM_MUTATE",
+    "params" : {
+      "mutator_func":[{"op":"ams_add_cbos_component","dns":"ams"}]
+    }
+  },
+  "respond" : {
+    "code" : "CBN000018",
+    "name" : "Intermediate Workflow Response",
+    "fsm" : "FSM_READ",
+    "input" : {},
+    "output" : {},
+    "params" : {
+      "accessor_func":[{"op":"wms_debug_print","dns":"wms"}]
+    }
+  }
+}

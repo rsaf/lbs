@@ -1,0 +1,142 @@
+<div class="cbos-padding-left-10 cbos-padding-right-10">
+    <accordion>
+        <accordion-group>
+            <accordion-heading class="inline">
+                <span class="glyphicon glyphicon-wrench"></span>   <strong translate>General Settings</strong>
+                <i class="pull-right glyphicon cbos-gray cbos-margin-top-4"
+                   ng-class="{'glyphicon-menu-down': !status.open, 'glyphicon-menu-up': status.open}"
+                   ng-click="status.open = !status.open" data-toggle="collapse"></i>
+            </accordion-heading>
+            Content one of accordion
+        </accordion-group>
+
+        <accordion-group>
+            <accordion-heading>
+                <span class="glyphicon glyphicon-equalizer"></span>    <strong translate> Business Canvases </strong>
+
+                <i class="pull-right glyphicon cbos-gray cbos-margin-top-4" ng-class="{'glyphicon-menu-down': !status.open, 'glyphicon-menu-up': status.open}" ng-click="status.open = !status.open" data-toggle="collapse"></i>
+            </accordion-heading>
+            <div class="cbos-tree-view-widget-box" ng-controller="cbosUiTreeController">
+                <!-- Nested node template -->
+                <script type="text/ng-template" id="nodes_renderer.html">
+                    <div ui-tree-handle class="tree-node tree-node-content">
+                        <a ng-if="node.nodes && node.nodes.length > 0" data-nodrag ng-click="toggle(this)">
+                            <span class=" cbos-gray-border cbos-gray glyphicon" ng-class="{'glyphicon-plus': collapsed,'glyphicon-minus': !collapsed }"></span>
+                        </a>
+                        {{node.title}}
+                        <a class="pull-right cbos-gray-border btn-xs" data-nodrag ng-click="remove(this)">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+
+                        <a ng-if="node.linkTo" class="pull-right cbos-gray-border btn-xs" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;" ui-sref={{node.linkTo}}>
+                            <span class="glyphicon glyphicon-cog"></span></a>
+                        <a ng-if="!node.linkTo" class="pull-right cbos-gray-border btn-xs" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;" ui-sref={{node.linkTo}}>
+                            <span class="glyphicon glyphicon-cog"></span></a>
+                    </div>
+                    <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+                        <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+                    </ol>
+                </script>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div ui-tree id="tree-root" data-drag-enabled="false">
+                            <ol ui-tree-nodes ng-model="data">
+                                <li ng-repeat="node in data" ui-tree-node collapsed="true" ng-include="'nodes_renderer.html'"></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </accordion-group>
+
+        <accordion-group>
+            <accordion-heading>
+                <span class="glyphicon glyphicon-th-large"></span>  <strong translate>  Layout Containers </strong>
+
+                <i class="pull-right glyphicon cbos-gray cbos-margin-top-4" ng-class="{'glyphicon-menu-down': !status.open, 'glyphicon-menu-up': status.open}" ng-click="status.open = !status.open" data-toggle="collapse"></i>
+
+            </accordion-heading>
+            Content two of accordion
+        </accordion-group>
+
+
+        <accordion-group>
+            <accordion-heading>
+                <span class="glyphicon glyphicon-object-align-vertical"></span> <strong translate> Top Navigation </strong>
+                <i class="pull-right glyphicon cbos-gray cbos-margin-top-4"
+                   ng-class="{'glyphicon-menu-down': !status.open, 'glyphicon-menu-up': status.open}"
+                   ng-click="status.open = !status.open" data-toggle="collapse"></i>
+
+            </accordion-heading>
+            Content two of accordion
+        </accordion-group>
+
+        <accordion-group>
+            <accordion-heading>
+                <span class="glyphicon glyphicon-object-align-horizontal"></span>   <strong translate> Left Navigation </strong>
+                <i class="pull-right glyphicon cbos-gray cbos-margin-top-4"
+                   ng-class="{'glyphicon-menu-down': !status.open, 'glyphicon-menu-up': status.open}"
+                   ng-click="status.open = !status.open" data-toggle="collapse"></i>
+
+            </accordion-heading>
+            Content two of accordion
+        </accordion-group>
+
+
+
+        <accordion-group>
+            <accordion-heading>
+                <span class="glyphicon glyphicon-user"></span>   <strong translate>My Profile </strong>
+                <i class="pull-right glyphicon cbos-gray cbos-margin-top-4"
+                   ng-class="{'glyphicon-menu-down': !status.open, 'glyphicon-menu-up': status.open}"
+                   ng-click="status.open = !status.open" data-toggle="collapse"></i>
+
+            </accordion-heading>
+            Content one of accordion
+        </accordion-group>
+
+        <accordion-group>
+            <accordion-heading>
+                <span class="glyphicon glyphicon-th-large"></span>  <strong translate>  Organization Members </strong>
+
+                <i class="pull-right glyphicon cbos-gray cbos-margin-top-4" ng-class="{'glyphicon-menu-down': !status.open, 'glyphicon-menu-up': status.open}" ng-click="status.open = !status.open" data-toggle="collapse"></i>
+
+            </accordion-heading>
+            Content two of accordion
+        </accordion-group>
+
+        <accordion-group>
+            <accordion-heading>
+                <span class="glyphicon glyphicon-th-large"></span>  <strong translate> App Themes </strong>
+
+                <i class="pull-right glyphicon cbos-gray cbos-margin-top-4" ng-class="{'glyphicon-menu-down': !status.open, 'glyphicon-menu-up': status.open}" ng-click="status.open = !status.open" data-toggle="collapse"></i>
+
+            </accordion-heading>
+            Content two of accordion
+        </accordion-group>
+
+        <accordion-group>
+            <accordion-heading>
+                <span class="glyphicon glyphicon-th-large"></span>  <strong translate>  App Features </strong>
+
+                <i class="pull-right glyphicon cbos-gray cbos-margin-top-4" ng-class="{'glyphicon-menu-down': !status.open, 'glyphicon-menu-up': status.open}" ng-click="status.open = !status.open" data-toggle="collapse"></i>
+
+            </accordion-heading>
+            Content two of accordion
+        </accordion-group>
+
+        <accordion-group>
+            <accordion-heading>
+                <span class="glyphicon glyphicon-th-large"></span>  <strong translate>  App Adapters </strong>
+
+                <i class="pull-right glyphicon cbos-gray cbos-margin-top-4" ng-class="{'glyphicon-menu-down': !status.open, 'glyphicon-menu-up': status.open}" ng-click="status.open = !status.open" data-toggle="collapse"></i>
+
+            </accordion-heading>
+            Content two of accordion
+        </accordion-group>
+
+
+
+    </accordion>
+
+</div>

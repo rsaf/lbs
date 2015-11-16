@@ -1,0 +1,19 @@
+npm-debug.log
+bin
+buckets
+<<<<<<< HEAD
+buckets/charts/
+buckets/files/
+buckets/forms/
+buckets/images/
+buckets/layouts/
+buckets/tables/
+buckets/workflows/
+=======
+buckets/*
+
+>>>>>>> 8eb204ecb2e3de59c2828c9f5d004b1637508b44
+
+
+
+

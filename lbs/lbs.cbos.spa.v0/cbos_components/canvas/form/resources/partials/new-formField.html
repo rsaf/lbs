@@ -1,0 +1,14 @@
+
+
+        <div class="form-group">
+            <label for="columnName" class="control-label col-sm-3"  style="max-width: 98px;">Label:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="columnName" ng-init="tcontainer.tablesnav[$state.params.formTableId].formsnav[$state.params.formId].fieldsnav[$state.params.formFieldId].label =  tcontainer.tablesnav[$state.params.formTableId].formsnav[$state.params.formId].fieldsnav[$state.params.formFieldId].label||tcontainer.tablesnav[$state.params.formTableId].fieldsnav[$state.params.formFieldId].fn" ng-model="tcontainer.tablesnav[$state.params.formTableId].formsnav[$state.params.formId].fieldsnav[$state.params.formFieldId].label">
+            </div>
+        </div>
+        <div class="form-group cbos-margin-bottom-5"> <label  for="TableDataType" class="control-label col-sm-3" style="max-width: 98px;">data type:</label>
+         <div class="col-sm-9">
+              <select id="TableDataType" class="form-control"   ng-options="elem.type for elem in tcontainer.tablesformTypeMap[tcontainer.tablesnav[$state.params.formTableId].fieldsnav[$state.params.formFieldId].ft]" ng-model="tcontainer.tablesnav[$state.params.formTableId].selectedFromType" ng-change="tcontainer.saveSelectedFormFieldType(tcontainer.tablesnav[$state.params.formTableId].selectedFromType)"></select>
+         </div>
+       </div>
+

@@ -1,0 +1,127 @@
+<div class="">
+
+    <h4 translate>Frequently Used Apps</h4>
+
+    <div class="cbos-gray-border cbos-padding-top-10 cbos-padding-bottom-10 commonLyUsedAppsContainer">
+
+        <div class="container-fluid pcOnly">
+
+
+            <div ng-repeat="row in rows">
+
+                <a ui-sref={{row.rdt.linkTo}}>
+                <div class="appIcon">
+
+                    <span class="glyphicon glyphicon-share-alt"></span>
+
+                    <div class="appIconIcon"> <img ng-src="{{row.rdt.icons.iselected}}"></div>
+
+                    <div class="appIconName"> {{row.rdt.name}}</div>
+                </div>
+                </a>
+            </div>
+
+        </div>
+
+
+        <div class="container-fluid mobileOnly">
+
+
+
+            <div ng-repeat="row in rows">
+
+                <a ui-sref={{row.rdt.linkTo}}>
+                    <div class="appIcon">
+                        <span class="glyphicon glyphicon-share-alt"></span>
+
+                        <div class="appIconIcon"> <img ng-src="{{row.rdt.icons.iselected}}" ></div>
+
+                        <div class="appIconName"> {{row.rdt.name}}</div>
+                    </div>
+                </a>
+
+            </div>
+
+            <!--
+
+        <div>
+
+            <div class="appIcon">
+                <span class="glyphicon glyphicon-share-alt"></span>
+
+                <div class="appIconIcon"> <img src="cbos_layouts/desktop/theme/images/app_icon_relations.png"></div>
+
+                <div class="appIconName"> PPM</div>
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <div class="appIcon">
+
+                <span class="glyphicon glyphicon-share-alt"></span>
+
+                <div class="appIconIcon"> <img src="cbos_layouts/desktop/theme/images/app_icon_dms.png"></div>
+
+                <div class="appIconName"> DMS</div>
+            </div>
+
+
+        </div>
+
+        <div>
+
+
+            <div class="appIcon">
+
+
+                <span class="glyphicon glyphicon-share-alt"></span>
+
+                <div class="appIconIcon"> <img src="cbos_layouts/desktop/theme/images/app_icon_finance.png"></div>
+
+                <div class="appIconName"> Finance</div>
+            </div>
+
+        </div>
+
+        <div>
+
+
+            <div class="appIcon">
+
+
+                <span class="glyphicon glyphicon-share-alt"></span>
+
+                <div class="appIconIcon"> <img src="cbos_layouts/desktop/theme/images/app_icon_kms.png"></div>
+
+                <div class="appIconName"> KMS</div>
+            </div>
+
+
+        </div>
+
+        <div>
+
+            <div class="appIcon">
+
+
+                <span class="glyphicon glyphicon-share-alt"></span>
+
+                <div class="appIconIcon"> <img src="cbos_layouts/desktop/theme/images/app_icon_scm.png"></div>
+
+                <div class="appIconName"> SCM</div>
+            </div>
+
+        </div>
+        -->
+
+        </div>
+
+    </div>
+
+
+</div>
+
+

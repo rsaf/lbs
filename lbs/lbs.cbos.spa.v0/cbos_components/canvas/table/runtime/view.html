@@ -1,0 +1,28 @@
+<div>
+    <div><h4 class="pull-left">{{componentTitle}}</h4>
+
+
+        <div class="dropdown pull-right cbos-margin-10 cbos-margin-right-0">
+            <span  class="cbos-pointer dropdown-toggle glyphicon glyphicon-list cbos-grayer cbos-gray-border" title="table menu" style="font-size: 1.3em; " id="addTableRecord" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></span>
+            <ul class="dropdown-menu" aria-labelledby="addTableRecord">
+                <li><a ui-sref="desktop.app.layout.addTableRecord({recordTableId:'2it3ak1u75'})">Add Record</a></li>
+                <li><a href="#">Edit Record</a></li>
+                <li><a href="#">View Record</a></li>
+                <li><a href="#">Delete Record</a></li>
+
+            </ul>
+        </div>
+
+        <div class="clearfix"></div>
+
+
+    </div>
+    <table class="cbos-table runtime">
+        <tr>
+            <td>Column1</td> <td>Column2</td> <td>Column3</td> <td>Column4</td> <td>Column5</td>
+        </tr>
+        <tr ng-repeat="row in rows">
+            <td>{{row.table}}</td> <td>{{row.Column2}}</td> <td>{{row.Column3}}</td> <td>{{row.Column4}}</td> <td>{{row.Column5}}</td>
+        </tr>
+    </table>
+</div>

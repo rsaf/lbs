@@ -1,0 +1,46 @@
+<!--<nav class="topNavigation largeTabletAndPc">-->
+    <!--<div class="menuContainer">-->
+        <!--<div ng-repeat="nav in topnav">-->
+
+            <!--<a ng-if="(nav.linkTo==='desktop')" class="menuItem"   ng-class="{'selected':('desktop.desktopsettings'|includedByState)||('desktop'|isState)}" ui-sref={{nav.linkTo}} cbos-top-navigation-item="">-->
+                <!--<div class="menuIcon grayIcon pull-left"> <img ng-src={{nav.icons.idefault}}></div>-->
+                <!--<div class="menuIcon blueIcon pull-left"> <img ng-src={{nav.icons.iselected}}></div>-->
+                <!--<div class="menuName pull-left">-->
+                    <!--{{nav.name}}-->
+                <!--</div>-->
+            <!--</a>-->
+            <!--<a ng-if="(nav.linkTo!='desktop')" class="menuItem"  ui-sref-active="selected" ui-sref={{nav.linkTo}} cbos-top-navigation-item="">-->
+                <!--<div class="menuIcon grayIcon pull-left"> <img ng-src={{nav.icons.idefault}}></div>-->
+                <!--<div class="menuIcon blueIcon pull-left"> <img ng-src={{nav.icons.iselected}}></div>-->
+                <!--<div class="menuName pull-left">-->
+                    <!--{{nav.name}}-->
+                <!--</div>-->
+            <!--</a>-->
+
+
+        <!--</div>-->
+
+        <!--<div class="clearfix"></div>-->
+    <!--</div>-->
+<!--</nav>-->
+
+
+
+<nav class="topNavigation largeTabletAndPc" style="background-color: red; position: absolute;">
+
+    <h4>Navagation top</h4>
+    <div class="menuContainer" *ng-if="topnav">
+        <!--<div *ng-for="nav in topnav" >-->
+
+            <!--<a  class="menuItem">-->
+                <!--<div class="menuIcon grayIcon pull-left"> <img [src]="nav.icons.idefault"></div>-->
+                <!--<div class="menuIcon blueIcon pull-left"> <img [src]="nav.icons.iselected"></div>-->
+                <!--<div class="menuName pull-left">-->
+                    <!--{{nav.name}}-->
+                <!--</div>-->
+            <!--</a>-->
+        <!--</div>-->
+
+        <div class="clearfix"></div>
+    </div>
+</nav>

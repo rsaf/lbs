@@ -1,0 +1,125 @@
+
+
+<div class="runtime-mobile-table">
+
+
+    <div class="runtime-mobile-table-header  cbos-gray-border cbos-padding-5">
+
+        <div class="pull-left" style="line-height: 32px;">Table Name</div>
+
+        <div class="runtime-mobile-table-actions cbos-gray-border pull-right ">
+
+
+            <div class="dropdown pull-left cbos-margin-right-0">
+                          <span class="cbos-pointer cbos-gray glyphicon glyphicon-list cbos-padding-5-15 cbos-pointer dropdown-toggle" id="mobileAddTableRecord"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
+                          <ul class="dropdown-menu" aria-labelledby="mobileAddTableRecord">
+                              <li><a ui-sref={{linkTo}}>Add Record</a></li>
+                              <li><a >Edit Record</a></li>
+                              <li><a >View Record</a></li>
+                              <li><a >Delete Record</a></li>
+
+                          </ul>
+                  </div>
+
+            <div class="cbos-border-left cbos-pointer cbos-gray glyphicon pull-left  cbos-padding-5-15 cbos-line-height cbos-pointer"   ng-class="{'glyphicon-menu-down': mobileTableCollapsed, 'glyphicon-menu-up': !mobileTableCollapsed}" ng-init="mobileTableCollapsed=false" ng-click="mobileTableCollapsed = !mobileTableCollapsed"></div>
+
+
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+
+
+
+    <div  collapse="mobileTableCollapsed" >
+        <div class=" runtime-mobile-table-body cbos-gray-border cbos-border-top-none">
+
+           <div class="runtime-mobile-table-row">
+
+                <div class="pull-right check-select"> <input type="checkbox"></div>
+
+
+                <div class="description ellipsis ">
+                    <h4 class="ellipsis">first field1</h4>
+                    <div class="details"><span class="ellipsis">second field1:second value1</span> <span class="ellipsis">third field1:third value1</span></div>
+
+                </div>
+
+               <div class="clearfix"></div>
+            </div>
+
+
+            <div class="runtime-mobile-table-row">
+
+                <div class="pull-right check-select"> <input type="checkbox"></div>
+
+                <div class="description ellipsis  ">
+
+                    <h4 class="ellipsis">first field2</h4>
+                    <div class="details"><span class="ellipsis">second field2:second value2</span> <span class="ellipsis">third field2:third value2</span></div>
+
+
+                </div>
+                <div class="clearfix"></div>
+
+
+            </div>
+
+            <div class="runtime-mobile-table-row">
+
+                <div class="pull-right check-select"> <input type="checkbox"></div>
+
+                <div class=" description  attachment ">
+
+                    <h4 class="ellipsis">first field3</h4>
+                    <div class="details"><span class="ellipsis">second field1:second value3</span> <span class="ellipsis">third field1:third value3</span></div>
+                </div>
+                <div class="clearfix"></div>
+
+
+            </div>
+
+
+
+            <div class="runtime-mobile-table-row">
+
+
+                <div class="pull-right check-select"> <input type="checkbox"></div>
+
+                <div class="  description attachment ">
+
+                    <h4 class="ellipsis">first field4</h4>
+                    <div class="details "><span class="ellipsis">second field4:second value4</span> <span class="ellipsis">third field4:third value4</span></div>
+
+                </div>
+                <div class="clearfix"></div>
+
+
+            </div>
+
+
+            <div class="runtime-mobile-table-row" >
+
+                <div class="pull-right check-select"> <input type="checkbox"></div>
+
+                <div class=" description attachment ">
+
+                    <h4 class="ellipsis">first field5</h4>
+                    <div class="details"><span class="ellipsis">second field5:second value5</span> <span class="ellipsis">third field5:third value5</span></div>
+
+                   </div>
+                <div class="clearfix"></div>
+
+
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+
+
+</div>

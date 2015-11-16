@@ -1,0 +1,545 @@
+{
+  "initializeApp": {
+  "code": "CBWD20001a",
+  "name": "Workflow : Initialize App",
+  "marked": "A",
+  "edges": {
+    "A": [{"dst": "I"}],
+    "I": [{"dst": "B","respond":true}],
+    "B": [{"dst": "Ca"},{"dst":"Cb"},{"dst":"Cc"}],
+    "Ca": [{"dst": "Cap"}],
+    "Cb": [{"dst": "Cbp"}],
+    "Cc": [{"dst": "Ccp"}],
+    "Cap": [{"dst": "D"}],
+    "Cbp": [{"dst": "D"}],
+    "Ccp": [{"dst": "D"}],
+    "D": [
+      {"src":[
+        {"any":[{"src":"Cbp"},{"src":"Ccp"}]},
+        {"must":[{"src":"Cap"}]},
+        {"may":[{"src":"Cbp"}]}]
+      },
+      {"dst":"1"}
+    ],
+    "1": [{"dst": "2"}],
+    "2": [{"dst": "3"}]
+  },
+  "nodes": {
+    "A": {
+      "name":"Calculate",
+      "node":"CBN000007",
+      "input":{
+        "expression":"3 + ( 3 * 4 )",
+        "foo":"app.app.55f24958c0c65a91f1acfcf8"
+      },
+      "output":{
+        "result":"Number"
+      }
+    },
+    "I":{
+      "name":"Respond",
+      "node":"CBN000018",
+      "input":{
+
+      },
+      "output":{
+        "pl" : "Object"
+      }
+    },
+    "B": {
+      "name":"Split",
+      "node":"CBN000012"
+    },
+    "Ca": {
+      "name":"Parallel Calculate",
+      "node":"CBN000007",
+      "input":{
+        "expression":"ingress + 1",
+        "ingress" : "A.output.result"
+      },
+      "output":{
+        "result":"Number"
+      }
+    },
+    "Cb": {
+      "name":"Parallel Calculate",
+      "node":"CBN000007",
+      "input":{
+        "expression":"ingress + 2",
+        "ingress" : "A.output.result"
+      },
+      "output":{
+        "result":"Number"
+      }
+    },
+    "Cc": {
+      "name":"Parallel Calculate",
+      "node":"CBN000007",
+      "input":{
+        "expression":"ingress + 3",
+        "ingress" : "A.output.result"
+      },
+      "output":{
+        "result":"Number"
+      }
+    },
+    "Cap": {
+      "name":"Parallel Print",
+      "node":"CBN00000X",
+      "input":{
+        "toprint":"Ca.output.result"
+      }
+    },
+    "Cbp": {
+      "name":"Parallel Print",
+      "node":"CBN00000X",
+      "input":{
+        "toprint":"Cb.output.result"
+      }
+    },
+    "Ccp": {
+      "name":"Parallel Print",
+      "node":"CBN00000X",
+      "input":{
+        "toprint":"Cc.output.result"
+      }
+    },
+    "D" : {
+      "name":"Debranch",
+      "node":"CBN000013"
+    },
+    "1": {
+      "name": "Create user",
+      "node": "CBN000004",
+      "input": {
+        "user" : "pl.user",
+        "app": "pl.app"
+      }
+    },
+    "2": {
+      "name": "Create app",
+      "node": "CBN000000",
+      "input": {
+        "app": "pl.app"
+      },
+      "output" : {
+        "app" : "Object"
+      }
+    },
+    "3": {
+      "name": "Update user",
+      "node": "CBN000005",
+      "input": {
+        "user":"pl.user",
+        "app": "2.output.app"
+      }
+    }
+  }
+},
+  "initializeAppTest": {
+    "code": "CBWD20001a",
+    "name": "Workflow : Initialize App",
+    "marked": "start",
+    "edges": {
+      "start" : [{"dst":"branch"}],
+      "branch" : [{"dst":"app"},{"dst":"user"}],
+      "app" : [{"dst":"debranch"}],
+      "user" : [{"dst":"debranch"}],
+      "debranch" : [{"dst":"update_user"}],
+      "update_user" : [{"dst":"conditional"}],
+      "conditional" : [{"dst":"send_mail","if":true},{"dst":"send_admin","if":false}],
+      "send_mail" : [{"dst":"end"}],
+      "send_admin" : [{"dst":"end"}]
+    },
+    "nodes": {
+      "start" : {
+        "name" : "Start",
+        "node" : "CBN000009",
+        "input" : {},
+        "output" : {}
+      },
+      "branch" : {
+        "name" : "Branch",
+        "node" : "CBN000012",
+        "input" : {},
+        "output" : {}
+
+      },
+      "user": {
+        "name": "Create user",
+        "node": "CBN000004",
+        "input": {
+          "user" : "pl.user"
+        }
+      },
+      "app": {
+        "name": "Create app",
+        "node": "CBN000000",
+        "input": {
+          "app": "pl.app"
+        },
+        "output" : {
+          "app" : "r.pl.app"
+        }
+      },
+      "debranch" : {
+        "name" : "Debranch",
+        "node" : "CBN000013",
+        "input" : {},
+        "output" : {}
+      },
+      "update_user": {
+        "name": "Update user",
+        "node" : "CBN000005",
+        "input": {
+          "user":"pl.user",
+          "user[eid]" : "app.output.app.eid",
+          "user[anm]" : "app.output.app.name"
+        },
+        "output":{
+          "user": "Object"
+        }
+      },
+      "conditional" : {
+        "name" : "Conditional",
+        "node" : "CBN000006",
+        "input" : {
+          "expression" : "status > 30",
+          "status" : "update_user.output.user.userstatus"
+        },
+        "output" : {
+          "result" : "Boolean"
+        }
+      },
+      "send_mail" : {
+        "name" : "Send User Mail",
+        "node" : "CBN000003",
+        "input" : {},
+        "output" : {}
+      },
+      "send_admin" : {
+        "name" : "Send Admin Mail",
+        "node" : "CBN000003",
+        "input" : {},
+        "output" : {}
+      },
+      "end" : {
+        "name" : "End",
+        "node" : "CBN000010"
+      }
+    }
+  },
+  "initializeAppActual": {
+    "code": "CBWD20001",
+    "name": "Workflow : Initialize App",
+    "marked": "0",
+    "edges": {
+      "0": [{"dst": "1"}],
+      "1": [{"dst": "2"}],
+      "2": [{"dst": "3"}],
+      "3": [{"dst": "4"}]
+    },
+    "nodes": {
+      "0": {
+        "name": "Start",
+        "code": "CBN000009",
+        "input":{}
+      },
+      "1": {
+        "name": "Create user",
+        "code": "CBN000004",
+        "input": {
+          "user" : "pl.user"
+        }
+      },
+      "2": {
+        "name": "Create app",
+        "code": "CBN000000",
+        "input": {
+          "app": "pl.app"
+        }
+      },
+      "3": {
+        "name": "Create layout",
+        "code": "CBN000014",
+        "input": {
+          "layout" : "pl.layout"
+        }
+      },
+      "4": {
+        "name": "Create Top Nav",
+        "code": "CBN000014",
+        "input": {
+          "nav" : "pl.nav"
+        }
+      },
+      "5": {
+        "name": "END",
+        "code" : "CBN000010"
+      }
+    }
+  },
+  "testwaiting":{
+    "code": "CBWD20001a",
+    "name": "Workflow: test waiting",
+    "marked":["LARRY"],
+    "edges":{
+      "LARRY" : [{"dst":"MARY"}],
+      "MARY" : [{"dst":"JOE"}]
+    },
+    "nodes":{
+      "LARRY" : {
+        "name" : "Start",
+        "code" : "CBN000009",
+        "input" : {},
+        "output" : {}
+      },
+      "MARY" : {
+        "name" : "Wait Test",
+        "code" : "CBN000008",
+        "input" : {
+          "expression" : "3 > 1"
+        },
+        "output" : {
+          "result" : "String"
+        }
+      },
+      "JOE" : {
+        "name" : "End",
+        "code" : "CBN000010",
+        "input" : {},
+        "output" : {}
+      }
+    }
+  },
+  "createdbdemo": {
+    "code": "CBWD20006",
+    "name": "Workflow : Initialize App",
+    "marked": "start",
+    "edges": {
+      "start": [{"dst": "crm"}],
+      "crm": [{"dst": "ordercanvas"}],
+      "ordercanvas": [{"dst": "product"}],
+      "product": [{"dst": "order"}],
+      "order": [{"dst": "iphone"}],
+      "iphone": [{"dst": "end"}]
+    },
+    "nodes": {
+      "start": {
+        "name": "start",
+        "code": "CBN000009",
+        "input": {},
+        "output": {}
+      },
+      "crm": {
+        "name": "crm",
+        "code": "CBN000014",
+        "input": {"app": "pl.app"},
+        "output": {"app": "pl.app"}
+      },
+      "end": {
+        "name": "end",
+        "code": "CBN000010",
+        "input": {},
+        "output": {}
+      },
+      "ordercanvas": {
+        "name": "ordercanvas",
+        "code": "CBN000014",
+        "input": {
+          "canvas": "pl.canvas",
+          "canvas[aid]": "crm.output.app.eid",
+          "canvas[anm]": "crm.output.app.name"
+        },
+        "output": {"canvas": "pl.canvas"}
+      },
+      "product": {
+        "name": "product",
+        "code": "CBN000014",
+        "input": {
+          "table": "pl.tables.product",
+          "table[cid]":"ordercanvas.output.canvas.eid",
+          "table[cnm]":"ordercanvas.output.canvas.name"
+        },
+        "output": {"table": "pl.table"}
+      },
+      "order": {
+        "name": "order",
+        "code": "CBN000014",
+        "input": {
+          "table": "pl.tables.order",
+          "table[cid]":"ordercanvas.output.canvas.eid",
+          "table[cnm]":"ordercanvas.output.canvas.name"
+        },
+        "output": {"table": "pl.table"}
+      },
+      "iphone": {
+        "name": "iphone",
+        "code": "CBN000014",
+        "input": {
+          "row": "pl.row",
+          "row[tid]":"product.output.table.eid",
+          "row[tbn]":"product.output.table.name"
+        },
+        "output": {"row": "pl.row"}
+      }
+
+    }
+
+
+  },
+  "halfauto" : {
+    "name" : "Unit Test: Workflow that stops halfway through",
+    "code" : "CBWD_UNITTEST_HALFAUTO",
+    "marked" : "A",
+    "edges" : {
+      "A" : [{"dst":"B"}],
+      "B" : [{"dst":"C"}]
+    },
+    "nodes" : {
+      "A" : {
+        "name" : "Start",
+        "code" : "CBN000009",
+        "input" : {},
+        "output" : {}
+      },
+      "B" : {
+        "name" : "Non-Automatic/Pending",
+        "code" : "CBN000008",
+        "input" : {},
+        "output" : {}
+      },
+      "C" : {
+        "name" : "End",
+        "code" : "CBN000010",
+        "input" : {},
+        "output" : {}
+      }
+    }
+  },
+  "fullauto" : {
+    "name" : "Unit Test: Workflow that automatically goes all the way through",
+    "code" : "CBWD_UNITTEST_FULLAUTO",
+    "marked" : "A",
+    "edges" : {
+      "A" : [{"dst":"B"}],
+      "B" : [{"dst":"C"}]
+    },
+    "nodes" : {
+      "A" : {
+        "name" : "Start",
+        "code" : "CBN000009",
+        "input" : {},
+        "output" : {}
+      },
+      "B" : {
+        "name" : "Automatic",
+        "code" : "CBN00000X",
+        "input" : {},
+        "output" : {}
+      },
+      "C" : {
+        "name" : "End",
+        "code" : "CBN000010",
+        "input" : {},
+        "output" : {}
+      }
+    }
+  },
+  "createAppWithLayout": {
+    "code": "CBWD101-ex",
+    "name": "Workflow : Initialize App",
+    "marked": "0",
+    "edges": {
+      "0": [{"dst": "1"}],
+      "1": [{"dst": "2"}],
+      "2": [{"dst": "3"}]
+    },
+    "nodes": {
+      "0": {
+        "name": "Start",
+        "code": "CBN000009",
+        "input":{}
+      },
+      "1": {
+        "name": "Create App",
+        "code": "CBN000000",
+        "input": {
+          "app" : "pl.app"
+        },
+        "output":{
+          "app" : "pl.app"
+        }
+      },
+      "2": {
+        "name": "Create Layout",
+        "code": "CBN000014",
+        "input": {
+          "layout": "pl.layout",
+          "layout[app]":"1.output.app.eid"
+        },
+        "output" : {
+          "layout" : "pl.layout"
+        }
+      },
+      "3": {
+        "name": "End",
+        "code": "CBN000010",
+        "input" : {
+
+        },
+        "output" : {
+          "app" : "1.output.app",
+          "layout" : "2.output.layout"
+        }
+      }
+    }
+  },
+  "bootstrap": {
+    "code": "CBW100",
+    "name": "Workflow : Initialize App",
+    "marked": "0",
+    "edges": {
+      "0": [{"dst": "1"}],
+      "1": [{"dst": "2"}],
+      "2": [{"dst": "3"}]
+    },
+    "nodes": {
+      "0": {
+        "name": "Start",
+        "code": "CBN000009",
+        "input":{}
+      },
+      "1": {
+        "name": "Create App",
+        "code": "CBN000014",
+        "input": {
+          "app" : "pl.app"
+        },
+        "output":{
+          "app" : "pl.app"
+        }
+      },
+      "2": {
+        "name": "Create Layout",
+        "code": "CBN000014",
+        "input": {
+          "layout": "pl.layout",
+          "layout[app]":"1.output.app.eid"
+        },
+        "output" : {
+          "layout" : "pl.layout"
+        }
+      },
+      "3": {
+        "name": "End",
+        "code": "CBN000010",
+        "input" : {
+        }
+      }
+    }
+  }
+
+}
+
+

@@ -1,0 +1,99 @@
+# CBOS Workflow FSM
+
+A finite state machine (FSM) is a directed graph consisting of States and Transitions, and can be represented as a list of uniquely-labelled states with the following internal structure:
+
+	FSM : {
+		State_A :	{
+			onEnter : "xmm_doFoo",	//when entering this state, run this fn
+			onExit : "ymm_doBar",	//when leaving this state, run this fn
+			event1 : State_B,		//on event1, Exit A and Enter B
+			event2 : State_A,		//on event2, Exit A and Enter A
+			event3 : State_C		//on event3, Exit A and Enter C
+		}
+		State_B : ...
+	}
+
+For example, there is a basic task consisting of 1) starting the task, 2) filling out a form and submitting it, and 3) finishing the task. We can model it like this:
+
+			START 		  	   .-> SUBMITTING_FORM -- onSubmitted --> END
+			   \		 	  /					\
+			 onBegin 	 onSubmit 			  onError
+				 \			/					  \
+				  `-> FILLING_FORM <-. 		  	   `-.-> ERROR
+				  		\			  \			    /	
+				      onFill 	 onPersisted   onError
+				  		  \			    \	   /
+				  		   `-> PERSISTING_FIELD
+
+This task can be represented by the following FSM specification:
+
+	FillFormFSM : {
+		START : {
+			onEnter : "bmm_createResponse"
+			onBegin : FILLING_FORM
+		}
+		FILLING_FORM : {
+			onFill : PERSISTING_FIELD
+			onSubmit : SUBMITTING_FORM
+		}
+		PERSISTING_FIELD : {
+			onEnter : "bmm_updateFormResponse"
+			onPersisted : FILLING_FORM
+			onError : ERROR
+		}
+		SUBMITTING_FORM : {
+			onEnter : "bmm_submitFormResponse"
+			onSubmitted : END
+			onError : ERROR
+		}
+		END : {
+			onEnter : "wfm_closeWorkflow"
+		}
+		ERROR : {
+			onEnter : "wfm_handleError"
+		}
+	}
+
+There are two kinds of field values here (although both nominally Strings): a STATE label or a FUNCTION name. When the FSM receives an event message, it will see if a state label has been specified for that event. If so, it will fire the onExit function (if present) for the current state, then proceed to change to the target state. Upon attaining the new state, the onEnter function of this new state will be fired. Both the onExit and onEnter functions take as a payload the information contained in the stimulus event. 
+
+On the other hand, if the field triggered by the event is not a state label, it is assumed to be a function name, and is executed with the event's payload. This functionality can be used where an event should trigger a function call, but not enter (or re-enter) a state.
+
+An event message has the following form:
+
+	EventMessage : {
+		name : "Begin"		//name of the event
+		payload : {
+			...				//Payload of information to pass to onEnter/onExit
+		}
+	}
+
+## Workflows
+
+CBOS workflows are collections of tasks linked as nodes in a decision tree:
+
+	START 					(FillFormB)-------------.
+		\				   /						 \
+		 `-> (FillFormA) -'.		    (ScheduleA)-. `---.-> END
+		 				    \		   /			 \	 /
+		 				    (Decide)--'.			  `.'
+		 				     		    \			  /
+		 				     		   	 (ScheduleB)-'
+
+Each task must have a single START and a single END state to be used in a CBOS workflow (and thus at all). These tasks are then linked to each other by daisy chaining STARTs to ENDs. 
+
+The order of the workflow is specified using simple grouping. In this example, it is
+
+(START), (FillFormA), (FillFormB , (Decide , (ScheduleA, ScheduleB))), (END)
+
+Each CBOS workflow maintains a stack, which begins empty, as well as this list of tasks in their groupings. When a workflow is begun, the first element in the list (START) is put onto the stack. Thereafter, when the workflow receives a message, it follows the following procedure:
+
+	0.) Push the leading group on the stack. Create a temporary stack.
+	1.) Pop the current group off the stack.
+	2.) For each element in the group popped off the stack:
+		a.) If the element is a Task, emit the event to the task.
+		b.) If the element is a Group, emit the event to the first task in the group
+		c.) If the task did not change state, push it onto the temporary stack
+		d.) If the task did change state, check the current state of the task:
+			a.) If it is not in the END state, push the task's group onto the temporary stack.
+			b.) If it *IS* in the END state, remove the task from its group
+	3.) Pop and then push all items off the temporary stack onto the current stack. Go to 1.

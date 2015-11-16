@@ -1,0 +1,188 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog createAppModal modal1100">
+        <div class="modal-content">
+            <div class="modal-header cbos-bluebg">
+                <button type="button" class="close" aria-label="Close" ng-click="dismiss()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title cbos-white">Create New App </h4>
+            </div>
+            <div class="modal-body">
+
+
+                <form class="form-horizontal cbos-light-font-label cbos-label-left">
+
+                    <div class="form-group">
+                        <label for="appTitle" class="col-sm-2 control-label">APP Title: </label>
+
+                        <div class="col-sm-10">
+
+                            <input class="form-control" id="appTitle" value="CRM" ng-model="newApp.appTitle">
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="appTitle" class="col-sm-2 control-label">APP Address: </label>
+
+                        <div class="col-sm-10">
+
+                            <input class="form-control" id="appTitle"
+                                   value="https://mycompany.saascbos.com/{{newApp.appTitle | lowercase}}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="appLayoutContainer">
+                        <div>
+                            App Layout
+                        </div>
+                        <div class="appLayoutContainerInnner">
+
+                            <div class="appLayouts pull-left cbos-relative">
+                                <div id="appSelectionCarousel">
+
+                                    <div class="clearfix"></div>
+
+                                    <slick infinite="true" vertical="true" speed="300" slides-to-show="5"
+                                           class="vertical-click" slides-to-scroll="1"
+                                           prev-arrow=".create-app-slick-prev" next-arrow=".create-app-slick-next">
+
+
+
+
+                                        <a ui-sref="desktop.createApp.selectView({gridId:'ly005'})" class="cbos-layout-grid select-grid cbos-display-block"
+                                           ui-sref-active="cbos-blue-border">
+
+                                            <div class="layout-left-nav cbos-gray-bg pull-left"></div>
+
+                                            <div class="layout-1y pull-left">
+                                                <div class="cbos-gray-bg "></div>
+                                            </div>
+
+
+                                        </a>
+
+                                        <a ui-sref="desktop.createApp.selectView({gridId:'ly001'})"  ui-sref-active="cbos-blue-border" class="cbos-layout-grid select-grid cbos-display-block">
+
+                                            <div class="layout-left-nav cbos-gray-bg pull-left"></div>
+                                            <div class="layout-2y pull-left">
+                                                <div class="cbos-gray-bg"></div>
+                                                <div class="cbos-gray-bg"></div>
+                                            </div>
+
+                                        </a>
+
+
+                                        <a ui-sref="desktop.createApp.selectView({gridId:'ly002'})"  ui-sref-active="cbos-blue-border" class="cbos-layout-grid select-grid cbos-display-block">
+
+                                            <div class="layout-left-nav cbos-gray-bg pull-left"></div>
+                                            <div class="layout-1y2x pull-left">
+                                                <div class="cbos-gray-bg"></div>
+                                                <div class="">
+                                                    <div class="pull-left cbos-gray-bg">
+
+                                                    </div>
+
+                                                    <div class="pull-right cbos-gray-bg">
+
+                                                    </div>
+
+                                                    <div class="clearfix"></div>
+
+                                                </div>
+                                            </div>
+
+                                        </a>
+
+
+
+
+                                        <a ui-sref="desktop.createApp.selectView({gridId:'ly003'})"  ui-sref-active="cbos-blue-border" class="cbos-layout-grid select-grid cbos-display-block">
+
+
+                                            <div class="layout-1y3x">
+                                                <div class="cbos-gray-bg"></div>
+                                                <div class="">
+                                                    <div class="pull-left cbos-gray-bg">
+
+                                                    </div>
+
+                                                    <div class="pull-left cbos-gray-bg">
+
+                                                    </div>
+                                                    <div class="pull-left cbos-gray-bg">
+
+                                                    </div>
+
+                                                    <div class="clearfix"></div>
+
+                                                </div>
+                                            </div>
+                                        </a>
+
+                                        <a ui-sref="desktop.createApp.selectView({gridId:'ly004'})"  ui-sref-active="cbos-blue-border" class="cbos-layout-grid select-grid sidebar cbos-display-block">
+
+                                            <!--cbos-create-app-layout-selection-->
+
+                                            <div class="layout-left-nav cbos-gray-bg pull-left"></div>
+                                            <div class="layout-2y pull-left">
+                                                <div class="cbos-gray-bg"></div>
+                                                <div class="cbos-gray-bg"></div>
+                                            </div>
+                                            <div class="layout-side-bar cbos-gray-bg pull-right"></div>
+
+                                        </a>
+
+
+                                   </slick>
+                                    <a type="button" class="vertical slick-control slick-prev create-app-slick-prev"
+                                       role="button">hello</a>
+                                    <a type="button" class=" vertical slick-control slick-next create-app-slick-next"
+                                       role="button">hello</a>
+                                </div>
+                            </div>
+                            <div class="layoutPreviewPanel pull-left" style="overflow: hidden;">
+                                <div class="demo-header-container"></div>
+                                <div id="demo-grid-preview" class="demo-grid-preview">
+
+
+                                    <div class="cbos-layout-grid left-nav-grid">
+                                        <div class="container-fluid">
+                                            <div class="row">
+
+                                                <div class="col-sm-3  col-md-2 cbos-full-height cbos-padding-right-0" ui-view="designLeftnav"></div>
+                                                <div class="grid-main-container col-sm-9 col-md-10 right" ui-view="designGridView"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--<ng-include src="selectedLayoutPreview"></ng-include>-->
+
+                                </div>
+
+                                <div class="demo-footer-container"></div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </form>
+
+
+                <div class="clearfix"></div>
+
+            </div>
+
+            <div class="modal-footer">
+                <div class="cbos-modal-footer-inner">
+                    <button class="btn cbos-btn cbos-btn-gray cbos-btn-lg" ng-click="dismiss()">Cancel</button>
+                    <button class="btn cbos-btn cbos-btn-blue cbos-btn-lg" ng-click="submitAppCreation()">Create</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

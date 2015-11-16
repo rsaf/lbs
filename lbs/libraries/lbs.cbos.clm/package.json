@@ -1,0 +1,9 @@
+{
+  "name" : "clm",
+  "description": "common library module",
+  "version" : "1.0.0",
+  "main": "./clm_Interface.js",
+  "private": true,
+  "dependencies" : {
+  }
+}

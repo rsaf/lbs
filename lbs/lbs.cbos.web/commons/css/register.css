@@ -1,0 +1,202 @@
+
+
+.registrationWrapper{
+    width: 98%;
+    margin: auto;
+}
+
+
+.registrationWrapper .control-label.required:before{
+
+    content: '*';
+    color: red;
+    padding: 2px;
+    font-size: 1.3em;
+}
+
+.registrationWrapper .form-group .control-label:first-child{
+    max-width: 180px;
+}
+
+ .formSubmitBox, .registrationTitle{
+
+    border: 1px solid #848484;
+    margin-left: 14.80%;
+    width: 71.5%;
+}
+
+
+.servicesContainerBox, .specialRequirementBox{
+    border: 1px solid #848484;
+}
+
+.specialRequirementBox textarea, .registrationTitle{
+    border: none;
+}
+
+.formSubmitBox{
+    border: none;
+    margin-bottom: 50px;
+}
+
+.checkboxOptions{
+    display: inline-block;
+    padding: 0 20px;
+}
+
+
+.servicesContainerBox{
+    display: table;
+    width: 100%;
+}
+
+.servicesContainerBoxInner{
+    /*max-width: -moz-max-content;*/
+    /*max-width: -webkit-max-content;*/
+    /*max-width: max-content;*/
+    /*margin: auto;*/
+
+
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+
+}
+
+
+
+
+.regisTrationSumbitBtn{
+    height: 45px;
+    max-width: 250px;
+    margin: auto;
+    margin-bottom: 30px;
+    background-color: #2D4B68;
+    margin-top: 20px;
+}
+
+.regisTrationSumbitBtn input{
+    height: 40px;
+    line-height: 40px;
+    background-color: #335B7D;
+    border: none;
+    width: 100%;
+    color: white;
+}
+
+.wrapper.registration{
+    width: 96%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+
+
+
+
+
+
+@media screen and (min-width:768px) {
+
+
+    .specialRequirementBoxContainer, .servicesContainerBoxContainer{
+        width: 90% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        float: none;
+    }
+
+    .servicesContainerBox{
+        padding: 10px;
+    }
+}
+
+
+
+
+
+@media screen and (max-width:768px) {
+
+    .formSubmitBox, .registrationTitle{
+
+        margin: auto;
+        width:90%;
+
+    }
+
+    /*.registrationWrapper{*/
+        /*padding: 15px 30px;*/
+    /*}*/
+
+    .checkboxOptions{
+
+        padding: 0 10px;
+        margin: 5px 0;
+
+    }
+    /*.servicesContainerBoxInner{*/
+        /*max-width:449px;*/
+    /*}*/
+}
+
+
+@media screen and (max-width:485px) {
+
+    .formSubmitBox, .registrationTitle{
+
+        margin: auto;
+        width:80%;
+
+    }
+
+
+    .checkboxOptions{
+
+        padding: 5px;
+
+    }
+
+
+
+   .registrationWrapper form img {
+       display: inline-block;
+       height: 30px !important;
+       width: 30px !important;
+    }
+
+}
+
+
+
+
+@media screen and (max-width:380px) {
+
+
+    .checkboxOptions{
+
+        padding: 3px;
+
+    }
+
+}
+
+
+@media screen and (max-width:330px) {
+
+
+
+    .checkboxOptions{
+
+        padding: 2px;
+
+    }
+
+    .registrationWrapper form img {
+        height: 27px !important;
+        width: 27px !important;
+        margin-bottom: 5px;
+        margin-top: 5px;
+    }
+
+}
+

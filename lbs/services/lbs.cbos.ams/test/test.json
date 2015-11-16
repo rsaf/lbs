@@ -1,0 +1,22 @@
+{
+  "dns": "wms",
+  "sns": "spa",
+  "vr": "1.0.0",
+  "ac": {
+    "uid": "5624c1c38468a8880b23a66a",
+    "oid": "500000000000000000000000"
+  },
+  "op": "ams_update_entity",
+  "pl": {
+    "table": {
+      "eid": "5628a66cfdbbddc23aa668bf",
+      "fields": {
+        "fn": "hiidddccbbbbb",
+        "fid": "9ykdvqu8fb",
+        "_id": "5628a681fdbbddc23aa668c6",
+        "linkTo": "desktop.app.canvas.tables.table.view.field({appName:\"bbs\",canvasName:\"j2g5tmpnqd\",tableId:\"avcol5z7g6\",viewId:\"avcol5z7g6\",fieldId:\"9ykdvqu8fb\"})"
+      }
+    }
+  },
+  "er": null
+}

@@ -1,0 +1,481 @@
+
+
+body,html{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.loginPageFooter{
+    background-color: #2068BB;
+    height: 35px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+body{
+    position: relative;
+
+}
+
+
+.loginPageSlider1, .loginPageSlider2, .loginPageSlider3 , .loginPageSlider4{
+
+    min-height: 752px;
+
+
+}
+
+.loginPageSlider1 {
+    background: url("../images/background1.jpg") no-repeat center center;
+    width: 100%;
+    background-size: 100% 100%;
+}
+
+.loginPageSlider2 {
+    background: url("../images/background2.jpg") no-repeat center center;
+    width: 100%;
+    background-size: 100% 100%;
+}
+
+
+.loginPageSlider3 {
+    background: url("../images/background3.jpg") no-repeat center center;
+    width: 100%;
+    background-size: 100% 100%;
+}
+
+
+.loginPageSlider4 {
+    background: url("../images/background4.jpg") no-repeat center center;
+    width: 100%;
+    background-size: 100% 100%;
+}
+
+
+.signInwrapper{
+    width: 100%;
+    height: 100%;
+    min-height: 500px !important;
+    overflow-y:hidden;
+}
+
+.swiper-container{
+    height: 100%;
+    /*padding-bottom: 50px;*/
+}
+
+.logginBox:not(.mobileOnly){
+    background-color: rgba(255,255,255,0.3);
+    width: 400px;
+    position: absolute;
+    top: 50%;
+    right: 50px;
+    margin-top: -158px;
+    padding: 40px 50px 10px;
+    z-index: 3;
+}
+
+
+.logginBox.accessControl{
+    position: static;
+    margin-top: 0 ;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 20px ;
+    padding-bottom: 0;
+    border: 1px solid #c8c8c8;
+}
+
+#loginModal .modal-header{
+    padding: 5px 15px;
+}
+
+.logginBox.accessControl .form-group:first-child,
+.logginBox.accessControl .form-group:nth-child(2){
+    border: 1px solid #c8c8c8;
+    height: 36px;
+}
+
+.logginBox.accessControl a{
+    color: #153E68 !important;
+
+}
+
+.loginMadal .modal-header{
+    padding:8px 15px;
+}
+
+.loginSumbitBtn{
+    height: 35px;
+    background-color: #2D4B68;
+    margin-top: 20px;
+}
+
+.loginSumbitBtn input{
+    height: 30px;
+    line-height: 30px;
+    background-color: #335B7D;
+    border: none;
+    width: 100%;
+    color: white;
+}
+
+
+.usernameLabel{
+    height: 34px;
+    background: url("../images/usernameicon.png") no-repeat center center;
+    background-color: white;
+    padding-left: 15px;
+}
+
+
+
+.passwordLabel{
+
+    height: 34px;
+    background: url("../images/passwordicon.png") no-repeat center center;
+    background-color: white;
+    padding-left:15px;
+}
+
+.catchaLabel{
+    height: 34px;
+    background: url("../images/verificationcodeicon.png") no-repeat center center;
+    background-color: white;
+    padding-left: 15px;
+}
+
+.logginBox a{
+    color: white;
+    cursor: pointer;
+
+}
+
+.logginBox a:hover{
+    opacity: 0.8;
+    text-decoration: none;
+}
+
+.logginBox .form-group div{
+    padding-left:0;
+    padding-right: 0;
+}
+
+.logginBox .form-group div input.form-control{
+    border: none;
+    border-radius: 0;
+}
+
+
+
+.autocaptchaBox{
+    background-color: white;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    color: #0000ff;
+
+}
+
+.loginPageLogo{
+    position: absolute;
+    top: 30px;
+    left: 50px;
+    width: 100%;
+    height: 60px;
+    z-index: 3;
+}
+
+.loginPageLogo span{
+    color: white;
+    font-size: 38px;
+    margin-left: 10px;
+    display: inline-block;
+}
+
+.loginPageLogo img{
+    cursor: pointer;
+    display: inline-block;
+}
+
+
+.logginBox.mobileOnly{
+    margin:auto;
+    margin-bottom: 60px;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    /*margin-top: 25%;*/
+}
+.logginBox.mobileOnly .loginSumbitBtn{
+    height: 45px;
+    background-color:transparent;
+    margin-top: 20px;
+
+}
+
+
+
+.logginBox.mobileOnly input.form-control{
+    height: 45px;
+    line-height: 45px;
+    border: 1px solid white !important;
+    border-radius: 22px !important;
+    background-color: transparent;
+    text-align: center;
+    padding: 0;
+    color: white;
+}
+
+
+
+.logginBox.mobileOnly ::-webkit-input-placeholder {
+    color: white;
+}
+
+.logginBox.mobileOnly :-moz-placeholder { /* Firefox 18- */
+    color: white;
+}
+
+.logginBox.mobileOnly ::-moz-placeholder {  /* Firefox 19+ */
+    color: white;
+}
+
+.logginBox.mobileOnly :-ms-input-placeholder {
+    color: white;
+}
+
+
+
+.logginBox.mobileOnly .loginSumbitBtn input{
+    height: 45px;
+    line-height: 45px;
+    background-color:#205FA5;
+    border: 1px solid #205FA5;
+    border-radius: 22px !important;
+    width: 100%;
+    color: white;
+}
+
+.mobileOnly{
+    display: none;
+}
+
+
+.logginBox.mobileOnly{
+
+    background-color:transparent;
+        /*position: absolute;*/
+}
+
+
+
+.logginBox.mobileOnly .loginSumbitBtn{
+    margin-top: 20px;
+}
+
+.registerForgotPassword.mobileOnly{
+    width: 100%;
+    padding: 15px;
+    margin-top: -20px;
+}
+
+.registerForgotPassword.mobileOnly a{
+    color: white ;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+
+@media screen and (max-width:950px) {
+
+    .loginPageLogo span{
+        font-size: 28px;
+    }
+
+
+    .loginPageLogo img{
+        width: 100px;
+        height: 40px;
+    }
+}
+
+
+
+@media screen and (max-width:668px) {
+
+    .loginPageLogo span{
+        font-size: 20px;
+        margin-top: 5px;
+    }
+
+   .loginPageLogo{
+
+       top: 20px;
+       left: 20px;
+
+   }
+}
+
+
+
+
+
+@media screen and (max-width:668px) {
+
+
+    .loginPageLogo img{
+        width: 80px;
+        height: 40px;
+    }
+
+    .loginPageLogo span{
+        font-size: 18px;
+        margin-top: 8px;
+    }
+
+    .loginPageLogo{
+
+        top: 20px;
+        left: 20px;
+
+    }
+}
+
+
+
+
+
+
+
+@media screen and (max-width:500px) {
+
+    .logginBox{
+
+        width: 300px;
+        right: 50%;
+        margin-right: -150px;
+    }
+
+
+}
+
+
+
+
+
+
+
+@media screen and (max-width:480px) {
+
+
+
+    .pcOnly{
+        display: none;
+    }
+
+
+    .mobileOnly{
+        display: block;
+    }
+
+    .loginPageLogo{
+        position: static;
+        margin-top: 60px;
+
+    }
+
+
+    .loginPageLogo img{
+        width: 120px;
+        height: 55px;
+    }
+
+    .loginPageLogo span{
+        display: block;
+        text-align: center;
+        width: 100%;
+        margin-left:0;
+        padding-left: 0;
+    }
+
+    .loginPageLogo a{
+        display: block;
+        width: 100%;
+    }
+
+    .loginPageLogo a img{
+
+        margin: auto;
+        display: block;
+    }
+
+
+
+
+
+
+
+
+    .loginPageSlider1, .loginPageSlider2, .loginPageSlider3 , .loginPageSlider4{
+
+        min-height: 752px;
+
+
+    }
+
+    .loginPageSlider1 {
+        background: url("../images/phonewelcomepage2.jpg") no-repeat center center;
+        width: 100%;
+        background-size: 100% 100%;
+    }
+
+    .loginPageSlider2 {
+        background: url("../images/phonewelcomepage3.jpg") no-repeat center center;
+        width: 100%;
+        background-size: 100% 100%;
+    }
+
+
+    .loginPageSlider3 {
+        background: url("../images/phonewelcomepage4.jpg") no-repeat center center;
+        width: 100%;
+        background-size: 100% 100%;
+    }
+
+
+    .loginPageSlider4 {
+        background: url("../images/phonewelcomepage1.jpg") no-repeat center center;
+        width: 100%;
+        background-size: 100% 100%;
+    }
+
+    .signInwrapper{
+        background: url("../images/phonewelcomepage2.jpg") no-repeat center center;
+        width: 100%;
+        background-size: 100% 100%;
+    }
+
+    .swiper-wrapper, .swiper-wrapper *{
+        display: none;
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

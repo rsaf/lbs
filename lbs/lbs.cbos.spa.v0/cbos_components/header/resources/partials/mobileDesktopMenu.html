@@ -1,0 +1,106 @@
+<div class="aside mobileMenuAside" tabindex="-1" role="dialog">
+    <div class="aside-dialog">
+        <div class="aside-content">
+            <div class="aside-header" ng-show="title">
+                <button type="button" class="close" ng-click="$hide()">&times;</button>
+                <!--<h4 class="aside-title" ng-bind="title"></h4>-->
+                <h4 class="aside-title"></h4>
+
+
+            </div>
+
+
+            <!--<div class="aside-body" ng-bind="content">-->
+            <div class="aside-body" ng-click="$hide()">
+
+
+
+                <div ng-if="appName==='DESKTOP'" class="userInfo">
+
+                    <div class="userProfilePic pull-left"> <img src="cbos_layouts/desktop/theme/images/profile_icon_man.png" alt="userPicture">  </div>
+                    <div class="userProfileText pull-left"> <div>STEVEN LIU</div>  <div>Senior HR Manager</div> </div>
+
+
+                    <div class="clearfix"></div>
+                </div>
+
+
+                <div ng-if="appName!=='DESKTOP'" class="userInfo appInfo">
+
+                    <div class="userProfilePic pull-left"> <img ng-src="{{appInfo.icons.iselected}}" alt="appIcon" style="width: 30px; height: 30px;">  </div>
+                    <div class="userProfileText pull-left"> <div style="font-size: 1.5em; line-height: 30px; vertical-align: baseline; padding-left: 20px;">{{appInfo.name}}</div>  </div>
+
+                    <div class="clearfix"></div>
+                </div>
+
+                <hr>
+
+
+
+                <div class="mobileMenuItemContainer">
+
+
+
+
+                    <div class="mobileMenuItem " ng-repeat="nav in navigation[appName]" >
+
+                        <div class="menuIcon pull-left">
+                            <span class="glyphicon glyphicon-list-alt"></span>
+
+
+                        </div>
+
+                        <a class="menuName pull-left cbos-white" ui-sref={{nav.linkTo}}>{{nav.ln}}</a>
+
+
+                        <div class="clearfix"></div>
+
+
+                    </div>
+
+
+
+                    <div class="mobileMenuItem" >
+
+                        <div class="menuIcon pull-left" style="margin-right: 10px">
+                            <span class="glyphicon glyphicon-log-out" style="font-size: 1.2em"></span>
+
+
+                        </div>
+
+                        <a ng-click="logout()" class="menuName cbos-pointer pull-left  cbos-white">Log Out</a>
+
+
+                        <div class="clearfix"></div>
+
+
+                    </div>
+
+
+
+                    <div class="mobileMenuItem settings">
+
+                        <div class="menuIcon pull-left">
+                            <span class="glyphicon glyphicon-cog"></span>
+
+
+                        </div>
+
+                        <a ng-if="appName!=='DESKTOP'" ui-sref="desktop.app.appsettings" class="menuName pull-left  cbos-white">Settings</a>
+                        <a ng-if="appName==='DESKTOP'" ui-sref="desktop.desktopsettings" class="menuName pull-left  cbos-white">Settings</a>
+
+
+                        <div class="clearfix"></div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="aside-footer">
+                <!--<button type="button" class="btn btn-default" ng-click="$hide()">Close</button>-->
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+<div class="mainWrapper">
+
+    <div>
+
+        <div>
+            <cbos-header >
+            </cbos-header>
+        </div>
+        <div>
+            <cbos-navigator></cbos-navigator>
+        </div>
+
+    </div>
+
+
+
+        <div  name="cbos-app-panel" class="content mainContainer">
+
+
+            <div  name="cbos-bottom-panel" class="container-fluid mainContainerInner">
+
+
+                <div class="row cbos-full-height cbos-padding-top-15">
+
+                    <!--left navigation for apps-->
+                    <div ng-if="($state.current.data&&$state.current.data. withLeftNav&&!cbosMobileMode)"  class="col-sm-2 cbos-full-height cbos-padding-left-0"  ui-view="mainLeftNav"></div>
+
+                    <!-- Start force loading -->
+                    <div  ng-if="($state.current.data&&$state.current.data.withLeftNav)" class="col-sm-10 cbos-full-height"  ui-view="mainView">
+
+                    </div>
+
+                    <!-- End of force loading -->
+                    <div ui-view="mainViewWithoutLeftNav" class="cbos-full-height" ng-if="$state.current.data&&$state.current.data.withLeftNav === false">
+
+                        <div class="cbos-full-height" ng-if="('desktop'|includedByState)">
+                            <!--<div name="cbos-left-panel"><nav class="leftNavigation"></nav></div>-->
+                            <div name="cbos-right-panel" class="mainInterContainer" id="mainInterContainer"  >
+                                <div name="cbos-grid-panel" class="row cbos-padding-bottom-20" >
+                                    <div name="cbos-2x-grid">
+                                        <div name="cbos-x1-grid" class="col-sm-9 desktopMainContainer cbos-margin-bottom-15" >
+                                            <div name="cbos-2y-grid" class="container-fluid">
+                                                <div name="cbos-y1-grid">
+                                                    <cbos-table-frequent-apps> </cbos-table-frequent-apps>
+                                                </div>
+                                                <div name="cbos-y2-grid" class=" cbos-margin-top-20 cbos-padding-bottom-15">
+                                                    <div name="cbos-2x-grid">
+                                                        <div name="cbos-x1-grid" class="col-sm-4 tasksContainer cbos-padding-bottom-10 cbos-padding-left-0" >
+                                                            <cbos-table-mytasks ></cbos-table-mytasks>
+                                                        </div>
+                                                        <div name="cbos-x2-grid" class="col-sm-8  cbos-padding-left-0  cbos-padding-right-0">
+                                                            <div name="cbos-2y-grid">
+                                                                <div name="cbos-y1-grid">
+                                                                    <cbos-table-mydocuments></cbos-table-mydocuments>
+                                                                </div>
+                                                                <div name="cbos-y2-grid">
+                                                                    <cbos-clock></cbos-clock>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div name="cbos-x2-grid" class="col-sm-3  sideContainer">
+                                            <div name="cbos-2y-grid" class="container-fluid" >
+                                                <div name="cbos-y1-grid">
+                                                    <cbos-table-news></cbos-table-news>
+                                                </div>
+                                                <div name="cbos-y2-grid">
+                                                    <cbos-table-twits></cbos-table-twits>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+           </div>
+<div>
+    <cbos-footer>
+    </cbos-footer>
+</div>
+</div>

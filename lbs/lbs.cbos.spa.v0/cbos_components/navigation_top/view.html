@@ -1,0 +1,55 @@
+
+<div class="tootboxSliderHelper"> </div>
+<div class="toolBoxTopNavContainer" style="background: transparent;">
+
+    <!--<div class="toolBox closed initClass" id="cbosToolBox" ng-controller="toolBoxAppIconsRender" style="background: white;">-->
+        <!--<div class="container-fluid">-->
+            <!--<div class="row">-->
+                <!--<div class="">-->
+                    <!--<slick  init-onload=true data="appIcons" infinite=true speed=300 slides-to-show={{numberToShow}} slides-to-scroll=1 prev-arrow=".toolbox-slick-prev" next-arrow=".toolbox-slick-next">-->
+                        <!--<div ng-repeat="appicon in appIcons" style="width: {{sigleWidth}}%;">-->
+                            <!--<div class="appIcon">-->
+                                <!--<span class="glyphicon glyphicon-cog"></span>-->
+                                <!--<div class="appIconIcon"> <img ng-src="{{appicon.url}}"></div>-->
+                                <!--<div class="appIconName"> {{appicon.name}}</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</slick>-->
+                    <!--<div class="clearfix"></div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<a type="button" class="slick-control slick-prev  toolbox-slick-prev"  role="button" >Previous Button</a>-->
+        <!--<a type="button" class=" slick-control slick-next toolbox-slick-next" role="button" >Next Button</a>-->
+    <!--</div>-->
+
+
+    <cbos-app-storage></cbos-app-storage>
+
+    <nav class="topNavigation largeTabletAndPc">
+        <div class="menuContainer">
+            <div ng-repeat="nav in topnav">
+
+                <a ng-if="(nav.linkTo==='desktop')" class="menuItem"   ng-class="{'selected':('desktop.desktopsettings'|includedByState)||('desktop'|isState)}" ui-sref={{nav.linkTo}} cbos-top-navigation-item="">
+                    <div class="menuIcon grayIcon pull-left"> <img ng-src={{nav.icons.idefault}}></div>
+                    <div class="menuIcon blueIcon pull-left"> <img ng-src={{nav.icons.iselected}}></div>
+                    <div class="menuName pull-left">
+                        {{nav.name}}
+                    </div>
+                </a>
+                <a ng-if="(nav.linkTo!='desktop')" class="menuItem"  ui-sref-active="selected" ui-sref={{nav.linkTo}} cbos-top-navigation-item="">
+                    <div class="menuIcon grayIcon pull-left"> <img ng-src={{nav.icons.idefault}}></div>
+                    <div class="menuIcon blueIcon pull-left"> <img ng-src={{nav.icons.iselected}}></div>
+                    <div class="menuName pull-left">
+                        {{nav.name}}
+                    </div>
+                </a>
+
+
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+    </nav>
+
+</div>

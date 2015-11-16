@@ -1,0 +1,338 @@
+
+
+/* Slide animation */
+ .ngViewAnimation.slide {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+.ngViewAnimation.slide.ng-enter,
+.ngViewAnimation.slide.ng-leave {
+    -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+}
+.ngViewAnimation.slide.ng-enter {
+    left: 100%;
+}
+.ngViewAnimation.slide.ng-enter-active {
+    left: 0;
+}
+.ngViewAnimation.slide.ng-leave {
+    left: 0;
+}
+.ngViewAnimation.slide.ng-leave-active {
+    left: -100%;
+}
+
+.reverse .page.slide.ng-enter {
+    left: -100%;
+}
+.reverse .page.slide.ng-enter-active {
+    left: 0;
+}
+.reverse .page.slide.ng-leave {
+    left: 0;
+}
+.reverse .page.slide.ng-leave-active {
+    left: 100%;
+}
+
+
+/* Slidedown */
+.ngViewAnimation.slidedown {
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.ngViewAnimation.slidedown.ng-enter,
+.ngViewAnimation.slidedown.ng-leave {
+    -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+}
+.ngViewAnimation.slidedown.ng-enter {
+    top: -100%;
+}
+.ngViewAnimation.slidedown.ng-enter-active {
+    top: 0;
+}
+.ngViewAnimation.slidedown.ng-leave {
+    top: 0;
+}
+.ngViewAnimation.slidedown.ng-leave-active {
+    top: 100%;
+}
+.reverse .page.slidedown.ng-enter {
+    top: 100%;
+}
+.reverse .page.slidedown.ng-enter-active {
+    top: 0;
+}
+.reverse .page.slidedown.ng-leave {
+    top: 0;
+}
+.reverse .page.slidedown.ng-leave-active {
+    top: -100%;
+}
+
+/* Slideup */
+.ngViewAnimation.slideup {
+    left: 0;
+    right: 0;
+    height: 100%;
+}
+.ngViewAnimation.slideup.ng-enter,
+.ngViewAnimation.slideup.ng-leave {
+    -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+}
+.ngViewAnimation.slideup.ng-enter {
+    top: 100%;
+}
+.ngViewAnimation.slideup.ng-enter-active {
+    top: 0;
+}
+.ngViewAnimation.slideup.ng-leave {
+    top: 0;
+}
+.ngViewAnimation.slideup.ng-leave-active {
+    top: -100%;
+}
+.reverse .page.slideup.ng-enter {
+    top: -100%;
+}
+.reverse .page.slideup.ng-enter-active {
+    top: 0;
+}
+.reverse .page.slideup.ng-leave {
+    top: 0;
+}
+.reverse .page.slideup.ng-leave-active {
+    top: 100%;
+}
+
+
+/* Pop in/out animation */
+.ngViewAnimation.pop {
+    position: absolute;
+    left: 0; right: 0;
+    top: 0; bottom: 0;
+}
+.ngViewAnimation.pop.ng-enter,
+.ngViewAnimation.pop.ng-leave {
+    -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+}
+.ngViewAnimation.pop.ng-enter {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+}
+.ngViewAnimation.pop.ng-enter-active,
+.ngViewAnimation.pop.ng-leave,
+.ngViewAnimation.pop.ng-leave-active {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+.ngViewAnimation.pop.ng-leave-active {}
+
+
+/* Fade in/out */
+.ngViewAnimation.fade {
+    left: 0;
+    right: 0;
+    height: 100%;
+    opacity: 1;
+}
+.ngViewAnimation.fade.ng-enter,
+.ngViewAnimation.fade.ng-leave {
+    -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+}
+.ngViewAnimation.fade.ng-enter {
+    opacity: 0;
+}
+.ngViewAnimation.fade.ng-enter-active {
+    opacity: 1;
+}
+.ngViewAnimation.fade.ng-leave {
+    opacity: 1;
+}
+.ngViewAnimation.fade.ng-leave-active {
+    opacity: 0;
+}
+
+
+/* Flip animation */
+.content {
+    -webkit-perspective: 600px;
+    perspective: 600px;
+}
+.ngViewAnimation.flip {
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+.ngViewAnimation.flip.ng-enter {
+    -webkit-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+    z-index: 800;
+}
+.ngViewAnimation.flip.ng-enter-active {
+    -webkit-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+    z-index: 900;
+}
+.ngViewAnimation.flip.ng-leave {
+    -webkit-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+    z-index: 900;
+}
+.ngViewAnimation.flip.ng-leave-active {
+    -webkit-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+    z-index: 800;
+}
+
+
+/* Rotate animation */
+.ngViewAnimation.rotate {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+}
+.ngViewAnimation.ng-leave.rotate {
+    -webkit-animation-name: rotate-leave;
+    animation-name: rotate-leave;
+}
+.ngViewAnimation.ng-enter.rotate {
+    -webkit-animation-name: rotate-enter;
+    animation-name: rotate-enter;
+}
+@-webkit-keyframes rotate-leave {
+    0% {
+        -webkit-transform-origin: center center;
+        transform-origin: center center;
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform-origin: center center;
+        transform-origin: center center;
+        -webkit-transform: rotate(-180deg);
+        transform: rotate(-180deg);
+        opacity: 0;
+    }
+}
+@-webkit-keyframes rotate-enter {
+    0% {
+        -webkit-transform-origin: center center;
+        transform-origin: center center;
+        -webkit-transform: rotate(-180deg);
+        transform: rotate(-180deg);
+        opacity: 0;
+    }
+    100% {
+        -webkit-transform-origin: center center;
+        transform-origin: center center;
+        -webkit-transform: rotate(-360deg);
+        transform: rotate(-360deg);
+        opacity: 1;
+    }
+}
+
+@keyframes rotate-leave {
+    0% {
+        transform-origin: center center;
+        transform: rotate(0);
+        opacity: 1;
+    }
+    100% {
+        transform-origin: center center;
+        transform: rotate(-180deg);
+        opacity: 0;
+    }
+}
+@keyframes rotate-enter {
+    0% {
+        transform-origin: center center;
+        transform: rotate(-180deg);
+        opacity: 0;
+    }
+    100% {
+        transform-origin: center center;
+        transform: rotate(-360deg);
+        opacity: 1;
+    }
+}
+
+
+
+/* slide-pop screen animation */
+.ngViewAnimation.slide-pop {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+.ngViewAnimation.slide-pop.ng-enter,
+.ngViewAnimation.slide-pop.ng-leave {
+    -webkit-transition: all 1s linear;
+    transition: all 1s linear;
+}
+.ngViewAnimation.slide-pop.ng-enter {
+    opacity: 0;
+    -webkit-transform: scale(.5);
+    transform: scale(.5);
+}
+.ngViewAnimation.slide-pop.ng-enter-active {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+.ngViewAnimation.slide-pop.ng-leave {
+    left: 0;
+    opacity: .5;
+}
+.ngViewAnimation.slide-pop.ng-leave-active {
+    left: -100%;
+    opacity: 0;
+}
+
+.reverse .page.slide-pop.ng-enter {
+    opacity: .5;
+    left: -100%;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+.reverse .page.slide-pop.ng-enter-active {
+    opacity: 1;
+    left: 0;
+}
+.reverse .page.slide-pop.ng-leave {
+    opacity: .5;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    left: 0;
+    right: 0;
+}
+.reverse .page.slide-pop.ng-leave-active {
+    opacity: 0;
+    -webkit-transform: scale(.5);
+    transform: scale(.5);
+}
+
+
+
+
+/* Addthis */
+.addthis_toolbox > a {
+    float: none !important;
+    display: inline-block;
+    vertical-align: top;
+}
+.addthis_toolbox .addthis_counter {
+    width: 32px !important;
+}

@@ -1,0 +1,11 @@
+
+<div>
+    <table class="cbos-table">
+        <tr>
+            <td ng-repeat="col in tcontainer.tablesnav[$state.params.tableId].viewnav[$state.params.viewId].vfields" >{{tcontainer.tablesnav[$state.params.tableId].fieldnav[col.fid].fn}}</td>
+        </tr>
+        <tr ng-repeat="row in tcontainer.rows">
+            <td ng-repeat="col in tcontainer.tablesnav[$state.params.tableId].viewnav[$state.params.viewId].vfields"> </td>
+        </tr>
+    </table>
+</div>

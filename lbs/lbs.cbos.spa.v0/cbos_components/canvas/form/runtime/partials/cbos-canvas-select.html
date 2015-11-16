@@ -1,0 +1,10 @@
+<div class="form-group">
+    <label class="control-label col-sm-3" ng-class="{'requiredInfo':required}">{{label}}</label>
+
+    <div class="col-sm-9">
+
+        <select class="form-control"   ng-init="" ng-options="option.name for option in [{name:'John'},{name:'Williams'},{name:'Mike'}]" ng-model="selections">
+        </select>
+
+    </div>
+</div>

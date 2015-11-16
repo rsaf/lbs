@@ -1,0 +1,8 @@
+<span class="glyphicon headerMenuIcon glyphicon-menu-hamburger" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></span>
+<ul class="dropdown-menu" aria-labelledby="dropdownMenu1" >
+    <li ng-repeat="item in headerMenu" ng-click={{item.action}} class="{{item.class}}" role="{{item.role}}">
+        <a ng-if="(item.linkTo!=='')" ui-sref={{item.linkTo}}>{{item.name}}</a>
+        <a ng-if="(item.linkTo=='')" >{{item.name}}</a>
+    </li>
+
+</ul>

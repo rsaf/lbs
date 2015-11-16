@@ -1,0 +1,175 @@
+
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" >
+
+
+<div id="loginModal" class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header  modal-header-primary blueHeader ">
+            <button type="button" class="close"  aria-hidden="true" ng-click="$hide()"><span style="color:red;">×</span></button>
+            <h4 id="recoverModalLoginTitle" class="modal-title">登陆</h4>
+            <h4 id="recoverModalForgotPwTitle" class="modal-title hide">重置密码</h4>
+        </div>
+        <div class="modal-body">
+
+
+            <!--loggin-->
+            <div class=" loginMadal" ng-controller="loginCtrl">
+                <form>
+                    <div class="logginBox accessControl">
+
+
+                        <form class="form-horizontal ng-valid ng-dirty ng-valid-parse ng-submitted" style="">
+                            <div class="form-group">
+                                <label for="userName" class="col-sm-2 col-xs-2 control-label usernameLabel"></label>
+                                <div class="col-sm-10 col-xs-10">
+                                    <input type="text" class="form-control ng-untouched ng-valid ng-dirty ng-valid-parse" ng-model="user.username" id="userName" placeholder="邮箱/用户名/手机" style="">
+                                </div>
+                                <div class="clearfix"></div>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="col-sm-2 col-xs-2 control-label passwordLabel"></label>
+                                <div class=" col-sm-10 col-xs-10">
+                                    <input type="password" class="form-control ng-untouched ng-valid ng-dirty ng-valid-parse" ng-model="user.password" id="password" placeholder="密码">
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="loginSumbitBtn">
+                                    <input type="submit" ng-click="submit()" value="LOGIN">
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group ">
+                                <a class="pull-left">忘记密码</a>
+                                <a class="pull-right">没有账户？申请试用</a>
+
+                                <div class="clearfix"></div>
+                            </div>
+
+                        </form>
+
+
+
+
+
+                    </div>
+                </form>
+            </div>
+
+
+            <!--forgot password-->
+            <div class="hide" id="popUpResetPassWord">
+
+
+                <form class="form-horizontal lan_margin_top_30" >
+
+                    <div class="form-group lan_margin_bottom_10">
+                        <label for="modalResetPassWordPhone" class="col-sm-3 control-label specialBlue">手机号:</label>
+                        <div class="col-sm-6 ">
+
+                            <input id="modalResetPassWordPhone" class="form-control " type="text" name="loginPhone"  placeholder="请输入手机号" value="">
+
+
+                        </div>
+
+                        <div class="col-sm-3 col-xs-12">
+
+
+                            <div class="grayButton"><span class="form-control getVerificationCodeBtn" style="line-height: 10px; font-size: 80%; color: black !important; padding-left:0!important;padding-right:0!important; " data-action-click="reset:password:get:verification:code">获取验证码<em class="transactionCountDown hide lan_text_red  lan_padding_left_5">60</em></span></div>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="modalResetPassWordVerificationCode" class="col-sm-3 specialBlue control-label">验证码:</label>
+                        <div class="col-sm-6">
+
+                            <input id="modalResetPassWordVerificationCode" data-action-click="modal:recover:verification:code" class="form-control" type="text" name="verificationCode"  maxlength="16" placeholder="输入验证码">
+
+                        </div>
+
+                        <span  class=" col-sm-3 verificationCodeSentNote hide " style="  line-height: 30px;"><span class="glyphicon glyphicon-ok lan_padding_right_5 specialBlue" style=" font-size: 1.1em;"></span>已发送</span>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="modalResetPassWordNewPassword" class="col-sm-3 specialBlue control-label">新密码:</label>
+                        <div class="col-sm-6">
+
+                            <input id="modalResetPassWordNewPassword" class="form-control" type="password" name="newPassword"  placeholder="请输入新密码" disabled>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="modalResetPassWordConfirmNewPassword" class="col-sm-3 specialBlue control-label">确认密码:</label>
+                        <div class="col-sm-6">
+
+                            <input id="modalResetPassWordConfirmNewPassword" class="form-control" type="password" name="confirmNewPassword"  placeholder="请输入新密码" disabled>
+
+                        </div>
+
+                    </div>
+
+                    <div id="modalResetPwIdNotMatchingBox"    class="hide form-group">
+                        <label for="modalResetPwIdNotMatching" class="col-sm-3 specialBlue control-label"></label>
+                        <div class="col-sm-6">
+
+                            <div><span id="modalResetPwIdNotMatching" style="color: red; font-size: 80%">密码不匹配!</span></div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-3 specialBlue control-label"></label>
+                        <div class="col-sm-6">
+
+                            <div class="blueButton "><span  class="form-control " style="max-width: none; height: 46px" data-action-click="modal:recover:new:password">确认</span></div>
+                            <div class="col-xs-12"></div>
+
+
+
+                            <div class="">
+                                <div class="pull-left" >
+                                    <a  id="modalLoginFromReg" data-action-click="recover:login:from:registration:box">返回登陆</a>
+                                </div>
+
+                                <div class="pull-right" >
+                                    <a  id="modalReg"  data-action-click="recover:register">马上注册</a>
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                </form>
+
+            </div>
+
+
+
+
+
+            <!--end of modal body--->
+        </div>
+    </div>
+</div>
+
+</div>

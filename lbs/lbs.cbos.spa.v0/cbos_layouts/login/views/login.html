@@ -1,0 +1,186 @@
+
+
+
+
+
+<div class=" signInwrapper">
+
+
+    <div class="swiper-container">
+        
+        
+        <div class="loginPageLogo">
+            <a class="pull-left" href="http://www.saascbos.com/"><img  src="cbos_layouts/login/themes/images/lbslogo.png"> </a>
+            <span class="pull-left">Simplifying Business Management </span>
+
+            <div class="clearfix"></div>
+        </div>
+
+
+        <div ng-controller="loginCtrl" class="pcAndMobileLoginBoxes">
+
+            <div class="logginBox pcOnly">
+
+
+                <form class="form-horizontal" >
+                    <div class="form-group">
+                        <label for="userName" class="col-sm-2 col-xs-2 control-label usernameLabel"></label>
+                        <div class="col-sm-10 col-xs-10">
+                            <input type="text" class="form-control" ng-model="user.username" id="userName" placeholder="邮箱/用户名/手机">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-sm-2 col-xs-2 control-label passwordLabel"></label>
+                        <div class=" col-sm-10 col-xs-10" >
+                            <input type="password" class="form-control" ng-model="user.password" id="password" placeholder="密码">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="captcha" class="col-sm-2 col-xs-2 control-label catchaLabel"></label>
+                        <div class=" col-sm-8 col-xs-8" >
+                            <input type="text" class="form-control" ng-model="user.captcha" id="captcha" placeholder="右侧的验证码">
+                        </div>
+                        <div class=" col-sm-2 col-xs-2 autocaptchaBox" >
+                            <span id="autocaptcha">HYFW</span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="loginSumbitBtn">
+                            <input type="submit"  ng-click="submit()" value="LOGIN">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group pcOnly registerForgotPassword">
+                        <a class="pull-left">忘记密码</a>
+                        <a class="pull-right" href="http://www.saascbos.com/register.html">没有账户？申请试用</a>
+                    </div>
+
+                </form>
+
+
+
+
+
+            </div>
+
+
+
+
+            <div class="logginBox mobileOnly">
+
+
+                <form class="form-horizontal">
+                    <div class="form-group">
+
+                        <div class="col-sm-12 col-xs-12">
+                            <input type="text" class="form-control" ng-model="user.username" id="userName" placeholder="Account/Email/phone">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class=" col-sm-12 col-xs-12" >
+                            <input type="password" class="form-control" ng-model="user.password" id="password" placeholder="Password">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="loginSumbitBtn">
+                            <input type="submit" ng-click="submit()" value="LOGIN">
+                        </div>
+                    </div>
+
+
+                </form>
+
+
+
+                <div class="clearfix"></div>
+
+            </div>
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+        <div class="mobileOnly registerForgotPassword">
+            <a class="pull-left">Forgot Password</a>
+            <a class="pull-right" href="http://www.saascbos.com/register.html">Register</a>
+
+            <div class="clearfix"></div>
+        </div>
+
+
+
+        <div class="swiper-wrapper">
+
+
+            <!--slide one-->
+            <div class="swiper-slide loginPageSlider1">
+
+            </div>
+
+            <!--slide two-->
+            <div class="swiper-slide loginPageSlider2">
+
+
+
+            </div>
+
+
+
+            <!--slide three-->
+
+            <div class="swiper-slide loginPageSlider3">
+
+
+
+            </div>
+
+            <!--slide four-->
+
+            <div class="swiper-slide loginPageSlider4">
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+
+    $(document).ready(function() {
+        <!-- Initialize Swiper -->
+        var swiper = new Swiper('.swiper-container', {
+//     pagination: '.swiper-pagination',
+            slidesPerView: 1,
+            paginationClickable: true,
+            spaceBetween: 0,
+            autoplay:5000,
+            loop:true,
+// freeMode:true,
+            keyboardControl: true,
+            nextButton: null,
+            prevButton: null
+        });
+    });
+
+</script>
+

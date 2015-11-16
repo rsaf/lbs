@@ -1,0 +1,23 @@
+
+<div class="runtime-mobile-table">
+    <div class="runtime-mobile-table-header  cbos-gray-border cbos-padding-5">
+        <div class="pull-left" style="line-height: 32px;">{{componentTitle}}</div>
+        <div class="runtime-mobile-table-actions cbos-gray-border pull-right ">
+            <span class="cbos-pointer cbos-gray glyphicon glyphicon-list cbos-padding-5-15 cbos-pointer" ></span>
+            <span class="cbos-border-left cbos-pointer cbos-gray glyphicon  cbos-padding-5-15 cbos-line-height cbos-pointer"   ng-class="{'glyphicon-menu-down': mobileTableCollapsed, 'glyphicon-menu-up': !mobileTableCollapsed}" ng-init="mobileTableCollapsed=false" ng-click="mobileTableCollapsed = !mobileTableCollapsed"></span>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div  collapse="mobileTableCollapsed" >
+        <div class=" runtime-mobile-table-body cbos-gray-border cbos-border-top-none">
+            <div class="runtime-mobile-table-row"  ng-repeat="row in rows" >
+                <div class="pull-right check-select"> <input type="checkbox"></div>
+                <div class="description ellipsis ">
+                    <h4 class="ellipsis">{{row.rdt." + table_fields[1].fid + "}}</h4>
+                    <div class="details"><span class="ellipsis"> table_fields[2].fn : {{row.rdt." + table_fields[2].fid + "}}</span> <span class="ellipsis">table_fields[3].fn : {{row.rdt." + table_fields[3].fid + "}}</span></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>

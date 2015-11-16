@@ -1,0 +1,315 @@
+
+<div class="container-fluid">
+
+
+
+    <div class="container-fluid">
+
+
+        <div class="row cbos-margin-bottom-15">
+
+            <div class=" cbos-gray-border  cbos-padding-5" >
+                <div>
+
+
+                    <div >
+
+                        <div class="cbos-padding-left-0 col-sm-8 col-xs-8">
+
+
+                            <div class="">
+
+                                <div class="col-sm-3 text-right" style="line-height: 35px;">Chartsets:</div>
+
+                                <div class="col-sm-7 cbos-padding-left-0 cbos-padding-right-5">
+
+                                    <select   class="form-control"  ng-init="tcontainer.dropDownSelectedTable = tcontainer.tablesnav[$state.params.tableId]" ng-options="table.name for table in tcontainer.tables" ng-model="tcontainer.dropDownSelectedTable" ng-change="tcontainer.tableSelectionChanged(tcontainer.dropDownSelectedTable)" >
+
+                                    </select>
+
+                                </div>
+
+                                <div ng-click="tcontainer.createNewTable()" class="col-sm-2 cbos-padding-left-0">
+                                    <span class="glyphicon glyphicon-plus form-add-sign-circle"></span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-sm-4">
+
+                            <a class="pull-right  cbos-gray glyphicon cbos-margin-top-10" ng-class="{'glyphicon-menu-down': isCollapsed, 'glyphicon-menu-up': !isCollapsed}" ng-init="isCollapsed=true" ng-click="isCollapsed = !isCollapsed" ></a>
+
+                        </div>
+
+                        <div class="clearfix"></div>
+
+
+                    </div>
+
+
+
+                </div>
+
+                <div class="container-fluid"  collapse="isCollapsed">
+                    <div class="row cbos-padding-top-15">
+                        <div class="form-group col-sm-6">
+                            <label for="generalConfigTile" class="col-sm-4 control-label">Table Title </label>
+                            <div class="col-sm-8 cbos-padding-left-8">
+                                <input type="text" id="generalConfigTile" class="form-control" ng-model="tcontainer.tablesnav[$state.params.tableId].name">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+
+                            <label for="generalConfigCreationDate" class="col-sm-4 control-label"> Creation Date</label>
+
+                            <div class="col-sm-8">
+
+                                <input type="date" id="generalConfigCreationDate" class="form-control" placeholder="date" readonly>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row ">
+
+                        <div class="form-group col-sm-6">
+
+                            <label for="generalConfigCreator" class="col-sm-4 control-label" >Created By </label>
+
+                            <div class="col-sm-8 cbos-padding-left-8">
+
+                                <input type="text" id="generalConfigCreator" class="form-control" placeholder="creator's name" readonly>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="container-fluid ">
+
+                            <div class="form-group text-left">
+
+                                <label for="generalConfigDescription" class="col-sm-12 control-label"><div class="col-sm-6"> <div class="col-sm-3 control-label">Description</div></div>  </label>
+
+                                <div class="col-sm-12">
+
+                                    <textarea type="text" id="generalConfigDescription" class="form-control"></textarea>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+        </div>
+
+        <div class="row cbos-margin-bottom-15">
+
+            <div class=" cbos-gray-border  cbos-padding-5" >
+                <div>
+
+
+                    <div >
+
+                        <div class="cbos-padding-left-0 col-sm-8 col-xs-8">
+
+
+                            <div class="">
+                                <div class="col-sm-3 text-right" style="line-height: 35px;">Chartviews </div>
+                                <div class="col-sm-7 cbos-padding-left-0 cbos-padding-right-5">
+
+                                    <select class="form-control"   ng-init="tcontainer.dropDownSelectedView = tcontainer.dropDownSelectedTable.views[0]" ng-options="view.vn for view in tcontainer.dropDownSelectedTable.views" ng-model="tcontainer.dropDownSelectedView" ng-change="tcontainer.tableViewSelectionChanged(tcontainer.dropDownSelectedView)">
+
+                                    </select>
+
+                                </div>
+                                <div ng-click="tcontainer.createNewTableView()" class="col-sm-2 cbos-padding-left-0">
+                                    <span class="glyphicon glyphicon-plus form-add-sign-circle"></span>
+
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-sm-4">
+
+                            <a class="pull-right  cbos-gray glyphicon cbos-margin-top-10" ng-class="{'glyphicon-menu-down': isCollapsed2, 'glyphicon-menu-up': !isCollapsed2}" ng-init="isCollapsed2 = true" ng-click="isCollapsed2 = !isCollapsed2"></a>
+
+                        </div>
+
+                        <div class="clearfix"></div>
+
+
+                    </div>
+
+
+
+                </div>
+
+                <div class="container-fluid" id="#currentViewGeneralSettings" collapse="isCollapsed2">
+                    <div class="row cbos-padding-top-15">
+                        <div class="form-group col-sm-6">
+                            <label for="generalConfigTile" class="col-sm-4 control-label">View Title </label>
+                            <div class="col-sm-8 cbos-padding-left-8">
+                                <input type="text" id="generalConfigTile" class="form-control" ng-model="tcontainer.tablesnav[$state.params.tableId].viewnav[$state.params.viewId].vn">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+
+                            <label for="generalConfigCreationDate" class="col-sm-4 control-label"> Creation Date</label>
+
+                            <div class="col-sm-8">
+
+                                <input type="date" id="generalConfigCreationDate" class="form-control" placeholder="date" readonly>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row ">
+
+                        <div class="form-group col-sm-6">
+
+                            <label for="generalConfigCreator" class="col-sm-4 control-label" >Created By </label>
+
+                            <div class="col-sm-8 cbos-padding-left-8">
+
+                                <input type="text" id="generalConfigCreator" class="form-control" placeholder="creator's name" readonly>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="container-fluid ">
+
+                            <div class="form-group text-left">
+
+                                <label for="generalConfigDescription" class="col-sm-12 control-label"><div class="col-sm-6"> <div class="col-sm-3 control-label">Description</div></div>  </label>
+
+                                <div class="col-sm-12">
+
+                                    <textarea type="text" id="generalConfigDescription" class="form-control"></textarea>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="bhc-row-sm-height">
+
+                <div class="col-sm-4 bhc-col-sm-height bhc-col-sm-top cbos-padding-left-0 cbos-padding-right-0 cbos-gray-bg3 cbos-gray-border bhc-xs-margin-bottom-20 ">
+                    <div class="bhc-inside text-center">
+
+
+
+
+                        <cbos-items-container></cbos-items-container>
+
+
+
+
+                    </div>
+                </div>
+                <div class="col-sm-8 bhc-col-sm-height cbos-gray-border ">
+                    <div class="bhc-inside-full-height  cbos-padding-top-15">
+
+
+                        <div class="form-group ">
+                            <label  for="TableDataType" class="control-label col-sm-3">Chart type:</label>
+                            <div class="col-sm-9">
+                                <select id="TableDataType" class=" form-control">
+                                    <option value="Line">Line Chart</option>
+                                    <option value="Bar">Bar Chart</option>
+                                    <option value="Pie">Pie Chart</option>
+                                    <option value="Area">Area Chart</option>
+                                    <option value="Spline">Spline Chart</option>
+                                    <option value="Step">Step Chart</option>
+                                    <option value="Scatter">Scatter Chart</option>
+                                    <option value="Donut">Donut Chart</option>
+                                    <option value="Gauge">Gauge Chart</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label  for="informationSource" class="control-label col-sm-3" style="max-width: 180px;">X-axis:</label>
+                            <div class="col-sm-9">
+                                <select id="" class=" form-control cbos-margin-bottom-5">
+                                    <option value="Name">Name</option>
+                                    <option value="Pie Chart">----</option>
+                                </select>
+
+                                <input id="informationSource" type="text" class="form-control" placeholder="enter X-axis Label">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label  for="informationSource" class="control-label col-sm-3" style="max-width: 180px;">Y-axis:</label>
+                            <div class="col-sm-9">
+                                <select id="" class=" form-control cbos-margin-bottom-5">
+                                    <option value="Name">Name</option>
+                                    <option value="Pie Chart">----</option>
+                                </select>
+
+                                <input id="informationSource" type="text" class="form-control" placeholder="enter Y-axis-label">
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>

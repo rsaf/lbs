@@ -1,0 +1,13 @@
+
+    "soap": "0.9.1",
+    "md5": "2.0.0",
+    "xml2js" : "0.4.9",
+    "q": "1.4.1"
+
+
+"scripts": {
+    "test": "../../libraries/lbs.cbos.nmm/node_modules/mocha/bin/mocha --reporter spec"
+  }
+
+
+

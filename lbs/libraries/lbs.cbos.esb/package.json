@@ -1,0 +1,9 @@
+{
+  "name": "esb",
+  "description": "Enterprise Service Bus",
+  "version": "1.0.0",
+  "main": "./esb.js",
+  "private": true,
+  "dependencies": {
+  }
+}

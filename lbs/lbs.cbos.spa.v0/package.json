@@ -1,0 +1,16 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "dependencies": {},
+  "devDependencies": {
+    "angular-gettext": "2.1.0",
+    "grunt" : "0.4.5",
+    "grunt-angular-gettext":"2.1.3"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  }
+}

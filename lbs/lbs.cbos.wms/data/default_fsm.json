@@ -1,0 +1,133 @@
+{
+  "write" : {
+    "code": "FSM_MUTATE",
+    "name": "Mutate Database Document",
+    "initial" : "START",
+    "transitions" : [
+      {"name" : "begin", "from" : "START", "to" : "MUTATING"},
+      {"name" : "done", "from" : "MUTATING", "to" : "MUTATED"},
+      {"name" : "fail", "from" : "MUTATING", "to" : "UNMUTATED"},
+      {"name" : "end", "from" : "MUTATED", "to" : "END"},
+      {"name" : "rollback", "from" : "END", "to" : "MUTATING"},
+      {"name" : "rollback", "from" : "MUTATING", "to" : "START"}
+    ],
+    "callbacks" : {
+      "onMUTATING":{"ops":"params.mutator_func","isSettled":false},
+      "onMUTATED":{"ops":"params.success_func","isSettled":false,"next":"end"},
+      "onUNMUTATED":{"ops":"params.failure_func","isSettled":false}
+    }
+  },
+  "read" : {
+    "code" : "FSM_READ",
+    "name" : "Read Database Document",
+    "initial" : "START",
+    "transitions" : [
+      {"name" : "begin", "from" : "START", "to" : "READING"},
+      {"name" : "done", "from" : "READING", "to" : "RETRIEVED"},
+      {"name" : "fail", "from" : "READING", "to" : "UNRETRIEVED"},
+      {"name" : "end", "from" : "RETRIEVED", "to" : "END"},
+      {"name" : "rollback", "from" : "END", "to" : "READING"},
+      {"name" : "rollback", "from" : "READING", "to" : "START"}
+    ],
+    "callbacks" : {
+      "onREADING":{"ops":"params.accessor_func","isSettled":false},
+      "onRETRIEVED":{"ops":"params.success_func","isSettled":false,"next":"end"},
+      "onUNRETRIEVED":{"ops":"params.failure_func","isSettled":false}
+    }
+  },
+  "wait" : {
+    "code" : "FSM_WAIT",
+    "name" : "Wait for event to fire",
+    "initial" : "START",
+    "transitions" : [
+      {"name" : "begin", "from" : "START", "to" : "FIRST_CHECK"},
+      {"name" : "done", "from": "FIRST_CHECK", "to" : "SUBMITTED"},
+      {"name" : "fail", "from": "FIRST_CHECK", "to" : "WAITING"},
+      {"name" : "done", "from" : "WAITING", "to" : "SUBMITTING"},
+      {"name" : "done", "from" : "SUBMITTING", "to" : "SUBMITTED"},
+      {"name" : "fail", "from" : "SUBMITTING", "to" : "WAITING"},
+      {"name" : "end", "from" : "SUBMITTED", "to" : "END"},
+      {"name" : "rollback", "from" : "END", "to" : "SUBMITTING"},
+      {"name" : "rollback", "from" : "SUBMITTING", "to" : "START"}
+    ],
+    "callbacks" : {
+      "onFIRST_CHECK":{"ops":"params.submission_func","isSettled":false},
+      "onWAITING":{"isSettled":true},
+      "onSUBMITTING":{"ops":"params.submission_func","isSettled":false},
+      "onSUBMITTED":{"ops":"params.success_func", "isSettled":false ,"next":"end"},
+      "onUNSUBMITTED":{"ops":"params.failure_func","isSettled":false}
+    }
+  },
+  "start" : {
+    "code" : "FSM_START",
+    "name" : "Start of workflow",
+    "initial" : "START",
+    "transitions" : [
+      {"name" : "begin", "from" : "START", "to" : "INITIALIZING"},
+      {"name" : "done", "from" : "INITIALIZING", "to" : "INITIALIZED"},
+      {"name" : "fail", "from" : "INITIALIZING", "to" : "UNINITIALIZED"},
+      {"name" : "end", "from" : "INITIALIZED", "to" : "END"},
+      {"name" : "rollback", "from" : "END", "to" : "INITIALIZING"},
+      {"name" : "rollback", "from" : "INITIALIZING", "to" : "START"}
+    ],
+    "callbacks" : {
+      "onINITIALIZING":{"ops":"params.initialize_func","isSettled":false},
+      "onINITIALIZED":{"ops":"params.success_func","isSettled":false,"next":"end"},
+      "onUNINITIALIZED":{"ops":"params.failure_func","isSettled":false}
+    }
+  },
+  "end" : {
+    "code" : "FSM_END",
+    "name" : "End of workflow",
+    "initial" : "START",
+    "transitions" : [
+      {"name" : "begin", "from" : "START", "to" : "FINALIZING"},
+      {"name" : "done", "from" : "FINALIZING", "to" : "FINALIZED"},
+      {"name" : "fail", "from" : "FINALIZING", "to" : "UNFINALIZED"},
+      {"name" : "end", "from" : "FINALIZED", "to" : "END"},
+      {"name" : "rollback", "from" : "END", "to" : "FINALIZING"},
+      {"name" : "rollback", "from" : "FINALIZING", "to" : "START"}
+    ],
+    "callbacks" : {
+      "onFINALIZING":{"ops":"params.finalize_func","isSettled":false},
+      "onFINALIZED":{"ops":"params.success_func","isSettled":false,"next":"end"},
+      "onUNFINALIZED":{"ops":"params.failure_func","isSettled":false}
+    }
+  },
+  "branch" : {
+    "code" : "FSM_BRANCH",
+    "name" : "Parallel branch",
+    "initial" : "START",
+    "transitions" : [
+      {"name" : "begin", "from" : "START", "to" : "BRANCHING"},
+      {"name" : "done", "from" : "BRANCHING", "to" : "BRANCHED"},
+      {"name" : "fail", "from" : "BRANCHING", "to" : "UNBRANCHED"},
+      {"name" : "end", "from" : "BRANCHED", "to" : "END"},
+      {"name" : "rollback", "from" : "END", "to" : "BRANCHING"},
+      {"name" : "rollback", "from" : "BRANCHING", "to" : "START"}
+    ],
+    "callbacks" : {
+      "onBRANCHING":{"ops":"params.branch_func","isSettled":false},
+      "onBRANCHED":{"ops":"params.success_func","isSettled":false,"next":"end"},
+      "onUNBRANCHED":{"ops":"params.failure_func","isSettled":false}
+    }
+  },
+  "debranch" : {
+    "code" : "FSM_DEBRANCH",
+    "name" : "Merge parallel branches",
+    "initial" : "START",
+    "transitions" : [
+      {"name" : "begin", "from" : "START", "to" : "DEBRANCHING"},
+      {"name" : "done", "from" : "DEBRANCHING", "to" : "DEBRANCHED"},
+      {"name" : "fail", "from" : "DEBRANCHING", "to" : "UNDEBRANCHED"},
+      {"name" : "end", "from" : "DEBRANCHED", "to" : "END"},
+      {"name" : "rollback", "from" : "END", "to" : "DEBRANCHING"},
+      {"name" : "rollback", "from" : "DEBRANCHING", "to" : "START"}
+    ],
+    "callbacks" : {
+      "onDEBRANCHING":{"ops":"params.debranch_func","isSettled":false},
+      "onDEBRANCHED":{"ops":"params.success_func","isSettled":false,"next":"end"},
+      "onUNDEBRANCHED":{"ops":"params.failure_func","isSettled":false}
+    }
+  }
+}

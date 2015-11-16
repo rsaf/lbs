@@ -1,0 +1,38 @@
+
+
+<div>
+
+    <div class="form-group">
+        <label  for="emalNodeName" class="control-label col-sm-3">Node Name:</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="emalNodeName" ng-model="workflow.pl.nodes[workflowNode].name">
+        </div>
+    </div>
+    <div class="container-fluid cbos-gray-border cbos-padding-top-20">
+
+        <div class="form-group">
+            <label  for="EmailDestination" class="control-label col-sm-3  col-xs-5">to:</label>
+            <div class="col-sm-7 col-xs-9">
+                <input type="text" id="EmailDestination" class="form-control" ng-model="workflow.pl.nodes[workflowNode].input.to" >
+
+                <span class="glyphicon glyphicon-user cbos-padding-5 cbos-white-bg cbos-gray-border" style="position: absolute; right: -20px; top: 5px; cursor: pointer;"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  for="EmailSource" class="control-label col-sm-3  col-xs-5">From:</label>
+            <div class="col-sm-7 col-xs-9">
+                <input type="text" id="EmailSource" class="form-control" ng-model="workflow.pl.nodes[workflowNode].input.from">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  for="EmailBody" class="control-label col-sm-3  col-xs-5">Body:</label>
+            <div class="col-sm-7 col-xs-9">
+                <textarea id="EmailBody" class="form-control" rows="3" ng-model="workflow.pl.nodes[workflowNode].input.body" placeholder="Please enter email content"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+</div>

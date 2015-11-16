@@ -1,0 +1,144 @@
+<div class="container-fluid createBusinessScenarioContainer cbos-hpadding-30">
+    <div class="row">
+
+        <div class="cbos-bread-crumbs">
+            <a>{{$state.params.appName}}</a>
+            <a>canvases</a>
+            <a>{{canvasTitle}}</a>
+        </div>
+    </div>
+
+    <div class="row cbos-padding-bottom-5">
+
+        <div class="pull-right" ng-if="( 'desktop.app.canvas.general' | isState )">
+            <button class="btn cbos-btn cbos-btn-gray cbos-btn-lg ">Unpublish</button>
+            <button class="btn cbos-btn cbos-btn-blue cbos-btn-lg ">Publish</button>
+        </div>
+
+        <div class="pull-right" ng-if="!('desktop.app.canvas.general' | isState )">
+            <button class="btn cbos-btn cbos-btn-blue cbos-btn-lg " ng-click="saveCanvasElementDraft()">save draft
+            </button>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="row">
+
+        <div class="bhc-row-sm-height" style="min-height: 550px;">
+
+            <div class="col-sm-4 bhc-col-sm-height bhc-col-sm-top  cbos-gray-border bhc-xs-margin-bottom-20 cbos-relative">
+                <div class="cbos-aboslute-label">Preview Panel</div>
+                <div data-toggle="tooltip" data-delay="0" data-placement="bottom" title="{{expandOrcollapase}}"
+                     class="pull-right cbos-padding-5 cbos-pointer"
+                     ng-click="isCollapsed = !isCollapsed; expandOrcollapase = (expandOrcollapase=='Expand')?'Collapse':'Expand';">
+                    <div ng-class={'glyphicon-menu-right':expandOrcollapase=='Expand','glyphicon-menu-left':expandOrcollapase=='Collapse'}
+                         class="pull-left glyphicon  cbos-blue" style="font-size: 1.3em; margin-top: 4px;"></div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="bhc-inside text-center">
+                    <div class=" canvas-preview-panel" ui-view="previewTemplate">
+
+
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="col-sm-8 bhc-col-sm-height bhc-xs-padding-right-0 bhc-xs-padding-left-0 bhc-xs-padding-top-20 cbos-padding-right-0"
+                 collapse-width="isCollapsed">
+                <div class="bhc-inside-full-height">
+
+                    <div class="cbos-gray-border  cbos-padding-left-15 cbos-padding-right-15 cbos-relative cbos-padding-top-20 cbos-full-height">
+
+
+                        <div class="cbos-aboslute-label">Configuration Panel</div>
+
+
+                        <div class="cbos-padding-bottom-10">
+                            <div class="innerPageMenuContainer">
+
+
+                                <a ui-sref="desktop.app.canvas.general({appName:appName,canvasName:$state.params.canvasName})"
+                                   class="menuItem squaredBottom" ui-sref-active="selected" cbos-top-navigation-item="">
+                                    <div class="menuName text-center">General</div>
+                                </a>
+
+
+                                <a ng-if="('desktop.app.canvas.tables.table.view.field'|isState)" ui-sref="desktop.app.canvas.tables.table.view.field"
+                                   class="menuItem squaredBottom" ui-sref-active="selected" cbos-top-navigation-item="">
+
+                                    <div class="menuIcon blueIcon pull-left"><img
+                                            src="base/images/icons/tablewhite.png"></div>
+                                    <div class="menuIcon grayIcon pull-left"><img src="base/images/icons/tablegray.jpg">
+                                    </div>
+                                    <div class="menuName pull-left">Tables</div>
+                                    <div class="clearfix"></div>
+
+                                </a>
+
+                                <a ng-if="!('desktop.app.canvas.tables.table.view.field'|isState)" ui-sref="desktop.app.canvas.tables"
+                                   class="menuItem squaredBottom" ui-sref-active="selected" cbos-top-navigation-item="">
+
+                                    <div class="menuIcon blueIcon pull-left"><img
+                                            src="base/images/icons/tablewhite.png"></div>
+                                    <div class="menuIcon grayIcon pull-left"><img src="base/images/icons/tablegray.jpg">
+                                    </div>
+                                    <div class="menuName pull-left">Tables</div>
+                                    <div class="clearfix"></div>
+
+                                </a>
+
+                                <a ng-if="('desktop.app.canvas.forms.table.form.field'|isState)" ui-sref="desktop.app.canvas.forms.table.form.field"
+                                   class="menuItem squaredBottom" ui-sref-active="selected" cbos-top-navigation-item="">
+                                    <div class="menuIcon blueIcon pull-left"><img src="base/images/icons/formgray.jpg">
+                                    </div>
+                                    <div class="menuIcon grayIcon pull-left"><img src="base/images/icons/formgray.jpg">
+                                    </div>
+                                    <div class="menuName pull-left">Forms</div>
+                                    <div class="clearfix"></div>
+                                </a>
+
+                                <a ng-if="!('desktop.app.canvas.forms.table.form.field'|isState)" ui-sref="desktop.app.canvas.forms"
+                                   class="menuItem squaredBottom" ui-sref-active="selected" cbos-top-navigation-item="">
+                                    <div class="menuIcon blueIcon pull-left"><img src="base/images/icons/formgray.jpg">
+                                    </div>
+                                    <div class="menuIcon grayIcon pull-left"><img src="base/images/icons/formgray.jpg">
+                                    </div>
+                                    <div class="menuName pull-left">Forms</div>
+                                    <div class="clearfix"></div>
+                                </a>
+
+
+                                <a ui-sref="desktop.app.canvas.workflows.workflow({appName:appName,canvasName:$state.params.canvasName})"
+                                   class="menuItem squaredBottom" ui-sref-active="selected" cbos-top-navigation-item="">
+                                    <div class="menuIcon blueIcon pull-left"><img    src="base/images/icons/workflowwhite.jpg"
+                                          ></div>
+                                    <div class="menuIcon grayIcon pull-left"><img
+                                            src="base/images/icons/workflowgray.png"></div>
+                                    <div class="menuName pull-left">Workflows</div>
+                                    <div class="clearfix"></div>
+                                </a>
+
+                                <a ui-sref="desktop.app.canvas.chartSets({appName:appName,canvasName:$state.params.canvasName,chartsetID:'heyto29xnf'})"
+                                   class="menuItem squaredBottom" ui-sref-active="selected" cbos-top-navigation-item="">
+                                    <div class="menuIcon blueIcon pull-left"><img
+                                            src="base/images/icons/chartwhite.jpg"></div>
+                                    <div class="menuIcon grayIcon pull-left"><img src="base/images/icons/chartgray.jpg">
+                                    </div>
+                                    <div class="menuName pull-left">Charts</div>
+                                    <div class="clearfix"></div>
+                                </a>
+                                <div class="clearfix"></div>
+                            </div>
+                            <form class="form-horizontal cbos-gray-border cbos-padding-bottom-10 cbos-padding-top-20">
+                                <div  ui-view="configTemplate">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

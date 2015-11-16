@@ -1,0 +1,12 @@
+
+table.cbos-table.runtime, table.cbos-table.runtime th ,table.cbos-table.runtime td {
+    border: 1px solid #c8c8c8;
+    border-collapse: collapse;
+    padding: 10px;
+}
+table.cbos-table.runtime tr:nth-child(odd) {
+    background-color: #EEEEEE;
+}
+table.cbos-table.runtime tr:nth-child(even) {
+    background-color: #fafafa;
+}

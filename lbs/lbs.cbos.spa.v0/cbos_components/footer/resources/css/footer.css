@@ -1,0 +1,9 @@
+
+.cbos-footer{
+    height:8px;
+    bottom: 0;
+    position: fixed;
+    z-index: 99;
+    background-color: #1874b2;
+    width: 100%;
+}

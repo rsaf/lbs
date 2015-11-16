@@ -1,0 +1,277 @@
+
+
+
+        <div class="container-fluid" >
+            <div class="container-fluid">
+
+                <div class="row cbos-margin-bottom-15">
+
+                    <div class=" cbos-gray-border  cbos-padding-5" >
+                        <div>
+
+
+                            <div >
+
+                                <div class="cbos-padding-left-0 col-sm-8 col-xs-8">
+
+
+                                    <div class="">
+
+                                        <div class="col-sm-3 text-right" style="line-height: 35px;">Tables:</div>
+
+                                        <div class="col-sm-7 cbos-padding-left-0 cbos-padding-right-5">
+
+                                            <select   class="form-control"  ng-init="tcontainer.dropDownSelectedTable = tcontainer.tablesnav[$state.params.tableId]" ng-options="table.name for table in tcontainer.tables" ng-model="tcontainer.dropDownSelectedTable" ng-change="tcontainer.tableSelectionChanged(tcontainer.dropDownSelectedTable)" >
+
+                                            </select>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-sm-4">
+
+                                    <a class="pull-right glyphicon glyphicon-menu-down cbos-gray glyphicon cbos-margin-top-10" data-toggle="collapse" data-target="#currentTableGeneralSettings" ></a>
+
+                                </div>
+
+                                <div class="clearfix"></div>
+
+
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="container-fluid  collapse" id="currentTableGeneralSettings">
+                            <div class="row cbos-padding-top-15">
+                                <div class="form-group col-sm-6">
+                                    <label for="generalConfigTile" class="col-sm-4 control-label">Table Title </label>
+                                    <div class="col-sm-8 cbos-padding-left-8">
+                                        <input type="text" id="generalConfigTile" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+
+                                    <label for="generalConfigCreationDate" class="col-sm-4 control-label"> Creation Date</label>
+
+                                    <div class="col-sm-8">
+
+                                        <input type="date" id="generalConfigCreationDate" class="form-control" placeholder="date" readonly>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row ">
+
+                                <div class="form-group col-sm-6">
+
+                                    <label for="generalConfigCreator" class="col-sm-4 control-label" >Created By </label>
+
+                                    <div class="col-sm-8 cbos-padding-left-8">
+
+                                        <input type="text" id="generalConfigCreator" class="form-control" placeholder="creator's name" readonly>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row">
+                                <div class="container-fluid ">
+
+                                    <div class="form-group text-left">
+
+                                        <label for="generalConfigDescription" class="col-sm-12 control-label"><div class="col-sm-6"> <div class="col-sm-3 control-label">Description</div></div>  </label>
+
+                                        <div class="col-sm-12">
+
+                                            <textarea type="text" id="generalConfigDescription" class="form-control"></textarea>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+
+                <div class="row cbos-margin-bottom-15">
+
+                    <div class=" cbos-gray-border  cbos-padding-5" >
+                        <div>
+
+
+                            <div >
+
+                                <div class="cbos-padding-left-0 col-sm-8 col-xs-8">
+
+
+                                    <div class="">
+                                        <div class="col-sm-3 text-right" style="line-height: 35px;">Workflows:</div>
+                                        <div class="col-sm-7 cbos-padding-left-0 cbos-padding-right-5">
+
+                                            <select class="form-control"   ng-init="tcontainer.dropDownSelectedView = tcontainer.dropDownSelectedTable.views[0]" ng-options="view.vn for view in tcontainer.dropDownSelectedTable.views" ng-model="tcontainer.dropDownSelectedView" ng-change="tcontainer.tableViewSelectionChanged(tcontainer.dropDownSelectedView)">
+
+                                            </select>
+
+                                        </div>
+                                        <div ng-click="tcontainer.createNewTableView()" class="col-sm-2 cbos-padding-left-0">
+                                            <span class="glyphicon glyphicon-plus form-add-sign-circle"></span>
+
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-sm-4">
+
+                                    <a class="pull-right glyphicon glyphicon-menu-down cbos-gray glyphicon cbos-margin-top-10" data-toggle="collapse" data-target="#currentViewGeneralSettings"></a>
+
+                                </div>
+
+                                <div class="clearfix"></div>
+
+
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="container-fluid  collapse " id="#currentViewGeneralSettings">
+                            <div class="row cbos-padding-top-15">
+                                <div class="form-group col-sm-6">
+                                    <label for="generalConfigTile" class="col-sm-4 control-label">View Title </label>
+                                    <div class="col-sm-8 cbos-padding-left-8">
+                                        <input type="text" id="generalConfigTile" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+
+                                    <label for="generalConfigCreationDate" class="col-sm-4 control-label"> Creation Date</label>
+
+                                    <div class="col-sm-8">
+
+                                        <input type="date" id="generalConfigCreationDate" class="form-control" placeholder="date" readonly>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row ">
+
+                                <div class="form-group col-sm-6">
+
+                                    <label for="generalConfigCreator" class="col-sm-4 control-label" >Created By </label>
+
+                                    <div class="col-sm-8 cbos-padding-left-8">
+
+                                        <input type="text" id="generalConfigCreator" class="form-control" placeholder="creator's name" readonly>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row">
+                                <div class="container-fluid ">
+
+                                    <div class="form-group text-left">
+
+                                        <label for="generalConfigDescription" class="col-sm-12 control-label"><div class="col-sm-6"> <div class="col-sm-3 control-label">Description</div></div>  </label>
+
+                                        <div class="col-sm-12">
+
+                                            <textarea type="text" id="generalConfigDescription" class="form-control"></textarea>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+
+
+                <div class="row">
+                    <div class="bhc-row-sm-height">
+                        <div class="col-sm-4 bhc-col-sm-height bhc-col-sm-middle cbos-gray-bg3 cbos-gray-border bhc-xs-margin-bottom-20 ">
+                            <div class="bhc-inside text-center">
+                                <!--
+                                <canvas id="workFlowIconCanvas" width="180" height="250"> abc</canvas>
+                                -->
+                                <div class="workflow-icons-container cbos-padding-bottom-20" style="min-height: 350px;">
+
+                                    <div class="workflow-icons-container cbos-padding-bottom-5 cbos-padding-top-20" >
+
+                                        <slick infinite="true" vertical="true" speed="300"  swipe="false" slides-to-show="3" class="vertical-click" slides-to-scroll="1" prev-arrow=".wf-slick-prev" next-arrow=".wf-slick-next">
+                                            <div style="padding:10px; height: 46px;"  ng-repeat="we in workflowElements" draggable="true" >
+                                                <img nodecode={{we.code}} ng-src={{we.icon}} style="margin: auto;" draggable="true"  ondragstart="drag(event)" >
+                                            </div>
+                                        </slick>
+                                        <a type="button" class="vertical slick-control slick-prev wf-slick-prev"  role="button" ></a>
+                                        <a type="button" class=" vertical slick-control slick-next wf-slick-next" role="button" ></a>
+                                    </div>
+
+                                    <div class="row cbos-padding-top-10 cbos-border-top">
+                                        <div class="col-sm-6 cbos-padding-right-0">
+                                            <button class="btn btn-default cbos-blue-border" style="min-width: 98px;"  onclick="deleteButton()"><span class="glyphicon glyphicon-plus cbos-blue cbos-padding-right-5 glyphicon glyphicon-trash off" style="font-weight: 100;"  id="delete"></span>Delete</button>
+                                        </div>
+
+                                        <div class="col-sm-6 cbos-padding-left-0">
+                                            <button class="btn btn-default cbos-blue-border off"   style="padding:5px;  min-width: 98px;" id="btn" onclick="toggle_arrow_mode(this)">NODE MODE</button>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 bhc-col-sm-height cbos-gray-border ">
+                            <div class="bhc-inside-full-height  cbos-padding-top-15 fade" ui-view="elementConfigTemplate">
+
+                                No workflow Id provided
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>

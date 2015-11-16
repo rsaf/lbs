@@ -1,0 +1,8 @@
+qvar http = require("http");
+
+var s = http.createServer(function(req,es){
+	res.end("hey , thanks for calling");
+    });
+
+s.listen(8080);
+

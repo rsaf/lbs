@@ -1,0 +1,487 @@
+{
+  "bootstrap": {
+    "code": "CBWD101",
+    "name": "Workflow: Initialize App",
+    "marked": "0",
+    "edges": {
+      "0": [{"dst": "1"}],
+      "1": [{"dst": "2"}],
+      "2": [{"dst": "3"}],
+      "3": [{"dst": "4"}],
+      "4": [{"dst": "5"}],
+      "5": [{"dst": "6"}],
+      "6": [{"dst": "7"}],
+      "7": [{"dst": "mytasksrows"}],
+      "mytasksrows": [{"dst": "8"}],
+      "8": [{"dst": "9"}],
+      "9": [{"dst": "10"}],
+      "10": [{"dst": "11"}],
+      "11": [{"dst": "freq_apps_rows"}],
+      "freq_apps_rows": [{"dst": "12"}],
+      "12": [{"dst": "13"}],
+      "13": [{"dst": "hrmaddlcp"}],
+      "hrmaddlcp": [{"dst": "14"}],
+      "14": [{"dst": "crmaddlcp"}],
+      "crmaddlcp": [{"dst": "15"}],
+      "15": [{"dst": "desktoplefnav"}],
+      "desktoplefnav": [{"dst": "hrmlefnav"}],
+      "hrmlefnav": [{"dst": "crmlefnav"}],
+      "crmlefnav": [{"dst": "16"}],
+      "16": [{"dst": "17"}],
+      "17": [{"dst": "19"}]
+    },
+    "nodes": {
+      "0": {
+        "name": "Start",
+        "code": "CBN000009",
+        "input": {}
+      },
+      "1": {
+        "name": "Create user",
+        "code": "CBN000004",
+        "input": {
+          "user": "pl.user"
+        },
+        "output": {
+          "user": "pl.user"
+        }
+      },
+      "2": {
+        "name": "Create Desktop",
+        "code": "CBN000014",
+        "input": {
+          "app": "pl.desktop"
+        },
+        "output": {
+          "app": "pl.app"
+        }
+      },
+      "3": {
+        "name": "Create hrm",
+        "code": "CBN000014",
+        "input": {
+          "app": "pl.hrm",
+          "app[parent]": "2.output.app.eid"
+        },
+        "output": {
+          "app": "pl.app"
+        }
+      },
+      "4": {
+        "name": "Create crm",
+        "code": "CBN000014",
+        "input": {
+          "app": "pl.crm",
+          "app[parent]": "2.output.app.eid"
+        },
+        "output": {
+          "app": "pl.app"
+        }
+      },
+      "5": {
+        "name": "Create navigationtop",
+        "code": "CBN000014",
+        "input": {
+          "navigationtop": "pl.navigationtop",
+          "navigationtop[parent]": "2.output.app.eid"
+        },
+        "output": {
+          "navigationtop": "pl.navigationtop"
+        }
+      },
+      "6": {
+        "name": "Create desktop canvas",
+        "code": "CBN000014",
+        "input": {
+          "canvas": "pl.desktop_canvas",
+          "canvas[parent]": "2.output.app.eid"
+        },
+        "output": {
+          "canvas": "pl.canvas"
+        }
+      },
+      "7": {
+        "name": "Create mytasks",
+        "code": "CBN000014",
+        "input": {
+          "table": "pl.desktop_mytasks",
+          "table[parent]": "6.output.canvas.eid"
+        },
+        "output": {
+          "table": "pl.table"
+        }
+      },
+      "mytasksrows": {
+        "name": "Create mytasks records",
+        "code": "CBN000020",
+        "input": {
+          "rows": "pl.desktop_mytasks_records",
+          "rows[parent]": "7.output.table.eid"
+        },
+        "output": {
+          "rows": "pl.rows"
+        }
+      },
+      "8": {
+        "name": "Create mydocuments",
+        "code": "CBN000014",
+        "input": {
+          "table": "pl.desktop_mydocuments",
+          "table[parent]": "6.output.canvas.eid"
+        },
+        "output": {
+          "table": "pl.table"
+        }
+      },
+      "9": {
+        "name": "Create companynews",
+        "code": "CBN000014",
+        "input": {
+          "table": "pl.desktop_companynews",
+          "table[parent]": "6.output.canvas.eid"
+        },
+        "output": {
+          "table": "pl.table"
+        }
+      },
+      "10": {
+        "name": "Create companytwits",
+        "code": "CBN000014",
+        "input": {
+          "table": "pl.desktop_companytwits",
+          "table[parent]": "6.output.canvas.eid"
+        },
+        "output": {
+          "table": "pl.table"
+        }
+      },
+      "11": {
+        "name": "Create freq apps",
+        "code": "CBN000014",
+        "input": {
+          "table": "pl.desktop_freq_apps",
+          "table[parent]": "6.output.canvas.eid"
+        },
+        "output": {
+          "table": "pl.table"
+        }
+      },
+      "freq_apps_rows": {
+        "name": "Create freq apps records",
+        "code": "CBN000020",
+        "input": {
+          "rows": "pl.desktop_freq_apps_records",
+          "rows[parent]": "11.output.table.eid"
+        },
+        "output": {
+          "rows": "pl.rows"
+        }
+      },
+      "12": {
+        "name": "Create desktop dlayout",
+        "code": "CBN000014",
+        "input": {
+          "layout": "pl.desktop_dlayout",
+          "layout[parent]": "2.output.app.eid"
+        },
+        "output": {
+          "layout": "pl.layout"
+        }
+      },
+      "13": {
+        "name": "Create hrm dlayout",
+        "code": "CBN000014",
+        "input": {
+          "layout": "pl.hrm_dlayout",
+          "layout[parent]": "3.output.app.eid"
+        },
+        "output": {
+          "layout": "pl.layout"
+        }
+      },
+      "hrmaddlcp": {
+        "name": "add layout component",
+        "code": "CBN000021",
+        "input": {
+          "layout[eid]": "13.output.layout.eid"
+        },
+        "output" : {
+          "layout" : "pl.layout"
+        }
+      },
+      "14": {
+        "name": "Create crm dlayout",
+        "code": "CBN000014",
+        "input": {
+          "layout": "pl.crm_dlayout",
+          "layout[parent]": "4.output.app.eid"
+        },
+        "output": {
+          "layout": "pl.layout"
+        }
+      },
+      "crmaddlcp": {
+        "name": "add layout component",
+        "code": "CBN000021",
+        "input": {
+          "layout[eid]": "14.output.layout.eid"
+        },
+        "output" : {
+          "layout" : "pl.layout"
+        }
+      },
+      "15": {
+        "name": "Update user",
+        "code": "CBN000005",
+        "input": {
+          "user[id]": "1.output.user.id",
+          "user[aid]": "2.output.app.eid",
+          "user[nid]": "5.output.navigationtop.eid"
+        },
+        "output": {
+          "user": "pl.user"
+        }
+      },
+      "desktoplefnav": {
+        "name": "Create desktop left navigation",
+        "code": "CBN000014",
+        "input": {
+          "navigationleft": "pl.desktopnavigationleft",
+          "navigationleft[parent]":"2.output.app.eid",
+          "navigationleft[layouts[lid]]":"12.output.layout.eid",
+          "navigationleft[dlid]]":"12.output.layout.eid"
+        },
+        "output" : {
+          "navigationleft" : "pl.navigationleft"
+        }
+      },
+      "hrmlefnav": {
+        "name": "Create hrm left navigation",
+        "code": "CBN000014",
+        "input": {
+          "navigationleft": "pl.hrmnavigationleft",
+          "navigationleft[parent]":"3.output.app.eid",
+          "navigationleft[layouts[lid]]":"hrmaddlcp.output.layout.eid",
+          "navigationleft[layouts[ltu]]":"hrmaddlcp.output.layout.ltu",
+          "navigationleft[dlid]]":"hrmaddlcp.output.layout.eid",
+          "navigationleft[dltu]":"hrmaddlcp.output.layout.ltu"
+        },
+        "output" : {
+          "navigationleft" : "pl.navigationleft"
+        }
+      },
+      "crmlefnav": {
+        "name": "Create crm left navigation",
+        "code": "CBN000014",
+        "input": {
+          "navigationleft": "pl.crmnavigationleft",
+          "navigationleft[parent]":"4.output.app.eid",
+          "navigationleft[layouts[lid]]":"crmaddlcp.output.layout.eid",
+          "navigationleft[layouts[ltu]]":"crmaddlcp.output.layout.ltu",
+          "navigationleft[dlid]]":"crmaddlcp.output.layout.eid",
+          "navigationleft[dltu]]":"crmaddlcp.output.layout.ltu"
+        },
+        "output" : {
+          "navigationleft" : "pl.navigationleft"
+        }
+      },
+      "16": {
+        "name": "Update desktop navigationtop",
+        "code": "CBN000016",
+        "input": {
+          "navigationtop": "pl.navigationtop_desktop",
+          "navigationtop[eid]": "5.output.navigationtop.eid",
+          "navigationtop[apps[aid]]": "2.output.app.eid",
+          "navigationtop[apps[lnid]]":"desktoplefnav.output.navigationleft.eid"
+        },
+        "output": {
+          "navigationtop": "pl.navigationtop"
+        }
+      },
+      "17": {
+        "name": "Update hrm navigationtop",
+        "code": "CBN000016",
+        "input": {
+          "navigationtop": "pl.navigationtop_hrm",
+          "navigationtop[eid]": "5.output.navigationtop.eid",
+          "navigationtop[apps[aid]]": "3.output.app.eid",
+          "navigationtop[apps[lnid]]":"hrmlefnav.output.navigationleft.eid"
+        },
+        "output": {
+          "navigationtop": "pl.navigationtop"
+        }
+      },
+      "19": {
+        "name": "End",
+        "code": "CBN000010",
+        "input": {
+        },
+        "output": {
+          "end": "all nodes done"
+        }
+      }
+    }
+  },
+  "createApp": {
+    "code": "CBWD102",
+    "name": "Workflow : create app",
+    "marked": "0",
+    "edges": {
+      "0": [{"dst": "1"}],
+      "1": [{"dst": "add_to_freq_apps"}],
+      "add_to_freq_apps": [{"dst": "2"}],
+      "2": [{"dst": "addlcp"}],
+      "addlcp": [{"dst": "3"}],
+      "3": [{"dst": "4"}],
+      "4": [{"dst": "5"}]
+    },
+    "nodes": {
+      "0": {
+        "name": "Start",
+        "code": "CBN000009",
+        "input":{}
+      },
+      "1": {
+        "name": "Create App",
+        "code": "CBN000014",
+        "input": {
+          "app" : "pl.app"
+        },
+        "output":{
+          "app" : "pl.app"
+        }
+      },
+      "add_to_freq_apps": {
+        "name": "Create frequently used app",
+        "code": "CBN000014",
+        "input": {
+          "row" : "pl.row",
+          "row[rdt[eid]]":  "1.output.app.eid"
+        },
+        "output":{
+          "row" : "pl.row"
+        }
+      },
+      "2": {
+        "name": "Create default layout",
+        "code": "CBN000014",
+        "input": {
+          "layout": "pl.layout",
+          "layout[parent]":"1.output.app.eid"
+        },
+        "output" : {
+          "layout" : "pl.layout"
+        }
+      },
+      "addlcp": {
+        "name": "add layout component",
+        "code": "CBN000021",
+        "input": {
+          "layout[eid]": "2.output.layout.eid"
+        },
+        "output" : {
+          "layout" : "pl.layout"
+        }
+      },
+      "3": {
+        "name": "Create left navigation",
+        "code": "CBN000014",
+        "input": {
+          "navigationleft": "pl.navigationleft",
+          "navigationleft[parent]":"1.output.app.eid",
+          "navigationleft[layouts[lid]]":"addlcp.output.layout.eid",
+          "navigationleft[layouts[ltu]]":"addlcp.output.layout.ltu",
+          "navigationleft[dlid]":"addlcp.output.layout.eid",
+          "navigationleft[dltu]]":"addlcp.output.layout.ltu"
+        },
+        "output" : {
+          "navigationleft" : "pl.navigationleft"
+        }
+      },
+      "4": {
+        "name": "Update top navigation",
+        "code": "CBN000016",
+        "input": {
+          "navigationtop":"pl.navigationtop",
+          "navigationtop[apps[aid]]":"1.output.app.eid",
+          "navigationtop[apps[lnid]]":"3.output.navigationleft.eid"
+        },
+        "output" : {
+          "navigationtop" : "pl.navigationtop"
+        }
+       },
+      "5": {
+        "name": "End",
+        "code": "CBN000010",
+        "input" : {
+        },
+        "output" : {
+          "app" : "1.output.app",
+          "layout" : "addlcp.output.layout",
+          "navigationleft" : "3.output.navigationleft",
+          "navigationtop" : "4.output.navigationtop"
+        }
+      }
+    }
+  },
+  "createLayout": {
+    "code": "CBWD103",
+    "name": "Workflow : create layout",
+    "marked": "0",
+    "edges": {
+      "0": [{"dst": "1"}],
+      "1": [{"dst": "addlcp"}],
+      "addlcp": [{"dst": "2"}],
+      "2": [{"dst": "3"}]
+    },
+    "nodes": {
+      "0": {
+        "name": "Start",
+        "code": "CBN000009",
+        "input":{}
+      },
+      "1": {
+        "name": "Create default layout",
+        "code": "CBN000014",
+        "input": {
+          "layout": "pl.layout"
+        },
+        "output" : {
+          "layout" : "pl.layout"
+        }
+      },
+      "addlcp": {
+        "name": "add layout component",
+        "code": "CBN000021",
+        "input": {
+          "layout[eid]": "1.output.layout.eid"
+        },
+        "output" : {
+          "layout" : "pl.layout"
+        }
+      },
+      "2": {
+        "name": "Update left navigation",
+        "code": "CBN000016",
+        "input": {
+          "navigationleft": "pl.navigationleft",
+          "navigationleft[layouts[lid]]":"addlcp.output.layout.eid",
+          "navigationleft[layouts[ltu]]":"addlcp.output.layout.ltu"
+        },
+        "output" : {
+          "navigationleft" : "pl.navigationleft"
+        }
+      },
+      "3": {
+        "name": "End",
+        "code": "CBN000010",
+        "input" : {
+        },
+        "output" : {
+          "layout" : "1.output.layout",
+          "navigationleft" : "2.output.navigationleft"
+        }
+      }
+    }
+  }
+}

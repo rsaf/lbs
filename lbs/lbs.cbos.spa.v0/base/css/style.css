@@ -1,0 +1,1499 @@
+
+
+body ,html{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    color: #333333;/*fake black*/
+}
+
+
+
+.mainWrapper{
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+    min-height: 500px;
+}
+
+
+.canvas-preview-panel{
+    overflow-x: scroll;
+}
+
+.cbosEyedRow.selectedListItem{
+    background-color: white;
+}
+
+.cbosEyedRow.selectedListItem:after{
+    content: '';
+    position: absolute;
+    height: 30px;
+    width: 4px;
+    right: -5px;
+    top: 0;
+    z-index: 9999;
+    background-color: white;
+}
+
+.cbos-header{
+    background-color: #153E68;
+    height:50px;
+    width: 100%;
+    min-width: 100% !important;
+    float: none !important;
+    color: white;
+}
+
+.commonLyUsedAppsContainer{
+    padding: 0 10px;
+}
+
+.commonLyUsedAppsContainer .container-fluid > div{
+    width:16.1%;
+    display: inline-block;
+    padding: 5px 0;
+    cursor: pointer;
+}
+
+
+.appIcon{
+    width: 101px;
+    height: 96px;
+    display: block;
+    margin: auto;
+    cursor: pointer;
+}
+
+
+.addAppBtn {
+    cursor: pointer;
+}
+
+
+
+.userInfo > div{
+    margin-right: 5px;
+}
+
+
+.userInfo .userProfileText div:first-child{
+    font-size: 14px;
+}
+
+.userInfo .userProfileText div:last-child{
+    font-size: 11px;
+}
+
+.cbos-header .row > div{
+
+    max-height:55px;
+}
+
+.cbos-header .searchboxContainer .btn-default{
+    border-left: none;
+    background-color: #265B7F;
+    padding: 8px 12px;
+    border-color:#265B7F ;
+}
+
+
+.searchboxContainer .form-control:focus {
+    border-color:#265B7F;
+    -webkit-box-shadow: none ;
+    box-shadow: none ;
+}
+
+
+.cbos-header .searchboxContainer .btn-default i{
+    color: #BBCBD4;
+    font-size: 1.15em;
+}
+
+.cbos-header .searchboxContainer
+.input-group-btn:last-child > .btn {
+    margin-left: -3px;
+}
+
+.searchboxContainer form > .input-group{
+    width: 100%;
+}
+
+
+.searchboxContainer form input{
+    background-color: #265B7F;
+    border-color:#265B7F;
+    height: 38px;
+    color: white;
+}
+
+
+
+
+.searchboxContainer form  ::-webkit-input-placeholder {
+    color: #BBCBD4;
+}
+
+.searchboxContainer form  :-moz-placeholder { /* Firefox 18- */
+    color: #BBCBD4;
+}
+
+.searchboxContainer form ::-moz-placeholder {  /* Firefox 19+ */
+    color: #BBCBD4;
+}
+
+.searchboxContainer form  :-ms-input-placeholder {
+    color: #BBCBD4;
+}
+
+
+
+
+
+
+/*.cbos-header .row > div > div{*/
+
+    /*display: table-cell;*/
+    /*vertical-align: middle;*/
+/*}*/
+
+ .topNavigation{
+    background-color: #1874b2;
+    height:45px ;
+    width: 100%;
+     margin-top: -109px;/*this margin is only for page render and  will be over written by the script*/
+}
+
+
+
+
+#collapseTasks ul li{
+    padding: 5px 2px;
+    border-bottom: 1px solid #c8c8c8;
+}
+
+.taskTableActions{
+    border-radius: 5px
+}
+
+.taskTableActions span{
+    padding: 3px 10px;
+}
+
+.taskTableActions span:first-child{
+    border-right: 1px solid #c8c8c8;
+    margin-right: -1px;
+}
+
+.taksListItems > div,
+.runtime-mobile-table-body .runtime-mobile-table-row{
+    margin: 0 10px;
+    padding: 15px 0;
+    border-bottom: 1px solid #c8c8c8;
+    position: relative;
+}
+
+
+.runtime-mobile-table-body .runtime-mobile-table-row{
+    margin: 0 3px;
+}
+
+.taksListItems .description,
+.runtime-mobile-table-body .description{
+    font-size: 0.95em;
+    line-height: 22px;
+
+}
+
+.taksListItems > div:last-child,
+.runtime-mobile-table-body > div:last-child{
+    border-bottom: none;
+}
+
+.taskBoxHeader,
+.runtime-mobile-table-header{
+    padding: 8px 5px;
+}
+
+.runtime-mobile-table-body .runtime-mobile-table-row{
+    height: 87px;
+}
+
+.runtime-mobile-table-body .runtime-mobile-table-row .check-select input[type="checkbox"]{
+
+    border: none;
+     -ms-transform: scale(1.5); /* IE */
+    -moz-transform: scale(1.5); /* FF */
+    -webkit-transform: scale(1.5); /* Safari and Chrome */
+    -o-transform: scale(1.5); /* Opera */
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 5px;
+    margin-top: 25px;
+
+
+}
+
+.taksListItems .description:before,
+.runtime-mobile-table-body .description:before{
+    content:'';
+    display: block;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    float: left;
+    margin-top: 6px;
+    margin-right: 3px;
+
+}
+
+
+.taksListItems .description:before,{
+    width: 8px;
+    height: 8px;
+    background: red ;
+}
+
+
+.taksListItems .description.rellowTag:before{
+    background-color: yellow;
+}
+
+
+
+.runtime-mobile-table-body .description{
+    margin-left: 20px;
+    min-width: 250px;
+}
+
+.runtime-mobile-table-body .description .details span+span{
+    margin-left: 2%;
+}
+
+
+.runtime-mobile-table-body .description .details span,
+.runtime-mobile-table-body .description h4{
+    display: inline-block;
+    max-width: 45%;
+    float: none !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.runtime-mobile-table-body .description.attachment:before{
+    content: "";
+    background:url("../images/icons/attatchment.png") no-repeat center;
+    width: 12px;
+    height: 30px;
+    background-size: contain;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    margin-top: -15px;
+}
+
+
+
+.taksListItems .description.greenTag:before{
+    background-color: #6ECD67;
+}
+
+.taksListItems .description.redTag:before{
+    background-color: red;
+}
+
+
+
+.desktopDocumentsContainer .documentDescription{
+    border-left: 1px solid #c8c8c8;
+    padding-left: 5px;
+    margin-left: 2px;
+    font-size: 12px;
+    line-height: 20px;
+    height: 84px;
+}
+
+
+.desktopDocumentsContainer > div.row{
+
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+}
+
+.desktopDocumentsContainer .documentIcon{
+    width: 103px;
+    height: 84px;
+    vertical-align: top;
+}
+
+.desktopDocumentsContainer .documentDescription .docomentTitle{
+    line-height: 20px;
+    font-size: 15px;
+}
+
+
+.desktopDocumentsContainer .documentDescription .totalItems{
+
+   margin-top: 15px;
+}
+
+.desktopDocumentsContainer{
+    margin-bottom: 2px;
+    max-width: 700px;
+}
+
+.sideContainer h4{
+    margin-top: 0;
+
+}
+
+.employeesTwits .media {
+    height: 95px;
+}
+
+
+.employeesTwits .media p{
+    margin-bottom:0 ;
+}
+
+
+.employeesTwits .media-heading{
+    margin-top: 5px;
+}
+
+
+
+
+.employeesTwits .media-object{
+
+    width: 86px;
+    height: 86px;
+
+}
+
+
+.desktopWeather{
+
+    height: 42px;
+}
+
+.desktopWeather .timeContainer, .desktopWeather .dateContainer{
+
+    line-height: 42px;
+
+}
+
+.desktopWeather .timeContainer{
+
+    font-size: 18px;
+
+}
+
+
+.taksListItems .description{
+    max-width: 85%;
+    max-height: 25px;
+}
+
+
+
+
+.newsBoddy {
+    max-height: 90px;
+    margin-bottom: 0;
+}
+
+
+.employeeName{
+    max-height: 19px;
+}
+
+.employeeTwit{
+    max-height: 42px;
+}
+
+
+
+
+
+.sideContainer{
+    padding-left: 0 ;
+}
+
+
+.headerDropDownIcon, .mobileSearch, .headerMenuIcon{
+
+    display: block;
+    margin-top: 18px;
+    vertical-align: top;
+    border: 1px solid white;
+}
+
+
+
+.headerDropDownIcon{
+    margin-right: 15px;
+    border-bottom-width: 5px ;
+    padding: 3px 4px;
+    font-size: 0.8em;
+}
+
+
+.mobileSearch{
+    border: none;
+    margin-right: -10px;
+}
+
+
+.headerMenuIcon{
+
+    font-size: 1.2em;
+    padding:2px 1px;
+}
+
+
+.seachInput form{
+    padding-left: 0;
+    margin-top: 5px;
+}
+
+
+.headerShortCuts{
+    font-size: 1.3em;
+    line-height: 150%;
+}
+
+.mobileVersion.seachInput{
+    float: right;
+    margin-top: 5px;
+    margin-right: 90px;
+}
+
+
+
+.mobileVersion.seachInput i{
+    color: white !important;
+}
+
+
+
+
+
+
+.singleDocumentContainer{
+    display: table;
+    width: 100%;
+}
+
+
+/*.singleDocumentContainer > div{*/
+    /*display: table-cell;*/
+    /*text-align: center;*/
+    /*vertical-align: middle;*/
+/*}*/
+
+
+
+.singleDocumentContainer > div{
+    display: table-cell;
+    vertical-align: middle;
+}
+
+
+
+
+
+.singleDocumentContainer .alignerTableBox{
+
+    text-align: left;
+    display: inline-block;
+}
+
+
+.contactsIcon img{
+    width: 19px;
+    height: 19px;
+    margin-bottom: -1px;
+}
+
+.contactsIcon{
+
+    background-color: white;
+    border-bottom: 1px solid white;
+    padding-bottom: 1px;
+}
+
+.menuItem{
+    background-color:#eeeeee;
+    height: 35px;
+    width: 120px;
+    float: left;
+    cursor: pointer;
+    margin:0 10px;
+}
+
+.menuItem .menuIcon{
+    margin: 5px;
+}
+
+.menuItem .menuName{
+    line-height: 35px;
+    min-width:60px;
+    text-align: center;
+}
+
+.topNavigation{
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+}
+
+
+.menuItem.selected{
+    background-color:white !important;
+    color: #158bbd;
+    border:1px solid white ;
+    border-bottom:0;
+    position:relative;
+
+}
+
+
+.menuItem.squaredBottom.selected{
+    border:1px solid #c8c8c8;
+    border-bottom:0 ;
+    margin-bottom: -2px ;
+    color: #333333;
+}
+
+.menuItem .menuIcon.grayIcon{
+    display: block;
+}
+
+
+.menuItem .menuIcon.blueIcon{
+    display: none;
+}
+
+
+
+
+.menuItem.selected .menuIcon.grayIcon{
+    display: none ;
+}
+
+
+.menuItem.selected .menuIcon.blueIcon{
+    display: block;
+}
+
+
+
+.menuItem.selected:not(.squaredBottom):after,
+.menuItem.selected:not(.squaredBottom):before{
+    content:'' ;
+    background-color: #1874b2 ;
+    width:16px ;
+    height:16px ;
+    -moz-border-radius:8px ;
+    -webkit-border-radius:8px ;
+    border-radius:8px ;
+    right: -17px ;
+    position:absolute ;
+    bottom:0 ;
+    z-index: 1;
+}
+
+.menuItem.selected.squaredBottom:before{
+    content:'' ;
+    background-color: white;
+    bottom: -2px;
+    left: 0;
+    width: 118px;
+    height: 4px;
+    position:absolute ;
+    z-index: 9999;
+}
+
+
+.menuItem.selected:not(.squaredBottom):before{
+    left: -17px ;
+    right: auto ;
+}
+
+.menuItem.selected:not(.squaredBottom) .menuIcon:before,
+.menuItem.selected:not(.squaredBottom) .menuName:after{
+    content:'';
+    width:10px ;
+    height:10px ;
+    /*border:1px solid;*/
+    position:absolute ;
+    bottom:0 ;
+    left: -10px ;
+    background-color: white ;
+    z-index: 0 ;
+}
+
+
+.menuItem.selected:not(.squaredBottom) .menuName:after{
+    right: -10px;
+    left: auto ;
+}
+
+
+.menuItem.squaredBottom{
+    border: 1px solid #cccccc;
+    border-top-right-radius:6px;
+    border-top-left-radius: 6px;
+    background-color: rgba(199, 199, 199, 0.64);
+}
+
+
+.headerMenuIconContainer li.header{
+    text-align: left !important;
+}
+
+
+.headerMenuIconContainer ul{
+    background-color:rgba(0,0,0,0.5);
+}
+
+.headerMenuIconContainer ul li a{
+    color: white !important;
+}
+
+
+.headerMenuIconContainer ul li a:hover{
+    background-color: #1874b2;
+}
+
+
+.headerMenuIconContainer .dropdown-menu .divider{
+    margin-top: 0;
+}
+
+#cbosToolBox{
+    height: 109px;
+    border-top: 2px solid #46B1DA;
+    border-bottom: 2px solid #46B1DA;
+    overflow: hidden;
+    padding: 5px 45px;
+    visibility: hidden;
+}
+
+
+
+
+ .aside-backdrop{
+     opacity: 0.01;
+}
+.aside.mobileMenuAside{
+    width: 250px;
+    color: white;
+
+    background: -webkit-linear-gradient(left, #3181B1 , #153363); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #3181B1, #153363); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #3181B1, #153363); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, #3181B1 , #153363); /* Standard syntax */
+}
+
+.modal.mobileSearchModal{
+    width: 100%;
+    background-color:#1874b2 ;
+}
+
+.modal.mobileSearchModal .modal-body{
+    padding:0;
+}
+
+.modal.mobileSearchModal label{
+    color: white;
+    line-height: 35px;
+    max-width: 70px;
+}
+
+.aside.mobileMenuAside .aside-dialog .aside-footer{
+    border: none;
+}
+
+
+.mobileMenuItemContainer .mobileMenuItem{
+
+    padding: 10px 0;
+    font-size: 1.2em;
+}
+
+
+.mobileMenuItemContainer .mobileMenuItem .menuIcon{
+
+    margin-right: 15px;
+}
+
+
+.mobileMenuItem.settings{
+    position: absolute;
+    bottom: -30px;
+    left: 15px;
+}
+
+
+.mobileMenuItem.settings .menuIcon{
+
+    font-size: 1.3em;
+}
+
+
+.appIcon{
+    border: 2px solid #eeeeee;
+    position: relative;
+}
+
+
+.appIcon img {
+    width: 48px;
+    height: 48px;
+    display: block;
+    margin:15px auto 5px;
+}
+
+.appIcon span.glyphicon{
+
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    color: #eeeeee;
+    font-size: 1.2em;
+    transform: rotate(30deg);
+    -ms-transform: rotate(30deg); /* IE 9 */
+    -webkit-transform: rotate(-30deg); /* Chrome, Safari, Opera */
+
+}
+
+
+.appIcon .appIconName{
+    background-color: #eeeeee;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+}
+
+ .toolBoxTopNavContainer{
+    position: fixed;
+    z-index: 99;
+}
+
+.demo-header-container{
+    background: url("../images/cbosHeader.png") center center;
+    background-size: 100% 100%;
+    height: 35px;
+}
+
+.demo-footer-container{
+    background-color: #1874b2;
+    height: 8px;
+}
+.demo-grid-preview{
+    height: 450px;
+}
+
+.toolBoxTopNavContainer{
+
+    top: 50px;
+    width: 100%;
+    background-color: white;
+}
+
+
+.mainContainer{
+    padding-top: 100px;
+    padding-bottom: 8px;
+    height: 100%;
+}
+
+.mainContainerInner{
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling:touch; /*important for the mobile touch scrolling*/
+}
+
+
+.mainContainerInner > .row{
+    height: 100%;
+}
+
+.modal-backdrop{
+    opacity: 0.1;
+}
+
+
+.mobileSearchModal .glyphicon-search{
+    position: absolute;
+    left: 22px;
+    top: 13px;
+    color: #BBCBD4;/*same as bootstrap form-control*/
+
+}
+
+.mobileSearchInputContainer{
+    position: relative;
+    margin-left: 15px;
+    padding-left: 8px;
+    padding-right: 0;
+
+}
+
+
+
+
+.mobileSearchModal form  ::-webkit-input-placeholder {
+    color: #BBCBD4;
+}
+
+.mobileSearchModal form  :-moz-placeholder { /* Firefox 18- */
+    color: #BBCBD4;
+}
+
+.mobileSearchModal form ::-moz-placeholder {  /* Firefox 19+ */
+    color: #BBCBD4;
+}
+
+.mobileSearchModal form  :-ms-input-placeholder {
+    color: #BBCBD4;
+}
+
+
+.tootboxSliderHelper{
+    width: 100%;
+}
+
+/*this should be the same as the collapsing class for bootstrap */
+/*.tootboxSliderHelper {*/
+    /*position: relative;*/
+    /*height: 0;*/
+    /*overflow: hidden;*/
+    /*-webkit-transition-timing-function: linear;*/
+    /*-o-transition-timing-function: linear;*/
+    /*transition-timing-function: linear;*/
+    /*-webkit-transition-duration: .35s;*/
+    /*-o-transition-duration: .35s;*/
+    /*transition-duration: .35s;*/
+    /*-webkit-transition-property: height, visibility;*/
+    /*-o-transition-property: height, visibility;*/
+    /*transition-property: height, visibility;*/
+/*}*/
+
+
+.toolBox.collapsing{
+    transition-duration:0.35s;
+    transition-timing-function: linear;
+}
+
+.createAppModal .control-label{
+    max-width: 120px;
+}
+
+.createAppModal .appLayouts{
+
+    width: 200px;
+}
+
+
+
+.createAppModal .layoutPreviewPanel{
+    width: 845px;
+    margin-left: 20px;
+}
+
+
+.createAppModal .layoutPreviewPanel,
+.createAppModal .appLayouts{
+    height: 100%;
+    border: 1px solid #c8c8c8;
+}
+
+
+#appSelectionCarousel{
+    padding: 30px 15px;
+    overflow: hidden;
+}
+
+.layoutPreviewPanel,
+#appSelectionCarousel{
+    height: 505px;
+    min-height:505px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (min-width : 768px) and (max-width : 1185px) {
+
+
+    .desktopDocumentsContainer .documentDescription, .desktopDocumentsContainer .documentIcon{
+        width: 100% ;
+        float: none !important;
+    }
+
+
+    .desktopMainContainer{
+        padding-right: 0;
+    }
+
+
+    .employeeName{
+        font-size: 0.98em;
+    }
+
+
+
+
+
+
+}
+
+
+
+
+@media screen and (min-width : 768px) and (max-width : 1150px) {
+
+    .taksListItems div{
+        width: 100%;
+        float: none !important;
+        text-align: center;
+        margin: auto;
+    }
+
+    .taksListItems .description{
+        max-width: 95%;
+    }
+
+    .taksListItems div.icon img{
+        max-width: 24px;
+        display: block;
+        margin: auto;
+
+    }
+
+
+
+    .employeesTwits .media-object {
+        width: 66px;
+        height: 66px;
+    }
+
+
+    .desktopNewsPosts .media-left img{
+        width: 80px;
+        height: 80px;
+
+    }
+
+
+    .desktopNewsPosts .newsTitle,.employeesTwits .employeeName{
+
+        font-size: 0.95em;
+    }
+
+
+
+}
+
+
+
+
+
+
+
+
+@media screen and (max-width : 960px) {
+
+
+    .commonLyUsedAppsContainer .container-fluid > div{
+        width:19.3%;
+    }
+
+
+}
+
+
+
+@media screen and (max-width : 800px) {
+
+
+    .commonLyUsedAppsContainer .container-fluid > div{
+        width:24%;
+    }
+
+
+}
+
+
+
+@media screen and (max-width : 768px) {
+
+
+
+
+
+    .headerDropDownIcon{
+        margin-right: auto;
+        margin-top:9px;
+    }
+
+    .mobileSearch, .headerMenuIcon{
+        margin-top: 8px;
+    }
+    .cbosLogoContainer{
+        top: 5px;
+    }
+
+    .cbosLogoContainer img{
+        width: 50px;
+        height: 25px;
+
+    }
+
+    .cbos-header{
+        height: 40px;
+        background-color: #1874b2;
+    }
+
+    .cbos-header .mobileSearch{
+        font-size: 1.8em;
+    }
+
+    .toolBoxSliderControl .headerDropDownIconContainer,
+    .toolBoxSliderControl .mobileSearchContainer{
+        position: absolute;
+        top: 3px;
+    }
+
+    .toolBoxSliderControl .headerDropDownIconContainer{
+        left: -12px;
+    }
+
+    .toolBoxSliderControl .mobileSearchContainer{
+        right: -12px;
+        left: auto;
+    }
+
+    .taksListItems > div{
+        padding: 6px 0;
+    }
+
+    .tasksContainer{
+        padding-right: 0;
+    }
+
+    .sideContainer{
+        padding: 30px;
+
+    }
+
+
+    .desktopNewsPosts .newsTitle, .employeesTwits .employeeName{
+
+        font-size: 1.1em;
+    }
+
+
+
+
+    .seachInput{
+        margin-right: 98px;
+    }
+
+
+
+    .seachInput .navbar-form{
+        padding: 0;
+
+    }
+
+    .userInfo{
+        padding-right: 0;
+    }
+
+    .mainContainer{
+        padding-top: 50px;
+    }
+
+    .toolBoxTopNavContainer{
+        top: 40px;
+    }
+
+}
+
+
+
+
+
+@media screen and (max-width : 680px) {
+
+
+    .headerShortCuts{
+        padding-bottom: 5px;
+    }
+
+    .toolBoxSliderControl{
+        margin-top: 10px;
+    }
+
+    .headerShortCuts{
+        display: none;
+    }
+
+    .toolBoxSliderControl{
+        margin-top: 2px;
+
+    }
+
+
+
+
+}
+
+
+
+
+
+@media screen and (max-width: 600px) {
+
+    .desktopDocumentsContainer .documentDescription, .desktopDocumentsContainer .documentIcon{
+        width: 100% !important;
+    }
+
+
+    .desktopDocumentsContainer .documentDescription .docomentTitle{
+        line-height: 20px;
+        font-size: 13px;
+    }
+
+    .desktopDocumentsContainer .documentDescription .totalItems{
+
+        margin-top: 2px;
+    }
+
+
+
+
+    .desktopDocumentsContainer .documentDescription{
+        height: 64px;
+    }
+
+
+}
+
+
+
+
+
+@media screen and (max-width: 550px) {
+
+
+    .commonLyUsedAppsContainer .container-fluid > div{
+        width:32%;
+    }
+
+
+}
+
+
+/*mobile*/
+
+@media screen and (max-width: 480px) {
+
+
+
+     .appIcon{
+        width: 86px;
+        height: 76px;
+    }
+
+
+     .appIcon img{
+        width: 35px;
+        height: 35px;
+    }
+
+
+
+    .appIcon span.glyphicon{
+        font-size: 1em;
+
+    }
+
+
+    .appIcon .appIconName{
+        height: 20px;
+        line-height: 20px;
+        font-size: 0.9em;
+    }
+
+
+    .desktopDocumentsContainer .documentIcon img{
+        width: 95px;
+        height: 80px;
+    }
+
+    .toolBoxTopNavContainer{
+        top: 40px;
+    }
+
+
+    .mainContainer{
+        padding-top: 40px;
+    }
+    .desktopWeather .col-xs-4:nth-child(2){
+        display: none;
+
+    }
+
+    .desktopWeather .col-xs-4{
+        width: 50%;
+    }
+
+    #cbosToolBox{
+        height: 92px !important;
+    }
+
+    #cbosToolBox .carousel-control{
+        height: 88px;
+    }
+
+
+}
+
+
+@media screen and (max-width: 400px) {
+
+
+    .cbos-header .container-fluid{
+        padding: 0 8px;
+    }
+
+
+}
+
+
+@media screen and (max-width: 370px) {
+
+
+    .mobileVersion.seachInput{
+
+        margin-right: 3px;
+        margin-right: 30px;
+
+    }
+
+
+}
+
+
+@media screen and (max-width: 350px) {
+
+
+    .commonLyUsedAppsContainer .container-fluid > div{
+        width:48%;
+    }
+
+}
+
+
+
+
+
+
+
+

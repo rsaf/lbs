@@ -1,0 +1,13 @@
+<div class="cbos-left-navigation">
+    <div class="cbos-left-navigation-items">
+        <div ng-repeat="nav in navigation" >
+            <a  class="cbos-display-block cbos-padding-5"  ui-sref-active="selected-left-nav" ui-sref={{nav.linkTo}} >
+                <img style="margin-left: 3px;" class="cbos-display-block pull-left" src="base/images/icons/formgray.jpg">
+                <div class="pull-left" style="line-height: 18px; margin-left: 5px;">  {{nav.ln}}</div>
+                <div class="clearfix"></div>
+            </a>
+
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,17 @@
+
+
+        <div class="form-group">
+            <label for="columnName" class="control-label col-sm-3"  style="max-width: 98px;">name:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="columnName" ng-model="tcontainer.tablesnav[$state.params.tableId].fieldnav[currentCol].fn">
+            </div>
+        </div>
+        <div class="form-group cbos-margin-bottom-5">
+                            <label  for="TableDataType" class="control-label col-sm-3" style="max-width: 98px;">data type:</label>
+                            <div class="col-sm-9">
+                                <select id="TableDataType" class="form-control" ng-init="tcontainer.tablesnav[$state.params.tableId].fieldnav[currentCol].ft=tcontainer.tablesnav[$state.params.tableId].fieldnav[currentCol].ft||canvasTableFieldTypes[0]" ng-options="type for type in canvasTableFieldTypes"  ng-model="tcontainer.tablesnav[$state.params.tableId].fieldnav[currentCol].ft">
+
+                                </select>
+                </div>
+       </div>
+

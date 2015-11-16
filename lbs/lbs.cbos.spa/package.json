@@ -1,0 +1,30 @@
+{
+  "name": "lbs.cbos.spa.v2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "cbos.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc -p . -w",
+    "start": "live-server --open=cbos.html"
+  },
+  "keywords": [],
+  "author": "Leo",
+  "license": "Private",
+  "dependencies": {
+    "angular2": "2.0.0-alpha.45",
+    "bootstrap": "3.3.5",
+    "bootstrap-additions": "0.3.1",
+    "bootstrap-select": "1.7.3",
+    "c3": "0.4.10",
+    "d3": "3.5.0",
+    "es6-shim": "0.33.10",
+    "jquery": "1.11.3",
+    "swiper": "3.1.2",
+    "systemjs": "0.18.4"
+  },
+  "devDependencies": {
+    "live-server": "^0.8.2",
+    "typescript": "^1.6.2"
+  }
+}

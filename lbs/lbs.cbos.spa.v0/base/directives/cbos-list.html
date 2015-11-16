@@ -1,0 +1,13 @@
+<div class="cbos-items-list cbos-gray-bg3 cbos-padding-top-15">
+
+        <span ng-if="ctrl.items.length == 0">No items available.</span>
+        <slick init-onload=true data="items" infinite="false" vertical="true" speed="300" slides-to-show="8" class="vertical-click" slides-to-scroll="1" prev-arrow=".eyelist-slick-prev" next-arrow=".eyelist-slick-next">
+
+            <a class="cbosEyedRow cbos-display-block"  ng-repeat="item in ctrl.items" ui-sref='{{item.linkTo}}' ui-sref-active="selectedListItem">
+                <!--<cbos-item data-set="item" ng-click="switch({item: item})"></cbos-item>-->
+                <cbos-item data-set="item" data-switch="ctrl.switch({item: item})"></cbos-item>
+            </a>
+        </slick>
+        <a type="button" class="vertical slick-control slick-prev eyelist-slick-prev"  role="button" ></a>
+        <a type="button" class=" vertical slick-control slick-next eyelist-slick-next" role="button" ></a>
+</div>

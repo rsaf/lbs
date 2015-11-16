@@ -1,0 +1,10 @@
+static/home/home.js
+node_modules
+node_modules_local
+static
+photos
+/handlers/.brackets.json
+/handlers/.jshintrc
+/.project
+.idea/workspace.xml
+

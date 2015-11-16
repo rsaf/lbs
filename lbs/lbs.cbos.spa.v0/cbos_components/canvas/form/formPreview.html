@@ -1,0 +1,25 @@
+
+<div class="modal-content">
+    <div class="modal-header cbos-bluebg">
+        <button type="button" class="close" aria-label="Close" ><span  aria-hidden="true">&times;</span></button>
+        <span class="modal-title cbos-white pull-left">{{tcontainer.tablesnav[tcontainer.dropDownSelectedFormTable.ufid].formsnav[$state.params.formId].name}}</span>
+        <div class="clearfix"></div>
+    </div>
+    <div class="modal-body" style="padding-bottom: 40px;">
+
+        <div class="form-horizontal">
+
+            <div ng-repeat="elem in tcontainer.tablesnav[$state.params.formTableId].formsnav[$state.params.formId].ffields" ng-bind-html="tcontainer.canvas_tablesformDirsMap[elem.fd]" cbos-compile="tcontainer.canvas_tablesformDirsMap[elem.fd],{{elem.fid}}">
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-footer small">
+        <div class="cbos-modal-footer-inner-small">
+            <button  class="btn cbos-btn cbos-btn-gray">Cancel</button>
+            <button class="btn cbos-btn cbos-btn-blue">ok</button>
+        </div>
+    </div>
+</div>

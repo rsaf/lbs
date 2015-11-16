@@ -1,0 +1,94 @@
+
+<header class="cbos-header" style="">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-5 col-xs-5 searchboxContainer">
+                <div>
+                    <div class="cbosLogoContainer "><a ui-sref="desktop"><img  class="" src="cbos_layouts/desktop/theme/images/cbosLogo.png" alt="cbos logo"></a>  </div>
+                    <div class=" seachInput largeTabletAndPc ">
+                        <form class="navbar-form" role="search">
+                            <div class="input-group cbos-relative">
+                                <input type="text" class="form-control" placeholder="{{'Search'|translate}}" name="srch-term" id="srch-term">
+                                <div class="cbos-aboslute" style="z-index: 9999; right: 0">
+                                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <div class="toolBoxSliderControl  col-sm-2 col-xs-2">
+                <div class="cbos-relative">
+                    <div class=" headerDropDownIconContainer cbos-pointer pull-left" cbos-toolbox-slider>
+                        <span class="glyphicon headerDropDownIcon glyphicon glyphicon-menu-down " ></span>
+                    </div>
+                    <div class="headerMenuIconContainer  dropdown cbos-pointer largeTabletAndPc pull-left" ng-controller="menuController" ui-view="headerMenuView">
+                        <span class="glyphicon headerMenuIcon glyphicon-menu-hamburger" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></span>
+                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" >
+
+                                 <li class="" role="" ng-show="('desktop'|isState)"> <a ui-sref='desktop.createApp'>Create App</a> </li>
+                                 <li ng-click='createCanvas()' class="" role="" ng-show="('desktop.app'|includedByState)&&!('desktop.app.canvas'|includedByState)"> <a> Create Business Canvas</a> </li>
+                                 <li  class="divider" role="separator" ng-show="!('desktop'|isState)&&!('desktop.app.canvas'|includedByState)"> <a> </a> </li>
+                                 <li class="header" role="" ng-show="('desktop.app'|includedByState)&&!('desktop.app.canvas'|includedByState)"> <a ui-sref='desktop.app.createLayout'>Create Layout Container</a> </li>
+                                 <li class="" role="" ng-show="('desktop.app'|includedByState)&&!('desktop.app.canvas'|includedByState)"> <a>Publish Layout Container</a> </li>
+                                 <li  class="divider" role="separator"  ng-show="!('desktop.app.canvas'|includedByState)"> <a> </a> </li>
+                                 <li class="" role="" ng-show="('desktop.app.canvas'|includedByState)"> <a>Publish Canvas</a> </li>
+                                 <li  class="divider" role="separator" ng-show="('desktop.app.canvas'|includedByState)"> <a> </a> </li>
+
+                                 <li class="" role="" ng-show="!('desktop'|isState)"> <a ui-sref='desktop.app.appsettings'>App Settings </a> </li>
+                                 <li class="" role="" ng-show="('desktop'|isState)"> <a ui-sref='desktop.desktopsettings'>App Settings </a> </li>
+                                 <li ng-click='logout()' class="" role=""> <a> Log Out</a> </li>
+
+
+                            </ul>
+                    </div>
+                    <div class="mobileSearchContainer smallTabletAndMobile cbos-pointer pull-left" ng-controller="mobileSearchBox">
+                        <span class=" mobileSearch  glyphicon glyphicon-search" ng-click="showSearch()"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+
+            <div class="  col-sm-5 col-xs-5">
+                <div class="userInfo largeTabletAndPc">
+                    <div class="userProfilePic pull-right"> <img src="{{user.avatar}}" alt="userPicture">  </div>
+                    <div class="userProfileText pull-right text-right"> <div>{{user.fullname}}</div>  <div>{{user.role}}</div> </div>
+                    <div class="pull-right headerShortCuts">
+                        <!--<div class="pull-left cbos-pointer cbos-padding-top-5 cbos-margin-right-15 glyphicon glyphicon-user">-->
+                        <!--</div>-->
+                        <div class="pull-left cbos-pointer cbos-padding-top-5 cbos-margin-right-15 glyphicon glyphicon-flag" ng-click="switchlanguage()">
+                        </div>
+
+                        <div class="pull-left cbos-pointer cbos-padding-top-5 cbos-margin-right-15 glyphicon glyphicon-envelope">
+                        </div>
+
+                        <div class="pull-left cbos-pointer cbos-padding-top-5 cbos-margin-right-15 glyphicon glyphicon-list-alt">
+                        </div>
+
+                        <!--
+                        <div class="pull-left cbos-pointer cbos-padding-top-2 cbos-margin-right-15 ">
+
+                            <span class="contactsIcon"> <img src="cbos_layouts/desktop/theme/images/address-book.png"></span>
+                        </div>
+                        -->
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <!--mobile menu-->
+                <div class="" ng-controller="mobileMenuAside">
+                    <div class="cbos-pointer smallTabletAndMobile mobileMenu  pull-right">
+                        <span class="glyphicon headerMenuIcon glyphicon-menu-hamburger" scroll-to="mainInterContainer"  ng-click="showSideMenu()"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
