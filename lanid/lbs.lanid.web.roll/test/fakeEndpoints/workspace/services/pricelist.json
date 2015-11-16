@@ -1,0 +1,22 @@
+{
+  "pl": [{
+      "_id": "54a268b26d79b7df053c4d0e",
+      "servicePoint" : "54a267006d79b7df053c4d0a",
+      "servicePrices": 22,
+      "discountedPrice":11,
+      "appointmentRequeirement":true, 
+      "paymentMethod": ["online","cache"],   "commentOnJSON":"payment method is a list maintained by admin and contains several payment methods, user shoudl be able to select more than one method",
+      "remark": "remark for this service at this point",
+      "md": {
+        "uID": "54852b4bada015b113c0df7e",
+        "oID": "54852b4bada015b113c0df7e",
+        "lu": "2014-12-30T08:56:18.929Z"
+      },
+      "ct": {
+        "cuID": "54852b4bada015b113c0df7e",
+        "oID": "54852b4bada015b113c0df7e",
+        "cd": "2014-12-30T08:56:18.929Z"
+      }
+    }],
+  "er": null
+}

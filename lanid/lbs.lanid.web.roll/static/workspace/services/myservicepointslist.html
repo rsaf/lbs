@@ -1,0 +1,87 @@
+{{^items.length}}
+{{/items.length}}
+{{#items.length}}
+<div class="lan_padding_5 lan_black_text">选择网点</div>
+<div class="createNewServiceTableContainer">
+  <div class="lan_table lan_align_default createNewServiceTable ">
+    <div class="lan_row">
+      <div class="lan_cell lan-col-15  Swap"><input class="selectAllCheckbox" data-action-click="myservices:select:allServicePoints"  style="height: 15px; width: 15px; display: inline-block; margin-left: 5px; margin-right: 6px;" type="checkbox">网点代码</div>
+      <div class="lan_cell lan-col-10 Swap">网点名称</div>
+      <div class="lan_cell lan-col-20  ">网点地址</div>
+      <div class="lan_cell  lan-col-10 Swap">服务价格</div>
+      <div class="lan_cell lan-col-10 Swap">优惠价格</div>
+      <div class="lan_cell lan-col-10 Swap">预约要求</div>
+      <div class="lan_cell lan-col-10 Swap">支付方式</div>
+      <div class="lan_cell lan-col-15 Swap">备注</div>
+    </div> <!--end of lan_row-->
+    {{#items}}
+    {{priceListHelper.init}}
+    <div class="lan_row" id='{{_id}}'>
+      <div class="lan_cell lan-col-15">
+        <input  style="height: 15px; width: 15px; display: inline-block; margin: 5px; margin-right: 6px;"
+                type="checkbox"
+               value='{{_id}}'
+               {{priceListHelper.isSelected}}
+               class='priceListCheckbox'
+               data-action-click='service:new:add:PriceList'>
+          {{servicePointCode}}
+      </div>
+      <div class="lan_cell lan-col-10">{{servicePointName}}</div>
+      <div class="lan_cell lan-col-20">{{servicePointAddress}}</div>
+      <div class="lan_cell lan-col-10">
+        <input
+          type="text"
+          class="form-control"
+          data-bind='priceDetail.servicePrices'
+          value="" >
+      </div>
+      <div class="lan_cell lan-col-10">
+        <input
+          type="text"
+          class="form-control"
+          data-bind='priceDetail.discountedPrice'
+          value="" >
+      </div>
+      <div class="lan_cell lan-col-10">
+        <select class="selectpicker"
+                data-bind='priceDetail.appointmentRequeirement'>
+                    {{#standardReservationRequest}}
+                      <option value='{{val}}'>{{text}}</option>
+                    {{/standardReservationRequest}}
+        </select>
+      </div>
+      <div class="lan_cell lan-col-10">
+        <select class="selectpicker" multiple=""
+                data-bind='priceDetail.paymentMethod'>
+          {{#standardPayment}}
+            <option value='{{val}}'>{{text}}</option>
+          {{/standardPayment}}
+        </select>
+      </div>
+      <div class="lan_cell form-group lan-col-15">
+        <input
+          type="text"
+          class="form-control"
+          data-bind='priceDetail.remark'
+          value="" > <!-- todo: this should be remark of the priceList -->
+      </div>
+    </div> <!--end of lan_row-->
+    {{/items}}
+
+    <div class="spinnerPlaceHolder "></div>
+
+
+  </div><!-- end of lan_table -->
+
+
+</div>
+<!--end of table container-->
+
+<div class="clearfix"></div>
+
+<!--<nav class="paginationContainer ">-->
+
+
+<!--</nav>-->
+
+{{/items.length}}

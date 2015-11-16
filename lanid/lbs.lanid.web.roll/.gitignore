@@ -1,0 +1,11 @@
+static/home/home.js
+node_modules
+/static/.brackets.json
+/photos/
+/static/forms/
+/static/actitivities/
+/test/node_modules/
+static.non_minified/
+/.project
+.idea
+

@@ -1,0 +1,130 @@
+<div class="modal-dialog uploadPhotoInfo">
+    <div class="modal-content">
+        <form  class="form-horizontal" id="photoInforForm" method="POST" enctype="multipart/form-data" >
+        <div class="modal-header modal-header-primary blueHeader ">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+            <h4 class="modal-title">上传照片</h4>
+        </div>
+        <div class="modal-body">
+
+
+            <!----///inserted part  ///---->
+            <!----///inserted part  ///---->
+            <div class=" opsLogDetailsPopUp">
+
+                <div class="regFancyBoxBody">
+
+                        <div class="opsLogDetailsTop noPadding">
+                            <div class="fakeTable">
+
+                                <div class="lan_vpadding_10">友情提示: *号为必选项，否则无法完成照片上传</div>
+
+                                <div class="form-group">
+                                    <label for="" class="col-sm-3 col-sm-offset-1 control-label">照片名称:</label>
+                                    <div class="col-sm-7 noPaddingLeft">
+                                        <input type="text" class="form-control uploadedPhotoName input-sm " name="photoName" value="山水风景" id="">
+                                    </div>
+
+                                    <!--<div class="col-sm-1 noPaddingLeft ">-->
+
+
+
+                                            <!--<div id="popupFileUploadContainer" class=" btn btn-primary  customFileUploader uploaderConstrained">-->
+                                               <!--选择照片-->
+                                            <!--<input name="file" id="popupFileUpload" type="file">-->
+                                            <!--</div>-->
+
+                                    <!--</div>-->
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="" class="col-sm-3 col-sm-offset-1 control-label">主题类型:  </label>
+                                    <div class="col-sm-4 noPaddingLeft">
+                                        <select class="selectpicker  sm-selectpicker " name="type">
+                                            <option>旅游照片</option>
+                                            <option>工作照片</option>
+                                            <option>工作照片</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="" class="col-sm-3 col-sm-offset-1 control-label">拍摄方式:  </label>
+                                    <div class="col-sm-4 noPaddingLeft">
+                                        <select class="selectpicker sm-selectpicker" name="shootingMethod">
+                                            <option>单板相机</option>
+                                            <option>工作照片</option>
+                                            <option>工作照片</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="shootingAddress" class="col-sm-3 col-sm-offset-1 control-label">拍摄地点:</label>
+                                    <div class="col-sm-7 noPaddingLeft">
+                                        <input type="text" class="form-control input-sm " name="shootingAddress" placeholder="请输入拍摄地点" value="" id="shootingAddress">
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label for="uploadedPhotoDescription" class="col-sm-3 col-sm-offset-1 control-label">照片描述:</label>
+                                    <div class="col-sm-7 noPaddingLeft">
+                                        <textarea class="form-control " name="description" placeholder="限150字以内" value="" id="uploadedPhotoDescription"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="" class="col-sm-3 col-sm-offset-1 control-label">拍摄日期:  </label>
+                                    <div class="col-sm-7 noPaddingLeft">
+                                        <input type="date" name="shootingDate" class="form-control input-sm ">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group noMarginBottom lan_margin_top_20">
+                            <label for="uploadedPhotoResolutionInfo" class="col-sm-3 col-sm-offset-1 control-label">像素尺寸:</label>
+                            <div class="col-sm-7 noPaddingLeft">
+                                <span id="uploadedPhotoResolutionInfo"> </span>
+                                <input type="text" class="uploadedPhotoResolutionInfo hide" name="uploadedPhotoResolutionInfo" value="">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="uploadedPhotoSizeInfo" class="col-sm-3 col-sm-offset-1 control-label">文件大小:</label>
+                            <div class="col-sm-7 noPaddingLeft">
+                                <span  id="uploadedPhotoSizeInfo"> </span>
+
+                                <input type="text" class="uploadedPhotoSizeInfo hide" name="uploadedPhotoSizeInfo" value="">
+
+                            </div>
+                        </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="clearfix"></div>
+            <!----/inserted part---->
+        </div>
+        <div class="modal-footer  fancyBoxGrayFooter">
+
+            <div class="footer_operation_container">
+                <div class="grayButton formPreview " data-dismiss="modal" ><span>取消</span></div>
+                <div class="blueButton formPreview " data-action-click="photo:information:upload"><span>开始上传</span></div>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        </form>
+
+    </div>
+</div>

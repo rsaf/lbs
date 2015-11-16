@@ -1,0 +1,19 @@
+.displaymode div.listMode{float:left;margin-left:2px;width:30px;height:30px;}
+.displaymode div.listMode{background:url("/commons/images/IDphotoListModeUnselectedIcon.png") no-repeat scroll center center/100% auto rgba(0, 0, 0, 0);background-size:100%;}
+.displaymode div.listMode.listModeClicked{background:url("/commons/images/IDphotoListModeSelectedIcon.png") no-repeat scroll center center/100% auto rgba(0, 0, 0, 0);background-size:100% !important;}
+.displaymode div.albumMode{background:url("../images/viewSwitchingThumbnail2.png") no-repeat scroll center center/100% auto rgba(0, 0, 0, 0);}
+.displaymode div.albumMode.albumModeClicked{background:url("../images/viewSwitchingThumbnail1.png") no-repeat scroll center center/100% auto rgba(0, 0, 0, 0);}
+.siglephotoAction input[type="radio"]{height:20px !important;padding-right:2px !important;position:static;width:20px !important;}
+.blueButton.IDPhotoInspectionConfirm > span{display:block;margin:auto;float:none;}
+.idPhotoGalery .left{background:url("../images/left_blue.jpg") no-repeat scroll center center rgba(0, 0, 0, 0);left:5px;}
+.idPhotoGalery .right{background:url("../images/right_blue.jpg") no-repeat scroll center center rgba(0, 0, 0, 0);right:5px;}
+.idPhotoGalery .left.disabled{background:url("../images/left_grey.jpg") no-repeat scroll center center rgba(0, 0, 0, 0);cursor:default;}
+.idPhotoGalery .right.disabled{background:url("../images/right_grey.jpg") no-repeat scroll center center rgba(0, 0, 0, 0);cursor:default;}
+.idPhotoGaleryArrowContainerLeft.disabled{cursor:default;}
+.idPhotoGaleryArrowContainerRight.disabled{cursor:default;}
+@media screen and (max-width:767px){div.horizontal-filler.small{display:table;}
+}
+div.table-responsive.lan-horizontal-scroll table.table tbody tr td{border-top:none;padding:0px;width:100%;}
+div.table-responsive.lan-horizontal-scroll table.table{background-color:transparent;}
+div.horizontal-filler{display:none;}
+.bootstrap-select .btn.disabled{background-color:#EEEEEE;}

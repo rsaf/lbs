@@ -1,0 +1,63 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header modal-header-primary blueHeader ">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+            <h4 class="modal-title">通知详细</h4>
+        </div>
+        <div class="modal-body">
+
+
+            <!----inserted part---->
+            <div class=" opsLogDetailsPopUp">
+
+                <div class="regFancyBoxBody">
+
+                    <div class="opsLogDetailsTop">
+                        <div class="fakeTable">
+
+                            <div class="fakeTableLine">
+                                <span>通知标题:</span><span>{{clickedMessage.notification.subject}}</span>
+
+                            </div>
+                            <div class="fakeTableLine">
+                                <span>发布人:</span><span> {{clickedMessage.notification.from}}</span>
+
+                            </div>
+
+                            <!--<div class="fakeTableLine">-->
+                                <!--<span>发布单位:</span><span>{{clickedMessage._id}}</span>-->
+
+                            <!--</div>-->
+                            <div class="fakeTableLine">
+                                <span>发布时间:</span><span>{{#limitLengthDate}}{{clickedMessage.notification.sendTime}}{{/limitLengthDate}} </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="opsLogDetailsBottom">
+                        <div class="fakeTableLine">
+
+                            {{clickedMessage.notification.body}}
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+
+
+            </div>
+
+            <!----/inserted part---->
+        </div>
+        <div class="modal-footer  fancyBoxGrayFooter">
+            <button type="button" class="btn btn-primary lan_margin_top_10 center-block" data-dismiss="modal">知道了</button>
+        </div>
+    </div>
+</div>

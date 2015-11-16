@@ -1,0 +1,78 @@
+<div class="modal-dialog uploadPhotoInfo">
+    <div class="modal-content">
+        <form  class="form-horizontal" id="documentInforForm" method="POST" enctype="multipart/form-data" >
+        <div class="modal-header modal-header-primary blueHeader ">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+            <h4 class="modal-title">上传文件</h4>
+        </div>
+        <div class="modal-body">
+
+
+            <!----///inserted part  ///---->
+            <!----///inserted part  ///---->
+            <div class=" opsLogDetailsPopUp">
+
+                <div class="regFancyBoxBody">
+
+                        <div class="opsLogDetailsTop noPadding">
+                            <div class="fakeTable">
+
+
+
+                                <div class="form-group lan_margin_top_15">
+                                    <label for="" class="col-sm-3 col-sm-offset-1 control-label">文件名称:</label>
+                                    <div class="col-sm-7 noPaddingLeft">
+                                        <input type="text" class="form-control uploadedDocumentName input-sm " name="docName" value="" id="">
+                                    </div>
+
+
+
+                                </div>
+
+
+
+
+                                <div class="form-group">
+                                    <label for="uploadedPhotoDescription" class="col-sm-3 col-sm-offset-1 control-label">文件描述:</label>
+                                    <div class="col-sm-7 noPaddingLeft">
+                                        <textarea class="form-control " name="description" placeholder="限150字以内" value="" id="uploadedPhotoDescription"></textarea>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group lan_margin_top_15">
+                            <label for="uploadedFileSizeInfo" class="col-sm-3 col-sm-offset-1 control-label">文件大小:</label>
+                            <div class="col-sm-7 noPaddingLeft">
+                                <span  id="uploadedFileSizeInfo"> </span>
+
+                                <input type="text" class="uploadedFileSizeInfo hide" name="uploadedPhotoSizeInfo" value="">
+
+                            </div>
+                        </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="clearfix"></div>
+            <!----/inserted part---->
+        </div>
+        <div class="modal-footer  fancyBoxGrayFooter">
+
+            <div class="footer_operation_container">
+                <div class="grayButton formPreview " data-dismiss="modal" ><span>取消</span></div>
+                <div class="blueButton formPreview " data-action-click="document:information:upload"><span>开始上传</span></div>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        </form>
+
+    </div>
+</div>

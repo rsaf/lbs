@@ -1,0 +1,83 @@
+
+
+<div class="container_top">
+  <div id="directory_indicator"><span id="root_folder">财务管理</span><span id="arrow"> </span><span id="sub_folder">{{currentPage}}</span> </div>
+
+
+
+  <!--<form class=" pull-left right_containter_top_form">-->
+    <!--<span>显示</span>-->
+    <!--<div class="business_task_select">-->
+      <!--<select>-->
+        <!--<option value="all">所有事务</option>-->
+        <!--<option value="one">待办事务</option>-->
+        <!--<option value="two">已提交事务</option>-->
+        <!--<option value="three">已完成事务</option>-->
+      <!--</select>-->
+    <!--</div>-->
+    <!--<div class="clearfix"></div>-->
+  <!--</form>-->
+
+  <div id="recharge" class="pull-right" style="width: 100%">
+    {{#balance1}}
+          <span class="balance">{{.}}{{#mainBalance}}{{accountBalance}}元{{/mainBalance}}</span>
+    {{/balance1}}
+      {{#balance2}}
+      <span class="balance">
+          <span class="lan_margin_right_10"> {{inCome}}{{#mainBalance}}{{totalCashIn}}元{{/mainBalance}}</span>
+           <span class="lan_margin_right_20">{{outCome}}{{#mainBalance}}{{totalCashOut}}元{{/mainBalance}}</span>
+           <span class="lan_margin_right_10"> {{balance}}{{#mainBalance}}{{accountBalance}}元{{/mainBalance}}</span>
+
+
+      </span>
+      {{/balance2}}
+
+    <!--
+    {{#expences}}
+      <span class="expences">{{.}}{{#mainBalance}}{{totalCashOut}}元{{/mainBalance}}</span>
+    {{/expences}}
+      -->
+    {{#showChargeButton}}
+    <div  class="blueButton  pull-right">
+      <span class="lan_hpadding_20 rechargeBtn lan_vpadding_5  "><a href="#/processes/activities/application/LZB104" target="_blank"> 充值</a></span>
+    </div>
+    {{/showChargeButton}}
+  </div>
+
+  <div class="clearfix"></div>
+
+
+
+
+
+    <form class="right_containter_top_form tableHeaderForm">
+
+        <div class="fin_date_picker">
+            <span>日期 </span>
+            <input type="date" name="startdate" id="startdate">
+            <em>-</em>
+            <input type="date" name="enddate" id="enddate">
+        </div>
+
+        <div class="form_right_search">
+            <input type="text" id="searchtext" placeholder="交易编号/事务名称">
+            <input type="submit" name="financesearch" id="financesearch" value="查询" data-action-click="pagination:search" onclick="return false;">
+        </div>
+
+    </form>
+
+  <!--          <form  class="business_task_select">
+           <span>显示</span><select  >
+              <option value="all">所有事务</option>
+               <option value="one">待办事务</option>
+               <option value="two">已提交</option>
+               <option value="three">已完成</option>
+           </select>
+             <span>日期 </span><input type="date" name="startdate" id="startdate" value="2014-05-05">
+              <input  type="date" name="enddate" id="enddate" value="2014-08-08">
+             <input type="submit" name="financesearch" id="financesearch" value="查询"> 
+         </form>-->
+
+</div><!---end of container_top-->
+
+<div class="container_bottom">

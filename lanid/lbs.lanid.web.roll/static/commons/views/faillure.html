@@ -1,0 +1,38 @@
+
+
+<div class="modal-dialog  x-smallModal">
+  <div class="modal-content">
+    <div class="modal-header modal-header-primary blueHeader ">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+        {{#title}}
+        <h4 class="modal-title">{{title}}</h4>
+        {{/title}}
+
+        {{^title}}
+        <h4 class="modal-title">操作失败提示:</h4>
+        {{/title}}
+
+    </div>
+    <div class="modal-body">
+
+
+      <div class="ListUploadRadios text-center center-block">
+          <span class="col-sm-2 lan_margin_top_5"> <img src="/commons/images/warningIcon.png"></span>
+          <span class="col-sm-10 deleteConfirmText">
+            {{message}}
+          </span>
+
+        <div class="clearfix"></div>
+      </div>
+
+    </div>
+    <!----/inserted part---->
+
+    <div class="modal-footer lan_padding_bottom_0 fancyBoxGrayFooter">
+
+        <div class="blueButton lan_margin_top_10 center-block" style="max-width: 120px;" data-dismiss="modal"><span>知道了</span></div>
+
+        <div class="clearfix"></div>
+    </div>
+  </div>
+</div>

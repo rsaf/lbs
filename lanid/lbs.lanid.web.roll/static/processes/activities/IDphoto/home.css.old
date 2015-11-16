@@ -1,0 +1,3214 @@
+/* CSS Document */
+
+/*reset*/
+
+/**
+ * html5doctor.com Reset Stylesheet v1.6.1 (http://html5doctor.com/html-5-reset-stylesheet/)
+ * Richard Clark (http://richclarkdesign.com)
+ * http://cssreset.com
+ */
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+
+/*this rule is added to get rid of the drop down arrow on ie*/
+select::-ms-expand {
+    display: none;
+}
+
+span{
+    display:inline-block;
+    }
+
+
+body {
+    line-height:1.0;
+}
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section {
+    display:block;
+}
+
+html,body{height:100%}html{overflow-y:auto}
+
+.home_wrapper{position:relative;_position:; height:100%;min-height:550px; *min-height:550px}
+
+nav ul {
+    list-style:none;
+}
+blockquote, q {
+    quotes:none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content:'';
+    content:none;
+}
+a {
+    margin:0;
+    padding:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+/* change colours to suit your needs */
+ins {
+    background-color:#ff9;
+    color:#000;
+    text-decoration:none;
+}
+/* change colours to suit your needs */
+mark {
+    background-color:#ff9;
+    color:#000;
+    font-style:italic;
+    font-weight:bold;
+}
+del {
+    text-decoration: line-through;
+}
+abbr[title], dfn[title] {
+    border-bottom:1px dotted;
+    cursor:help;
+}
+table {
+    border-collapse:collapse;
+    border-spacing:0;
+}
+/* change border colour to suit your needs */
+hr {
+    display:block;
+    height:1px;
+    border:0;
+    border-top:1px solid #home_cccccc;
+    margin:1em 0;
+    padding:0;
+}
+/*input, select {
+    vertical-align:middle;
+}*/
+
+/*end reset*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+body{
+	background-color:#414141;
+	height:100%;
+    font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
+	/*background:url(../images/%E5%A4%A7%E8%83%8C%E6%99%AF_02.jpg) repeat;*/
+
+	}
+	body a {
+	text-decoration:none;
+	color:blue;
+	
+	}
+input{
+	outline:none;
+	
+	}
+.home_wrapper{
+	
+	background-color:#FFFFFF;
+	/*url(../images/%E7%99%BD%E8%89%B2%E8%83%8C%E6%99%AF_03.jpg); */
+	width:90%;
+    max-width:1280px; 
+	margin-top:0;
+	margin-bottom:0;
+	margin-left:auto;
+	margin-right:auto;
+	padding:0;
+	border-top-left-radius:10px;
+	border-top-right-radius:10px;
+    
+	
+	}
+ 
+  .home_header{
+      height:12.5%;
+      position:relative;
+      }
+      
+
+.home_logo{
+    width:auto;
+    height:60px;
+    cursor:pointer;
+	margin-top:15px;
+    
+	
+	}
+    
+    
+  .mobile_search_icon{
+      display:none;
+      }  
+.home_logo img{
+	width:100%;
+	min-height:55px;
+	min-width:85px;
+
+
+	}
+
+
+#header_heading{
+	font-size:30px;
+	text-align:center;
+	line-height:220%;
+	/*width:45%;*/
+	
+	}
+	
+    
+   .search_input{
+       position:relative;
+       }
+       
+  .search_icon{
+      position: absolute;
+      right:0;
+      cursor:pointer;
+      padding:6px 10px;
+      z-index:1000;
+      }
+ 
+.search_icon.btn{
+    border-bottom:0;
+    border-top:0;
+    }
+
+   .home_search {
+       float:right;
+       margin-top:20px;
+       
+    }
+    
+    
+.home_search *{
+    border-radius:0;
+    }
+    
+.home_search .caret{
+    margin-left:5px;
+    }
+
+#home_search_botom_border{
+	clear:both;
+	width: 100%;
+	height:4px;
+    background: url(../images/search-frame_bottom_line.jpg) center bottom no-repeat;
+    background-size:100%;
+    padding:0;
+    margin:0;
+	}
+
+
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+.home_main_containter{
+	clear:both;
+	background: url(../images/background_03.jpg)  center center no-repeat;
+	background-size: cover;
+/*	width:1296px;*/
+	width:99.8%;
+ 
+
+    overflow:hidden;
+    height:75%;
+	margin:auto;
+
+	box-sizing:border-box;
+
+	
+	}
+    
+    
+    
+    /*main container for search*/
+    .HomeMainContainerWhiteBg{
+	
+	width:100%;
+	min-height:75%;
+	margin:auto;
+	box-sizing:border-box;
+	background-color:white !important;
+	position:relative;
+	overflow:hidden;
+    box-sizing:border-box;
+
+	
+	}
+	
+	/*css for registration use case*/
+	
+.notHomeMainContainer{
+	
+	width:100%;
+	min-height:75%;
+    
+	border:1px solid #dddddd;
+	margin:auto;
+	box-sizing:border-box;
+	background-color:#fafafa !important;
+	position:relative;
+	/*overflow:hidden;*/
+    box-sizing:border-box;
+    padding:0 15px 30px 15px;
+
+	
+	}
+#regBox{
+	width:55%;
+	height:80%;
+	margin-left:auto;
+	margin-right:auto;
+	background-color:white;
+	position:relative;
+	border:1px solid #dddddd;
+    box-sizing:border-box;
+	
+	
+	}
+#regBoxHeader{
+	width:100%;
+	height:60px;
+	position:relative;
+	
+	}
+	
+
+#forgotPwBox{
+	width:70%;
+	height:60%;
+	margin-left:auto;
+	margin-right:auto;
+	background-color:white;
+	margin-top:100px;
+    border:1px solid #dddddd;
+    box-sizing:border-box;
+	
+
+	}
+#forgotPwHeaderContent{
+
+	height:45px;
+	width:96%;
+	border-bottom:1px solid #F5F5F5;
+	margin:0 auto;
+	overflow:hidden;
+
+	}
+	
+	#forgotPwHeaderLeftContent{
+		background:url(../images/forget-password_step1_lock-icon.png) no-repeat left center;
+		background-size:contain;
+		float:left;
+		width:30%;
+		margin-top:10px;
+		
+		}
+		#forgotPwHeaderLeftContent span{
+			margin-left:20px;
+		
+		}
+			
+	#forgotPwHeaderRightContent{
+		float: right;
+		width:70%;
+		margin-top:10px;
+		max-width:352px;
+		overflow:hidden;
+		
+		
+		
+		}
+	.forgotPwDoneMsg{
+		display:block !important;
+		margin:0 auto;
+		margin-top:30px;
+		
+		}
+	#forgotPwBox #mainText a{
+		color:blue;
+		
+		}
+		
+	#forgotPwHeaderRightContent span{
+		background:url(../images/forget-password_step1_process-2.png) no-repeat center top;
+		padding-top:10px;
+		background-size: contain;
+		color:#c7c7c7;
+		float:left;
+		width:25%;
+		margin:0;
+		max-width:88px;
+		text-align:center;
+		font-size:75%;
+		cursor:pointer;
+		
+		}
+	
+	#forgotPwEmailSent{
+		background:url(../images/forget-password_step2-mail-image.png)  no-repeat left center;
+		padding-left:70px;
+		margin:0 auto;
+		margin-top:100px;
+		max-width:450px;
+		font-size:90%;
+		height:37px;/*image height*/
+		}
+
+	#forgotPwEmailSent span{
+		line-height:37px;
+		}
+		#forgotPwEmailSent #confirmPawordLink{
+		line-height:37px;
+		}
+	#forgotPwEmailSent span strong{
+		color:blue;
+		}
+		
+.forgotPwProcedureIndicator{
+		background:url(../images/forget-password_step1_process-1.png) no-repeat center top !important;
+		color: black !important;
+		
+		}
+	.forgotPwProcessDone, .forgotPwCheckID,.forgotPwresetPass{
+		background:url(../images/forget-password_step1_process-1.png) no-repeat center top !important;
+		color: black !important;
+		
+		}
+	
+.forgotPwSubmitBtn{
+	margin-top:30px;
+	
+	}
+.servicePointRegBoxHeader{
+	background: url(../images/service-point-user.jpg) no-repeat center top;
+    background-size:100%;
+    height:60px;
+	}
+#regBoxHeaderLeft,#regBoxHeaderRight{
+    
+	width:50%;
+	height:55px;
+	float:left;
+	cursor:pointer;
+	
+	
+	
+	}
+#regBoxHeaderLeft .mainFrame, #regBoxHeaderLeft .arrowFrame,
+
+#regBoxHeaderRight .mainFrame, #regBoxHeaderRight .arrowFrame
+
+{
+	width:100%;
+    box-sizing:border-box;
+	
+	}
+.mainFrame{
+	height:45px;
+	}
+.arrowFrame{
+	height:10px;
+    display:none;
+    background-size:10px;
+	
+	}
+
+#regBoxHeaderLeft .mainFrame{
+	background: url(../images/personal_grey.jpg) center center no-repeat;
+	background-size:100% 45px !important;
+	}	
+#regBoxHeaderRight .mainFrame{
+	background: url(../images/corporate_grey.jpg)  center center no-repeat;
+	background-size:100% 45px !important;
+	
+	}
+#regBoxHeaderLeft .arrowFrame{
+	background:url(../images/ArrowLeft.png) center center no-repeat;
+
+	
+	} 
+
+#regBoxHeaderRight .arrowFrame{
+	background: url(../images/ArrowRight.png) center center no-repeat;
+
+	
+	} 
+	
+/*for js addClass*/	
+.regBoxHeaderSelectedUserTypeCorp{
+	background:url(../images/corporateBlue.png)  center center no-repeat !important; 
+		background-size:100% 45px !important;
+	}
+.regBoxHeaderSelectedUserTypePern{
+	background:url(../images/personalBlue.jpg)  center center no-repeat !important;
+		background-size:100% 45px !important;
+	
+	}
+	
+#regBoxBody form{
+	width:80%;
+	max-width:600px;
+	height:95%;
+	margin:4% auto;
+	
+	}
+#regBoxBody form .regFormInputLine{
+		overflow:hidden;
+		width:100%;
+		margin-top:15px;
+	}
+#regBoxBody form div:nth-child(2){
+	position:relative;
+    z-index:100000;
+	
+	}
+ #regBoxBody form div:nth-child(2) .sideNote{
+     
+     margin-top:15px;
+	
+	}
+
+
+
+
+#regBoxBody form input{
+	float:left;
+	width:50%;
+	height:30px;
+	
+	}
+#regBoxBody form div.sideNote{
+	/*float:left;*/
+	position:absolute;
+	left:69.5%;
+	width:25%;
+/*	border:red 1px solid;*/
+	
+	}
+
+#regBoxBody form span {
+	font-size:15px;
+	font-family: "Times New Roman", Times, serif;
+	float:left;
+	height:30px;
+	width:18%;
+	padding-right:10px;
+	box-sizing:border-box;
+	text-align:right;
+	line-height:30px;
+	color:#5294B3;
+	/*border:yellow 2px solid;*/
+	
+	}
+#regBoxBody form span.sideNote{
+	text-align:left;
+	margin-left:0.5%/*10px*/;
+/*	border:red 1px solid;*/
+	
+	}
+
+
+#regBoxBody form input[type=image]{
+	max-width:120px;
+	height:40px;
+	margin-left:18%;
+	
+	}
+#regBoxBody form input[type=checkbox]{
+	margin-left:18%;
+	width:15px;
+	
+	}
+	
+#regBoxBody form input#antiBot{
+	float:left;
+	width:34%;
+	
+	}
+#regBoxBody .systemAntibox{
+	width:15%;
+	margin-left:1%;
+	text-align: center;
+	font-size:18px;
+    line-height:25px;
+	border: 2px groove;
+	
+	
+	}
+#regBoxBody span.refresh{
+
+font-size:10px;
+	margin:0;
+	padding:10px 0 0 0;
+	color:#32ABE6;
+	cursor:pointer;
+    
+
+	}
+#regBoxBody form div:nth-child(5) span:last-child{
+	
+	font-size:12px;
+	color:#32ABE6;
+	text-align:left;
+	line-height:36px;
+	height:36px;
+	/*border:red 1px solid;*/
+	
+	
+	
+	}
+	
+	
+#regBoxBody #termsAndConditions+span{
+    line-height:36px;
+	width:50%;
+	text-align:left;
+
+	
+	}	
+	
+ul.strength { 
+	list-style: none; 
+	padding: 0; 
+	/*width: 100%;*/
+/*	border:blue solid 1px;*/
+	overflow:hidden;
+	display:none;
+
+}
+
+	ul.strength li { width: 18px; height: 5px; background: #ddd; float: left; margin: 0 2px;}
+/*	#comment { float: left;  margin: -6px 0 0 5px; font-size: 14px;}*/
+div.sideNote #pwStrengthComment{
+	display:block;
+	/*border:black 1px solid;*/
+	clear:both;
+	float:left;
+	text-align:center;
+	width:100%;
+	height:auto;
+	font-size:12px;
+	line-height:150%;
+	/*position:absolute;*/
+	
+	}
+	
+#regBoxBody #conformPassword+span{
+	width:24%;
+	font-size:12px;
+	/*border:red 1px solid;*/
+	
+	}
+	
+	
+
+/*  end css for registration use case*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*home page activities' css*/
+
+
+
+.breadCrumbs{
+    margin:20px 0;
+    }
+
+.breadCrumbs span{
+    color:blue;
+    
+    }
+    
+.breadCrumbs span:after{
+    content:'》';
+    margin:0 5px;
+    
+    }
+
+.breadCrumbsLast:after{
+    content:normal !important;
+    margin-right:0;
+    }
+    
+.breadCrumbsLast{
+    color:black !important;
+    }
+
+.lan_form{
+    border:#c8c8c8 solid 1px ;
+    background:#f5f5f5;
+    padding:20px;
+    
+    }
+.lan_form .row{
+    height:auto;
+    }
+
+.lable{
+    float:left;
+    margin-right:10px;
+    line-height:35px;
+    }
+ .homeActivitiesSelect{
+     margin-left:-5%;
+     margin-right:5%;
+     
+     }
+  .application_photo{
+      width:60px;
+      text-align:center;
+      }
+         
+  .applicationForm + span{
+      margin:5px;
+      height:30px;
+      padding-top:5px;
+      line-height:30px;
+      }
+   
+ .dropdown-menu > li > a{/*improve display for boostrap-select*/
+     width:100%;
+     }
+     
+  .lan_info_with_small{
+      width:20%;
+      margin-bottom:15px;
+      margin-left:5%;
+      }
+   .lan_info_with_large{
+       width:30%;
+       margin-left:5%;
+       }
+       
+   .formPriewButtonContainer{
+       width:200px;
+       margin:auto;
+       }
+           
+   .formPreview {
+       width:95px;
+       float:right;
+       margin-left:5px;
+       } 
+   .formPreview span:first-child {
+       padding:5px;
+       
+       } 
+   .application_form_header div{
+       float:left;
+       margin-right:5px;
+       }
+    .application_form_header{
+        margin:0  auto 30px auto;
+        width:550px;
+        overflow:hidden;
+        
+        }
+           
+     .application_form_header div img{
+         height:60px;
+         width:70px;
+       } 
+        .application_form_header div h1{
+            line-height:60px;
+            font-size:160%;
+       }     
+       
+ 
+       
+  .application_form_footer{
+      line-height:30px;
+      height:30px;
+      padding:40px 0 !important;
+      text-align:center;
+      border-bottom:1px solid #c8c8c8;
+      width:90%;
+      line-height:130%;
+      margin-bottom:60px;
+      
+      }
+   .applicationNextStep, 
+   .wsApplicationNextStep,
+   .IDPhotoApplicationNextStep,
+   .applicationPreviousStep{
+       float:right;
+        width:120px;
+       position:absolute;
+       bottom:10px;
+       right:35px;
+       }
+   .IDPhotoApplicationNextStep{
+       right:50%;
+       margin-right:-60px;
+       bottom:30px;
+       }
+           
+         
+      .payment_form  .lan_horiz_input_group div{
+          margin-top:5px;
+          margin-bottom:5px;
+         } 
+         
+      .payment_frame{
+           background:#fafafa ;
+          } 
+     .applicationPreviousStep{
+          right:160px;
+         }
+       
+     .align_left_with_margin{
+         text-align:right;
+         padding-right:3% !important;
+         box-sizing:border-box;
+         }
+     .check_box_and_image span{
+         vertical-align:middle;
+                  }
+            
+    .payment_done_header span{
+        height:36px;
+        line-height:36px;
+        font-size:28px;
+        margin-right:5px;
+        display:block;
+        float:left;
+        }
+       .payment_done_header{
+           overflow:hidden;
+           width:500px;
+           margin:0 auto !important;
+        }     
+  .done_register_container{
+      border-top:1px solid #c8c8c8;
+      border-bottom:1px solid #c8c8c8;
+      width:80%;
+      margin:20px auto;
+      margin-bottom:5px;
+      padding:0;
+      }
+    .done_register_container form{
+        margin-bottom:0 !important;
+      }   
+  .done_form .register_submit{
+      width:200px;
+      margin:8px auto;
+      
+      }
+   .paymentPwModal .modal-header,
+   .home_paymentPwModal .modal-header {
+       height:30px;
+       padding:5px !important;
+       }
+    
+    .home_paymentPwModal  .modal-body{
+        height:150px;
+       
+       }   
+   .paymentPwModal .modal-body{
+           height:200px ;
+       }
+    .paymentSuccessBtn{
+       margin-left: 50px;
+       }
+    .modal_single_action_botton{
+        width:120px;
+        margin:auto;
+        margin-top:40px;
+        margin-bottom:20px;
+        
+        }
+           
+   .paymentSuccessBtn,
+   .wspaymentSuccessBtn,
+     .paymentFailureBtn,
+     .wspaymentFailureBtn{
+         width:120px !important;
+         color:blue;
+         background:#fafafa;
+       
+       }    
+       
+  .twoButtonModal{
+      width:300px;
+      margin:auto;
+      margin-top:40px;
+      }
+  .paymentPwModalContent{
+      margin-top:30px;
+      width:350px;
+      
+      } 
+   
+       
+   .paymentPwModal  .modal-content,
+    .home_paymentPwModal .modal-content{
+       width:500px;
+       border-radius:0
+       }
+       
+ /*  .paymentStatusModalLabel{
+       margin: 5px;
+       }*/
+  
+   .modal_two_action_botton{
+       margin-top:30px;
+       margin-bottom:15px;
+       width:350px;
+       margin-left:auto;
+       margin-right:auto;
+       overflow:hidden;
+       
+       } 
+   .modal_two_action_botton div{
+       width:100px;
+       float:left;
+       margin-left:78px;
+       } 
+     .modal_two_action_botton div:nth-child(2){
+         margin-left:30px;
+       }        
+   .success_icon_and_text{
+       font-size:150%;
+       }
+      .success_icon_and_text span{
+          margin-right:5px;
+       }                   
+    .transaction_text{
+        font-size:85%;
+        }    
+        
+        
+
+ 
+ .free_slider_header{
+     border:1px solid #c8c8c8;
+     }
+
+.IDphoto_response_side_checkbox{
+    height:40px;
+    line-height:40px;
+    margin-left:6px;
+    margin-top:5px;
+    }
+    
+  .IDphoto_response_side_checkbox input{
+      height:30px;
+      width:30px;
+    }  
+
+    .checkBoxDownLabel{
+        width:100%;
+        color:blue;
+        font-size:60% !important;
+        
+        } 
+        
+      .IdPhotoResponse{
+       padding:5px;
+       } 
+       
+       
+      .IdPhotoResponse    .detailPageUserIntroBoxBody div {
+        
+          margin:0;
+          }
+          
+          
+            .IdPhotoResponse    .detailPageUserIntroBoxBody {
+          padding:10px;
+          }
+       
+  .introboxHeaderLogo img{
+      margin-top:6px;
+      width:35px;
+      height:28px;
+      margin-right:5px;
+      }
+      .introboxHeaderLogo{
+          margin-left:3px !important;
+      }              
+ .IdPhotoResponse  .notice_file  {
+     height:40px;
+     line-height:40px;
+     }  
+  .IdPhotoResponse    .lan_input_line{
+      margin-right:5% !important;
+      }
+      
+   .IdPhotoResponse    .lan_input_line:first-child{
+      margin-left:10px !important;
+      }
+    .IdPhotoResponse    .lan_input_line:last-child{
+      margin-right:0 !important;
+      }       
+   .IdPhotoResponse *{
+       font-size:99% !important;
+       }     
+  .responsePhotoDetailsBox .fixed{
+      width:230px !important;
+      padding: 7px 20px !important;
+      box-sizing:border-box;
+      }      
+         
+         
+  .responsePhotoSizeBoxes{
+      padding-bottom:10px;
+      }       
+.responsePhotoDetailsBox .fluid .fluid_contain{
+      margin-left:220px !important;
+      margin-right:20px !important;
+      padding-top:7px;
+      }  
+      
+  .responsePhotoDetailsBox.fixed_and_fluid .fluid{
+
+      margin-left:-230px !important;
+      
+      }
+      
+   .read_only_field.value_error_range{
+       text-align:left; 
+        width:200px;
+          } 
+          
+     .responsePhotoDetailsBox .fluid_contain .lan_lable{
+         min-width:100px !important;
+         }     
+          
+          
+    .read_only_field.value_error_range span{
+          position:absolute;
+          right:3px;
+          top:5px;
+          } 
+          
+     .responsePhotoDetailsBox   .lan_horiz_input_group  .lan_input_line{
+         margin:5px 0 !important;
+         
+         }           
+     .responsePhotoSizeBoxes {
+         margin-top:6px !important;
+         margin:5px;
+         } 
+         
+         
+       .responsePhotoSizeBoxes  .header  {
+           border-bottom: 1px solid #c8c8c8;
+           padding:8px;
+           } 
+      .responsePhotoSizeBoxes .lan_input_line{
+          margin:10px 5px !important;
+          } 
+          
+      .responsePhotoSizeBoxes .right_box, .responsePhotoSizeBoxes .left_box {
+          width:49%;
+          float:left;
+          } 
+       .responsePhotoSizeBoxes .right_box{
+           float:right;
+           } 
+      .servicePointList{
+          padding:10px;
+          }
+       .servicePointListTableCaption{
+           margin-top:20px !important;
+           margin-bottom:5px !important;
+           margin-left:10px !important;
+           }
+              
+       .servicePointList   .lan_cell strong{
+           margin-left:20px;
+           
+           } 
+        .servicePointList   .lan_table .lan_cell:last-child{
+            color:black !important;
+           
+           } 
+           
+       .servicePointList   .lan_table .lan_cell input[type="radio"]{
+           margin-left:10px;
+           margin-right:10px;
+           
+           } 
+      .printOutPhotos{
+          margin-top:20px;
+          margin-bottom:20px;
+          }  
+      .printingStage{
+          margin-top:0 !important;
+          }    
+     
+          .printingStage .fixed_and_fluid .fixed{
+          width:45% !important;
+          } 
+     
+      .printingStage .fixed_and_fluid .fluid{
+          margin-left:-45% !important;
+          }
+          
+       .printingStage .fixed_and_fluid .fluid_contain{
+          margin-left:46% !important;
+          }     
+       
+     .responsePhotoSizeBoxes .inner_box{
+         margin:20px  !important;
+         
+         } 
+       .responsePhotoSizeBoxes .inner_box input{
+           height:35px;
+         
+         }
+         
+     .photoShooting{
+         background:url(../images/PhotoShooting.jpg) no-repeat center center;
+         background-size:100%;
+         
+         } 
+         
+    .photoPrinting{
+        background:url(../images/PhotoPrinting.jpg) no-repeat center center;
+        background-size:100%;
+      
+        }             
+     .photoShooting, .photoPrinting{
+              height:400px;
+              margin-top:25px;
+              margin-bottom:25px;
+              font-size:13px;
+              line-height:16px;
+              position:relative;
+              
+         }
+      .photoSeriveTextBox{
+          width:200px;
+          margin-right:30px;
+          margin-top:20px;
+          } 
+          
+    .photoServices h1{
+        line-height:40px;
+        font-weight:bold;
+        font-size:18px ;
+        }  
+     .photoServiceActionButton{
+         border-top:1px solid #c8c8c8;
+         position:absolute;
+         bottom:10px;
+         width:350px;
+         left:30px;
+         padding:5px;
+         
+         }
+         
+         
+         .photoServiceActionButton div{
+             float:left;
+             line-height:20px;
+             font-size:14px;
+             padding-right:5px;
+             cursor:pointer;
+         
+         } 
+         
+            .photoServiceActionButton div:first-child{
+             margin-left:120px;
+         
+         }                                                                            
+/* end of home page activities' css*/
+
+
+
+
+
+
+
+
+
+
+/*helper css*/
+
+.lan_horiz_input span,
+.lan_horiz_checkbox span,
+.lan_horiz_radio span{
+    display:inline-block;
+  }
+ .lan_item_side_icon{
+     margin-right:5px;
+     margin-top:2px;
+     }
+      
+ .lan_horiz_input .lan_lable{
+     text-align:right;
+     padding-right:5px;
+  }
+.lan_horiz_checkbox .lan_input{
+    padding:5px;
+    
+    }
+  .lan_horiz_radio .lan_input{
+    padding:5px;
+    
+    } 
+  .lan_blue{
+      color:blue;
+      } 
+  .lan_input_line {
+      margin:15px 0;
+      }
+  .lan_spacing_left_5{
+      margin-left:5%;
+   
+      }
+    .lan_spacing_left_10{
+      margin-left:10%;
+   
+      }
+     .lan_spacing_left_40{
+      margin-left:40%;
+   
+      }     
+     .lan_gray_border{
+         border:1px solid #c8c8c8;
+         }
+     .lan_inline_header{
+         margin-right:15px;
+         line-height:34px;
+         
+         }
+ 
+     .lan_horiz_input_group div{
+         margin-left:15px;
+         }
+     .lan_horiz_input_group{
+         overflow:hidden;
+         padding:5px;
+         }
+     .lan_pull{
+         float:left;
+         }
+ .space_down_10{
+     
+     margin-bottom:10px !important;
+     } 
+         
+       .lan_push_down{
+           margin-top:30px !important;
+           }
+           
+        .gray_bg{
+            background:#f5f5f5;
+            } 
+      .read_only_field{
+          padding:5px;
+          text-align:center;
+          min-width:100px;
+          position: relative;
+          } 
+          
+    
+          
+  
+                
+      .lan_table_top_info{
+          margin-bottom:5px;
+          }
+     .lan_free_line{
+         margin:15px 0; 
+         }  
+      .lan_blur{
+          opacity:0.3;
+          }
+                       
+             
+ .clearFix{
+     clear:both;
+     float:none !important;
+     
+    }
+ .lan_make_space{
+     margin-top:50px;
+     }
+   
+.no_borders{
+    border:none !important;
+    }
+ .white_bg{
+     background:white !important;
+     }        
+  .fixed_and_fluid .fixed,
+  .fixed_and_fluid .fluid{
+      float:left;
+      }  
+      
+   .fixed_and_fluid .fixed{
+       width:35px;
+      }  
+  .fixed_and_fluid .fluid{
+      width:100%;
+      margin-left:-35px;
+      
+      }
+     
+    .fixed_and_fluid .fluid .fluid_contain{
+        margin-left:35px;
+      
+      }  
+      
+   .light_gray_bg{
+       background:#fafafa;
+       
+       
+       }   
+    
+      
+/*end of helper css*/
+
+
+
+
+
+.home_left_container{
+
+    display:table;
+	position:relative;
+     height:100%;
+
+	}
+#home_left_contain{
+	/*width:65%;      cannot work because of display table cell property(table cell without table row misbehaves)*/
+     display:table-cell;
+    vertical-align:middle;
+   /* border: white 1px solid;*/
+	padding:0;
+    margin: auto;
+	
+	}
+
+#home_left_contain h1{
+	font-family:"Microsoft Sans Serif", "Microsoft YaHei Bold";
+	color:white;
+	font-size:25pt;
+    margin-bottom:30px;
+	/*margin-left:auto;
+	margin-right:auto;*/
+/*	width:540px;*/
+	
+	}
+	
+/*#home_services_title2{
+	display:none;
+	
+	}*/
+#home_text_and_line{
+	
+ 	padding:5px 0;
+	margin:5px 0;
+	width:100%;
+	overflow:hidden;
+	
+	}
+#home_h_bar{
+	background: url(../images/horizontal_03.jpg) no-repeat left center;
+	float:left;
+	max-width:100%;
+    width:75%;
+/*	width:500px;*/
+	min-height: 12px;
+	height:100%;
+	overflow:hidden;
+	/*border:solid 2px yellow;*/
+	/*display:inline;*/
+/*	margin-top:auto;
+	margin-bottom:auto;*/
+
+	/*max-width:55%;*/
+		
+		/*height:auto;*/
+	
+	}
+#home_text_and_line span{
+	float:left;
+	/*width:25%;*/
+	padding:0;
+	margin:0;
+/*	border:solid red 1px;*/
+	
+	}
+#home_available_services{
+	overflow:hidden;
+	width:100%;
+	/*width:540px;*/
+	margin-top:20px;
+	}
+#home_text_and_line span{
+	font-size:12pt;
+	color:#B5D4E8;
+	float:left;
+		}
+.home_left_aligned{
+	/*border:dashed 1px red;*/
+	width:49%;
+	max-width:212px;
+	margin-right:2%;
+	float:left;
+	}
+ .home_left_aligned a,
+ .home_right_aligned a{
+     color:white;
+	}
+	
+.home_service_title + a{
+/*	border:black 1px solid;*/
+	clear:both;
+	float:left;
+	
+	}
+.home_service_title + a:after{
+	content:"|";
+    font-family:Constantia, "Lucida Bright", "DejaVu Serif", Georgia, serif;
+    margin: 0 5px;
+  
+	
+	}
+	
+.home_right_aligned{
+	width:49%;
+    max-width:212px;
+	float: left;
+    margin-left:15%;
+	
+	
+	}
+.home_service{
+	float:left;
+	height:60px;
+	margin-top:5%;
+	color:#B5D4E8;
+	font-size:11pt;
+
+	
+	}
+.home_service a{
+	margin-top:8px;
+	float:left;
+	}
+ .home_service a:nth-child(2),.home_service a:nth-child(3){
+     line-height:30px;
+     margin-top:0;
+	}
+    
+#home_photo{
+	background: url(../images/icon-1_03.png)no-repeat left;
+	padding-left:55px;
+	
+	
+	}
+#home_info{
+	background:  url(../images/icon-3.png)   no-repeat left;
+	padding-left:55px;
+	
+	}
+	
+#home_service_area{
+	background: url(../images/icon-2_05.png)  no-repeat left;
+	padding-left:55px;
+	margin-top:25%;
+	
+	}
+#home_credit_card{
+	background: url(../images/icon-4_10.png)  no-repeat left;
+	padding-left:55px;
+	margin-top:25%;
+	}
+.home_service_title{
+	font-size:18pt;
+	display:block;
+	color:white;
+	
+	}
+	
+.home_separation_line{
+	background:url(../images/line_04.png) no-repeat center center;
+		margin:0;
+		padding:0;
+		background-size: cover;
+		height:100%;
+		/*width:10%;*/
+		vertical-align:middle;	
+	
+	}
+
+	
+.home_right_container{
+	height:100% ;
+	text-align:center;
+	position:relative;
+    
+  
+	}
+   
+
+    
+#home_login_form a{
+	margin-top:3px;
+	
+	
+	}
+#home_login_form form{
+	
+    display:table-cell;
+    vertical-align:middle;
+    position:relative;
+    
+	/*max-width:275px ; not working because of display property*/
+  
+
+	
+	}
+    
+ #home_login_form{
+    
+	
+     display:table;
+     max-width:275px;
+     width:95%;
+     height:100%;
+     margin:auto;
+     
+	
+	}   
+
+#otherLoginMethods{
+	width:90%;
+    position:absolute;
+    bottom:20px;
+  }
+#otherLoginMethods_br{
+	display:none;}
+#otherLoginMethods a, #otherLoginMethods span{
+	float:left;
+	margin-right:10px;
+	text-decoration:none;
+	color:white;
+	}
+#otherLoginMethods a:last-child{
+	margin:0;
+	}
+#otherLoginMethods span{
+	margin-right:5px;
+	font-size:85%;
+	line-height:120%;
+	
+	}
+
+
+#home_login_form .home_input{
+
+
+	/*background:transparent;*/
+	font-size:12pt;
+	min-height:40px;
+	/*border:1px red dashed;*/
+	float:left;
+	
+	}
+#home_login_form input{
+	font-size:12pt;
+	min-height:40px;
+	border:none;
+	
+	}
+/*from input{
+	max-width: 100%
+	
+	}
+form div{
+	/*margin-top:10px;
+
+	}*/
+#home_username{
+	margin-top:2%;
+	/*border:solid 2px yellow;*/
+	
+	overflow:hidden;
+	width:100%;
+	min-height:40px;
+	
+	}
+	
+	/*input*/
+#home_username .home_input,#home_password .home_input{
+	/*float:right;*/
+	width:85%;
+	min-height:40px;
+	padding-left:20px;
+	float:right;
+	}
+#home_username input, #home_password input{
+	width:100%;
+	
+	
+	}	
+.home_input_icon .home_img {
+	/*max-width:40px;*/
+	min-height:43px;
+	float:left;
+	margin-right:1%;
+	
+	 position: relative;
+	/* padding-left:10px;*/
+
+	
+	
+	}
+.home_input_icon .home_img img{
+	
+	/* bottom: 0;*/
+        left: 5px;
+		margin:auto;
+        position: absolute;
+     /*  left: 10%;*/
+        top: 5px;
+
+	
+	}
+
+	
+#home_password{
+
+	margin-top:2%;
+	width:100%;
+	max-height:40px;
+	overflow:hidden;
+	/*border:solid 2px yellow;*/
+	}
+
+.home_forget_password{
+	
+	clear:right;
+	overflow:hidden;
+	
+	}
+.mobile_home_forget_password{
+    position:absolute;
+    bottom:0;
+    display:none;
+    
+    }   
+    
+#home_user_captcha{
+	width: 45%;
+	float: right;
+	
+	
+
+	max-height:40px;
+	}
+#home_user_captcha input{ 
+margin-right:1%;
+font-size:93%;
+border-right:#c8c8c8 2px solid;
+	
+	}
+	
+	
+	
+
+
+#home_system_captcha{
+	   background:url(../images/button.png) center center no-repeat;
+	   background-size:cover;
+	width: 40%;
+	margin-left:0.5%;
+    border:none;
+	height:38px;
+	overflow:hidden;
+
+	float: right;
+
+	}
+#home_user_captcha input{
+		width: 100% ;
+		
+		}
+
+	
+#home_system_captcha a{
+	display:block;
+	width:100%;
+    margin:0;
+	height:38px;
+    line-height:38px;
+	cursor: pointer; 
+	position: inherit;
+	
+	}		
+		
+ .home_check{
+	width: 100%;
+	
+	      font-size: 25px;/*xx-large;*/
+            font-family: Cooper Std Black;
+            font-style: italic;
+            letter-spacing: 4px;
+            opacity: 0.5;
+			height:38px;
+			color:gray;
+            line-height:38px;
+            filter: alpha(opacity=40);
+            text-align: center;
+             box-sizing:border-box;
+	
+	
+	}
+	
+#home_captcha_box{
+	/*background: url(../images/textfiled_03.jpg) no-repeat ;*/
+	/*height:50px;*/
+	overflow:hidden;
+	margin-top:2%;
+	/*border:solid 2px red;*/
+	width:100%;
+	max-height:40px;
+
+		}
+
+.home_input_icon{
+	background-color:white;
+	/*max-height:40px;
+	*/
+	}
+#home_submit_buton{
+	/*float:right;*/
+	margin-top:2%;
+max-height:40px;	
+	width:100%;
+/*	border:dashed red 2px;*/
+	/*overflow:hidden;*/
+	
+
+	}
+#home_submit_buton input{
+	width:100%;
+		max-height:40px;	
+	/*border:dashed white 2px;*/
+	}
+
+form h1{
+	color:white;
+	font-size:20pt;
+	font-family:Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", serif;
+	
+	}
+#home_login_form form a{
+	clear:both;
+	float:right;
+	color:white;
+	}
+	
+form{
+	/*overflow:hidden;	*/
+	}
+
+
+
+	
+.home_footer{
+    
+
+    background-color:white;
+ 
+	height:12.5%;
+    padding-top:10px;
+
+	}
+
+    	
+.mobile_display_elmt{
+    display:none;
+    }
+ . .mobile_display_break{
+     display: none;
+     }  
+
+	
+
+#home_footer_text{
+	overflow:hidden;
+	box-sizing:border-box;
+	float:left;
+	
+	}
+#home_footer_nav span{
+	
+	font-size:12pt;
+	float:left;
+	color:#1974B3;
+	font-weight:bold;
+    
+	}
+	
+	#home_footer_nav span:first-child{
+
+	margin-left:0;
+
+	}
+
+
+	#home_footer_nav span:after{
+		content:"|";
+		margin:0 5px;
+	}	
+	#home_footer_nav .lastSpan:after{
+		content: normal ;
+		margin-right:0;
+	}	
+	
+	
+#home_copy_right{
+	color:#1C79BD;
+	font-size:11px;
+	Helvetica, Arial, sans-serif;
+	font-family:"Microsoft Sans Serif", "Microsoft YaHei Bold";
+	
+	overflow:hidden;
+	padding-top:5px;
+	margin-left:2px;
+
+	
+	}
+
+
+#home_web_police{
+
+	background:url(../images/1_03.jpg) no-repeat right;
+	width:100px;
+	height:40px;
+
+	}
+#home_union_pay{
+	background:url(../images/2_05.jpg) no-repeat right;
+	width:103px;
+	height:40px;
+	
+	}
+#home_zhifubao{
+	background:url(../images/3_07.jpg) no-repeat right;
+	width:100px;
+	height:40px;
+	/*margin-right:40px;*/
+	
+	}
+#home_kexinwang{
+	background:url(../images/4_09.jpg) no-repeat right;
+	width:100px;
+	height:40px;
+	
+	}
+#home_verysign{
+	background: url(../images/verisign_03.jpg) no-repeat right;
+	width:100px;
+	height:40px;
+	}
+.home_parnter_icon{
+	float:right;
+	margin-right:10px;
+	
+	}
+.home_partners img{
+	float:right;
+	/*margin-top:4px;*/
+	margin-right:3px;
+	/*border:1px solid red;*/
+	 }
+#home_kexinwang{
+	margin-right:0;
+	padding-right:0;
+	
+	} 
+#home_kexinwang img{
+	margin-right:0;
+	} 
+		
+		
+		
+		
+
+
+@media screen and (max-width:1260px){
+	
+	.home_wrapper{
+	width:97%;
+    }
+		
+
+	
+
+.home_left_container{
+    margin-left:-40px;
+    }
+	
+	
+	#home_username .home_input,#home_password .home_input{
+	/*float:right;*/
+	width:83%;
+	font-size:90%;
+	}
+
+	
+
+#home_user_captcha{
+
+	font-size:90%;
+	
+	}
+
+.home_check{
+	
+	      font-size: 16px;
+          line-height:20px;
+	}	
+
+	#home_text_and_line span{
+		font-size:90%;
+		}
+		
+		
+		
+		
+		
+#otherLoginMethods{
+	width:95%;
+	
+	
+	}
+#otherLoginMethods a{
+	margin-right:4px;
+	}
+
+#otherLoginMethods a:last-child{
+	margin:0;
+	}
+#otherLoginMethods span{
+	margin:0;
+	font-size:65%;
+	line-height:175%;
+	
+	}		
+
+
+
+#home_footer_text{
+	/*width:800px;*/
+	overflow:hidden;
+/*	float:none;*/
+	margin-top:0;
+    padding:0;
+	/*width:100%;*/
+	float:none;
+	/*text-align:center;*/
+	margin-left:auto;
+	margin-right:auto;
+    
+	}
+	
+
+#home_footer_nav span{
+	margin-top:0;
+	font-size:105%;
+	float:left;
+	color:#1974B3;
+	font-weight:bold;
+	}
+
+#home_footer_nav span:after{
+	margin:0 4px;
+	}
+
+	
+#home_footer_nav{
+	/*width:70%;*/
+	overflow:hidden;
+
+	margin-top:2px;
+	/*line-height:105%;*/
+	height:100%;
+	/*text-align:center;*/
+	
+	
+	}
+#home_copy_right{
+	color:#1C79BD;
+	font-size:65%;
+	Helvetica, Arial, sans-serif;
+	font-family:"Microsoft Sans Serif", "Microsoft YaHei Bold";
+	clear:none;
+	float:left;
+	width:36%;
+	margin:0;
+	padding:0;
+   /* line-height:75%;*/
+	/*border:double green 1px;*/
+
+	
+	}
+
+
+
+#home_web_police{
+
+	background:url(../images/1_03.jpg) no-repeat left;
+	width:100px;
+	height:40px;
+
+	}
+#home_union_pay{
+	background:url(../images/2_05.jpg) no-repeat left;
+	width:103px;
+	height:40px;
+/*	margin-right:5%;*/
+
+	
+	}
+#home_zhifubao{
+	background:url(../images/3_07.jpg) no-repeat left;
+	width:100px;
+	height:40px;
+/*margin-right:5%;*/
+
+	/*margin-right:40px;*/
+	
+	}
+#home_kexinwang{
+	background:url(../images/4_09.jpg) no-repeat left;
+	width:100px;
+	height:40px;
+	margin-right:0;
+	}
+#home_verysign{
+	background: url(../images/verisign_03.jpg) no-repeat left;
+	width:100px;
+	height:40px;
+	/*margin-right:0%;*/
+	}
+.home_parnter_icon{
+	/*float:right;*/
+	margin-right:10px;
+	
+	}
+.home_partners img{
+	/*float:right;*/
+	/*margin-top:4px;*/
+	margin-right:4px;
+	 }
+	
+	/*user registration case*/
+	#regBox{
+		width:64%;
+		
+		
+		}
+	#forgotPwBox{
+		width:80%;
+		
+		}
+	
+	ul.strength li { width: 16px; height: 4px; background: #ddd; float: left; margin: 0 2px;}
+	#regBoxBody #password +div #pwStrengthComment{
+	/*width:25%;*/
+	font-size:70%;
+/*	border:red 1px solid;*/
+	}
+#regBoxBody form div.sideNote{
+
+	left:71.5%;
+	/*width:25%;*/
+	
+	}
+
+	
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width:992px){
+    
+    	
+#home_services_title h1{
+    font-size:140%;
+    }
+    
+   	.home_wrapper{
+	width:98%;
+/*    height:auto;*/
+	
+	}
+    
+   .home_logo{
+    width:auto;
+    max-width:166px;
+    height:45px;
+    
+	
+	} 
+
+	#home_available_services a{
+		font-size:85%;
+		
+		}
+				 
+    
+.home_search input[type=text]{
+ 
+    font-size:75%;
+    }
+    
+
+		
+#otherLoginMethods{
+	width:90%;
+	
+	
+	}
+#otherLoginMethods a, #otherLoginMethods span{
+	margin-right:3px;
+	}
+#otherLoginMethods span{
+	/*margin-right:5px;*/
+	font-size:60%;
+	line-height:150%;
+	
+	}	
+    
+    
+    
+    
+		#header_heading{
+
+	font-size:20px;
+	line-height:300%;
+
+	
+	}
+
+.home_right_container{
+    margin-right:-50px;
+    
+  
+	}	
+				
+.home_left_container{
+    margin-left:10px;
+    }
+
+#home_username .home_input, #home_password .home_input{
+	/*float:right;*/
+	width:80%;
+	font-size:80%;
+	}
+
+.home_input_icon .home_img {
+	max-width:40px;
+	min-height:43px;
+	float:left;
+	/*margin-right:1%;*/
+	
+	 position: relative;
+	/* padding-left:10px;*/
+
+	
+	}
+
+	
+
+#home_user_captcha{
+    width:50%;
+	float: right;
+	font-size:80%;
+	max-height:40px;
+	}
+	
+ .home_check{
+
+	      font-size: 14px;
+          line-height:20px;
+           
+            letter-spacing: 2px;
+	
+	
+	}
+	
+#home_user_captcha input{ 
+margin-right:1%;
+	
+	}
+
+#home_system_captcha{
+	width: 29%;
+	margin-left:0.5%;
+
+	float: right;
+	max-height:40px;
+	}
+		
+
+	
+#otherLoginMethods_br{
+	
+	display:block;
+	}
+#otherLoginMethods{
+	width:85%;
+	
+	
+	}
+#otherLoginMethods a, span{
+	margin-right:5px;
+	}
+#otherLoginMethods span{
+	/*margin-right:5px;*/
+/*	float:none;*/
+	font-size:85%;
+	line-height:150%;
+	
+	}	
+#loginMethodClearFix{
+	clear:both;
+	
+	}	
+	
+
+	
+#home_h_bar{
+    max-width:70%;
+    }
+    
+	
+
+	#home_left_contain{
+		
+		/*width:100%;*/
+		margin:0;
+		padding:0;
+		
+		
+		
+		}
+        
+	.home_left_container h1{
+		/*font-weight:bold;*/
+		/*font-size:20pt;*/
+		text-align:center;
+		margin-bottom:50px;
+		
+		}
+	.home_left_aligned{
+		float:left;
+		margin:0;
+/*
+	margin-right:1%;
+	margin-left:1%;*/
+	
+	}
+	.home_right_aligned{
+		float:right;
+		margin:0;
+		
+		}
+
+	.home_text_and_line span{
+		font-size:75%;
+		
+		}
+
+
+		
+
+		
+
+	#home_login_form #home_username,#home_login_form #home_password,#home_login_form #home_captcha_box,#home_login_form #home_submit_buton{
+		height :35px;
+		min-height:35px;
+		max-width:210px;
+		/*float:right;*/
+		
+		}
+
+
+		#home_login_form input{
+		height :35px;
+		min-height:35px;
+		margin-right:0;
+		padding-right:0;
+		float:right;
+		
+		}
+
+#home_submit_buton input{
+	width:100%;
+	/*min-width:210px;*/
+		max-height:35px;	
+	/*border:dashed white 2px;*/
+	}
+
+		
+		
+		
+		
+		
+
+		
+		
+	
+	#home_login_form{
+	/*	border:dashed red 1px;*/
+		/*float:right;*/
+	/*	padding:15px 0;*/
+		max-width:210px;
+		
+		
+		}
+	#home_username,#home_username input, #home_password, #home_password input, #home_captcha_box{
+		margin-right:0;
+		padding-right:0;
+		margin-left:0;
+		padding-left:0;
+		
+		}
+	
+
+
+
+	#home_footer_text{
+	/*width:800px;*/
+	overflow:hidden;
+	/*box-sizing:border-box;*/
+/*	float:none;*/
+	margin-top:10px;
+	float:none;
+	margin-left:auto;
+	margin-right:auto;
+	
+	
+	}
+
+#home_footer_nav span{
+	/*width:70%;*/
+	font-size:100%;
+	}
+	
+	
+
+	
+	#home_footer_nav span:after{
+	margin:0 2px;
+	}
+	
+#home_copy_right{
+	color:#1C79BD;
+	font-size: 25%;
+	/*font-family:"Microsoft Sans Serif", "Microsoft YaHei Bold";*/
+	clear:none;
+	float: left;
+	width:33%;/*160px;*/
+	margin:0;
+	padding:0 0 0 2px;
+	}
+	
+
+		
+
+		
+		
+		
+		
+		
+	/*user loggin*/
+	#regBox{
+		width:70%;
+		
+		
+		}
+		#forgotPwBox{
+			width:90%
+			
+			
+			}
+	ul.strength li { width: 14px; height: 4px; background: #ddd; float: left; margin: 0 2px;}
+	
+	
+	#regBox div span{
+		font-size:80%;
+/*		color:blue 1px solid;*/
+
+		
+		}
+		
+	
+		#regBoxBody #conformPassword+span,#regBoxBody #antiBot +span +span{
+	width:25%;
+	font-size:60%;
+	
+	}
+	#regBoxBody div.sideNote{
+		width:27%;
+	/*	border:black 1px solid;*/
+		
+		}
+#regBoxBody #password +div #pwStrengthComment{
+	/*width:25%;*/
+	font-size:50%;
+	/*text-align:left;*/
+/*	border:red 1px solid;*/
+	}
+#regBoxBody form div.sideNote{
+
+	left:72.5%;
+	/*width:25%;*/
+	
+	}
+	
+	
+.backendLogginContainer{
+	
+	width:80%;
+	min-width:300px;
+}
+		
+	
+
+#regBox{
+	width:65%;
+	
+	}	
+	
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/*for screens less than 960px*/
+
+
+
+
+
+		/*for screens less than 690px devices*/
+		
+
+	
+
+
+
+
+
+
+
+/* for screens less than 560px*/
+	@media screen and (max-width:768px){
+		
+		
+		.home_wrapper{
+			width:100%;
+			
+			}
+		
+
+    .home_header{
+        position:relative;
+        }
+
+	.home_logo div{
+        width:190px;
+        max-width:none;
+        margin:0 auto;
+	}
+    
+    .home_logo {
+        position:absolute;
+        left:50%;
+        margin-left:-105px;
+        margin-top:20px;
+        margin-bottom:30px;
+	}
+    
+  .mobile_search_icon{
+      display:block;
+      }  
+	
+.home_logo img{
+     
+	width:90%;
+	height:55%;
+	
+	}
+	
+
+	
+.search_icon{
+    display:block;
+    }
+    
+
+					
+		#header_heading{
+			display:none;
+	
+	}
+
+	
+
+.home_search{
+    display:none;
+    }
+    
+
+
+	
+
+	.home_main_containter{
+		background: url(../images/mobile-bg.jpg) no-repeat center center;
+        background-size: cover;
+        box-sizing:border-box;
+        height:auto;/*85%;*/
+	    overflow:visible;
+        margin-top:15px;
+        padding-bottom:30px;
+		
+		width:100%;
+		}
+
+
+    
+
+
+	#home_left_contain{
+		
+		width:95%;
+		max-width:500px;
+		margin:auto;
+      /*  border:dashed 1px red;*/
+		
+		
+		}
+	.home_left_container h1{
+		clear:both;
+		font-weight:bold;
+		font-size:14pt !important;
+        line-height:1.4;
+        text-align:center;
+        margin-top:30px;
+	
+		}
+		
+			
+#home_service_area{
+	
+	margin-top:15%;
+	/*border:red 1px solid*/
+	
+	}
+#home_credit_card{
+	margin-top:15%;
+	}
+
+	#home_available_services{
+		clear:both;
+		font-size:60% ;
+		
+		}
+	
+
+	.home_left_aligned{
+		float:left;
+        margin-left:2%;
+/*
+	margin-right:1%;
+	margin-left:1%;*/
+	
+	}
+	
+
+	.home_right_aligned{
+		float:right;
+		margin:0;
+		
+		}
+
+	#home_text_and_line span{
+		font-size:97%;
+        margin-left:2%;
+        line-height:70%;
+		}
+
+
+    
+        
+		
+.backendLogginContainer{
+	
+	width:90%;
+}
+	
+	#home_login_form{
+		float:none;
+        max-width:200px;
+		width: 50%;
+		margin-left:auto;
+		margin-right:auto;
+        margin-top:25px;
+		overflow:hidden;
+        }
+       #home_login_form input[type=text]{
+           font-size:75%;
+  
+           }
+
+        
+	#home_login_form form{
+		/*width:60%;*/
+	/*	min-width:270px;*/
+		float:none;
+		margin-left:auto;
+		margin-right:auto;
+		
+		}
+
+
+	.home_separation_line {
+		display:none;
+		}
+
+
+
+
+.home_partners{
+		display:none;
+		
+		}
+
+.home_input_icon{
+    margin:10px 0;
+    }
+    
+.home_forget_password{
+    display:none;
+	
+	}
+.mobile_home_forget_password{
+    display:block;
+    }   
+
+
+	
+#otherLoginMethods_br{
+	
+	display:none;
+	}
+#otherLoginMethods{
+	width:215px;
+    position:static;
+    margin:20px auto;
+	
+	
+	}
+
+#otherLoginMethods a, span{
+	margin-right:5px;
+	}
+#otherLoginMethods span{
+	/*margin-right:5px;*/
+/*	float:none;*/
+	font-size:85%;
+	line-height:150%;
+	
+	}	
+#loginMethodClearFix{
+	clear: none;
+	
+	}	
+	
+
+
+
+
+
+
+
+
+
+
+
+		 #home_footer_text span{
+		 font-size:96.5%;
+		 margin-left:2px;
+		
+		 }
+		#home_footer_nav{
+	
+           
+			font-size:85%;
+			margin: 0 auto;
+   
+			margin-bottom:5px;
+            overflow:hidden;
+        /*    margin-left:2%;*/
+			
+			}
+	
+
+		.home_footer{
+			/*height:10vh;*/
+			padding:0;
+			margin:0;
+			
+			}
+
+
+		 /*user registration case*/
+	#regBox{
+			width:90%;
+			/*height:70%;*/
+			
+		
+		}
+	#forgotPwBox form{
+		width:98%;
+		
+		}
+	#regBoxBody form input[type=image]{
+		max-width:80px;
+		}
+		
+	ul.strength li { width: 12px; height: 4px; background: #ddd; float: left; margin: 0 1px;}
+	
+	
+	#regBox div span{
+		font-size:60%;
+	/*	color:blue 1px solid;*/
+
+		
+		}
+		#regBox div input+span,#regBox div input+span+span,#regBox div #antiBot +span{
+		font-size:25%;
+		width:20%;
+		/*border:red 1px dashed;*/
+		
+		}
+	
+	
+	}
+
+
+
+/*  for screens less than 400px*/
+
+
+@media screen and (max-width:490px){
+	
+	
+	
+	.home_wrapper{
+		width:100%;
+		margin:0;
+		padding:0;
+		
+		}	
+	
+
+.home_left_container h1{
+	margin-bottom:10px;
+    font-size:100% !important ;
+    margin-top:20px;
+	
+	}
+    
+    .home_right_container h1{
+        font-size:120%;
+        padding:5px 0;
+	
+	}
+	
+	.home_header{
+	height:10%;
+    min-height:70px;
+	}
+    
+    
+
+
+#otherLoginMethods span{
+	margin-right:0;
+	}
+    
+
+ #home_footer_nav a{
+     
+     display:inline-block;
+
+     float:none;
+     font-size:16px;
+     margin-top:5px;
+     
+     }
+     
+  #home_footer_nav a:nth-child(odd) span{
+      
+      float:right;
+      
+  }
+    #home_footer_nav a:nth-child(even):before{
+        content:'|';
+        color:#6A93F4;
+        margin:0 6px;
+        line-height:50%;
+      
+  }
+  
+  
+   #home_footer_nav a span:after{
+       content:normal;
+  }
+        
+  
+        
+ 
+    
+		 #home_footer_text span{
+		 font-size:90%;
+		 margin-left:2px;
+         float:none;
+		
+		 }
+		#home_footer_nav{
+			/*width:280px;*/
+			font-size:85%;
+
+			
+			}	
+	
+
+
+#home_password input{
+    font-size:75%;
+    }
+ #home_user_captcha #user_captcha{
+     font-size:60%;
+     }
+       
+	#home_text_and_line span{
+
+        margin-left:4%;
+        font-size:80%;
+		}
+        
+    
+        
+	
+    #home_h_bar{
+    max-width:55%;
+    }
+        
+        
+
+    .home_input_icon{
+        width:160px;
+        min-width:160px;
+        }
+        
+	
+.home_left_aligned,.home_right_aligned,.home_service{
+	clear:both;
+    float:none;
+        max-width:200px;
+        margin: 10px auto !important;
+       
+        font-size:200%;
+		}
+        
+        
+  .home_left_aligned, .home_right_aligned{
+
+    width:100%;
+    font-size:87%;
+		}      
+        
+#home_service_area, #home_credit_card {
+	margin-top:10px;
+	
+	}
+
+
+
+
+
+	.home_logo div{
+        width:120px;
+       
+        max-width:none;
+        margin:0 auto;
+	}
+    
+    .home_logo {
+        margin-bottom:15px;
+         margin-left:-75px;
+	}	
+        .home_logo img {
+         min-height:40px;
+	}	
+    	
+        
+        
+        
+        
+        
+
+#home_footer_nav span ,	#home_footer_nav span:after {
+    margin: 0;
+}
+
+.mobile_display_elmt{
+    display: block;
+    }
+ #home_copy_right{
+  
+     text-align:center;
+     padding:10px 0;
+     font-size:70%;
+     }
+ .mobile_display_break{
+     display:block;
+     }    	
+	
+	
+	/*user registration case*/
+
+#regBox{
+		width:98%;
+		/*height:70%;*/
+		
+		
+		}
+	
+	/*end of user registration case*/
+    
+    
+    
+    
+    
+	}
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*backend home*/
+
+
+.backendLogginContainer{
+	
+	width:50%;
+	max-width:500px;
+	background: url(../images/bachend/images/background-login2_03.jpg) no-repeat center center;
+	background-size: cover;
+	height:auto;
+	overflow:hidden;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:100px;
+	padding-bottom:10px;
+	}
+
+	
+.backendLogginContainer h1{
+	padding:20px;
+	text-align:center;
+	background:url(../images/bachend/images/images/background-login_03.png) no-repeat center bottom;
+	background-size: 95% 1px;
+}
+	
+	
+
+.backendLogginForm input {
+	height:38px;
+	font-size:14px;
+	border:none;
+	}
+	
+.backendLogginForm #home_username,.backendLogginForm #home_password,.backendLogginForm  #home_submit_buton{
+	width:65%;
+	height:40px;
+	margin:20px auto;
+
+	
+	}
+.backendLogginForm  #home_submit_buton input{
+	max-height:50px;
+	height:45px;
+	
+	}
+
+.backendLogginForm .home_input_icon:nth-child(4) img{
+	padding-top:5px;
+	
+	
+	}
+
+/*end of backend home*/
+
+
+
+
+
+
+	
+	
+	
+	
+/*registration fancybox csss*/
+
+#regFancybox{
+	z-index:10000;
+	/*top:200px;
+	left:0px;*/
+	width:264px;
+	height:164px;
+	box-sizing:border-box;
+/*	border:black 1px solid;*/
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif; 
+	font-size:16px;
+	/*box-shadow:2px 2px 20px #888888;*/
+	display:none;
+	}
+#regFancyBoxHeader{
+	width:100%;
+	height:29px;
+	background-color:#2884C7;
+	color:white;
+	overflow:hidden;
+	
+
+	
+	}
+#regFancyBoxHeader span{
+	padding:5px;
+	line-height:29px;
+	font-size:85%;
+	}
+	
+#regFancyBoxBody{
+	background-color:white;
+		color:black;
+	}
+	
+#good_icon{
+	float:left;
+	width:25%;
+	height:134px;
+	overflow:hidden;
+	background: url(../images/check-mark_small.png) no-repeat right 5px center;
+	
+	/*border:red 1px solid;*/
+	}
+	
+#mainText{
+	float:left;
+	/*border:1px solid #CB0CDC;*/
+	margin-top:21%;
+	}
+#mainText span{
+	display:block;
+	
+	}
+#mainText span+span{
+	font-size:85%;
+	color:#636262;
+	}
+/*end of fancyBox css*/
+	
+    
+    
+    
+    
+    
+/*progress bar/wizar css*/
+
+
+.wizard{
+    width:100%;
+    box-sizing:border-box;
+    border:#2785c3 1px solid;
+    margin-bottom:20px;
+    background:#2785c3;
+    }
+  .wizard a:hover{
+      text-decoration:none;
+      color:blue;
+    }  
+
+.wizard a {
+    padding:7px 0 6px 0;
+    background:#fff; 
+    position:relative; display:inline-block; 
+    width:33.1% ;
+    box-sizing:border-box; 
+    text-align:center;
+
+   
+}
+.wizard a:last-child {
+    margin-right:0;
+    padding-right:0;
+}
+.wizard a:before,
+.wizard a:after {
+         width:0px;
+     height:0px; 
+     border-top: 14px inset transparent;
+     border-bottom: 15px inset transparent;
+     position: absolute;
+     content: ""; }
+
+
+
+
+.wizard a:before {
+
+      
+     border-left: 15px solid #2785c3; 
+    top: 0; left:-1px;
+     }
+.wizard a:after {
+  
+     
+    border-left: 15px solid #fff; 
+    top: 0; right: -15px;
+    z-index:2;
+ }
+ 
+ 
+.wizard a:first-child:before {border:none;}
+.wizard a:last-child:after {border:none; }
+
+/*.wizard a:first-child {-moz-border-radius: 4px 0 0 4px; -webkit-border-radius: 4px 0 0 4px; 
+border-radius:   4px 0 0 4px;}
+.wizard a:last-child {-moz-border-radius: 0 4px 4px 0; -webkit-border-radius: 0 4px 4px 0;
+ border-radius:   0 4px 4px 0;}*/
+
+/*.wizard .badge {margin:0 5px 0 18px; position:relative; top:-1px;}
+.wizard a:first-child .badge {margin-left:0;}*/
+
+.wizard .current {background:#2785c3; color:#fff;}
+.wizard .current:after {border-left-color:#2785c3;}
+.wizard .current:before {border-left-color:#2785c3;}
+
+
+/*end of progress bar css*/

@@ -1,0 +1,123 @@
+
+<div class="relationshipsRightContainter  searchResultHeader">
+<div class="top_container">
+  <div class="breadCrumbs"><span>首页 </span><span>事务列表 </span><span class="breadCrumbsLast">华东理工大学入学申请</span></div>
+  <div class="wizard"> <a class="current"><span class="badge"></span> 信息填写</a> <a ><span class="badge badge-inverse"></span> 费用支付</a> <a><span class="badge"></span> 完成</a> </div>
+</div>
+<!---end of container_top-->
+
+<div class="activities_container_bottom">
+  <div id="applicationFormModal"  class="fluid-container lan_form">
+    <div class="application_form_header_container">
+      <div class="application_form_header ">
+        <div class="application_form_logo"><img src="../../commons/images/huadongligong.jpg" alt="corporation logo"></div>
+        <div class="application_form_title">
+          <h1>华 东 理 工 大 学 入 学 申 请 表 (专业学习)</h1>
+        </div>
+      </div>
+    </div>
+    <form method="POST" >
+      <div class="table-responsive">
+        <table class="table table-striped lan_form_table  table-hover table-bordered  bootstrap_table ">
+          <tbody>
+            <tr>
+              <td class="align_left_with_margin">姓名:</td>
+              <td><input type="text" name="usrname" value="王小力"></td>
+              <td class="align_left_with_margin">性别：</td>
+              <td><label class="checkbox-inline lan_info_with_large">
+                  <input type="checkbox" id="inlineCheckbox1" checked value="option1">
+                  男 </label>
+                <label class="checkbox-inline lan_info_with_large">
+                  <input type="checkbox" id="inlineCheckbox2" value="option2" >
+                  女 </label></td>
+              <td class="application_photo" rowspan="4"><img src="../../commons/images/transaction_avatar_03.jpg" alt="avatar"> <span  style="width:100%; display:block; color:#2785c3; cursor:pointer;">上传证照</span></td>
+            </tr>
+            <tr>
+              <td class="align_left_with_margin">国籍:</td>
+              <td><select class="selectpicker" >
+                  <option>国家</option>
+                  <option>中国</option>
+                  <option>美国</option>
+                </select></td>
+              <td class="align_left_with_margin">婚姻状况:</td>
+              <td><label class="checkbox-inline lan_info_with_large">
+                  <input type="checkbox" id="inlineCheckbox1" checked   value="option1">
+                  未婚 </label>
+                <label class="checkbox-inline lan_info_with_large">
+                  <input type="checkbox" id="inlineCheckbox2" value="option2" >
+                  已婚 </label></td>
+            </tr>
+            <tr>
+              <td class="align_left_with_margin">宗教:</td>
+              <td><input type="text" name="religion" value="无"></td>
+              <td class="align_left_with_margin">出生年月:</td>
+              <td><input type="date" name="dateOfBirth"  ></td>
+            </tr>
+            <tr>
+              <td class="align_left_with_margin">固定电话:</td>
+              <td><input type="tel" name="phone" value="021-64253636"  ></td>
+              <td class="align_left_with_margin">手机:</td>
+              <td><input type="tel" name="mobilePhone" value="021-64253636"  ></td>
+            </tr>
+            <tr>
+              <td class="align_left_with_margin">籍贯:</td>
+              <td><input type="text" name="placeOfOrigin" value="上海"></td>
+              <td class="align_left_with_margin">家庭住址:</td>
+              <td colspan="2"><input type="text" name="homeAddress" style="width:90%;" value="上海市徐汇区梅陇路130号"></td>
+            </tr>
+            <tr>
+              <td class="align_left_with_margin">电子邮箱:</td>
+              <td ><input type="email" name="email" value="wangxiaoli123@163.com"></td>
+              <td class="align_left_with_margin">最后学历:</td>
+              <td colspan="2"><input type="text" name="educationLevel" value="本科"></td>
+            </tr>
+            <tr>
+              <td class="align_left_with_margin high-col-table">教育背景:</td>
+              <td colspan="4"><textarea class="form-control" name="educationBackground" placeholder="学校/在校时间/专业/证书" rows="3"></textarea></td>
+            </tr>
+            <tr>
+              <td class="align_left_with_margin high-col-table">工作经历:</td>
+              <td colspan="4"><textarea class="form-control" placeholder="工作单位/起止时间/专业职称" rows="3"></textarea></td>
+            </tr>
+            <tr>
+              <td class="align_left_with_margin high-col-table">学习类型:</td>
+              <td colspan="4"><label class="checkbox-inline lan_info_with_small">
+                  <input type="checkbox" id="inlineCheckbox1" value="option1">
+                  本科 </label>
+                <label class="checkbox-inline lan_info_with_small">
+                  <input type="checkbox" id="inlineCheckbox2" value="option2" checked>
+                  硕士 </label>
+                <label class="checkbox-inline lan_info_with_small">
+                  <input type="checkbox" id="inlineCheckbox3" value="option3">
+                  博士 </label>
+                
+                <label class="checkbox-inline lan_info_with_small">
+                  <input type="checkbox" id="inlineCheckbox2" value="option2">
+                  普通进修 </label>
+                <label class="checkbox-inline lan_info_with_small">
+                  <input type="checkbox" id="inlineCheckbox3" value="option3" checked>
+                  高级进修 </label></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!--end of responsive table-->
+    </form>
+    <!--end of form-->
+    
+    <div class="clearfix"></div>
+  </div>
+  <!--end of container -->
+  
+  <div class="footer_operation_container">
+    <div class="grayButton formPreview"  data-toggle="modal" data-target="#applicationFormModal"> <span>预览</span> </div>
+    <div class="grayButton formPreview "> <span>打印</span> </div>
+        <div class="clearfix"></div>
+    <div class="blueButton applicationNextStep"
+         data-action-click='application:bbqUpdate'
+         data-linkto='/home/activities/payment'><span>下一步</span> </div>
+  </div>
+</div>
+<!--  /activities_container_bottom --> 
+
+<!--end of relationship container --> </div>

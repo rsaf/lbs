@@ -1,0 +1,45 @@
+  
+                <div class="container_top">
+            <div id="directory_indicator"><span id="root_folder">操作记录</span><span id="sub_folder">所有操作</span> </div>
+            
+             
+             
+              <form class="right_containter_top_form">
+                <span>显示</span>
+                <div class="business_task_select">
+             	   <select>
+                       <option value="all">所有操作</option>
+                       <option value="one">业务操作</option>
+                       <option value="two">授权操作</option>
+             	</select>
+                </div>
+                  <!--
+                 <div class="blueButton blueButton-sm pull-right "> <span>新建</span></div>
+                 -->
+               
+            </form>
+
+
+
+            <form class="right_containter_top_form tableHeaderForm">
+
+                <div class="fin_date_picker">
+                    <span>日期 </span>
+                    <input type="date" name="startdate" id="startdate">
+                    <em>-</em>
+                    <input type="date" name="enddate" id="enddate">
+                </div>
+
+                <div class="form_right_search">
+                    <input type="text" id="searchtext" placeholder="事务编号/事务名称/发布单位" size="32">
+                    <input type="submit" name="financesearch" id="financesearch" value="查询" data-action-click="pagination:search" onclick="return false;">
+                </div>
+
+            </form>
+           
+       
+            </div><!---end of container_top-->
+                     
+          <div class="container_bottom access_list_container">
+
+            <!-- /container bottom --></div>

@@ -1,0 +1,150 @@
+
+{{dumyData}}
+<div  class="container_top personalFilesTopMenuClass">
+           
+            <div id="directory_indicator" class="detailPageDirectory"><span id="root_folder">{{root}}</span><span id="sub_folder">{{currentPage}}</span> </div>
+ 
+            </div><!---end of container_top-->
+                     
+          <div class="container_bottom">
+       		
+            <div class="firstColumn_fixed_sized_Box">
+
+
+
+                <span id="avatar" class="firstColumn_fixed_sized_Box_img "><img src="{{profile.basic.avatar.value}}" alt="photo"></span>
+                <span class="firstColumn_fixed_sized_Box_text">
+                    <span class="customFileUploader" data-action-change="profile:avatar:upload">从本地上传
+                      <form  id="uploadForm"  method="POST" enctype="multipart/form-data">
+                          <input name="file" type="file">
+                      </form>
+                    </span>
+
+                    <!--<span  data-action-click="profile:open:photo:list">从照片库上传</span>-->
+                </span>
+
+
+            </div>
+           <div id="basicProfileInfo" class="profile_fluid_part  user-information">
+            <ul>
+              <li>
+                <span class>用户名 : </span> 
+                <span>{{profile.userAccountID}}</span>
+              </li>
+
+
+
+
+
+                <li>
+                <span class>身份证号:</span>
+                <span>{{profile.private.IDNumber.value}}</span>
+                </li>
+                <li>
+                <span>姓名:</span>
+                <span>{{profile.private.fullName.value}}</span>
+                </li>
+
+
+                <!-- todo switch 国籍 and  性别 <li> position for better view on reduced version. should switch them back later-->
+                <!--<li>-->
+                    <!--<span>国籍 : </span>-->
+                    <!--<span> {{profile.basic.country.value}}</span>-->
+                <!--</li>-->
+
+              <!--<li> -->
+                <!--<span>出生日期 : </span> -->
+                <!--<span>{{#limitLength}}{{profile.basic.dateOfBirth.value}} {{/limitLength}} </span>-->
+              <!--</li> -->
+            </ul>
+
+            <!--<ul>-->
+                <!--<li> -->
+                <!--<span>性别:</span> -->
+                <!--<span>{{profile.basic.gender.value}} </span>-->
+                <!--</li>-->
+              <!--<li>-->
+                <!--<span>户口地 : </span> -->
+                <!--<span > {{profile.basic.placeOfBrith.value}} </span>-->
+              <!--</li>-->
+              <!-- -->
+              <!--<li>-->
+                <!--<span>现居地 : </span> -->
+                <!--<span>{{profile.basic.currentResidence.value}}</span>-->
+              <!--</li>-->
+            <!--</ul>-->
+            <!--<span class="edit-info" data-action-click="basic:edit">编辑信息</span>-->
+          <!--</div>   -->
+           
+           <!--<div class="firstColumn_fixed_sized_Box">-->
+               <!--<span class="firstColumn_fixed_sized_Box_img">-->
+                   <!--<img id="privateAvatar" src="{{profile.private.lastestPhoto.value}}"  alt="photo"></span>-->
+               <!--<span class="firstColumn_fixed_sized_Box_text" data-action-click="profile:open:idphoto:list">蓝证近照</span></div>-->
+           <!--<div class="profile_fluid_part user-information">-->
+            <!--<ul>-->
+              <!--<li>-->
+                <!--<span class>身份证号:</span> -->
+                <!--<span>{{profile.private.IDNumber.value}}</span>-->
+              <!--</li>-->
+              <!--<li> -->
+                <!--<span>姓名:</span> -->
+                <!--<span>{{profile.private.fullName.value}}</span>-->
+              <!--</li>-->
+              <!--<li> -->
+                <!--<span>蓝证号:</span> -->
+                <!--<span>{{profile.private.lanID.value}}</span>-->
+              <!--</li> -->
+            <!--</ul>-->
+               
+            <div class="profileMainPageRightInfo">
+                <div class="blueButton"> <span class="center-block {{^notValidated}}disabled{{/notValidated}}"><a {{#notValidated}} href="#/processes/activities/application/LZB101" {{/notValidated}}>立即认证</a></span></div>
+                <p>说明: 点击‘立即认证’，可对单位信息进行核验，认证完成后可办理相关业务。</p>
+        </div>
+      </div>
+
+              
+              
+              
+              
+     <div class="PersonlaInfo_BasicInfo_Table">
+     <!--<span class="PersonlaInfo_BasicInfo_Table_row" >-->
+     <!--<span  class="PersonlaInfo_BasicInfo_Table_cell">电子邮箱</span>-->
+     <!-- -->
+     <!--<span  class="PersonlaInfo_BasicInfo_Table_cell" id="boundEmail" data-bind="contacts.email.value">{{profile.contacts.email.value}}</span>-->
+     <!-- -->
+     <!--<span  class="PersonlaInfo_BasicInfo_Table_cell" data-action-click="contacts:set:email">修改</span>-->
+     <!--</span>-->
+         <span class="PersonlaInfo_BasicInfo_Table_row" >
+     <span  class="PersonlaInfo_BasicInfo_Table_cell">绑定手机</span>
+     
+     <span  class="PersonlaInfo_BasicInfo_Table_cell" id="boundPhone" data-bind="contacts.linkToPhone.value">{{profile.contacts.linkToPhone.value}}     &nbsp; 可直接使用此号码登录</span>
+
+     <span  class="PersonlaInfo_BasicInfo_Table_cell" data-action-click="contacts:set:phone">绑定</span>
+     </span>
+         <!--<span class="PersonlaInfo_BasicInfo_Table_row">-->
+     <!--<span  class="PersonlaInfo_BasicInfo_Table_cell">绑定QQ</span>-->
+     <!-- -->
+     <!--<span  class="PersonlaInfo_BasicInfo_Table_cell" id="boundQQ" data-bind="contacts.linkToQQ.value">{{profile.contacts.linkToQQ.value}}</span>-->
+     <!-- -->
+     <!--<span class="PersonlaInfo_BasicInfo_Table_cell" data-action-click="contacts:set:QQ">绑定</span>-->
+     <!--</span>-->
+
+         {{#weixin}}
+
+             <span class="PersonlaInfo_BasicInfo_Table_row" >
+             <span  class="PersonlaInfo_BasicInfo_Table_cell">绑定微信</span>
+
+             <span  class="PersonlaInfo_BasicInfo_Table_cell" id="boundWechat" data-bind="contacts.linkToWechat.value">{{profile.contacts.linkToWechat.value}}<br> <em>(已关注用户才能绑定微信)</em></span>
+
+             <span  class="PersonlaInfo_BasicInfo_Table_cell" data-action-click="contacts:set:WeChat">绑定</span>
+             </span>
+
+      {{/weixin}}
+
+     </div>         
+              
+              
+              
+                
+                  
+            </div><!---/contaier bottom  -->

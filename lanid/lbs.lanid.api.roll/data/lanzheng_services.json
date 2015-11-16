@@ -1,0 +1,556 @@
+[
+  {
+    "_comment":"LZS101",
+    "payload": {
+      "service": {
+        "serviceCode": "LZS101",
+        "PriceList": [
+          {
+            "servicePoint": "LZP101",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "信息核验",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "实名认证服务",
+        "serviceName": "实名认证服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"信息核验"
+      }
+    ]
+  },
+  {
+    "_comment":"LZS102",
+    "payload": {
+      "service": {
+        "serviceCode": "LZS102",
+        "PriceList": [
+          {
+            "servicePoint": "LZP102",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "信息核验",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "蓝证证照核验",
+        "serviceName": "蓝证证照核验服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"信息核验"
+      }
+    ]
+  },
+  {
+    "_comment":"LZS103",
+    "payload": {
+      "service": {
+        "serviceCode": "LZS103",
+        "PriceList": [
+          {
+            "servicePoint": "LZP103",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "信息核验",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "蓝证单位信息核验服务",
+        "serviceName": "蓝证单位信息核验服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"信息核验"
+      }
+    ]
+  },
+  {
+    "_comment":"LZS104",
+    "payload": {
+      "service": {
+        "serviceCode": "LZS104",
+        "PriceList": [
+          {
+            "servicePoint": "LZP104",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "充值服务",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "蓝证充值服务",
+        "serviceName": "蓝证充值服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"充值服务"
+      }
+    ]
+  },
+  {
+    "_comment":"LZS105",
+    "payload": {
+      "service": {
+        "serviceCode": "LZS105",
+        "PriceList": [
+          {
+            "servicePoint": "LZP105",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "证照服务",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "证照检测",
+        "serviceName": "蓝证证照检测服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"证照服务"
+      }
+    ]
+  },
+  {
+    "_comment":"LZS106",
+    "payload": {
+      "service": {
+        "serviceCode": "LZS106",
+        "PriceList": [
+          {
+            "servicePoint": "LZP106",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "证照服务",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "蓝证证照制作服务",
+        "serviceName": "蓝证证照制作服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"证照服务"
+      }
+    ]
+  },
+  {
+    "_comment":"LZS107",
+    "payload": {
+      "service": {
+        "serviceCode": "LZS107",
+        "PriceList": [
+          {
+            "servicePoint": "LZP107",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "信息核验",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "实名认证服务",
+        "serviceName": "API实名认证服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"信息核验"
+      }
+    ]
+  },
+  {
+    "_comment":"LZS108",
+    "payload": {
+      "service": {
+        "serviceCode": "LZS108",
+        "PriceList": [
+          {
+            "servicePoint": "LZP108",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "信息核验",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "实名认证服务",
+        "serviceName": "身份认证服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"信息核验"
+      }
+    ]
+  },
+  {
+    "_comment":"LZS112",
+    "payload": {
+      "service": {
+        "serviceCode": "LZS112",
+        "PriceList": [
+          {
+            "servicePoint": "LZP112",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "信息核验",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "实名认证",
+        "serviceName": "蓝证实名认证",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"信息核验"
+      }
+    ]
+  },
+  {
+    "_comment":"LZS109",
+    "payload": {
+      "service": {
+        "serviceCode": "LZS109",
+        "PriceList": [
+          {
+            "servicePoint": "LZP109",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          },
+          {
+            "servicePoint": "LZP110",
+            "servicePrices": "3000",
+            "discountedPrice": "3000",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          },
+          {
+            "servicePoint": "LZP111",
+            "servicePrices": "5600",
+            "discountedPrice": "5600",
+            "paymentMethod": ["1"],
+            "remark": "",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "信息核验",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "2015 大漠胡杨双人越野挑战赛报名表",
+        "serviceName": "报名服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "links": [
+      {
+        "path":"serviceType",
+        "method":"map",
+        "value":"信息核验"
+      }
+    ]
+  }
+]

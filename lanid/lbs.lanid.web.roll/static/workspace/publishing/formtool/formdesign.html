@@ -1,0 +1,1666 @@
+<div class="modal-dialog bigger popup" id="mxicon" >
+  <div class="modal-content">
+    <div class="modal-header modal-header-primary blueHeader ">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span
+          style="color:white;">×</span></button>
+          <a href="#" class="max-icon" ><img alt="Brand" src="/workspace/publishing/formtool/images/max-icon.png"></a>
+      <h4 class="modal-title">表单</h4>
+    </div>
+    <div class="modal-body">
+      
+<!--  *********************************************
+      *********************************************
+      Content for form designer tool goes here ...
+      *********************************************
+      *********************************************
+      -->
+      
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- <div class="container-fluid"> -->
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <!-- <div class="navbar-header"> -->
+        <div class="navborder topPadding5 bottomPadding5">
+          <div class="col-md-4 col-sm-6">
+            <div class="btn-group">
+              
+              <!-- <button type="button" data-value="saveboot" data-type="action" class="btn btn-default">
+                <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolSave.png">
+              </button> -->
+              
+              <button type="button" data-value="save" data-type="action" class="btn btn-default">
+                <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolSave.png">
+              </button>
+              <button type="button" data-value="saveas" data-type="action" class="btn btn-default">
+                <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolSaveAs.png">
+              </button>
+              <button type="button" data-value="new" data-type="action" class="btn btn-default">
+                <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolNewFile.png">
+              </button>
+              <button type="button" data-value="newtemplate" data-type="action" class="btn btn-default">
+                <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolNewFileFromTemplate.png">
+              </button>
+              <button type="button" data-value="print" data-type="action" class="btn btn-default">
+                <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolPrint.png">
+              </button>
+            </div>
+            <div class="btn-group">
+              <button type="button" data-value="undo" data-type="action" class="btn btn-default">
+                <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolBack.png">
+              </button>
+              <button type="button" data-value="redo" data-type="action" class="btn btn-default">
+                <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolForward.png">
+              </button>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-2">
+            <!-- <ul class="nav nav-tabs app-nav-tabs" role="tablist" id="tabs" data-tabs="tabs">
+                <li role="presentation" href="#screen1" class="active" data-toggle="tab"><a >Tab1</a>
+                </li>
+                <li role="presentation"><a href="#screen2" data-toggle="tab">Tab2</a>
+                </li>
+            </ul> -->
+          </div>
+          <div class="col-md-4 col-sm-4 alignright">
+            <button type="button" data-value="design" data-type="action" class="btn btn-default">设计</button>
+            <button type="button" data-value="code" data-type="action" class="btn btn-default">代码</button>
+            <button type="button" data-value="preview" data-type="action" class="btn btn-default">预览</button>
+          </div>
+        </div>
+
+        <div id="my-tab-content" class="tab-content">
+          <div class="tab-pane active" id="screen1">
+            <!--Row2 Screen 1-->
+            <div class="row2leftpadding">
+              <div class="col-md-5">
+                <div class="row topPadding5">
+                  <!-- <div class="btn-group"> -->
+                  <!--   <button type="button" class="btn btn-default">B1</button>
+                      <button type="button" class="btn btn-default">B2</button> -->
+                  <!--Font style and size-->
+                  <div class="col-md-2 paddingleft0 paddingright0">
+                    <div class="input-group">
+                      <!-- <span class="input-group-addon">Font Style</span> -->
+                      <select class="form-control" id="fontName" data-key="fontName">
+                        <option value="Arial">Arial</option>
+                        <option value="Courier">Courier</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Verdana">Verdana</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-1 paddingleft0 paddingright0 appfontsizecontrol">
+                    <div class="input-group">
+                      <!-- <span class="input-group-addon">Font Size</span> -->
+                      <select class="form-control appfontsizecontrol" id="fontSize" data-key="fontSize">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+
+                      </select>
+                    </div>
+                  </div>
+                  <!-- </div> -->
+                  <div class="btn-group col-md-3">
+                    
+                    
+
+                    <button type="button" data-value="decreaseFont" data-type="property" class="btn btn-default">
+                      <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/decreaseFont.png">
+                    </button>
+                    <button type="button" data-value="increaseFont" data-type="property" class="btn btn-default">
+                      <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/increaseFont.png">
+                    </button>
+                  </div>
+                  <div class="btn-group col-md-3 paddingleft0 paddingright0 marginleft0">
+                    <button type="button" data-value="foreground" data-class="colorPicker1" data-type="property" class="btn btn-default">
+                      <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolFontColor.png">
+                    </button>
+                    <div class="colorPiker1" data-value="foreground">
+                    </div>
+                    <button type="button" data-value="background" data-class="colorPicker1" data-type="property" class="btn btn-default">
+                      <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolBackgroundColor.png">
+                    </button>
+                    
+                  </div>
+                  
+                     
+                </div>
+                <div class="row topPadding5 bottomPadding5">
+                  <div class="btn-group">
+                    <button type="button" data-value="bold" data-type="property" class="btn btn-default">
+                      <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolBold.png">
+                    </button>
+                    <button type="button" data-value="italic" data-type="property" class="btn btn-default">
+                      <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolTilt.png">
+                    </button>
+                    <button type="button" data-value="underline" data-type="property" class="btn btn-default">
+                      <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolUnderline.png">
+                    </button>
+                    <button type="button" data-value="strikethrough" data-type="property" class="btn btn-default">
+                      <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolScribing.png">
+                    </button>
+                  </div>
+                  <div class="btn-group">
+                    <button type="button" data-value="alignleft" data-type="property" class="btn btn-default">
+                      <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolAlignLeft.png">
+                    </button>
+                    <button type="button" data-value="alignmiddle" data-type="property" class="btn btn-default">
+                      <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolAlignMiddle.png">
+                    </button>
+                    <button type="button" data-value="alignright" data-type="property" class="btn btn-default">
+                      <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolAlignRight.png">
+                    </button>
+                    <button type="button" data-value="distributed" data-type="property" class="btn btn-default">
+                      <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolDistributed.png">
+                    </button>
+                    <!--    <button type="button" data-value="justified" data-type="property" class="btn btn-default">
+                        <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolJustified.png">
+                    </button> -->
+                    <button type="button" data-value="rowspacing" data-type="property" class="btn btn-default">
+                      <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolRowSpacing.png">
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-7 large-icons">
+                <div class="row">
+                  <button type="button" data-value="table" data-type="component" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">
+                    <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolInsertTable.png">
+                  </button>
+                  <button type="button" data-value="checkbox" data-type="component" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">
+                    <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolInsertCheckBox.png">
+                  </button>
+                  <button type="button" data-value="radio" data-type="component" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">
+                    <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolInsertRadioButton.png">
+                  </button>
+                  <button type="button" data-value="text" data-type="component" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">
+                    <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolInsertLineTextBox.png">
+                  </button>
+                  <button type="button" data-value="textarea" data-type="component" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">
+                    <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolInsertMultilineTextBox.png">
+                  </button>
+                  <button type="button" data-value="dropdown" data-type="component" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">
+                    <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolInsertPullDownButton.png">
+                  </button>
+                  <button type="button" data-value="button" data-type="component" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">
+                    <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/calander.png">
+                  </button>
+
+                  <button type="button" data-value="image" data-type="component" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">
+                    <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webPageToolInsertPicture.png">
+                  </button>
+                
+
+                  <button type="button" data-value="照片" data-type="component" id="uploadPhotoPropertyBtn" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">
+                    <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page1/webpageToolInsertIDPhoto.png">
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!--Row2 Screen 1-->
+          </div>
+          <!-- <div class="tab-pane" id="screen2">
+              <p>Building in process</p>
+          </div> -->
+        </div>
+        <!-- </div> -->
+        <!-- /.container-fluid -->
+      </nav>
+
+    
+      <div class="panel panel-default form-panel" id="containerPanel">
+        <div class="panel-heading">
+          <div class="slide-modal">
+        <div id="slideToggle" class="slide-modal-content" style="display:none">
+          
+        </div>
+        <!-- <div class="save-buttons">
+          <button type="button" id="popupSave" class="btn btn-primary footer-btn-save-cls" >Save</button>
+        </div> -->
+        <div id="closeSlider" class="slide-modal-bar">
+
+        </div>
+      </div>
+        </div>
+        <div class="panel-body">
+          <textarea id="generatedCode">
+          </textarea>
+        </div>
+      </div>
+      
+      <div class="dividized" style="display:none">
+      </div>
+      <!--Popup Generic code-->
+      <!--<div class="modal fade model-generic-cls" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content model-content-extra-style-cls">
+            <div class="modal-header model-header-styles-cls">
+              <button type="button" class="close model-header-close-cls" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body model-body-style-cls">
+            </div>
+            <div class="modal-footer modal-footer-styles-cls">
+              <button type="button" id="popupCancel" class="btn btn-default footer-btn-cancel-cls" data-dismiss="modal">Cancel</button>
+              <button type="button" id="popupSave" class="btn btn-primary footer-btn-save-cls" data-dismiss="modal">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>-->
+      <!-- Table popup inner body -->
+      <div data-value="table" data-title="" data-type="popup" class="default-display-cls">
+       <form class="form-horizontal">
+        <div class="col-md-2">
+          <div class="input-group app-input-group">
+            <span class="input-group-addon">行数</span>
+            <input type="text" min="1" value="6" class="form-control" id="rows" data-key="rows">
+          </div>
+        </div>
+          <div class="col-md-2">
+          <div class="input-group app-input-group">
+            <span class="input-group-addon">列数</span>
+            <input type="text" min="1" value="4" class="form-control" id="columns" data-key="columns">
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group app-input-group">
+            <span class="input-group-addon">行高</span>
+            <input type="text" min="1" value="50" class="form-control" id="rowHeight" data-key="rowHeight">
+          </div>
+        </div>
+          <div class="col-md-2">
+          <div class="input-group app-input-group">
+            <span class="input-group-addon">列宽</span>
+            <input type="text" min="1" value="150" class="form-control" id="columnHeight" data-key="columnHeight">
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group app-input-group">
+            <span class="input-group-addon">线型</span>
+            <select class="form-control" id="line" data-key="lineType">
+              <option value="solid">实线</option>
+              <option value="dotted">虚线</option>
+              <option value="dashed">点虚线</option>
+              <option value="double">双实线</option>
+            </select>
+          </div>
+        </div>
+          <div class="col-md-2">
+          <div class="input-group app-input-group">
+            <span class="input-group-addon">线粗</span>
+            <input type="text" min="0" value="1" class="form-control" id="lineThickness" data-key="lineThickness">
+          </div>
+        </div>
+
+        <!-- <div class="input-group app-input-group padding-left-15 col-md-2">
+          <span class="input-group-addon">Title</span>
+          <input type="text" id="tableTitle" class="form-control" placeholder="Title" data-key="tableTitle">
+        </div>
+        <div class="input-group app-input-group padding-left-15 col-md-3">
+          <span class="input-group-addon">Summary</span>
+          <input type="text" id="tableSummary" class="form-control" placeholder="Summary" data-key="tableSummary">
+        </div> -->
+
+        <div class="app-input-group padding-left-15 alignleft">
+          <button type="button" class="tblm btn btn-default table-popup-btn1-cls btn5-background-cls">
+            <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page2/webPageTool2MergeCells.jpg">
+          </button>
+          <button type="button" class="tblsh btn btn-default table-popup-btn1-cls btn5-background-cls">
+            <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page2/webPageTool2SplitCells.jpg">
+          </button>
+          <button type="button" class="tblsv btn btn-default btn5-background-cls">
+            <img alt="Brand" src="/workspace/publishing/formtool/images/webpage_tool_page2/webPageTool2SplitTable.jpg">
+          </button>
+        </div>
+       <div style="display:none"> <input type="reset"/></div>
+        </form>
+      </div>
+
+      <div data-value="button" data-title="" data-type="popup" class="default-display-cls">
+        <form class="form-horizontal">
+          <div class="input-group app-input-group col-md-4">
+            <span class="input-group-addon">名称</span>
+            <input type="text" id="inputName" class="form-control" placeholder="名称" data-key="inputValue">
+          </div>
+          <div class="input-group app-input-group col-md-2">
+            <span class="input-group-addon">初始值</span>
+            <input type="text" id="inputDefault" class="form-control" placeholder="2015/01/08" data-key="inputDefault">
+          </div>
+          <div class="input-group app-input-group col-md-2">
+            <span class="input-group-addon">宽度</span>
+            <input type="text" data-key="rowHeight" id="inputHeight" class="form-control" value="1" min="1">
+          </div>
+          <div class="input-group app-input-group col-md-2">
+            <span class="input-group-addon">高度</span>
+            <input type="text" data-key="rowWidth" id="inputWidth" class="form-control" value="20" min="1">
+          </div>
+          <div class="col-md-2 popuplastrowcomp">
+            <div class="input-group app-input-group">
+              <span class="input-group-addon">必须填</span>
+              <select class="form-control" id="inputType2" data-key="requried">
+                  <option value="false">否</option>
+                <option value="true">是</option>
+              
+              </select>
+            </div>
+          </div>
+          <div class="input-group app-input-group col-md-3">
+            <span class="input-group-addon">显示格式</span>
+            <select class="form-control" id="inputType" data-key="type">
+              <option value="two">yyyy/M/d</option>
+              <option value="three">yyyy-M-d</option>
+            </select>
+          </div>
+           <div style="display:none"> <input type="reset"/></div>
+        </form>
+      </div>
+
+      <div data-value="text" data-title="" data-type="popup" class="default-display-cls">
+        <form class="form-horizontal">
+          <div class="input-group app-input-group padding-left-15 col-md-3">
+            <span class="input-group-addon">名称</span>
+            <input type="text" id="inputName" class="form-control" placeholder="名称" data-key="name">
+          </div>
+          <div class="input-group app-input-group padding-left-15 col-md-3">
+            <span class="input-group-addon">初始值</span>
+            <input type="text" id="inputValue" class="form-control" placeholder="输入初始值" data-key="value">
+          </div>
+          <div class="col-md-2">
+            <div class="input-group app-input-group">
+              <span class="input-group-addon">文本框宽度</span>
+              <input type="text" data-key="columnHeight" id="inputHeight" class="form-control" value="1" min="1">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="input-group app-input-group">
+              <span class="input-group-addon">文本框高度</span>
+              <input type="text" data-key="columnWidth" id="inputWidth" class="form-control" value="20" min="1">
+            </div>
+          </div>
+          <div class="col-md-2 popuplastrowcomp">
+            <div class="input-group app-input-group">
+              <span class="input-group-addon">类型</span>
+              <select class="form-control" id="inputType" data-key="type">
+                <option value="text">文本</option>
+                <option value="password">密码</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-2 popuplastrowcomp">
+            <div class="input-group app-input-group">
+              <span class="input-group-addon">必须填</span>
+              <select class="form-control" id="inputType2" data-key="requried">
+                  <option value="false">否</option>
+                <option value="true">是</option>
+              
+              </select>
+            </div>
+          </div>
+           <div style="display:none"> <input type="reset"/></div>
+        </form>
+      </div>
+
+
+
+       <div data-value="image" data-title="" data-type="popup" class="default-display-cls">
+          <form class="form-horizontal">
+          <span style="display: inline-block ; padding: 10px">Upload image</span>
+         <span style="display: inline-block ; padding: 10px"><input type="file" id="uploadImage" style="display: block;" accept="image/*" /></span>
+
+            <div class="input-group app-input-group col-md-2">
+              <span class="input-group-addon">文本框宽度</span>
+              <input type="text" data-key="columnHeight" id="inputwidth" class="form-control" value="250" min="1">
+            </div>
+            <div class="input-group app-input-group col-md-2">
+              <span class="input-group-addon">文本框高度</span>
+              <input type="text" data-key="columnWidth" id="inputwidth" class="form-control" value="250" min="1">
+            </div>
+
+            <div style="display:none"> <input type="reset"/></div>
+            </form>
+      </div>
+
+      <div data-value="radio" data-title="" data-type="popup" class="default-display-cls">
+        <form class="form-horizontal">
+          <div class="input-group app-input-group col-md-3">
+            <span class="input-group-addon">名称</span>
+            <input type="text" id="inputName" class="form-control" placeholder="名称" data-key="name">
+          </div>
+          <div class="input-group app-input-group col-md-2">
+            <span class="input-group-addon">必须填</span>
+            <select class="form-control" id="inputType" data-key="requried">
+              <option value="false">否</option>
+              <option value="true">是</option>
+              
+            </select>
+          </div>
+          <div class="input-group app-input-group col-md-4">
+            <label for="inputTextArea" class="alignleft">值</label>
+            <textarea id="inputTextArea" class="form-control" placeholder="请输入值" data-key="value"></textarea>
+          </div>
+           <div style="display:none"> <input type="reset"/></div>
+        </form>
+      </div>
+
+      <div data-value="textarea" data-title="" data-type="popup" class="default-display-cls">
+        <form class="form-horizontal">
+          <div class="input-group app-input-group padding-left-15 col-md-4">
+            <span class="input-group-addon">名称</span>
+            <input type="text" id="inputName" class="form-control" placeholder="名称" data-key="name">
+          </div>
+            
+            <div class="input-group app-input-group col-md-2">
+              <span class="input-group-addon">文本框高度</span>
+              <input type="text" data-key="columnHeight" id="inputHeight" class="form-control" value="3" min="1">
+            </div>
+            <div class="input-group app-input-group col-md-2">
+              <span class="input-group-addon">行数</span>
+              <input type="text" data-key="columnWidth" id="inputWidth" class="form-control" value="25" min="1">
+            </div>
+          <div class="col-md-2 popuplastrowcomp">
+            <div class="input-group app-input-group">
+              <span class="input-group-addon">必须填</span>
+              <select class="form-control" id="inputType2" data-key="requried">
+                  <option value="false">否</option>
+                <option value="true">是</option>
+              
+              </select>
+            </div>
+          </div>
+          <div class="input-group app-input-group popuplastrowcomp padding-left-15 col-md-6">
+            <label for="inputTextArea" class="alignleft">初始值</label>
+            <textarea id="inputTextArea" class="form-control" placeholder="请输入初始值" data-key="initalValue"></textarea>
+          </div>
+           <div style="display:none"> <input type="reset"/></div>
+        </form>
+      </div>
+
+      <div data-value="checkbox" data-title="" data-type="popup" class="default-display-cls">
+        <form class="form-horizontal">
+          <div class="input-group app-input-group col-md-3">
+            <span class="input-group-addon">名称</span>
+            <input type="text" id="inputName" class="form-control" placeholder="名称" data-key="name">
+          </div>
+          <div class="col-md-2 popuplastrowcomp">
+            <div class="input-group app-input-group">
+              <span class="input-group-addon">必须填</span>
+              <select class="form-control" id="inputType2" data-key="requried">
+                  <option value="false">否</option>
+                <option value="true">是</option>
+              
+              </select>
+            </div>
+          </div>
+          <div class="input-group app-input-group col-md-4">
+            <label for="inputTextArea" class="alignleft">值</label>
+            <textarea id="inputTextArea" class="form-control" placeholder="请输入值" data-key="value"></textarea>
+          </div>
+           <div style="display:none"> <input type="reset"/></div>
+        </form>
+      </div>
+
+      <div data-value="dropdown" data-title="" data-type="popup" class="default-display-cls">
+        <form class="form-horizontal">
+          <div class="col-md-3">
+            <div class="input-group app-input-group">
+              <span class="input-group-addon">名称</span>
+              <input type="text" id="inputName" class="form-control" placeholder="名称" data-key="name">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="input-group app-input-group">
+              <span class="input-group-addon">宽度</span>
+              <input type="text" data-key="columns" id="inputName" class="form-control" value="1" min="1">
+            </div>
+          </div>
+          <div class="col-md-2 popuplastrowcomp">
+            <div class="input-group app-input-group">
+              <span class="input-group-addon">必须填</span>
+              <select class="form-control" id="inputType2" data-key="requried">
+                  <option value="false">否</option>
+                <option value="true">是</option>
+              
+              </select>
+            </div>
+          </div>
+          <div class="input-group app-input-group padding-left-15 col-md-4">
+            <label for="inputTextArea" class="alignleft">值</label>
+            <textarea id="inputTextArea" rows="10" class="form-control" placeholder="Value" data-key="optionsText"></textarea>
+          </div>
+<!--             <div class="col-md-4">
+              <label for="inputName" class="alignleft">Options Text</label>
+            </div>
+            <div class="col-md-4">
+              <label for="inputName" class="alignleft">Options Value</label>
+            </div>
+            <div class="col-md-4">
+              <input type="text" id="inputName" class="form-control margin-bottom-5" placeholder="Name">
+            </div>
+            <div class="col-md-4">
+              <input type="text" id="inputName" class="form-control margin-bottom-5" placeholder="Name">
+            </div>
+          <div class="row padding-left-15">
+            <div class="col-md-4">
+              <textarea id="inputTextArea" rows="10" class="form-control" placeholder="Value" data-key="optionsText"></textarea>
+            </div>
+            <div class="col-md-4">
+              <textarea id="inputTextArea" rows="10" class="form-control" placeholder="Value" data-key="optionsValue"></textarea>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group app-input-group">
+                <div class="popuplastrowcomp">
+                  <button type="button" data-value="" data-type="action" class="btn btn-default dropdowncompbutton">Add To
+                  </button>
+                </div>
+                <div class="popuplastrowcomp">
+                  <button type="button" data-value="" data-type="action" class="btn btn-default dropdowncompbutton">Revise
+                  </button>
+                </div>
+                <div class="popuplastrowcomp">
+                  <button type="button" data-value="" data-type="action" class="btn btn-default dropdowncompbutton">Move Up
+                  </button>
+                </div>
+                <div class="popuplastrowcomp">
+                  <button type="button" data-value="" data-type="action" class="btn btn-default dropdowncompbutton">Move Down
+                  </button>
+                </div>
+                <div class="popuplastrowcomp">
+                  <button type="button" data-value="" data-type="action" class="btn btn-default dropdowncompbutton">Delete
+                  </button>
+                </div>
+                <div class="popuplastrowcomp">
+                  <button type="button" data-value="" data-type="action" class="btn btn-default dropdowncompbutton">Set as Default Value
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div> -->
+             <div style="display:none"> <input type="reset"/></div>
+        </form>
+      </div>
+
+        <div data-value="照片" data-title="" data-type="popup"  class="upLoadColorPickerModal  default-display-cls">
+
+          <div class="row ft-gray-border ft-gray-bg  proper-control-bar">
+
+            <div class="norm-param-button  ft-white-gb swallow-border action-switch-button">规格参数</div>
+            <div class="make-param-button  action-switch-button">制作参数</div>
+            <div class="clearfix"></div>
+
+          </div><!--end of row-->
+
+
+          <form class="form-horizontal norm-param-form">
+
+            <div class="">
+
+              <!--Row1-->
+              <div class="row">
+                <div class="col-md-5 paddingright0">
+                  <div class="input-group app-input-group">
+                    <span class="input-group-addon" id="photoNormsSelection">证照类</span>
+                    <select class="form-control" id="inputType00" data-key="type">
+
+                    </select>
+                  </div>
+                </div>
+
+
+                <!--   <div class="col-md-3 paddingright0 marginright0">
+                    <div class="input-group app-input-group">
+                        <span class="input-group-addon">Pixel Size</span>
+                    </div>
+                </div> -->
+                <div class="col-md-3 col-md-offset-1 ">
+                  <div class="input-group app-input-group">
+                    <!-- <span class="input-group-addon">Pixel Size</span> -->
+                    <span class="input-group-addon">标准像宽(pix)</span>
+                    <input type="text" min="0" max="300"  data-bind="formPhotoStandard.swp" value="300" class="form-control" id="photoheight">
+                    <!-- <select class="form-control" id="inputType" data-key="type">
+                        <option value="two">Submit</option>
+                        <option value="three">Button</option>
+                    </select> -->
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group app-input-group">
+                    <span class="input-group-addon">标准向高(pix)</span>
+                    <input type="text" min="0" max="300"  data-bind="formPhotoStandard.shp" value="" class="form-control" id="photowidth">
+                    <!--   <select class="form-control" id="inputType" data-key="type">
+                        <option value="two">Submit</option>
+                        <option value="three">Button</option>
+                    </select> -->
+                  </div>
+                </div>
+                <!-- </div> -->
+              </div>
+
+              <!--Row2-->
+              <div class="row">
+                <div class="col-md-7">
+
+
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <div class="input-group app-input-group">
+                        <span class="input-group-addon">头部长度(pix)</span>
+                        <input type="text"
+                               data-bind="formPhotoStandard.hlp" min="0" max="300" value="" class="form-control" >
+
+                      </div>
+
+                    </div><!---end of col -->
+
+                    <div class="col-sm-6">
+                      <div class="input-group app-input-group">
+                        <span class="input-group-addon">头部长度误差值(pix)</span>
+                        <input type="text" min="0" max="300"  data-bind="formPhotoStandard.hlpe" value="" class="form-control">
+
+                      </div>
+
+                    </div><!--end of col -->
+
+
+                  </div><!--end of row-->
+
+
+
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <div class="input-group app-input-group">
+                        <span class="input-group-addon">脸颊宽度(pix)</span>
+                        <input type="text" min="0" max="300"  data-bind="formPhotoStandard.cwp" value="" class="form-control" >
+
+                      </div>
+
+                    </div><!---end of col -->
+
+                    <div class="col-sm-6">
+                      <div class="input-group app-input-group">
+                        <span class="input-group-addon">脸颊宽度度误差值(pix)</span>
+                        <input type="text" min="0" max="300"  data-bind="formPhotoStandard.cwpe" value="" class="form-control">
+
+                      </div>
+
+                    </div><!---end of col -->
+
+
+                  </div><!-- end of row-->
+
+
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <div class="input-group app-input-group">
+                        <span class="input-group-addon">头顶距(pix)</span>
+                        <input type="text" min="0" max="300"  data-bind="formPhotoStandard.hdp" value="" class="form-control" >
+
+                      </div>
+
+                    </div><!---end of col -->
+
+                    <div class="col-sm-6">
+                      <div class="input-group app-input-group">
+                        <span class="input-group-addon">头顶距误差值(pix)</span>
+                        <input type="text" min="0" max="300"  data-bind="formPhotoStandard.hdpe" value="" class="form-control">
+
+                      </div>
+
+                    </div><!---end of col -->
+
+
+                  </div><!-- end of row-->
+
+
+
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <div class="input-group app-input-group">
+
+                        <!--@todo this is not on the schema rolland will check with leo-->
+
+                        <span class="input-group-addon">外部背景代码</span>
+
+                          <input type="text" min="0" max="300"   data-bind="formPhotoStandard.bc" class="form-control">
+
+                        <!--<select class="form-control"  data-bind="formPhotoStandard.bc" data-key="type">-->
+                          <!--<option value="two"></option>-->
+                          <!--<option value="three"></option>-->
+                        <!--</select>-->
+                      </div>
+
+                    </div><!---end of col -->
+
+                    <div class="col-sm-6">
+                      <div class="input-group app-input-group">
+
+                        <!--@todo this is not on the schema-->
+
+                        <span class="input-group-addon">背景颜色渐变</span>
+
+
+
+                          <input type="text" min="0" max="300"   data-bind="formPhotoStandard.bcr" class="form-control">
+
+                        <!--<select class="form-control"  data-bind="formPhotoStandard.bcr"  data-key="type">-->
+                          <!--<option value="two"></option>-->
+                          <!--<option value="three"></option>-->
+                        <!--</select>-->
+                      </div>
+
+                    </div><!---end of col -->
+
+
+                  </div><!--end of row-->
+
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <div class="input-group app-input-group">
+                        <span class="input-group-addon">证照分辨率</span>
+
+                        <input type="text" min="0" max="300"   data-bind="formPhotoStandard.rs" class="form-control">
+                      </div>
+
+                    </div><!---end of col -->
+
+                    <div class="col-sm-6">
+                      <div class="input-group app-input-group">
+                        <span class="input-group-addon">标准证照图片格式</span>
+
+                        <input type="text" min="0" max="300"   data-bind="formPhotoStandard.fm" class="form-control">
+
+                      </div>
+
+                    </div><!---end of col -->
+
+
+                  </div><!--end of row-->
+
+
+
+
+
+                </div><!--end of col-->
+
+                <div class="col-md-5 ">
+
+
+
+                  <div class="row colorPickerContainerRow">
+                    <div class="col-sm-7 colorPickerCol">
+                      <div class="input-group  app-input-group">
+                        <div id="popupPicker"></div>
+                      </div>
+
+                    </div><!--end of col-->
+
+                    <div class="col-sm-5">
+                      <div class="row">
+                        <div class="input-group app-input-group">
+                          <span class="input-group-addon">背景颜色</span>
+
+
+                            <input type="text" min="0" max="300"   data-bind="formPhotoStandard.bc" class="form-control">
+
+
+                          <!--<select class="form-control"  data-bind="formPhotoStandard.bc"  data-key="type">-->
+                            <!--<option value="two">蓝色</option>-->
+                            <!--<option value="three"></option>-->
+                          <!--</select>-->
+                        </div>
+
+
+                      </div><!--end of row-->
+
+
+
+
+                      <div class="row">
+                        <div class="input-group app-input-group">
+                          <span class="input-group-addon">颜色R值</span>
+                          <input type="text" min="0" max="300"  data-bind="formPhotoStandard.bcr" value="" class="form-control">
+
+                        </div>
+
+
+                      </div><!--end of row-->
+
+                      <div class="row">
+                        <div class="input-group app-input-group">
+                          <span class="input-group-addon">颜色G值</span>
+                          <input type="text" min="0" max="300"  data-bind="formPhotoStandard.bcg" value="" class="form-control">
+
+                        </div>
+
+
+                      </div><!--end of row-->
+
+                      <div class="row">
+                        <div class="input-group app-input-group">
+                          <span class="input-group-addon">颜色B值</span>
+                          <input type="text" min="0" max="300"  data-bind="formPhotoStandard.bcb" value="" class="form-control">
+
+                        </div>
+
+
+                      </div><!--end of row-->
+
+                      <div class="row">
+                        <div class="input-group app-input-group">
+                          <span class="input-group-addon">RGB值误差</span>
+                          <input type="text" min="0" max="300"  data-bind="formPhotoStandard.bcrgbe" value="" class="form-control">
+
+                        </div>
+
+
+                      </div><!--end of row-->
+
+
+                    </div><!--end of col-->
+
+
+                  </div><!--end of row -->
+
+
+
+                </div>
+              </div><!--end of row-->
+
+              <!--Row4-->
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="input-group app-input-group">
+                    <span class="input-group-addon">标准证照文件大小（Kb）</span>
+                    <input type="text" min="0" max="300"  data-bind="formPhotoStandard.ss" value="" class="form-control">
+
+                  </div>
+                </div>
+
+
+                <div class="col-md-4">
+                  <div class="input-group app-input-group">
+                    <span class="input-group-addon">输出名义尺寸宽度（mm）</span>
+                    <input type="text" min="0" max="300"  data-bind="formPhotoStandard.osw" value="" class="form-control">
+
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="input-group app-input-group">
+                    <span class="input-group-addon">输出名义尺寸高度（mm）</span>
+                    <input type="text" min="0" max="300"  data-bind="formPhotoStandard.swp" value="" class="form-control">
+
+                  </div>
+                </div>
+
+              </div>
+              <!--Row5-->
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="input-group app-input-group">
+                    <span class="input-group-addon">初始照片格式</span>
+                    <input type="text" min="0" max="300"  data-bind="formPhotoStandard.osh" value="" class="form-control">
+
+                  </div>
+                </div>
+
+
+                <div class="col-md-4">
+                  <div class="input-group app-input-group">
+                    <span class="input-group-addon">初始照片文件大小（kb）</span>
+                    <input type="text" min="0" max="300"  data-bind="formPhotoStandard.ofs" value="" class="form-control">
+
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="input-group app-input-group">
+                    <span class="input-group-addon">初始照片清晰度要求</span>
+                    <input type="text" min="0" max="300"  data-bind="formPhotoStandard.ifr" value="" class="form-control">
+
+                  </div>
+                </div>
+
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="input-group app-input-group">
+
+
+
+
+                    <span class="input-group-addon">头部长度（mm）</span>
+                    <input type="text" min="0" max="300"  data-bind="formPhotoStandard.hlm" value="" class="form-control">
+
+                  </div>
+                </div>
+
+
+                <div class="col-md-3">
+                  <div class="input-group app-input-group">
+                    <span class="input-group-addon">头部长度误差（mm）</span>
+                    <input type="text" min="0" max="300"  data-bind="formPhotoStandard.hlme" value="" class="form-control">
+
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="input-group app-input-group">
+                    <span class="input-group-addon">脸颊宽度（mm）</span>
+                    <input type="text" min="0" max="300"  data-bind="formPhotoStandard.cwm" value="" class="form-control">
+
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="input-group app-input-group">
+                    <span class="input-group-addon">脸颊宽度误差值（mm）</span>
+                    <input type="text" min="0" max="300"  data-bind="formPhotoStandard.cwme" value="" class="form-control">
+
+                  </div>
+                </div>
+
+              </div><!--end of row-->
+
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="input-group app-input-group">
+                    <span class="input-group-addon">头顶距（mm）</span>
+                    <input type="text" min="0" max="300"  data-bind="formPhotoStandard.hdm" value="" class="form-control">
+
+                  </div>
+                </div>
+
+
+                <div class="col-md-3">
+                  <div class="input-group app-input-group">
+                    <span class="input-group-addon">头顶距误差值（mm）</span>
+                    <input type="text" min="0" max="300"  data-bind="formPhotoStandard.hdme" value="" class="form-control">
+
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="input-group app-input-group">
+                    <span class="input-group-addon">备注</span>
+                    <input type="text"  data-bind="formPhotoStandard.rm"  class="form-control">
+
+                  </div>
+                </div>
+
+
+              </div><!--end of row-->
+
+
+
+              <!--Row8-->
+              <div class="row downloadLink">
+
+                <div class="pull-left"><img src="/commons/images/download.jpg" alt="download file">  </div>
+                <div class="pull-left"><a>证照标准说明.pdf</a></div>
+
+              </div>
+
+
+            </div><!--end of container-->
+            <div style="display:none"> <input type="reset"/></div>
+          </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <form class="form-horizontal hideDiv make-param-form">
+            <div class="">
+              <div class="row">
+                <div class="col-sm-6">
+
+                  <div class="input-group app-input-group" style="padding-left: 10px">
+                    <span class="input-group-addon">照片来源</span>
+                    <select class="form-control" id="inputType31" data-key="type">
+
+
+
+
+
+
+                        <option data-control="1" value="one">自助机K</option>
+                        <option data-control="2" value="one">自助机P</option>
+                        <option data-control="3" value="one">照相馆</option>
+
+                        <option data-control="4" value="one">个人本地上传</option>
+                        <option data-control="5" value="one">移动设备拍摄</option>
+
+
+
+
+
+                      <!--<option data-control="1" value="one">自助机-K</option>-->
+                      <!--<option data-control="2" value="one">自助机-P</option>-->
+                      <!--<option data-control="3" value="one">自助机-A1</option>-->
+                      <!--<option data-control="4" value="one">自助机-A2</option>-->
+                      <!--<option data-control="5" value="one">自助机-A3</option>-->
+                      <!--<option data-control="6" value="one">专业网点-蓝证网</option>-->
+                      <!--<option data-control="7" value="one">专业网点-客户端</option>-->
+                      <!--<option data-control="8" value="one">个人用户-蓝证本地</option>-->
+                      <!--<option data-control="9" value="one">个人用户-我的证照</option>-->
+                      <!--<option data-control="10" value="one">移动客户端-个人用户</option>-->
+                      <!--<option data-control="11" value="one">移动客户端-单位用户</option>-->
+                      <!--<option data-control="12" value="one">蓝证通办证照</option>-->
+                      <!--<option data-control="13" value="one">单位导入</option>-->
+                      <!--<option data-control="14" value="one">授权数据源</option>-->
+
+                    </select>
+                  </div>
+
+                </div><!--end of col-->
+
+                  <div class="col-sm-6">
+
+                      <div class="input-group app-input-group" style="padding-left: 10px">
+                          <span class="input-group-addon">认证要求</span>
+                          <select class="form-control" id="inputType42" data-key="type">
+
+
+                              <option data-control="1" >证照不需要比对认证</option>
+                              <option data-control="2" >证照需要比对认证</option>
+
+                          </select>
+                      </div>
+
+
+                  </div>
+
+
+                <!--<div class="col-sm-6">-->
+
+                  <!--<div class="input-group app-input-group" style="padding-left: 10px">-->
+                    <!--<span class="input-group-addon">照片提供</span>-->
+                    <!--<select class="form-control" id="inputType32" data-key="type">-->
+
+                      <!--<option data-control="1" value="one">仅提供标准照片</option>-->
+                      <!--<option data-control="2" value="one">提供标准和水印照片</option>-->
+                      <!--<option data-control="3" value="one">仅提供水印照片</option>-->
+                      <!--<option data-control="4" value="one">仅提供缩略照片</option>-->
+                      <!--<option data-control="5" value="one">提供所有事务照片</option>-->
+                      <!--<option data-control="6" value="one">不提供任何事务照片</option>-->
+
+                    <!--</select>-->
+                  <!--</div>-->
+
+
+                <!--</div>&lt;!&ndash;end of col&ndash;&gt;-->
+
+
+
+              </div><!--end of row-->
+
+              <div class="row">
+                <div class="col-sm-6">
+
+                  <div class="input-group app-input-group" style="padding-left: 10px">
+                    <span class="input-group-addon">拍摄索引</span>
+                    <select class="form-control" id="inputType33" data-key="type">
+
+
+                      <option data-control="1" value="one">蓝证码</option>
+                      <option data-control="2" value="one">身份证号</option>
+                      <!--<option data-control="3" value="one">特征码</option>-->
+                      <!--<option data-control="4" value="one">蓝证号</option>-->
+                      <!--<option data-control="5" value="one">手机号</option>-->
+                      <!--<option data-control="6" value="one">邮箱</option>-->
+                      <!--<option data-control="7" value="one">微信号</option>-->
+                      <!--<option data-control="8" value="one">QQ号</option>-->
+
+
+                    </select>
+                  </div>
+
+                </div><!--end of col-->
+
+
+
+
+
+                  <div class="col-sm-6">
+
+                      <div class="input-group app-input-group" style="padding-left: 10px">
+                          <span class="input-group-addon">对比阀值</span>
+
+                          <input class="form-control" type="text"   />
+                      </div>
+
+
+                  </div>
+
+
+
+                <!--<div class="col-sm-6">-->
+
+                  <!--<div class="input-group app-input-group" style="padding-left: 10px">-->
+                    <!--<span class="input-group-addon">照片上传</span>-->
+                    <!--<select class="form-control" id="inputType34" data-key="type">-->
+
+                      <!--<option data-control="1" value="one">允许所有用户上传</option>-->
+                      <!--<option data-control="2" value="one">仅允许单位网点用户上传</option>-->
+                      <!--<option data-control="3" value="one">仅允许个人用户上传</option>-->
+                      <!--<option data-control="4" value="one">仅允许单位用户上传</option>-->
+                      <!--<option data-control="5" value="one">仅允许单位非网点用户上传</option>-->
+
+
+                    <!--</select>-->
+                  <!--</div>-->
+
+
+                <!--</div>-->
+
+                  <!--end of col-->
+
+
+
+              </div><!--end of row-->
+              <div class="row">
+                <div class="col-sm-6">
+
+                  <div class="input-group app-input-group" style="padding-left: 10px">
+                    <span class="input-group-addon">检测要求</span>
+                    <select class="form-control" id="inputType35" data-key="type">
+
+
+                      <option data-control="1" value="one">证照不需要检测</option>
+                      <option data-control="2" value="one">证照需要检测</option>
+
+
+                    </select>
+                  </div>
+
+                </div><!--end of col-->
+                <div class="col-sm-6">
+
+                  <div class="input-group app-input-group" style="padding-left: 10px">
+                    <span class="input-group-addon">制作要求</span>
+                    <select class="form-control" id="inputType36" data-key="type">
+
+                      <option data-control="1" value="one">证照不需要制作</option>
+                      <option data-control="2" value="one">证照需要制作</option>
+                    </select>
+                  </div>
+
+
+                </div><!--end of col-->
+
+
+
+              </div><!--end of row-->
+
+              <!--<div class="row">-->
+                <!--<div class="col-sm-6">-->
+
+                  <!--<div class="input-group app-input-group" style="padding-left: 10px">-->
+                    <!--<span class="input-group-addon">证照水印</span>-->
+                    <!--<select class="form-control" id="inputType37" data-key="type">-->
+
+
+
+                      <!--<option data-control="1" value="one">事务不需要水印证照</option>-->
+                      <!--<option data-control="2" value="one">事务需要水印证照</option>-->
+
+                    <!--</select>-->
+                  <!--</div>-->
+
+                <!--</div>-->
+
+                  <!--end of col-->
+                <!--<div class="col-sm-6">-->
+
+                  <!--<div class="input-group app-input-group" style="padding-left: 10px">-->
+                    <!--<span class="input-group-addon">水印模式</span>-->
+
+                    <!--<input class="form-control" type="text"   />-->
+
+
+                  <!--</div>-->
+
+
+                <!--</div>-->
+                  <!--end of col-->
+
+
+
+              <!--</div>-->
+              <!--end of row-->
+
+              <!--<div class="row">-->
+                <!--<div class="col-sm-6">-->
+
+                  <!--<div class="input-group app-input-group" style="padding-left: 10px">-->
+                    <!--<span class="input-group-addon">证照缩略</span>-->
+                    <!--<select class="form-control" id="inputType39" data-key="type">-->
+                      <!--<option data-control="1" value="one">事务不需要缩略照片</option>-->
+                      <!--<option data-control="2" value="one">事务需要缩略照片</option>-->
+                    <!--</select>-->
+                  <!--</div>-->
+
+                <!--</div>&lt;!&ndash;end of col&ndash;&gt;-->
+                <!--<div class="col-sm-6">-->
+
+                  <!--<div class="input-group app-input-group" style="padding-left: 10px">-->
+                    <!--<span class="input-group-addon">缩略模式</span>-->
+
+                    <!--<input class="form-control" type="text"   />-->
+                  <!--</div>-->
+
+
+                <!--</div>&lt;!&ndash;end of col&ndash;&gt;-->
+
+
+
+              <!--</div>-->
+
+                <!--end of row-->
+
+
+
+              <div class="row">
+                <div class="col-sm-6">
+
+                  <div class="input-group app-input-group" style="padding-left: 10px">
+                    <span class="input-group-addon">替换限制</span>
+
+                    <select class="form-control" id="inputType42" data-key="type">
+
+                      <option data-control="1" > 照片提交后不允许替换</option>
+                      <option data-control="2" > 事务有效期内允许替换</option>
+                      <option data-control="3" > 事务有效期内允许替换1次</option>
+                      <!--<option data-control="4" > 照片提交7日内允许替换</option>-->
+                      <!--<option data-control="5" > 照片提交15日内允许替换</option>-->
+                      <!--<option data-control="6" > 照片提交30日内允许替换</option>-->
+                      <!--<option data-control="7" > 在指定日期前允许替换</option>-->
+                      <!--<option data-control="8" > 在指定日期前允许替换1次</option>-->
+
+                    </select>
+
+
+
+
+                  </div>
+
+                </div><!--end of col-->
+                <!--<div class="col-sm-6">-->
+
+                  <!--<div class="input-group app-input-group" style="padding-left: 10px">-->
+                    <!--<span class="input-group-addon">必须填</span>-->
+                    <!--<select class="form-control" id="inputType42" data-key="type">-->
+
+
+                      <!--<option data-control="1" >证照不需要比对认证</option>-->
+                      <!--<option data-control="2" >证照需要比对认证</option>-->
+
+                    <!--</select>-->
+                  <!--</div>-->
+
+
+                <!--</div>-->
+
+
+                  <!--end of col-->
+
+
+
+              </div><!--end of row-->
+
+              <!--<div class="row">-->
+                <!--<div class="col-sm-6">-->
+
+                  <!--<div class="input-group app-input-group" style="padding-left: 10px">-->
+                    <!--<span class="input-group-addon">采集限定</span>-->
+                    <!--<select class="form-control" id="inputType43" data-key="type">-->
+
+
+                      <!--<option data-control="1" >数码照相机</option>-->
+                      <!--<option data-control="2" >摄像头</option>-->
+                      <!--<option data-control="3" >单反数码相机</option>-->
+                      <!--<option data-control="4" >摄像机</option>-->
+                      <!--<option data-control="5" >扫描仪</option>-->
+
+                    <!--</select>-->
+                  <!--</div>-->
+
+                <!--</div>&lt;!&ndash;end of col&ndash;&gt;-->
+                <!--<div class="col-sm-6">-->
+
+                  <!--<div class="input-group app-input-group" style="padding-left: 10px">-->
+                    <!--<span class="input-group-addon">授权数据源</span>-->
+
+                    <!--<input class="form-control" type="text"   />-->
+                  <!--</div>-->
+
+
+                <!--</div>&lt;!&ndash;end of col&ndash;&gt;-->
+
+
+
+              <!--</div>-->
+
+                <!--end of row-->
+
+              <!--<div class="row">-->
+                <!--<div class="col-sm-6">-->
+
+                  <!--<div class="input-group app-input-group" style="padding-left: 10px">-->
+                    <!--<span class="input-group-addon">认证方式</span>-->
+                    <!--<select class="form-control" id="inputType45" data-key="type">-->
+                      <!--<option data-control="1" >与身份证照片比对</option>-->
+                      <!--<option data-control="2" >与蓝证近照比对</option>-->
+                      <!--<option data-control="3" >与身份证、蓝证近照比对</option>-->
+                    <!--</select>-->
+                  <!--</div>-->
+
+                <!--</div>-->
+
+                  <!--end of col-->
+                <!--<div class="col-sm-6">-->
+
+                  <!--<div class="input-group app-input-group" style="padding-left: 10px">-->
+                    <!--<span class="input-group-addon">对比阀值</span>-->
+
+                    <!--<input class="form-control" type="text"   />-->
+                  <!--</div>-->
+
+
+                <!--</div>-->
+
+                  <!--end of col-->
+
+
+
+              <!--</div>-->
+
+              <!--end of row-->
+
+            </div><!--end of container-->
+
+          </form>
+
+
+
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+        <!--<form class="form-horizontal">-->
+          <!--&lt;!&ndash;Row1&ndash;&gt;-->
+            <!--<div class="col-md-3">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">Photo Type</span>-->
+                <!--<select class="form-control" id="inputType" data-key="type">-->
+                  <!--<option value="two">Submit</option>-->
+                  <!--<option value="three">Button</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;   <div class="col-md-3 paddingright0 marginright0">-->
+                <!--<div class="input-group app-input-group">-->
+                    <!--<span class="input-group-addon">Pixel Size</span>-->
+                <!--</div>-->
+            <!--</div> &ndash;&gt;-->
+            <!--<div class="col-md-3">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--&lt;!&ndash; <span class="input-group-addon">Pixel Size</span> &ndash;&gt;-->
+                <!--<span class="input-group-addon">Height</span>-->
+                <!--<input type="text" min="0" max="300" value="1" class="form-control" id="photoheight">-->
+                <!--&lt;!&ndash; <select class="form-control" id="inputType" data-key="type">-->
+                    <!--<option value="two">Submit</option>-->
+                    <!--<option value="three">Button</option>-->
+                <!--</select> &ndash;&gt;-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-md-3">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">Width</span>-->
+                <!--<input type="text" min="0" max="300" value="1" class="form-control" id="photowidth">-->
+                <!--&lt;!&ndash;   <select class="form-control" id="inputType" data-key="type">-->
+                    <!--<option value="two">Submit</option>-->
+                    <!--<option value="three">Button</option>-->
+                <!--</select> &ndash;&gt;-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--&lt;!&ndash; </div> &ndash;&gt;-->
+
+          <!--&lt;!&ndash;Row2&ndash;&gt;-->
+            <!--<div class="col-md-4">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">Background Color</span>-->
+                <!--<div id="popupPicker"></div>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-md-2">-->
+              <!--<div class="row">-->
+
+                <!--<div class="col-md-12">-->
+                  <!--<div class="input-group app-input-group rgbvaluebox">-->
+                    <!--<span class="input-group-addon autofix-input-group-addon">R</span>-->
+                    <!--<input type="text" min="0" max="255" value="1" class="form-control" id="rvalue">-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+
+                <!--<div class="col-md-12">-->
+                  <!--<div class="input-group app-input-group rgbvaluebox">-->
+                    <!--<span class="input-group-addon autofix-input-group-addon">G</span>-->
+                    <!--<input type="text" min="0" max="255" value="1" class="form-control" id="gvalue">-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+
+                <!--<div class="col-md-12">-->
+                  <!--<div class="input-group app-input-group rgbvaluebox">-->
+                    <!--<span class="input-group-addon autofix-input-group-addon">B</span>-->
+                    <!--<input type="text" min="0" max="255" value="1" class="form-control" id="bvalue">-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--&lt;!&ndash; <div class="col-md-2">-->
+                <!--<div class="input-group app-input-group">-->
+                    <!--<span class="input-group-addon">Resolution</span>-->
+                    <!--<input type="text" min="0" max="1800" value="1" class="form-control" id="resolution">-->
+                    <!--<span class="input-group-addon">DPI</span>-->
+                <!--</div>-->
+            <!--</div> &ndash;&gt;-->
+
+            <!--<div class="col-md-3">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">Resolution</span>-->
+                <!--<input type="text" min="0" max="1800" value="1" class="form-control" id="resolution">-->
+                <!--&lt;!&ndash; <span class="input-group-addon">DPI</span> &ndash;&gt;-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--&lt;!&ndash; </div> &ndash;&gt;-->
+            <!--&lt;!&ndash;Row3&ndash;&gt;-->
+            <!--&lt;!&ndash; <div class="row"> &ndash;&gt;-->
+            <!--<div class="col-md-3">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">File Size</span>-->
+                <!--<input type="text" min="0" max="255" value="1" class="form-control" id="filesize">-->
+                <!--&lt;!&ndash;  <select class="form-control" id="inputType" data-key="type">-->
+                    <!--<option value="two">Submit</option>-->
+                    <!--<option value="three">Button</option>-->
+                <!--</select> &ndash;&gt;-->
+                <!--&lt;!&ndash; <span class="input-group-addon">KB</span> &ndash;&gt;-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-md-3">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">Photo Source</span>-->
+                <!--<select class="form-control" id="inputType" data-key="type">-->
+                  <!--<option value="two">Submit</option>-->
+                  <!--<option value="three">Button</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--&lt;!&ndash;Row4&ndash;&gt;-->
+            <!--<div class="col-md-3">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">Photo Provider</span>-->
+                <!--<select class="form-control" id="inputType" data-key="type">-->
+                  <!--<option value="two">Submit</option>-->
+                  <!--<option value="three">Button</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-md-3">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">Shooting Index</span>-->
+                <!--<select class="form-control" id="inputType" data-key="type">-->
+                  <!--<option value="two">Submit</option>-->
+                  <!--<option value="three">Button</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--&lt;!&ndash;Row5&ndash;&gt;-->
+            <!--<div class="col-md-3">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">Local upload control</span>-->
+                <!--<select class="form-control" id="inputType" data-key="type">-->
+                  <!--<option value="two">Submit</option>-->
+                  <!--<option value="three">Button</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-md-4">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">File format</span>-->
+                <!--<select class="form-control" id="inputType" data-key="type">-->
+                  <!--<option value="two">JPG</option>-->
+                  <!--<option value="three">PNG</option>-->
+                  <!--<option value="three">JPEG</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--&lt;!&ndash;Row6&ndash;&gt;-->
+            <!--<div class="col-md-4">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">Validation Req.</span>-->
+                <!--<select class="form-control" id="inputType" data-key="type">-->
+                  <!--<option value="two">Requires validation</option>-->
+                  <!--<option value="three">Button</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-md-4">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">Corrections Req.</span>-->
+                <!--<select class="form-control" id="inputType" data-key="type">-->
+                  <!--<option value="two">Requires correction</option>-->
+                  <!--<option value="three">Button</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--&lt;!&ndash;Row7&ndash;&gt;-->
+            <!--<div class="col-md-4">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">Photo watermark</span>-->
+                <!--<select class="form-control" id="inputType" data-key="type">-->
+                  <!--<option value="two">Water mark needed</option>-->
+                  <!--<option value="three">Button</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-md-4">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">Replacement restriction</span>-->
+                <!--<select class="form-control" id="inputType" data-key="type">-->
+                  <!--<option value="two">Allow with in valid period</option>-->
+                  <!--<option value="three">Button</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--&lt;!&ndash;Row8&ndash;&gt;-->
+            <!--<div class="col-md-4">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">Corporate record thumbnail</span>-->
+                <!--<select class="form-control" id="inputType" data-key="type">-->
+                  <!--<option value="two">Submit</option>-->
+                  <!--<option value="three">Button</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-md-4">-->
+              <!--<div class="input-group app-input-group">-->
+                <!--<span class="input-group-addon">Verification Req.</span>-->
+                <!--<select class="form-control" id="inputType" data-key="type">-->
+                  <!--<option value="two">Submit</option>-->
+                  <!--<option value="three">Button</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--&lt;!&ndash; <input type="text"></input> &ndash;&gt;-->
+
+        <!--</form>-->
+      </div>
+      <script>
+        // $('picker').click(function() {
+        //     $('picker').colpickShow();
+        // });
+
+
+  
+    $('.max-icon').click(function(e){
+      console.log('test');
+      e.preventDefault();
+       $('#mxicon').toggleClass("mxcon");   
+
+    })
+  
+      </script>
+    </div><!--end of modal body -->
+
+
+<!--     <div class="modal-footer  fancyBoxGrayFooter">
+      <div class="footer_operation_container">
+        <div class="grayButton formPreview" data-dismiss="modal"><span>取消</span></div>
+        <div class="blueButton formPreview " data-action-click='saveServicePoint'><span>确认</span></div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+ -->
+
+  </div>
+</div>

@@ -1,0 +1,9 @@
+{
+    "name" : "ws",
+    "description": "Web Server Simulator Using Node.js",
+    "version" : "0.1.0",
+    "private": true,
+    "dependencies" : {
+    "express": "^4.8.8"
+       }
+}

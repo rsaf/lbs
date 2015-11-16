@@ -1,0 +1,54 @@
+<div class="lan_table  col-6-table">
+  <div class="lan_row">
+    <span class="lan_cell Swap">响应编号</span>
+    <span class="lan_cell Swap">事务名称</span>
+    <span class="lan_cell Swap">发布单位</span>
+    <span class="lan_cell Swap">提交日期</span>
+    <span class="lan_cell Swap">响应状态</span>
+    <span class="lan_cell Swap">操作</span>
+  </div>
+  {{#items}}
+  <div class="lan_row">
+    <span class="lan_cell">{{rc}}</span>
+    <span class="lan_cell">{{dp.ac.abd.an}}</span>
+    <span class="lan_cell">{{pcn}}</span>
+    <span class="lan_cell">{{shortClose}}</span>
+    <span class="lan_cell">{{getCode}}</span>
+    <span class="lan_cell">
+      {{#rc}}<!-- only show if there is data and this row isn't padding (empt object) -->
+      <ul class="lan_table_more">
+
+          <li class="">
+              <a>选项 </a>
+              <ul>
+                  <li><a data-action-click="response:list:details:view" data-code="{{rc}}"> 详细 </a></li>
+                {{^isPayed}}<li>   <a href="#/processes/activities/application/{{rc}}" target="_blank"> 响应 </a></li>{{/isPayed}}
+                  <!--<li><a >委托</a></li>-->
+                  <li><a data-action-click='response:delete'
+                         data-id='{{_id}}'> 删除</a></li>
+
+                  <li><a href="#/details/public/activitydetail/{{acn}}" target="_blank"> 详情</a></li>
+
+              </ul>
+          </li>
+      </ul>
+      {{/rc}}
+    </span>
+
+
+  </div>
+
+  {{/items}}
+  <div class="spinnerPlaceHolder "></div>
+
+</div><!--end lan_table -->
+
+
+<nav class="paginationContainer">
+
+
+</nav> <!-- /pagging -->
+
+
+
+

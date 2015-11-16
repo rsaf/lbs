@@ -1,0 +1,27 @@
+    <div class="lan_table col-5-table">
+              <div class="lan_row">
+                <span class="lan_cell Swap">服务代码</span>
+                <span class="lan_cell Swap">服务名称</span>
+                <span class="lan_cell Swap">服务商</span>
+                 <span class="lan_cell Swap">服务价格</span>
+                <span class="lan_cell Swap">操作</span>
+              </div>
+            {{#items}}
+              <div class="lan_row">
+                <span class="lan_cell">{{ui.serviceCode}}</span>
+                <span class="lan_cell">{{ui.serviceName}}</span>
+                <span class="lan_cell">{{ui.servicePointName}}</span>
+                <span class="lan_cell">{{ui.price}}</span>
+                <span class="lan_cell">
+                    <!--@todo: remove the item when button is clicked-->
+                  <button 
+                      type="button" 
+                      class="center-block btn-sm btn btn-primary"
+                      data-id='{{_id}}'
+                      data-action-click='publishing:activity:remove:query'>移除</button>
+                </span>
+              </div>
+            {{/items}}
+                  
+              
+      </div><!--end lan_table -->

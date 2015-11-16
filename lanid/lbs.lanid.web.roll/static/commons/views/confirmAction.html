@@ -1,0 +1,48 @@
+
+
+<div class="modal-dialog  x-smallModal">
+  <div class="modal-content">
+    <div class="modal-header modal-header-primary blueHeader ">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+      <h4 class="modal-title">{{data.actionName}}</h4>
+    </div>
+    <div class="modal-body">
+
+
+
+      <div class="ListUploadRadios text-center center-block">
+          <span class="deleteConfirmWarningIcon"> <img src="/commons/images/warningIcon.png"></span>   
+          <span class="deleteConfirmText">
+              确认{{data.actionName}}?
+          </span>
+      </div>
+      <div class="ListUploadRadios text-center center-block">
+        {{#data.itemName}}
+        <p>
+            名称 : {{data.itemName}}
+        </p>
+        {{/data.itemName}}
+
+        {{#data.code}}
+        <p>
+            网点:{{data.code}}
+        </p>
+        {{/data.code}}
+      </div>
+    </div>
+
+    <!----/inserted part---->
+
+    <div class="modal-footer  fancyBoxGrayFooter">
+
+      <div class="footer_operation_container">
+        <div class="grayButton formPreview " data-dismiss="modal"><span>取消</span></div>
+        <div class="blueButton formPreview " data-action-click="general:action:confirmed"><span>确认</span></div>
+
+        <div class="clearfix"></div>
+      </div>
+
+
+    </div>
+  </div>
+</div>

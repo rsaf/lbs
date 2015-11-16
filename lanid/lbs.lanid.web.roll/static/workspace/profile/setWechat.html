@@ -1,0 +1,53 @@
+
+
+<div class="modal-dialog  smallModal">
+    <div class="modal-content">
+        <div class="modal-header modal-header-primary blueHeader ">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span
+                    style="color:white;">×</span></button>
+            <h4 class="modal-title">绑定微信</h4>
+        </div>
+        <div class="modal-body">
+
+
+
+            <div class="ListUploadRadios center-block">
+
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="linkUserWechat" class="col-sm-3 control-label">微信账号</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="linkUserWechat" placeholder="请输入微信账号"  value="{{renderWechatValue}}" >
+                        </div>
+                    </div>
+
+                    <div class="form-group hide">
+                        <label for="setWechatFeedbackBOx" class="col-sm-3 control-label"> </label>
+                        <div class="col-sm-6">
+                            <span class="form-control" id="setWechatFeedbackBOx" style="color: red"></span>
+                        </div>
+
+
+                    </div>
+                </form>
+
+            </div>
+
+
+        </div><!--end of modal body--->
+        <div class="modal-footer  fancyBoxGrayFooter">
+
+
+            <div class="footer_operation_container">
+                <div class="grayButton formPreview" data-dismiss="modal"><span>取消</span></div>
+                <div class="blueButton formPreview " data-action-click="contacts:set:WeChat:success" ><span>确认</span></div>
+
+
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>

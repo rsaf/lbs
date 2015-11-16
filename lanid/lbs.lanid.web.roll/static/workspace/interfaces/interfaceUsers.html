@@ -1,0 +1,45 @@
+                     
+
+
+<div class="lan_table col-5-table allUsersTable">
+  <div class="lan_row">
+    <span class="lan_cell Swap">用户名</span>
+    <span class="lan_cell Swap">创建者</span>
+    <span class="lan_cell Swap">创建时间</span>
+    <span class="lan_cell Swap">账户状态</span>
+    <span class="lan_cell Swap">操作</span>
+  </div>
+  {{#items}}
+  <div class="lan_row">
+    <span class="lan_cell">
+      {{#imageurl}}
+      <div class="pull-left" ><img src="{{imageurl}}" ></div>
+      {{/imageurl}}
+      <div class="pull-left">{{field1}}</div>
+    </span>
+    <span class="lan_cell">{{field2}}</span>
+    <span class="lan_cell">{{field3}}</span>
+    <span class="lan_cell">{{field4}}</span>
+    <span class="lan_cell">
+      {{#field1}}<!-- show only if current record is data, not if it's a padding row (empty object) -->
+      <ul class="lan_table_more">
+        <li ><a > 详细 </a>
+          <ul>
+            <li><a >取消</a></li>
+            <li><a data-action-click='interface:delete'
+                   data-id='{{_id}}'> 删除</a></li>
+          </ul>
+        </li>
+      </ul>
+      {{/field1}}
+    </span>
+  </div>
+  {{/items}}
+</div>
+
+  <nav class="paginationContainer">
+
+
+  </nav><!-- /pagination  -->
+
+

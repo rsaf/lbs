@@ -1,0 +1,40 @@
+  
+<div class="container_top">
+  <div id="directory_indicator"><span id="root_folder">用户管理</span><span id="sub_folder">{{currentPage}}</span> </div>
+
+  <!--<form class="right_containter_top_form">-->
+    <!--<span>显示</span>-->
+    <!--<div class="business_task_select">-->
+      <!--<select>-->
+        <!--<option value="all">所有表单</option>-->
+        <!--<option value="one">待办事务</option>-->
+        <!--<option value="two">已提交事务</option>-->
+        <!--<option value="three">已完成事务</option>-->
+      <!--</select>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;<div class="blueButton pull-right blueButton-sm"> <span data-action-click="users:create:new">创建用户</span></div>&ndash;&gt;-->
+  <!--</form>-->
+
+    <form class="right_containter_top_form tableHeaderForm">
+
+        <div class="fin_date_picker">
+            <span>日期 </span>
+            <input type="date" name="startdate" id="startdate">
+            <em>-</em>
+            <input type="date" name="enddate" id="enddate">
+        </div>
+
+        <div class="form_right_search">
+            <input type="text" id="searchtext" placeholder="      用户名" size="32">
+            <input type="submit" name="financesearch" id="financesearch" value="查询" data-action-click="pagination:search" onclick="return false;">
+        </div>
+
+    </form>
+
+
+
+
+</div><!---end of container_top-->
+
+<div class="container_bottom">
+</div>

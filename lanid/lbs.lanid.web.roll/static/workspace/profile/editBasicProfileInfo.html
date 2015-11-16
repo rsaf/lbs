@@ -1,0 +1,55 @@
+
+    <ul >
+        <li>
+            <span class="">用户名 : </span>
+            <span>{{profile.basic.userName.value}}</span>
+        </li>
+        <li>
+            <span>性别:</span>
+            <label class="radio-inline lan_margin_top_5">
+                <input  data-bind="basic.gender.value" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="男"> 男
+            </label>
+            <label class="radio-inline lan_margin_top_5">
+                <input data-bind="basic.gender.value" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="女"> 女
+            </label>
+
+        </li>
+        <li>
+            <span>出生日期 : </span>
+            <span><input data-bind="basic.dateOfBirth.value" style="height: 30px" type="date" placeholder="1990/10/20"></span>
+        </li>
+    </ul>
+
+    <ul class="editProfileBox">
+        <li>
+            <span>国家 : </span>
+
+            <span>
+                <select data-bind="basic.country.value" class="selectpicker">
+                <option>中国</option>
+
+            </select>
+            </span>
+        </li>
+        <li>
+            <span>户口地 : </span>
+             <span>
+                <select data-bind="basic.placeOfBrith.value" class="selectpicker">
+
+                    {{#areas}}  <option>{{省及直辖市}}</option>{{/areas}}
+
+                </select>
+            </span>
+        </li>
+
+        <li>
+            <span>现居地 : </span>
+              <span>
+                <select data-bind="basic.currentResidence.value" class="selectpicker">
+                    {{#areas}}  <option>{{省及直辖市}}</option>{{/areas}}
+                </select>
+            </span>
+
+        </li>
+    </ul>
+    <span class="edit-info" data-action-click="basic:save">保存信息</span>

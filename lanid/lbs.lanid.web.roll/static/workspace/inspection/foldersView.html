@@ -1,0 +1,65 @@
+<div class="detailPageUserIntroBox noMargin">
+  <div class="detailPageUserIntroBoxHeader">
+
+    共有{{total}}项
+
+  </div>
+  <div class="detailPageUserIntroBoxBody photoFolders ">
+
+
+    <div class="idPhotoGaleryArrowContainerLeft"
+         data-direction='left'
+         data-action-click='inspection:list:movePage'></div> 
+    <div class="idPhotoGaleryArrow  left"
+         data-direction='left'
+         data-action-click='inspection:list:movePage'></div>
+
+    <div id="idphotoGaleryContain" class="idphotoAlbum galeryInIntroBox">
+
+
+
+      <span class="photoframeRow">
+
+            {{#list}}
+        <span class="photoframeContainer ">
+            {{#_id}}
+
+          <span class="siglephtoframe withSelection"
+                data-action-click='inspection:bbqUpdate'
+                data-linkto="/workspace/inspection/{{settings.filter}}/folder/{{photos.0}}">
+            <span class="siglephotoImage"><img class="center-block" src="../../commons/images/inspectionsFolder.jpg" alt="photo">  </span>
+            <span class="text-center" >
+              {{_id}}
+
+
+            </span><!--end of siglephotoAction -->
+
+          </span><!--end of siglephtoframe-->
+
+        {{/_id}}
+       </span><!--end of photoframeContainer--->
+      {{#row}}
+      <div class="clearfix"></div>
+      </span><!--end of photo frame row--->
+      <span class="photoframeRow">
+       {{/row}}
+        {{/list}}
+      </span><!--end of photo frame row--->
+
+
+    </div> <!--end of idphotoGalerycontain-->
+
+    <div class="idPhotoGaleryArrowContainerRight"
+         data-direction='right'
+         data-action-click='inspection:list:movePage'></div>
+    <div class="idPhotoGaleryArrow  right"
+         data-direction='right'
+         data-action-click='inspection:list:movePage'></div>
+
+    <div class="clearfix"></div>
+
+  </div>   <!---end of detailPageUserIntroBoxBody-->
+
+  <div class="clearfix"></div>
+</div> <!--/detailPageUserIntroBox--->
+

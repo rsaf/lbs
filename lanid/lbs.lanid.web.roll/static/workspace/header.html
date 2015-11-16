@@ -1,0 +1,78 @@
+            
+      			
+             <div id="logo" class="not_home_logo"
+                  data-action-click='workspace:header:bbqUpdate'
+                  data-linkto='/workspace/welcome'>  </div>
+            <!-- <a href="#/workspace/welcome"><div id="locatiion"><div id="location_text">上海 <span>切换所在城市</span></div></div></a>-->
+            <div id="top_right_info_and_search">
+             
+                <div id="top_right_info">
+                 
+                
+                <ul>
+                     <li><a href="/" data-action-click='workspace:header:logout'>安全退出</a></li>
+                    <li id="settings_tab">设置
+                     	  <ul>
+                             <!--<li><a data-action-click="workspace:header:openSettings"> 平台功能</a></li>-->
+                             <li><a href="#/home/forgetpw/resetpassword">修改密码</a></li>
+                       	 </ul>
+                      </li>
+                     <li>{{user.loginName}}</li>
+                     <li>欢迎</li>
+                 </ul>
+                 <div id="clearFix"></div>
+         		
+           		
+            </div><!---top right info -->
+         
+            
+            
+            
+            
+            
+             <div id="search_container"> 
+                <div class="mobile_search_icon2">
+                    <a href="#/home/detailPages/search/all">
+                        <img src="../commons/images/search-white.png" style="width:35px;">
+                        </a>
+                      </div>
+             <div id="search">
+              
+               <form action="" method="get">
+              
+            	<div id="search_text_field">
+
+                    <!--<a href="#/home/detailPages/search">-->
+                    <a data-action-click="search:by:key">
+                     <span class="glyphicon glyphicon-search search_icon  btn btn-default specialBlue lan_border_right_none"  type="button"  style="margin-top:-1px" >
+                         </span>
+                    </a>
+               <input type="search" id="searchValueHolder" name="lan_search"  placeholder="编号/名称" class="search-id">
+              </div>
+
+
+
+
+                   <div id="headerFileterSelectContainer">
+                       <select class="selectpicker">
+
+                           <option value="all">全部</option>
+                           <option value="corporate">单位</option>
+                           <option value="servicepoint">网点</option>
+                           <option value="activity">事务</option>
+
+                       </select>
+
+                   </div>
+
+                </form>
+  
+                         
+            
+             
+                 </div><!--end of search-->
+                 <!-- <div id="search_botom_border"></div> -->
+             
+             </div><!--/search container-->
+            </div>  <!--end of top_right_info_and_search-->
+      

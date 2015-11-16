@@ -1,0 +1,163 @@
+
+
+<div class="detailPageUserIntroBox noMargin">
+    <div class="detailPageUserIntroBoxHeader">
+    {{#helpers.showAction}}
+        <!--<span> <input type="checkbox"></span>-->
+        <!--<span>本页全选</span>-->
+        <span>总共{{total}}页</span>
+    {{/helpers.showAction}}
+    </div>
+    <div class="detailPageUserIntroBoxBody">
+
+
+        <div class="idPhotoGaleryArrowContainerLeft"
+             data-direction='left'
+             data-action-click='inspection:list:movePage'></div>
+        <div class="idPhotoGaleryArrow  left"
+             data-direction='left'
+             accesskey=""data-action-click='inspection:list:movePage'></div>
+
+        <div id="idphotoGaleryContain" class="idphotoAlbum galeryInIntroBox">
+          <span class="photoframeRow">
+          
+            {{#list}}
+            {{#page}}
+            <span class="photoframeContainer">
+              {{#urlm}}
+              <span class="siglephtoframe withSelection">
+                <span class="siglephotoImage">
+                    <div class="lan-arrow-frame   {{helpers.photoHoverBoxDirection}}">
+                        <div class="hoverPictureContainer   pull-left">
+                            <img src="{{uri}}">
+                        </div>
+                        <div class="hoverPictureInfoContainer   pull-right">
+                           <div class="hoverPictureInfoContent lan_gray_border center-block" style="font-size: 0.9em;">
+
+                                   <h2 class="text-center under lan_margin_10"  style="overflow: hidden;"><u> 初始照片属性</u></h2>
+
+                                   <dl class="dl-horizontal ">
+                                       <dt>事务名称:</dt> <dd>{{can}}</dd>
+                                       <div class="clearfix"></div>
+                                       <!--<dt>用户ID: </dt> <dd>LZ00002198465</dd>-->
+                                       <!--<dt>拍摄日期:</dt>  <dd>2014-08-06</dd>-->
+                                       <dt>上传提起:</dt>  <dd>{{#date}}{{ct.cd}}{{/date}}</dd>
+                                       <div class="clearfix"></div>
+                                       <dt>照片大小:</dt> <dd>{{pp.ofs}}</dd>
+                                       <div class="clearfix"></div>
+                                       <dt>照片尺寸:</dt> <dd>{{pp.ifr}}</dd>
+                                       <div class="clearfix"></div>
+                                       <!--<dt>相机型号:</dt> <dd>佳能550D</dd>-->
+                                       <!--<dt>备注:</dt>  <dd>无</dd>-->
+                                   </dl>
+
+
+                               <div class="clearfix"></div>
+
+                               <h2 class="text-center under lan_margin_10" style="overflow: hidden;"><u> 目标照片属性</u></h2>
+
+                               <dl class="dl-horizontal">
+                                   <dt>像素尺寸:</dt> <dd>{{tpp.ifr}}</dd>
+                                   <div class="clearfix"></div>
+                                   <dt>背景颜色:</dt> <dd>{{tpp.bc}}</dd>
+                                   <div class="clearfix"></div>
+                                   <!--<dt>证照来源:</dt > <dd>自助机-K</dd>-->
+                                   <dt>图片格式:</dt> </dt> <dd>{{tpp.fm}}</dd>
+                                   <div class="clearfix"></div>
+                                   <dt>分辨率:</dt> </dt> <dd>{{tpp.rs}}</dd>
+                                   <div class="clearfix"></div>
+                                   <dt>文件大小:</dt> </dt> <dd> {{tpp.ofs}}</dd>
+                                   <div class="clearfix"></div>
+                               </dl>
+
+                               <div class="clearfix"></div>
+
+
+                           </div>
+
+                            <div class="hoverPictureActionButton">
+
+                    <span class="siglephotoAction gray_bg center-block" >
+
+                    <span class=" qualified"  ><input class='inspection' data-action-change="inspection:provide:feedback" data-type="qualified" type="radio"  data-id="{{_id}}"  name='{{helpers.someId}}'><span>合格</span></span>
+                    <span class=" unqualified"  > <input data-action-change="inspection:provide:feedback" class='inspection' data-type="unqualified" type="radio"  data-id="{{_id}}"  name='{{helpers.someId}}'><span>不合格</span></span>
+                    <div class="clearfix"></div>
+                </span><!--end of siglephotoAction -->
+
+
+
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div><!--end of lan-arrow-frame-->
+
+                  <img src="{{urlm}}" alt="photo" style="display: block;margin: auto">
+                </span>
+
+
+                  {{#helpers.showDetail}}
+
+                   <dl class="dl-horizontal photoSizeInfo">
+                       <dt>照片尺寸:</dt><dd>{{pp.ifr}}</dd>
+                       <dt>文件大小:</dt><dd>{{pp.ofs}}</dd>
+
+                   </dl>
+
+                  {{/helpers.showDetail}}
+
+                  {{#helpers.showAction}}
+                <span class="siglephotoAction gray_bg" >
+
+                    <span class=" qualified"  ><input class='inspection' data-action-change="inspection:provide:feedback" data-type="qualified" type="radio" data-id="{{_id}}" name='{{helpers.someId}}'><span>合格</span></span>
+                    <span class=" unqualified"  > <input data-action-change="inspection:provide:feedback" class='inspection' data-type="unqualified" type="radio" data-id="{{_id}}" name='{{helpers.someId}}'><span>不合格</span></span>
+                    <div class="clearfix"></div>
+                </span><!--end of siglephotoAction -->
+                {{/helpers.showAction}}
+
+                  <!--<span class="siglephotoAction text-center" >-->
+                    <!--{{!category}}-->
+                  <!--</span>-->
+
+                  <!--end of siglephotoAction -->
+
+              </span><!--end of siglephtoframe-->
+            {{/urlm}}
+            </span><!--end of photoframeContainer--->
+            {{#row}}
+              <div class="clearfix"></div>
+              </span>
+              <span class="photoframeRow">
+            {{/row}}
+            {{/page}}
+            {{/list}}
+      <div class="clearfix"></div>
+      </span><!--end of photo frame row--->
+      <div class="clearfix"></div>
+
+
+        </div> <!--end of idphotoGalerycontain-->
+
+        <div class="idPhotoGaleryArrowContainerRight"
+            data-direction='right'
+            data-action-click='inspection:list:movePage'></div>
+        <div class="idPhotoGaleryArrow  right"
+         data-direction='right'
+         data-action-click='inspection:list:movePage'></div>
+
+
+
+
+        <div class="clearfix"></div>
+
+
+
+    </div>   <!---end of detailPageUserIntroBoxBody-->
+
+
+    <div class="clearfix"></div>
+</div> <!--/detailPageUserIntroBox--->
+
+
+
+

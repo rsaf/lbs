@@ -1,0 +1,708 @@
+    
+        
+        
+        
+        
+
+            <div class="container_top">
+            <div id="directory_indicator"><span id="root_folder">事务管理</span><span id="sub_folder">新建事务</span> </div>
+
+            </div><!--end of container_top-->
+                     
+          <div class="container_bottom fluid-container">
+          
+          <form class="form-horizontal lan_push_down" role="form">
+          
+         <div class="row">
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">事务编号</label>
+                <div class="col-sm-7">
+                  <span
+                    data-bind='ba.abd.ac'></span>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">事务类别</label>
+                    <div class="col-sm-7">
+                     <select class="selectpicker"
+                             data-bind="ba.abd.at" >
+                            <option>选择</option>
+                            {{#activityTypes}}
+                            <option value="{{val}}">{{text}}</option>
+                            {{/activityTypes}}
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+
+
+
+
+             <div class="col-sm-4">
+
+                 <div class="form-group">
+                     <label for="inputEmail3" class="col-sm-5 control-label">事务有效开始日期</label>
+                     <div class="col-sm-7">
+                         <input type="date" data-bind="ba.abd.asd" class="form-control" placeholder="前台显示名称" >
+
+                     </div>
+                 </div>
+
+             </div>
+
+
+         <!--<div class="col-sm-4">-->
+         <!---->
+            <!--<div class="form-group">-->
+                <!--<label for="inputEmail3" class="col-sm-5 control-label">事务前台显示限制</label>-->
+                <!--<div class="col-sm-7">-->
+                  <!--<select class="selectpicker" data-bind="ba.abd.vc">-->
+                            <!--<option></option>-->
+                            <!--<option value="">首页前台无条件显示可见</option>-->
+                            <!--<option value="">仅登录用户可见</option>-->
+                            <!--<option value="">仅实名用户登录可见</option>-->
+                            <!--<option value="">仅事务名单内用户登录可见</option>-->
+                          <!--</select>-->
+                <!--</div>-->
+              <!--</div>-->
+         <!---->
+         <!--</div>-->
+             <!--end of col-->
+         
+         
+         
+         </div><!--end of row--> 
+         
+         
+         
+               <div class="row">
+           <div class="col-sm-4">
+         
+            <div class="form-group ">
+                <label for="inputEmail3" class="col-sm-5 control-label">事务名称</label>
+                <div class="col-sm-7">
+                  <input type="text" data-bind="ba.abd.an" class="form-control" placeholder="请输入事务名称" >
+
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group ">
+                <label for="inputEmail3" class="col-sm-5 control-label">事务发布状态</label>
+                    <div class="col-sm-7">
+                     <select class="selectpicker"
+                             data-bind="ba.abd.aps" disabled="true">
+                            <option>选择</option>
+                            {{#publishingStatus}}
+                              <option value="{{val}}">{{text}}</option>
+                            {{/publishingStatus}}
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+
+                   <div class="col-sm-4">
+
+                       <div class="form-group ">
+                           <label for="inputEmail3" class="col-sm-5 control-label">事务有效截止日期</label>
+                           <div class="col-sm-7">
+                               <input type="date" data-bind="ba.abd.acd" class="form-control" placeholder="事务有效截止日期" >
+
+                           </div>
+                       </div>
+
+                   </div>
+
+         <!--<div class="col-sm-4">-->
+         <!---->
+            <!--<div class="form-group">-->
+                <!--<label for="inputEmail3" class="col-sm-5 control-label">事务结果单位审核</label>-->
+                <!--<div class="col-sm-7">-->
+                           <!--<select class="selectpicker"-->
+                                   <!--data-bind="ba.abd.arv">-->
+                            <!--<option></option>-->
+                            <!--<option value="">需要单位审核</option>-->
+                            <!--<option value="">不需要单位审核</option>-->
+                          <!--</select>-->
+                <!--</div>-->
+              <!--</div>-->
+         <!---->
+         <!--</div>-->
+                   <!--end of col-->
+         
+         
+         
+         </div><!--end of row--> 
+           <div class="row">
+
+        <div class="col-sm-4">
+            <div class="form-group ">
+                <label  class="col-sm-5 control-label">响应人数</label>
+                <div class="col-sm-7">
+                    <input type="number" class="form-control"  data-bind="ba.arc.mr">
+                    <span class=""></span>
+                </div>
+            </div>
+         </div>
+
+                   <div class="col-sm-4">
+
+                       <div class="form-group ">
+                           <label for="inputEmail3" class="col-sm-5 control-label">收费方式</label>
+                           <div class="col-sm-7">
+                               <select class="selectpicker" data-bind="ba.abd.apm">
+
+                                   {{#paymentMethod}}
+                                       <option val="{{val}}">{{text}}</option>
+                                   {{/paymentMethod}}
+
+
+                               </select>
+                           </div>
+                       </div>
+
+                   </div>
+
+
+
+
+               <div class="col-sm-4">
+
+                   <div class="form-group ">
+                       <label for="inputEmail3" class="col-sm-5 control-label">响应用户性质：</label>
+                       <div class="col-sm-7">
+
+                           <select class="selectpicker" data-bind="ba.abd.ul">
+                               {{#userLimits}}
+                               <option val="{{val}}">{{text}}</option>
+                               {{/userLimits}}
+                           </select>
+
+                       </div>
+                   </div>
+
+               </div>
+
+
+
+         <!--<div class="col-sm-4">-->
+         <!---->
+                <!--<div class="form-group">-->
+                <!--<label for="inputEmail3" class="col-sm-5 control-label">前台显示名称</label>-->
+                    <!--<div class="col-sm-7">-->
+                  <!--<input type="text" data-bind="ba.abd.fdn" class="form-control" placeholder="前台显示名称" >-->
+                <!--</div>-->
+              <!--</div>-->
+         <!---->
+         <!--</div>-->
+               <!--end of col-->
+         <!--<div class="col-sm-4">-->
+         <!---->
+            <!--<div class="form-group">-->
+                <!--<label for="inputEmail3" class="col-sm-5 control-label">事务有效开始日期</label>-->
+                    <!--<div class="col-sm-7">-->
+                    <!--<input type="date" data-bind="ba.abd.asd" class="form-control" placeholder="前台显示名称" >-->
+                <!--</div>-->
+              <!--</div>-->
+         <!---->
+         <!--</div>-->
+               <!--end of col-->
+         <!--<div class="col-sm-4">-->
+         <!---->
+            <!--<div class="form-group">-->
+                <!--<label for="inputEmail3" class="col-sm-5 control-label">事务信息校对</label>-->
+                <!--<div class="col-sm-7">-->
+                           <!--<select class="selectpicker"-->
+                                   <!--data-bind="ba.abd.aiv">-->
+                            <!--<option></option>-->
+                            <!--<option value="">需要个人校对响应结果</option>-->
+                            <!--<option value="">不需要个人校对响应结果</option>-->
+                          <!--</select>-->
+                <!--</div>-->
+              <!--</div>-->
+         <!---->
+         <!--</div>-->
+               <!--end of col-->
+         
+         
+        </div><!--end of row--> 
+        
+       
+             <!--<div class="row space_down_10">-->
+         <!--<div class="col-sm-4">-->
+
+                <!--<div class="form-group">-->
+                <!--<label for="inputEmail3" class="col-sm-5 control-label">收费方式</label>-->
+                    <!--<div class="col-sm-7">-->
+                     <!--<select class="selectpicker" data-bind="ba.abd.apm">-->
+                       <!--<option></option>-->
+                       <!--{{!#paymentMethod}}-->
+                       <!--<option val="{{!val}}">{{!text}}</option>-->
+                       <!--{{!/paymentMethod}}-->
+                          <!--</select>-->
+                <!--</div>-->
+              <!--</div>-->
+
+         <!--</div>-->
+                 <!--end of col-->
+         <!--<div class="col-sm-4">-->
+         <!---->
+            <!--<div class="form-group">-->
+                <!--<label for="inputEmail3" class="col-sm-5 control-label">事务有效截止日期</label>-->
+                    <!--<div class="col-sm-7">-->
+                    <!--<input type="date" data-bind="ba.abd.acd" class="form-control" placeholder="事务有效截止日期" >-->
+                <!--</div>-->
+              <!--</div>-->
+         <!---->
+         <!--</div>-->
+                 <!--end of col-->
+         <!--<div class="col-sm-4">-->
+         <!---->
+            <!--<div class="form-group">-->
+                <!--<label for="inputEmail3" class="col-sm-5 control-label">发布行为类型</label>-->
+                <!--<div class="col-sm-7">-->
+                           <!--<select class="selectpicker"-->
+                                   <!--data-bind="ba.abd.apt">-->
+                            <!--<option></option>-->
+                            <!--{{!#publishingType}}-->
+                            <!--<option value="{{!val}}">{{!text}}</option>-->
+                            <!--{{!/publishingType}}-->
+                          <!--</select>-->
+                <!--</div>-->
+              <!--</div>-->
+         <!---->
+         <!--</div>-->
+                 <!--end of col-->
+         
+         
+        <!--</div>-->
+            <!--end of row-->
+        
+     <!--<div class="lan_push_down10 lan_line-height" >事务清分方式</div>-->
+     <!--<div class="lan_gray_border lan_padding_10 ">-->
+         <!--&lt;!&ndash;<div class="row space_down_10">&ndash;&gt;-->
+         <!--&lt;!&ndash;&ndash;&gt;-->
+           <!--&lt;!&ndash;<span class="lan_hpadding_10  lan_line-height point push_right" >清分参与方</span> &ndash;&gt;-->
+             <!--&lt;!&ndash;<label class="checkbox-inline ">&ndash;&gt;-->
+              <!--&lt;!&ndash;<input type="checkbox" id="inlineCheckbox1" value="option1"> 蓝证平台&ndash;&gt;-->
+            <!--&lt;!&ndash;</label>&ndash;&gt;-->
+            <!--&lt;!&ndash;<label class="checkbox-inline">&ndash;&gt;-->
+              <!--&lt;!&ndash;<input type="checkbox" id="inlineCheckbox2" value="option2"> 事务单位&ndash;&gt;-->
+            <!--&lt;!&ndash;</label>&ndash;&gt;-->
+            <!--&lt;!&ndash;<label class="checkbox-inline">&ndash;&gt;-->
+              <!--&lt;!&ndash;<input type="checkbox" id="inlineCheckbox3" value="option3">服务商&ndash;&gt;-->
+            <!--&lt;!&ndash;</label>&ndash;&gt;-->
+         <!--&lt;!&ndash;</div>&ndash;&gt;-->
+         <!--<div class="lan_space_down"></div>-->
+           <!--<div class="row ">-->
+         <!--&lt;!&ndash;<div class="col-sm-4">&ndash;&gt;-->
+         <!--&lt;!&ndash;&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+                <!--&lt;!&ndash;<label for="inputEmail3" class="col-sm-5 control-label">清分计算方式</label>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="col-sm-7">&ndash;&gt;-->
+                     <!--&lt;!&ndash;<select class="selectpicker">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option>选择</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option>1</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option>2</option>&ndash;&gt;-->
+                          <!--&lt;!&ndash;</select>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--&lt;!&ndash;</div>&ndash;&gt;-->
+         <!--&lt;!&ndash;&ndash;&gt;-->
+         <!--&lt;!&ndash;</div>&lt;!&ndash;end of col&ndash;&gt;&ndash;&gt;-->
+         <!--<div class="col-sm-4">-->
+         <!---->
+            <!--<div class="form-group lan_margin_bottom_0">-->
+                <!--<label for="inputEmail3" class="col-sm-5 control-label">清分条件</label>-->
+                    <!--<div class="col-sm-7">-->
+                     <!--<select class="selectpicker"-->
+                             <!--data-bind="ba.ars.st">-->
+                       <!--<option></option>-->
+                       <!--{{#splitting}}-->
+                       <!--<option value="{{val}}">{{text}}</option>-->
+                       <!--{{/splitting}}-->
+                      <!--</select>-->
+                <!--</div>-->
+              <!--</div>-->
+         <!---->
+         <!--</div>&lt;!&ndash;end of col&ndash;&gt;-->
+         <!--<div class="col-sm-4">-->
+         <!---->
+            <!--<div class="form-group lan_margin_bottom_0">-->
+                <!--<label for="inputEmail3" class="col-sm-5 control-label">清分时间</label>-->
+                <!--<div class="col-sm-7">-->
+                           <!--<select class="selectpicker"-->
+                                   <!--data-bind="ba.ars.sp">-->
+                             <!--<option></option>-->
+                             <!--{{#splittingPhase}}-->
+                             <!--<option value="{{val}}">{{text}}</option>-->
+                             <!--{{/splittingPhase}}-->
+                          <!--</select>-->
+                <!--</div>-->
+              <!--</div>-->
+         <!---->
+         <!--</div>&lt;!&ndash;end of col&ndash;&gt;-->
+         <!---->
+         <!---->
+        <!--</div>&lt;!&ndash;end of row&ndash;&gt; -->
+         <!---->
+
+     <!---->
+     <!---->
+     <!---->
+      <!--</div>-->
+          
+          
+          
+          
+    
+      <!--<div class="lan_push_down lan_line-height" >事务响应限制</div>-->
+     <!--<div class="lan_gray_border lan_margin_bottom_20 lan_padding_20">-->
+   <!---->
+         <!--<div class="lan_margin_bottom_20" id="publishing:filter:postal">-->
+   <!---->
+<!--&lt;!&ndash;          <div class="row">-->
+         <!--<div class="col-sm-4">-->
+
+                <!--<div class="form-group">-->
+                <!--<label for="inputEmail3" class="col-sm-5 control-label">响应地区</label>-->
+                    <!--<div class="col-sm-6">-->
+                     <!--<input type="email" class="form-control" >-->
+                <!--</div>-->
+              <!--</div>-->
+
+         <!--</div>end of col-->
+         <!--<div class="col-sm-2">-->
+
+            <!--<div class="form-group">-->
+                    <!--<div class="col-sm-12">-->
+                     <!--<select class="selectpicker">-->
+                            <!--<option>选择</option>-->
+                            <!--<option>1</option>-->
+                            <!--<option>2</option>-->
+                          <!--</select>-->
+                <!--</div>-->
+              <!--</div>-->
+
+         <!--</div>end of col-->
+         <!--<div class="col-sm-2">-->
+
+            <!--<div class="form-group">-->
+                <!--<div class="col-sm-12">-->
+                           <!--<select class="selectpicker">-->
+                            <!--<option>选择</option>-->
+                            <!--<option>1</option>-->
+                            <!--<option>2</option>-->
+                          <!--</select>-->
+                <!--</div>-->
+              <!--</div>-->
+
+         <!--</div>end of col-->
+
+
+        <!--</div>end of row &ndash;&gt;-->
+         <!--</div>-->
+
+         <!--<div class="clearfix"></div>-->
+ <!--<div class="activityPublisingRestrictions">-->
+         <!--<div class="col-sm-4">-->
+         <!---->
+                <!--<div class="form-group">-->
+                <!--<label  class="col-sm-5 control-label">响应人数</label>-->
+                    <!--<div class="col-sm-7">-->
+                     <!--<input type="number" class="form-control"  data-bind="ba.arc.mr">-->
+                <!--</div>-->
+              <!--</div>-->
+         <!---->
+         <!--</div>&lt;!&ndash;end of col&ndash;&gt;-->
+         <!--<div class="col-sm-4">-->
+         <!---->
+            <!--<div class="form-group">-->
+                <!--<label  class="col-sm-5 control-label">响应对象</label>-->
+                    <!--<div class="col-sm-7">-->
+                     <!--<input type="text" class="form-control"  data-bind="ba.arc.rs">-->
+                <!--</div>-->
+              <!--</div>-->
+         <!---->
+         <!--</div>&lt;!&ndash;end of col&ndash;&gt;-->
+         <!--<div class="col-sm-4">-->
+         <!---->
+            <!--<div class="form-group">-->
+                <!--<label for="inputEmail3" class="col-sm-5 control-label">性别</label>-->
+                <!--<div class="col-sm-7">-->
+                           <!--<select class="selectpicker"-->
+                                   <!--data-bind="ba.arc.rg">-->
+                            <!--<option></option>-->
+                            <!--{{#gender}}-->
+                            <!--<option value="{{val}}">{{text}}</option>-->
+                            <!--{{/gender}}-->
+                          <!--</select>-->
+                <!--</div>-->
+              <!--</div>-->
+         <!---->
+         <!--</div>&lt;!&ndash;end of col&ndash;&gt;-->
+         <!---->
+         <!---->
+        <!--</div>&lt;!&ndash;end of row&ndash;&gt; -->
+       <!---->
+
+        <!---->
+        <!---->
+        <!---->
+        <!---->
+           <!--<div class="activityPublisingRestrictions">-->
+         <!--<div class="col-sm-4">-->
+         <!---->
+            <!--<div class="form-group">-->
+                <!--<label for="inputEmail3" class="col-sm-5 control-label">年龄限制</label>-->
+                <!--<div class="col-sm-7">-->
+                  <!--<input type="date" class="form-control" id="inputEmail3" placeholder="年龄限制" data-bind="ba.arc.ra">-->
+                <!--</div>-->
+              <!--</div>-->
+         <!---->
+         <!--</div>&lt;!&ndash;end of col&ndash;&gt;-->
+         <!--<div class="col-sm-4">-->
+         <!---->
+            <!--<div class="form-group">-->
+                <!--<label for="inputEmail3" class="col-sm-5 control-label">用户性质</label>-->
+                    <!--<div class="col-sm-7">-->
+                     <!--<select class="selectpicker" -->
+                             <!--data-bind="ba.arc.rt">-->
+                            <!--<option></option>-->
+                            <!--{{#userType}}-->
+                            <!--<option value="{{val}}">{{text}}</option>-->
+                            <!--{{/userType}}-->
+                          <!--</select>-->
+                <!--</div>-->
+              <!--</div>-->
+         <!---->
+         <!--</div>&lt;!&ndash;end of col&ndash;&gt;-->
+
+         <!---->
+         <!---->
+         <!---->
+         <!--</div>&lt;!&ndash;end of row&ndash;&gt; -->
+
+         <!--<div class="clearfix"></div>-->
+         <!---->
+    <!--</div>-->
+
+              <!--end of gray container-->
+
+  
+         <div class="lan_table col-5-table serveListActionTable lan_push_down lan_gray_border">
+              <div class="lan_row lan_black_text  text-center">
+              事务配置
+              </div>
+              <div class="lan_row gray_bg2">
+       <div class="container-fluid"  >     
+      <div class="row fancySeparatorContainer">
+             <div class="col-sm-5 fancySeparator "> </div>
+             <div class="col-sm-2 lan_gray_border fancySeparator lan_black_text text-center" >选择服务</div>
+             <div class="col-sm-5 fancySeparator "></div>
+        </div>
+
+              <div class="lan_vpadding_10">
+              
+              <p class="lan_space_down">
+
+
+                  您可在此选择事务办理中所有需要的服务，并自由定义服务流程。
+
+
+              </p>
+              </div>
+              <div class=" lan_relative ">
+               <div class="blueButton "> 
+              <span class="center-block" data-action-click="activities:select:service">选择服务</span>
+              
+           
+            </div> 
+            
+               <!--<div class="lan_absolute lan_gray_border"> 选择服务</div>-->
+            
+            </div>  
+           
+           
+           
+           
+           
+           
+           <div class='publishing_activities_query_list'>
+           </div>
+      
+      <div class="clearfix"></div>
+       
+
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+        </div> <!--end of fluid container-->  
+        
+        
+        
+        
+        
+         <div class="container-fluid"  >     
+      <div class="row fancySeparatorContainer">
+             <div class="col-sm-5 fancySeparator "> </div>
+             <div class="col-sm-2 lan_gray_border fancySeparator lan_black_text text-center">表单</div>
+             <div class="col-sm-5 fancySeparator "></div>
+        </div>
+        
+        
+        
+              <div class="lan_vpadding_10">
+              
+              <p class="lan_space_down">
+
+
+                  您可在此创建事务所需表单，并在表单中自由定义表格和证照属性。
+
+
+              </p>
+              </div>
+              <div class=" lan_relative ">
+               <div class="blueButton serviceListCreateForm "> 
+              <span class="center-block">  <a  href="formtool/formdesign.html" target="_blank"
+                                               data-action-click='activities:form:new'>创建表单</a></span>
+              
+           
+            </div> 
+            
+               <!--<div class="lan_absolute lan_gray_border"> 导入模板</div>-->
+            
+            </div>  
+           
+           
+           
+           
+           
+           
+           
+             <div class="lan_table col-4-table activities-form-list">
+            </div><!--end lan_table -->
+      
+      <div class="clearfix"></div>
+       
+
+        
+           
+        </div> <!--end of fluid container-->  
+  
+              
+              
+        
+        
+         <div class="container-fluid"  >     
+      <div class="row fancySeparatorContainer">
+             <div class="col-sm-5 fancySeparator "> </div>
+             <div class="col-sm-2 lan_gray_border fancySeparator lan_black_text text-center">名单</div>
+             <div class="col-sm-5 fancySeparator "></div>
+        </div>
+        
+        
+        
+              <div class="lan_vpadding_10">
+              
+              <p class="lan_space_down">
+
+                  您可在此对事务响应对象作名单限制和集中响应操作。
+
+              </p>
+              </div>
+              <div class=" lan_relative ">
+               <div class="blueButton " data-action-click="activities:list:new">
+              <span class="center-block">添加名单</span>
+              
+           
+            </div> 
+            
+               <div class="lan_absolute lan_gray_border" data-action-click="list:new:template:get">下载名单模板</div>
+            
+            </div>  
+           
+           
+           
+           
+    <div class="mything" id="mything">
+        <div class="lan_table">
+            <div class="lan_row">
+                <span class="lan_cell lan-col-33_33 Swap">名单</span>
+                <span class="lan_cell lan-col-33_33 Swap">创建时间</span>
+                <span class="lan_cell lan-col-33_33 Swap">文件大小</span>
+                <!--span class="lan_cell Swap">操作</span-->
+            </div>
+            <div class="lan_row">
+                {{#zipuploadedtime}}
+                <span class="lan_cell lan-col-33_33">{{zipuploadedname}}</span>
+                <span class="lan_cell lan-col-33_33">{{zipuploadedtime}}</span>
+                <span class="lan_cell lan-col-33_33">{{zipuploadedsize}}</span>
+
+                <!--span class="lan_cell">
+                    <button type="button" class="center-block btn-sm btn btn-primary">删除</button>
+                </span-->
+                {{/zipuploadedtime}}
+            </div>
+        </div><!--end lan_table -->
+    </div><!--end of mything -->
+      
+      <div class="clearfix"></div>
+       
+
+        
+           
+        </div> <!--end of fluid container-->  
+  
+              
+              
+              
+   			
+              </div><!--end lanrow-->
+
+    
+              
+              
+
+              
+            </div><!--end lan_table -->
+  
+  
+        <div class="clearfix"></div>
+          
+            <div class="blueButton servicelistActivitySubmit"
+                 data-action-click='publishing:activities:request:publish'> 
+              <span class="center-block">提交</span>
+            </div> 
+            
+          
+
+            
+
+        </form>
+        </div><!--end of container bottom-->
+
+
+        
+    <div class="modal stripped_modal lanFixedModal" id="activities:select:service" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    </div> <!--- modal -->
+
+    <div class="modal stripped_modal lanFixedModal" id="formDesigner" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    </div> 

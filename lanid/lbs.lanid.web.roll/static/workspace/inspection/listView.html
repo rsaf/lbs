@@ -1,0 +1,70 @@
+
+          
+        <form method="post">
+       
+           <div class="lan_table col-5-table allUsersTable">
+                  <div class="lan_row">
+                    <span class="lan_cell Swap">
+                      <!--<input type="checkbox"> -->
+                        证照类别
+                    </span>
+                      <span class="lan_cell Swap">上传时间</span>
+                      <span class="lan_cell">格式</span>
+                      <span class="lan_cell Swap">像素尺寸</span>
+                      <span class="lan_cell Swap">文件大小</span>
+                    <!--span class="lan_cell Swap">操作</span-->
+                    
+                  </div>
+             
+             {{#list}}
+                  <div class="lan_row">
+                    <span class="lan_cell">
+
+                      <!--<input class="pull-left" type="checkbox">--> 
+
+                    <div class="pull-left" >
+                        {{#urls}}   <img src="{{urls}}" > {{/urls}}
+                    </div><div class="pull-left">{{pp.igt}}</div></span>
+                      <span class="lan_cell">{{#date}}{{ct.cd}}{{/date}}</span>
+                     <span class="lan_cell">{{pp.ofs}}</span>
+                      <span class="lan_cell">{{pp.ifr}}</span>
+                     <span class="lan_cell">{{#urls}} {{pp.fm}} {{/urls}}</span>
+                   
+                    <!--span class="lan_cell">
+                    {{#urls}}
+                     <ul class="lan_table_more">
+
+                        <li ><a > 详细 </a>
+                              <ul>
+                                 <li><a >取消</a></li>
+                                  <li><a > 删除</a></li>
+                             </ul>
+                          </li>
+                     </ul>
+                  {{/urls}}
+                   </span-->
+                  </div>
+             {{/list}}
+            
+    
+                  
+
+                  
+                </div><!--end lan_table -->
+           
+      </form>
+               
+                 
+                <nav class="paginationContainer">
+                  <ul class="pagination">
+                    <li><a >上一页</a></li>
+                    <li><a class="active" >1</a></li>
+                    <li><a >2</a></li>
+                    <li><a >3</a></li>
+                    <li><a >4</a></li>
+                    <li><a >5</a></li>
+                    <li><a >下一页</a></li>
+                  </ul>
+                </nav><!-- /pagination  -->
+            
+              

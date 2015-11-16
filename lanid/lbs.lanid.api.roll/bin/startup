@@ -1,0 +1,83 @@
+#!/usr/bin/env node
+var debug = require('debug')('api');
+var cluster = require('cluster');
+var numCPUs = require('os').cpus().length;
+
+var startTime = new Date();
+var endTime = null;
+
+console.log('\nBootstrapper: starting system boot strapping at ' + startTime.toLocaleString());
+console.log('\nBootstrapper: starting BS...');
+
+var bss = require('../bs.js');
+var bsPromise = bss.startBS().then(function (r) {
+
+    var bssInstance = r.pl.fn;
+    var bssPort = r.pl.pt;
+
+    bssInstance.listen(bssPort);
+    console.log('BS is now running on port: ', bssPort );
+
+
+    //node cluster
+    //if(cluster.isMaster){
+    //console.log('Forking %s worker(s) from master ...', numCPUs);
+    //    for(var i =0; i < numCPUs; i++){
+    //        cluster.fork();
+    //    }
+    //
+    //    cluster.on('online', function(worker){
+    //        console.log('A worker is running on  %s pid ...', worker.process.pid );
+    //    });
+    //
+    //    cluster.on('exit', function (worker){
+    //   console.log('The worker with %s pid is closed...', worker.process.pid );
+    //    });
+    //}
+    //else if (cluster.isWorker){
+    //    bssInstance.listen(bssPort);
+    //    console.log('The worker with process id (%s) is is now listening on port (%s) ', cluster.worker.process.pid, bssPort );
+    //}
+
+
+    //Amazon cluster
+    //cluster2, has some bugs .. we are not using it...
+    //var c = new cluster({
+    //    port: bssPort,
+    //    cluster: true,
+    //    timeout: 500,
+    //    ecv: {
+    //        path: '/ecv', // Send GET to this for a heartbeat
+    //        control: true, // send POST to /ecv/disable to disable the heartbeat, and to /ecv/enable to enable again
+    //        monitor: '/',
+    //        validator: function () {
+    //            return true;
+    //        }
+    //    }
+    //});
+    //
+    //c.on('died', function (pid) {
+    //    console.log('Worker ' + pid + ' died');
+    //});
+    //c.on('forked', function (pid) {
+    //    console.log('Worker ' + pid + ' forked');
+    //});
+    //
+    //c.listen(function (cb) {
+    //    // You need to pass the app. monApp is optional.
+    //    // If monApp is not passed, cluster2 creates one for you.
+    //    cb(bssInstance);
+    //});
+
+    console.log('Bootstrapper: BS cluster is fully configured....');
+    endTime = new Date();
+    console.log('Bootstrapper: system boot strapping commpleted at  ' + endTime.toLocaleString());
+    console.log('Bootstrapper: system boot strapping took ' + ((endTime.getTime() - startTime.getTime()) / 1000) + ' seconds \n\n');
+
+}).fail(function (r) {
+    console.log('starting BS failed with error message: ' + r)
+});
+
+
+
+

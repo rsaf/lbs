@@ -1,0 +1,22 @@
+{
+  "pl": [{
+      "code": "rejected data",
+      "plotting": "拍摄码申请",
+      "period": "2014-08-05 12:23:16",
+      "applicant": "王大力",
+      "status": "拒绝"
+    }
+    , {
+      "code": "L0121210120",
+      "plotting": "申请接口开通",
+      "period": "2014-08-05 11:23:13",
+      "applicant": "孙悟空",
+      "status": "已拒绝"
+    }, {
+      "code": "L0121210120",
+      "plotting": "服务代码申请",
+      "period": "2014-08-05 12:13:36",
+      "applicant": "黄蓉",
+      "status": "已拒绝"
+    }]
+}

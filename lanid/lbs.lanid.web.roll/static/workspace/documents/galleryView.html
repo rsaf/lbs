@@ -1,0 +1,105 @@
+
+<div class="detailPageUserIntroBox noOverflowHidden DocumentManagementGalleryView noMargin">
+    <div class="detailPageUserIntroBoxHeader">
+        {{#settings.showSelect}}
+        <span>
+          <!--<input class="selectAllPhotos" type="checkbox" data-action-click="photos:select:all">-->
+        </span>
+        <!--<span >本页全选</span>-->
+        <span class="numberOfSelectedItems hide">已选择<strong class="specialBlue">3</strong>页</span>
+        {{/settings.showSelect}}
+
+    </div>
+    <div class="detailPageUserIntroBoxBody">
+
+
+        <div class="idPhotoGaleryArrowContainerLeft disabled"
+             data-direction='left'
+             data-action-click='documents:list:movePage'></div>
+        <div class="idPhotoGaleryArrow  left disabled"
+             data-direction='left'
+             data-action-click='documents:list:movePage'></div>
+
+        <div id="idphotoGaleryContain" class="idphotoAlbum galeryInIntroBox">
+          <span class="photoframeRow">
+
+            {{#list}}
+            {{#page}}
+            <span class="photoframeContainer">
+              {{#uri}}
+              <span class="siglephtoframe withSelection">
+                <span class="siglephotoImage  photoContainer ">
+                  <!--<img src="{{uri}}" alt="photo">-->
+
+                     <img src="/commons/images/document{{fm}}.png" alt="file">
+
+                  <!--{{#settings.showSelect}}<input data-bind="delDocument.id" class="photoSelection" value="{{_id}}" type="checkbox" > {{/settings.showSelect}}-->
+                </span>
+                <span class="siglephotoAction" >
+                  <span class="text-left pull-left fileName"  >{{fn}}</span>
+
+
+                    <span class="photoActionDropDownContainer pull-right">
+
+                     <ul class="photoHoverDetails">
+
+                         <li><span class="glyphicon glyphicon-chevron-down pull-right photoActionDropDown ">  </span>
+
+                             <ul>
+                                 <span class="borderHider"></span>
+                                 {{^settings.processing}}     <li><a> 详细</a></li>{{/settings.processing}}
+                                 <li><a href="{{uri}}" >下载</a></li>
+
+                                 {{^settings.processing}}       <li><a data-action-click="documents:document:delete:one"  data-code="{{_id}}"> 删除</a></li>{{/settings.processing}}
+
+                             </ul>
+                         </li>
+                     </ul>
+
+
+                    </span>
+
+
+                 <!--<span > <img class="pull-right"  src="../../commons/images/IDphotoDropdownIcon.png" alt="dropdown"></span>-->
+                  <div class="clearfix"></div>
+                </span><!--end of siglephotoAction -->
+              </span><!--end of siglephtoframe-->
+            {{/uri}}
+            </span><!--end of photoframeContainer--->
+            {{#row}}
+              <div class="clearfix"></div>
+              </span>
+              <span class="photoframeRow">
+            {{/row}}
+            {{/page}}
+            {{/list}}
+      <div class="clearfix"></div>
+      </span><!--end of photo frame row--->
+            <div class="clearfix"></div>
+
+
+        </div> <!--end of idphotoGalerycontain-->
+
+        <div class="idPhotoGaleryArrowContainerRight"
+             data-direction='right'
+             data-action-click='documents:list:movePage'></div>
+        <div class="idPhotoGaleryArrow  right"
+             data-direction='right'
+             data-action-click='documents:list:movePage'></div>
+
+
+
+
+        <div class="clearfix"></div>
+
+
+
+    </div>   <!---end of detailPageUserIntroBoxBody-->
+
+
+    <div class="clearfix"></div>
+</div> <!--/detailPageUserIntroBox--->
+
+
+
+

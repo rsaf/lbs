@@ -1,0 +1,50 @@
+
+
+    <div class="lan_table col-5-table">
+        <div class="lan_row">
+            <span class="lan_cell Swap">接口名称</span>
+            <span class="lan_cell Swap">接口状态</span>
+            <span class="lan_cell Swap">状态指示灯</span>
+            <span class="lan_cell Swap">开通时间</span>
+            <span class="lan_cell Swap">提供商</span>
+            <!--
+            <span class="lan_cell Swap">操作</span>
+            -->
+        </div>
+      {{#items}}
+        <div class="lan_row">
+            <span class="lan_cell">{{field1}}</span>
+            <span class="lan_cell">{{field2}}</span>
+            <span class="lan_cell">
+              {{#field1}}
+              <span class="status {{statusClass}}"></span>
+              {{/field1}}                
+            </span>
+            <span class="lan_cell">{{field4}}</span>
+            <span class="lan_cell">{{field5}}</span>
+            <!--
+            <span class="lan_cell">
+              {{#field1}}
+             <ul class="lan_table_more">
+                 <li ><a >详细 </a>
+                     <ul>
+                         <li><a >编辑</a></li>
+                         <li><a data-action-click='interface:delete'
+                                data-id='{{_id}}'> 删除</a></li>
+                     </ul>
+                 </li>
+             </ul>
+              {{/field1}}
+            </span>
+            -->
+        </div>
+      {{/items}}
+    </div><!--end lan_table -->
+
+    <nav class="paginationContainer">
+
+
+    </nav><!-- /pagination  -->
+
+
+

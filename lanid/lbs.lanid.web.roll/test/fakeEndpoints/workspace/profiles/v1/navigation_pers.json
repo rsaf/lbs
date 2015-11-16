@@ -1,0 +1,123 @@
+{
+  "pl": [{
+      "main": {
+        "icon": "/commons/images/menu/notificationCenter.png",
+        "url": "/workspace/notifications",
+        "label": "通知中心"
+      },
+      "sub": [{
+          "url": "/workspace/notifications/all",
+          "label": "所有通知"
+        }, {
+          "url": "/workspace/notifications/unread",
+          "label": "未读通知"
+        }, {
+          "url": "/workspace/notifications/read",
+          "label": "已读通知"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/menu/BusinessResponse.png",
+        "url": "/workspace/responses",
+        "label": "事务响应"
+      },
+      "sub": [{
+          "url": "/workspace/responses/all",
+          "label": "所有事务"
+        }, {
+          "url": "/workspace/responses/conventional",
+          "label": "常规事务"
+        }, {
+          "url": "/workspace/responses/favorite",
+          "label": "收藏事务"
+        }, {
+          "url": "/workspace/responses/agent",
+          "label": "代理事务"
+        }, {
+          "url": "/workspace/responses/delegated",
+          "label": "委托事务"
+        }, {
+          "url": "/workspace/responses/agentsettings",
+          "label": "代理设置"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/menu/IDPhotoManagement.png",
+        "url": "/workspace/photos",
+        "label": "证照管理"
+      },
+      "sub": [{
+          "url": "/workspace/photos/idphotos",
+          "label": "证照照片"
+        }, {
+          "url": "/workspace/photos/processing",
+          "label": "待检照片"
+        }, {
+          "url": "/workspace/photos/otherPhotos",
+          "label": "其他照片"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/menu/FinancialManagement.png",
+        "url": "/workspace/finance",
+        "label": "财务管理"
+      },
+      "sub": [{
+          "url": "/workspace/finance/status",
+          "label": "账户状态"
+        }, {
+          "url": "/workspace/finance/history",
+          "label": "交易统计"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/menu/userProfiles.png",
+        "url": "/workspace/profile",
+        "label": "个人资料"
+      },
+      "sub": [{
+          "url": "/workspace/profile/personalprofile",
+          "label": "我的信息"
+        }, {
+          "url": "/workspace/profile/securitymanagement",
+          "label": "安全管理"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/menu/OperationRecord.png",
+        "url": "/workspace/operationslog",
+        "label": "操作记录"
+      },
+      "sub": [{
+          "url": "/workspace/operationslog/all",
+          "label": "所有操作"
+        }, {
+          "url": "/workspace/operationslog/business",
+          "label": "业务操作"
+        }, {
+          "url": "/workspace/operationslog/access",
+          "label": "授权操作"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/menu/applyManagement.png",
+        "url": "/workspace/requests",
+        "label": "申请管理"
+      },
+      "sub": [{
+          "url": "/workspace/requests/all",
+          "label": "所有申请"
+        }, {
+          "url": "/workspace/requests/unprocess",
+          "label": "未审核"
+        }
+        , {
+          "url": "/workspace/requests/approved",
+          "label": "已通过"
+        }, {
+          "url": "/workspace/requests/rejected",
+          "label": "已拒绝"
+        }]
+    }],
+  "er": null
+}

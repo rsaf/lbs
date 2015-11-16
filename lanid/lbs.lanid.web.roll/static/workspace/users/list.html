@@ -1,0 +1,54 @@
+<div class="lan_table col-6-table allUsersTable">
+    <div class="lan_row">
+        <span class="lan_cell Swap">用户名</span>
+        <span class="lan_cell Swap">创建者</span>
+        <span class="lan_cell Swap">用户类型</span>
+        <span class="lan_cell Swap">创建时间</span>
+        <span class="lan_cell Swap">账户状态</span>
+        <span class="lan_cell Swap">操作</span>
+    </div>
+
+    {{#items}}
+
+    <div class="lan_row">
+    <span class="lan_cell">
+
+      {{#lanzheng}}
+      <div class="pull-left" >{{#extraData.avatar.value}}<img src="{{extraData.avatar.value}}" >{{/extraData.avatar.value}}</div>
+      <div class="pull-left">{{loginName}}</div>
+      {{/lanzheng}}
+
+    </span>
+        <span class="lan_cell">{{createdBy}}</span>
+        <span class="lan_cell">{{#extraData.renderUserType}}{{userType}}{{/extraData.renderUserType}}</span>
+        <span class="lan_cell">{{#date}}{{createdOn}}{{/date}}</span>
+        <span class="lan_cell">{{#extraData.renderUserStatus}}{{accountStatus}}{{/extraData.renderUserStatus}}</span>
+    <span class="lan_cell">
+      {{#lanzheng}}<!-- if this is a padding row then do not display -->
+      <ul class="lan_table_more">
+          <li ><a> 选项 </a>
+              <ul>
+                  <li ><a data-action-click="user:details:show" data-id = "{{_id}}"> 详细 </a></li>
+               <li><a data-action-click="user:status:disable" data-id = "{{_id}}" data-type="{{userType}}" data-name="{{loginName}}" >停止</a></li>
+               <li><a data-action-click="user:status:enable" data-id = "{{_id}}" data-type="{{userType}}" data-name="{{loginName}}" >激活</a></li>
+                  <!--<li><a data-action-click='user:delete'-->
+                  <!--data-id='{{_id}}'> 删除</a></li>-->
+              </ul>
+          </li>
+      </ul>
+      {{/lanzheng}}
+    </span>
+    </div>
+
+    {{/items}}
+    <div class="spinnerPlaceHolder "></div>
+</div>
+
+
+
+<nav class="paginationContainer">
+
+
+</nav><!-- /pagination  -->
+
+

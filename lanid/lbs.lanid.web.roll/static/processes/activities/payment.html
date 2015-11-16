@@ -1,0 +1,232 @@
+<div class="relationshipsRightContainter  searchResultHeader paymentPageHeader">
+
+  <div class="top_container">
+      <div class="breadCrumbs"><span><a href="/">首页</a> </span><span><a href="/#/processes/activities/activities">事务办理 </a></span><span class="breadCrumbsLast">{{data.can}}</span></div>
+    </div>
+
+    <div class="wizard">
+      <a><span class="badge"></span> 信息填写</a>
+      <a class="current"><span class="badge badge-inverse"></span> 费用支付</a>
+      <a><span class="badge"></span> 完成</a>
+    </div>
+
+  </div>
+  <!---end of container_top-->
+
+  <div class="activities_container_bottom lan_padding_left_15 lan_padding_right_15 payment_form">
+
+
+    <div class="fluid-container payment_frame lan_form_payment">
+
+      <form class="form-horizontal" role="form" method="POST">
+
+        <div class="cell-phone-number">
+          <div class="col-md-4 col-sm-6 row">
+            <span class="lan_lable">手机:</span>
+            <span class="lan_input"><input id="paymentPhoneNumber" type="text" class="form-control" data-bind='payment.ow.sc'  data-verification="true" placeholder="填写你的手机号码" value={{user.mobile}}> </span>
+          </div>
+          <div class="col-md-4 col-sm-6 row">
+            <span class="lan_lable">确认手机:</span>
+            <span class="lan_input"><input id="confirmPaymentPhoneNumber"  type="text" class="form-control"  data-bind='payment.ow.sc' data-verification="true" placeholder="填写你的手机号码" value={{user.mobile}}></span>
+          </div>
+
+            <div class="col-md-4 col-sm-12 row">
+               <span class="matchingStatusContainer lan_inline_block" style="height: 30px; line-height: 30px;"></span>
+            </div>
+        </div>
+
+{{#services}}
+          <!--
+        <div class="lan_input_line  lan_horiz_checkbox">
+          <span class="lan_input"> <input type="checkbox"
+                                          data-bind='payment.needInvoice'></span> <span class="lan_lable"> 需要发票</span>
+        </div>
+
+
+        <div class="lan_gray_border lan_horiz_input_group" style='display:none' id='response_payment_invoice_data'>
+          <div class="columns-input-form">
+            <div class="lan_input_line2 pull-left"><span class="lan_inline_header">发票抬头:</span>
+            </div>
+
+            <div class="lan_input_line2  lan_horiz_radio">
+              <span class="lan_input"> <input type="radio" name='invoice1' value='personal'
+                                              data-bind='payment.sp.it'></span > <span  class="lan_lable" >个人</span>
+              <span class=" lan_input"> <input type="radio" name='invoice1' value='company'
+                                               data-bind='payment.sp.it'></span> <span class="lan_lable"> 单位</span>
+            </div>
+
+            <div class="lan_input_line2   lan_horiz_input2" id='response_payment_invoice_company_name'>
+              <span class="lan_input"><input name="invoice_name" type="text" class="form-control"
+                data-bind='payment.sp.ih' placeholder="请输入单位名称"></span>
+            </div>
+
+          </div>
+
+          <div class="columns-input-form">
+            <div class="lan_input_line2 pull-left"><span class="lan_inline_header">发票抬头:</span>
+            </div>
+
+            <div class="lan_input_line2  lan_horiz_radio">
+              <span class="lan_input"> <input type="radio" name='invoice2' data-bind='payment.sp.ic' value='pickup'
+                                              ></span > <span class="lan_lable"> 自取</span>
+              <span class="lan_spacing_left_5"> <input type="radio" name='invoice2' data-bind='payment.sp.ic' value='send'
+                                                       ></span>
+              <span class="lan_lable"> 邮寄（需要支付邮寄费用6元）</span>
+            </div>
+
+            <div class="lan_input_line2 lan_horiz_input response_payment_invoice_sending_info">
+              <span class="lan_lable">收件人:</span>
+              <span class="lan_input col-sm-2"><input type="text" class="form-control" 
+                                                      data-bind='payment.sp.cp'></span>
+            </div>
+
+
+            <div class="lan_input_line2 lan_horiz_input response_payment_invoice_sending_info">
+              <span class="lan_lable">地址:</span>
+              <span class="lan_input"><input type="text" class="form-control"
+                                             data-bind='payment.sp.ia' placeholder="请输入收件地址" ></span>
+            </div>
+
+          </div>
+        </div>
+          -->
+        <!--/lan_horiz_input_group-->
+
+
+    <div class="lan_relative">
+        <div id="holdSpinnerContainer"></div>
+    </div>
+
+        <div class="lan_push_down lan_table_top_info">
+          <span>支付费用</span>
+        </div>
+
+
+        <div class="table-responsive paymentFeesTable scroll-pane payment_service_list">
+        </div>
+        <!--end of responsive table-->
+
+          {{#showAlipay}}
+        <div class="lan_free_line">
+          请选择支付方式，并点击下一步继续进行支付：
+        </div>
+
+
+
+          {{!#hasEnoughInternalMoney}}
+          <div class="lan_input_line check_box_and_image lan_horiz_checkbox">
+              {{!#user}}
+          <!--<span class="lan_input "> <input class="paymentProvider" type="radio" name="paymentProvider" data-bind="payment.sp.pm" value="lz">-->
+                    <!--<img src="/commons/images/PaymentLogoLanzheng.jpg" alt="蓝证支付"></span>-->
+              {{!/user}}
+          {{!/hasEnoughInternalMoney}}
+
+          {{!^hasEnoughInternalMoney}}
+              {{!#user}}
+          <!--<span class="lan_input "> <input disabled class="paymentProvider" type="radio" name="paymentProvider" data-bind="payment.sp.pm" value="lz">-->
+                    <!--<img src="/commons/images/PaymentLogoLanzheng.jpg" alt="蓝证支付"></span>-->
+              {{!/user}}
+          {{!/hasEnoughInternalMoney}}
+
+              {{#weixin}}
+
+              <span class="lan_input "> <input class="paymentProvider" type="radio" name="paymentProvider" data-bind="payment.sp.pm" value="weixin">
+                  <img style="width: 90px; height: 30px;" src="/commons/images/weichatpay.jpg" alt="微信支付"></span>
+               {{/weixin}}
+
+              {{^weixin}}
+
+          <span class="lan_input "> <input class="paymentProvider" type="radio" name="paymentProvider" data-bind="payment.sp.pm" value="ali">
+                  <img src="/commons/images/3_07.jpg" alt="支付宝"></span>
+               {{/weixin}}
+
+
+          </div>
+          {{/showAlipay}}
+
+
+
+        <!--<div class="lan_input_line check_box_and_image lan_horiz_checkbox">-->
+          <!--<span class="lan_input "> <input type="radio" name="paymentProvider" data-bind='payment.sp.provider' value='lz'>-->
+                    <!--<img src="/commons/images/2_05.jpg" alt="支付宝"></span>-->
+
+
+
+          <!--<span class="lan_input "> <input type="radio" name="paymentProvider" data-bind='payment.sp.provider' value='ali'>-->
+                  <!--<img src="/commons/images/3_07.jpg" alt="支付宝"></span>-->
+
+        <!--</div>-->
+          {{!^hasEnoughInternalMoney}}
+            <!--<span>You must use alipay - insufficient Lanzheng credit</span>-->
+          {{!/hasEnoughInternalMoney}}
+
+          {{/services}}
+
+        <div class="lan_input_line  lan_horiz_checkbox">
+          <span class="lan_input "> <input type="checkbox" class="termsAndConditions" data-bind='payment.agreeTerms' id='respone_agree_terms'></span> <span class="lan_lable"> 我已阅读并同意相关协议条例</span>
+
+
+           <span class="validationHolder termsAndConditionsNotSelected  glyphicon hide  glyphicon-remove" style="color:red; line-height: 30px;"></span>
+        </div>
+
+      </form>
+      <!--end of form-->
+
+      <div class="clearfix"></div>
+
+
+
+
+
+    </div>
+    <!--end of container -->
+
+
+
+      <div class="lan_make_space"></div>
+      <div class="blueButton applicationNextStep response_payment_next" id='response_next_alipay'>
+          <span><a href="" target="_blank" >下一步</a></span>
+      </div>
+      <div class="blueButton applicationNextStep response_payment_next" id='response_next_lz'
+           data-action-click='response:payment:pay'>
+          <span><a href="" target="_blank" >下一步</a></span>
+      </div>
+      <div class="grayButton applicationPreviousStep"><span><a href="#/processes/activities/application/{{data.rc}}">上一步</a></span>
+      </div>
+
+      <div id="formRequiredFieldsFeedBack" class="pull-right lan_margin_top_20 lan_text_red hide"> 带红色标志必须填合格的值!</div>
+      <div class="clearfix"></div>
+
+
+  </div>
+  <!--  activities_container_bottom -->
+
+
+
+  <!--end of relationship container -->
+
+
+
+
+  <!-- Modal -->
+  <div class="modal" id="paymentStatusModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+          <h4 class="modal-title" id="paymentStatusModalLabel">证照认证</h4>
+        </div>
+        <div class="modal-body">
+          <div class="twoButtonModal">
+            <button type="button" data-dismiss="modal" class="btn paymentFailureBtn btn-default">支付遇到问题？</button>
+            <button type="button" data-dismiss="modal" class="btn  paymentSuccessBtn btn-default">支付完成</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>

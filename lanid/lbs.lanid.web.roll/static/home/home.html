@@ -1,0 +1,151 @@
+<div class="col-md-3 col-sm-4 col-sm-push-8 col-md-push-9  col-xs-12 home_right_container">
+
+    <div id="home_login_form">
+        <form>
+
+            <h1>登录蓝证平台</h1>
+
+            <div id="home_username" class="home_input_icon">
+
+                <div class="home_img"><img src="/commons/images/用户ICON_03.jpg"/></div>
+                <div class="home_input"><input type="text" name="username" id="username" placeholder="用户名/手机号"/>
+                </div>
+            </div>
+            <div id="home_password" class="home_input_icon">
+                <div class="home_img"><img src="/commons/images/平台密码ICON_03.jpg"/></div>
+                <div class="home_input"><input type="password" name="password" id="password" placeholder="蓝证平台密码"/>
+                </div>
+            </div>
+            <div class="home_forget_password"><a href="#/home/forgetpw/resetpassword" class="content clickToResetPw homeAccessButtons">忘记密码</a></div>
+            <div id="home_captcha_box" class="home_input_icon">
+                <div class="home_img"><img src="/commons/images/T_18.jpg"/></div>
+
+
+                <div id="home_system_captcha"><a onclick="randomString();"> 
+                    <span class="home_check">{{randomString}}</span> </a></div>
+                <div id="home_user_captcha"><input type="text" name="user_captcha" id="user_captcha"
+                                                   placeholder="右侧的验证码"/></div>
+                <!--<img src="../images/分隔条_15.jpg" />-->
+                <input type="hidden" name="antiBotValue" id="antiBotValue" value='{{randomString}}'>
+            </div>
+            <div id="home_submit_buton" class="home_input_icon" ondragstart="return false;" ondrop="return false;">
+                <!--<input type="image" src="/commons/images/signin.jpg" name="login" id="homeLoginSubmit"-->
+                       <!--data-action-click='home-default:login'/>-->
+
+                <div id="homeLoginSubmit"
+                     data-action-click='home-default:login' class="text-center"> 登录</div>
+
+
+            </div>
+
+            <div class="">
+
+
+                <a href="#/home/registration/user" class="content homeAccessButtons clickToRegister">
+                    立即注册</a>
+
+            </div>
+
+
+
+            <div class="home_forget_password mobile_home_forget_password">
+                <a href="#/home/forgetpw/resetpassword" class="content clickToResetPw homeAccessButtons"
+                   data-action-click='home-default:bbqUpdate'
+                   data-linkto='#/home/forgetpw/resetpassword'>忘记密码</a>
+            </div>
+        </form>
+    </div>
+
+    <!--<div id="otherLoginMethods">-->
+
+        <!--<span>其他账号快速登录：</span><br id="otherLoginMethods_br">-->
+
+        <!--<div id="loginMethodClearFix"></div>-->
+        <!--<div class="links">-->
+            <!--<a > <img src="/commons/images/QQ_icon.png" alt="QQ"></a>-->
+            <!--<a > <img src="/commons/images/weixin.png" alt="微信"></a>-->
+            <!--<a > <img src="/commons/images/QR-code.png" alt="二维码"></a>-->
+            <!--<a > <img src="/commons/images/micro-blog.png" alt="微博"></a>-->
+        <!--</div>-->
+    <!--</div>-->
+
+
+</div><!--***** end of right_container ************-->
+
+
+<div class="col-sm-1 col-md-push-5 col-sm-push-3 home_separation_line"></div>
+
+
+<div class="col-md-8 col-sm-6 col-md-pull-3 col-sm-pull-5 col-xs-12 home_left_container">
+    <div id="home_left_contain">
+        <div id="home_services_title"><h1> 致力为您提供<br id="home_line_brake">最真实、最便捷、 最安全的事务服务</h1></div>
+        <div id="home_text_and_line"><span>您可在这</span>
+
+            <div id="home_h_bar"></div>
+        </div>
+
+        <!--<div id="home_services_title2"><h1> 蓝证致力为您提供最真实、最便捷、 <br id="home_line_brake">最安全的事务服务！</h1></div>-->
+
+        <div id="home_available_services">
+            <div class="home_left_aligned">
+
+                <div id="home_info" class="home_service">
+                    <span class="home_service_title lan_margin_top_10"><a href="#/processes/activities/activities" >事务办理</a></span>
+                    <!--<a>我要办理</a> <a >如何办理</a>-->
+                </div>
+
+
+
+
+
+                <div id="home_service_area" class="home_service ">
+                    <span class="home_service_title lan_margin_top_10">
+                            <a href="#/details/public/activitydetail/LZB107" >身份认证</a></span>
+                    <!--<a >我要办理</a>-->
+                    <!--<a>如何拍证照</a>-->
+                </div>
+
+
+            </div>
+            <div class="home_right_aligned">
+
+
+                <div id="home_image" class="home_service">
+                    <span class="home_service_title lan_margin_top_10 idPhotoServices">
+
+                    <a data-action-click="processes:activities:findbycode">有蓝证码</a></span>
+                    <!--<a>我要办理</a> <a >如何拍证照</a>-->
+
+                </div>
+
+                <div id="home_credit_card" class="home_service"><span class="home_service_title lan_margin_top_10">
+                    <a href="#/details/public/activitydetail/LZB102">证照核验</a></span>
+                    <!--<a >我要办理</a> <a >如何拍证照</a>-->
+                </div>
+
+            </div>
+
+        </div>
+        <!-----end of available services---->
+
+
+    </div>
+    <!----end of left contain---->
+
+</div><!-----end of left container------>
+            
+            
+            
+            
+            	
+  
+  
+             
+             
+             
+
+         
+             
+           
+                 
+    

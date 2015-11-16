@@ -1,0 +1,389 @@
+{{dumyData}}
+
+
+          <div class="container_bottom corporateProfileFirstPage">
+
+            <div id="directory_indicator" class="detailPageDirectory">
+              <span id="root_folder">{{root}}</span>
+              <span id="sub_folder">{{currentPage}}</span> 
+            </div>
+       		
+            <div class="firstColumn_fixed_sized_Box">
+              <span class="firstColumn_fixed_sized_Box_img">
+
+
+
+                <img id="corporateLogoImage" src="{{profile.basic.corporationLogo.value}}" alt="logo">
+              </span>
+              <span class="firstColumn_fixed_sized_Box_text">
+
+                  <span class="customFileUploader" data-action-change="corporate:logo:upload">从本地上传
+                    <form  id="uploadForm"  method="POST" enctype="multipart/form-data">
+                      <input name="file" type="file">
+                     </form>
+                </span>
+
+
+                <!--<span>从照片库上传</span>-->
+              </span>
+              </div>
+           <div class="profile_fluid_part right-button-with-full">
+          <div class="profileMainPageRightInfo">
+
+              <a   {{#notValidated}} href="#/processes/activities/application/LZB103" {{/notValidated}} style="display: inline-block" target="_blank">
+
+                  <div class="blueButton" style="width: 150px;">
+                      <span class="center-block {{^notValidated}}disabled{{/notValidated}}" style="margin-bottom: 0;">立即认证</span>
+                  </div>
+
+              </a>
+
+             <p class="text-center">说明: 点击‘立即认证’，可对单位信息进行核验，认证完成后可办理相关业务。</p>
+            </div> 
+           
+           </div>   <!---end of fluid part-->
+           
+
+
+
+
+              <div class="detailPageUserIntroBox lan_border_top">
+
+
+                  <div class="detailPageUserIntroBoxHeader lan_border_right lan_border_left">
+                      <span><b>主要信息</b></span>
+                      <span class=" glyphicon    detailPageDropDownIcon    pull-right glyphicon-menu-up"></span>
+
+                  </div>
+
+                  <div class="detailPageUserIntroBoxBody corporateOtherINfo lan_border_right lan_border_bottom lan_border_left  ">
+
+                      <div class="">
+
+                          <div class="col-sm-6 ">
+                              <span class="lan_margin_left_20" style="height: 35px; line-height: 35px">联系人姓名</span>
+
+                          </div>
+                          <div class="col-sm-6 ">
+
+                              <span class="lan_margin_left_20" style="height: 35px; line-height: 35px">{{profile.contacts.name.value}}</span>
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+
+                      <div class=" gray_bg" >
+
+                          <div class="col-sm-6 ">
+                              <span class="lan_margin_left_20" style="height: 35px; line-height: 35px;">联系人职位</span>
+
+                          </div>
+                          <div class="col-sm-6 ">
+
+                              <span class="lan_margin_left_20" style="height: 35px; line-height: 35px; ">{{profile.contacts.position.value}}</span>
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+                      <div class="">
+
+                          <div class="col-sm-6 ">
+                              <span class="lan_margin_left_20" style="height: 35px; line-height: 35px">联系人电话</span>
+
+                          </div>
+                          <div class="col-sm-6 ">
+
+                              <span class="lan_margin_left_20" style="height: 35px; line-height: 35px">{{profile.contacts.phone.value}}</span>
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+
+
+                  </div><!--end of detailPageUserIntroBoxBody--->
+
+              </div> <!---end of detailPageUserIntroBox-->
+
+
+
+
+              <div class="detailPageUserIntroBox lan_border_top">
+
+
+                  <div class="detailPageUserIntroBoxHeader lan_border_right lan_border_left">
+                      <span><b>其他信息</b></span>
+                      <span class=" glyphicon    detailPageDropDownIcon    pull-right glyphicon-menu-up"></span>
+
+                  </div>
+
+                  <div class="detailPageUserIntroBoxBody corporateOtherINfo lan_border_right lan_border_bottom lan_border_left lan_padding_top_20 white_bg">
+
+
+
+                      <div class="form-group">
+                          <label for="tradeMarkName" class="col-sm-4 control-label text-right lan_line-height ">商标名称:</label>
+                          <div class="col-sm-4">
+                              <span id="tradeMarkName"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.tradeMarkName.value}}</span>
+                          </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+
+
+                      <div class="form-group">
+                          <label for="officialWechatAccount" class="col-sm-4 control-label text-right lan_line-height ">单位微信公众号:</label>
+                          <div class="col-sm-4">
+                              <span id="officialWechatAccount"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.officialWechatAccount.value}}</span>
+                          </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+
+
+                      <div class="form-group">
+                          <label for="tramarkRegistrationCertificate" class="col-sm-4 control-label text-right lan_line-height ">商标登记证书或扫描件:</label>
+                          <div class="col-sm-4">
+
+                              <span id="tramarkRegistrationCertificate"  class="lan_full_width  lan_text_overflow form-control" ><a href="{{profile.others.tramarkRegistrationCertificate.uri.value}}" target="_blank">{{profile.others.tramarkRegistrationCertificate.name.value}}</a></span>
+
+
+                          </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+
+                      <div class="form-group">
+                          <label for="tramarkCopyRightFile" class="col-sm-4 control-label text-right lan_line-height ">商标授权文件照片或扫描件:</label>
+                          <div class="col-sm-4">
+
+
+                              <span id="tramarkCopyRightFile"  class="lan_full_width lan_text_overflow form-control" ><a href="{{profile.others.tramarkCopyRightFile.uri.value}}" target="_blank">{{profile.others.tramarkCopyRightFile.name.value}}</a></span>
+
+
+                          </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+
+
+                      <div class="form-group">
+                          <label for="officialWebSite" class="col-sm-4 control-label text-right lan_line-height ">单位官网地址:</label>
+                          <div class="col-sm-4">
+                              <span id="officialWebSite"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.officialWebSite.value}}</span>
+                            </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+                      <div class="form-group">
+                          <label for="businessDepartmentWebSite" class="col-sm-4 control-label text-right lan_line-height ">事务部门网址:</label>
+                          <div class="col-sm-4">
+
+
+                              <span id="businessDepartmentWebSite"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.businessDepartmentWebSite.value}}</span>
+                          </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+                      <div class="form-group">
+                          <label for="copyRightManagerName" class="col-sm-4 control-label text-right lan_line-height ">单位授权管理人姓名:</label>
+                          <div class="col-sm-4">
+                              <span id="copyRightManagerName"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.contacts.copyRightManager.name.value}}</span>
+                          </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+
+                      <div class="form-group">
+                          <label for="copyRightManagerPhone" class="col-sm-4 control-label text-right lan_line-height ">授权管理人联系电话:</label>
+                          <div class="col-sm-4">
+                              <span id="copyRightManagerPhone"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.contacts.copyRightManager.phone.value}}</span>
+                          </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+
+                      <div class="form-group">
+                          <label for="copyRightManagerOtherContacts" class="col-sm-4 control-label text-right lan_line-height ">授权管理人其他联系方式:</label>
+                          <div class="col-sm-4">
+                              <span id="copyRightManagerOtherContacts"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.contacts.copyRightManager.otherContactInfos.0.value}}</span>
+                          </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+
+                      <div class="form-group">
+                          <label for="validatorName" class="col-sm-4 control-label text-right lan_line-height ">单位关系认证姓名:</label>
+                          <div class="col-sm-4">
+                              <span id="validatorName"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.contacts.verificationManager.name.value}}</span>
+                            </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+
+                      <div class="form-group">
+                          <label for="validatorContact" class="col-sm-4 control-label text-right lan_line-height ">单位关系认证联系电话:</label>
+                          <div class="col-sm-4">
+
+                              <span id="validatorContact"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.contacts.verificationManager.phone.value}}</span>
+                          </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+                      <div class="form-group">
+                          <label for="validatorOtherContacts" class="col-sm-4 control-label text-right lan_line-height ">单位关系认证人其他联系方式:</label>
+                          <div class="col-sm-4">
+
+                              <span id="validatorOtherContacts"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.contacts.verificationManager.otherContactInfos.0.value}}</span>
+                          </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+                      <div class="form-group">
+                          <label for="linkedBankAccount" class="col-sm-4 control-label text-right lan_line-height ">单位绑定的银行账号:</label>
+                          <div class="col-sm-4">
+                              <span id="linkedBankAccount"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.bankingInfo.accountNumber.value}}</span>
+                          </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+                      <div class="form-group">
+                          <label for="linkedBank" class="col-sm-4 control-label text-right lan_line-height ">单位绑定银行账号开户银行:</label>
+                          <div class="col-sm-4">
+                              <span id="linkedBank"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.bankingInfo.bankName.value}}</span>
+                           </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+                      <div class="form-group">
+                          <label for="linkedAlipay" class="col-sm-4 control-label text-right lan_line-height ">单位绑定支付宝号码:</label>
+                          <div class="col-sm-4">
+                              <span id="linkedAlipay"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.bankingInfo.alipayAccount.value}}</span>
+                          </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+
+                      <div class="form-group">
+                          <label for="industrytype" class="col-sm-4 control-label text-right lan_line-height ">单位印业类型:</label>
+                          <div class="col-sm-4">
+
+                              <span id="industrytype"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.industrytype.value}}</span>
+                          </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+
+
+                      <div class="form-group">
+                          <label for="economicModel" class="col-sm-4 control-label text-right lan_line-height ">单位经济类型:</label>
+                          <div class="col-sm-4">
+
+                              <span id="economicModel"  class="lan_full_width lan_text_overflow form-control" >{{profile.others.economictype.value}}</span>
+                          </div>
+
+                          <div class="col-xs-12 col-sm-4 ">
+
+                          </div>
+                          <div class="clearfix"></div>
+
+                      </div>
+                      <div class="clearfix"></div>
+
+
+
+
+                  </div><!--end of detailPageUserIntroBoxBody--->
+
+              </div> <!---end of detailPageUserIntroBox-->
+          
+          
+           
+
+              
+                   
+                  
+            <!-- /contaier bottom --></div>

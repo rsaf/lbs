@@ -1,0 +1,45 @@
+    <div class="lan_table col-5-table">
+        <div class="lan_row">
+            <span class="lan_cell Swap">网点代码</span>
+            <span class="lan_cell Swap">网点名称</span>
+            <span class="lan_cell Swap">网点状态</span>
+            <span class="lan_cell Swap">网点地址</span>
+            <span class="lan_cell Swap">操作</span>
+        </div>
+{{#items}}
+        <div class="lan_row">
+            <span class="lan_cell">{{servicePointCode}}</span>
+            <span class="lan_cell">{{servicePointName}}</span>
+            <span class="lan_cell">{{getStatus}}</span>
+            <span class="lan_cell">{{servicePointAddress}}</span>
+            <span class="lan_cell">
+            {{#_id}}
+             <ul class="lan_table_more">
+
+                 <li class="">
+                    <a> 选项</a>
+
+                     <ul>
+
+                         <li><a data-id='{{_id}}'
+                                data-action-click='servicepoint:detail'> 详细 </a></li>
+                         <li><a>取消</a></li>
+                         <li><a data-id='{{_id}}'
+                                data-action-click='servicepoint:delete'> 删除</a></li>
+
+                         <li><a target="_blank" href="#/details/workspace/servicepoint/{{servicePointCode}}" data-id='{{_id}}' data-action-click='servicepoint:details'> 网点详情</a></li>
+                     </ul>
+                 </li>
+
+            {{/_id}}
+             </ul>
+            </span>
+        </div>
+{{/items}}
+    </div>
+    <nav class="paginationContainer">
+
+    </nav>
+    <!-- /pagging -->
+
+

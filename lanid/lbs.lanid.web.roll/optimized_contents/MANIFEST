@@ -1,0 +1,43 @@
+This zip file contains optimized resources for https://www.idlan.cn/. The optimized resources are listed below in the format of: 
+filename: url
+
+Note: We only include up to 10 MB of optimized contents. If the
+optimized contents of your page are larger than 10 MB, we list them in
+this file too, with 'NOT INCLUDED' to indicate those URLs require
+further optimization.
+
+css/bootstrap.min.css: https://www.idlan.cn/commons/bootstrap/css/bootstrap.min.css
+css/bootstrap-select.min.css: https://www.idlan.cn/commons/bootstrapselect/css/bootstrap-select.min.css
+css/jquery.jscrollpane.css: https://www.idlan.cn/commons/jscrollpane/jquery.jscrollpane.css
+css/home.css: https://www.idlan.cn/commons/css/home.css?v=1.030
+css/workSpace.css: https://www.idlan.cn/commons/css/workSpace.css?v=1.030
+css/harmAdded.css: https://www.idlan.cn/commons/css/harmAdded.css?v=1.030
+css/formdesigndialog.css: https://www.idlan.cn/commons/css/formdesigndialog.css?v=1.030
+js/jquery-1.11.3.min.js: https://www.idlan.cn/commons/js/jquery-1.11.3.min.js
+js/jquerybbq.min.js: https://www.idlan.cn/commons/js/jquerybbq.min.js
+js/bootstrap.min.js: https://www.idlan.cn/commons/bootstrap/js/bootstrap.min.js
+js/bootstrap-select.min.js: https://www.idlan.cn/commons/bootstrapselect/js/bootstrap-select.min.js
+js/defaults-zh_CN.min.js: https://www.idlan.cn/commons/bootstrapselect/js/i18n/defaults-zh_CN.min.js
+js/jquery.form.min.js: https://www.idlan.cn/commons/js/jquery.form.min.js
+js/bbq.js: https://www.idlan.cn/commons/js/bbq.js
+js/util.js: https://www.idlan.cn/commons/js/util.js?v=1.030
+js/jquery.dotdotdot.min.js: https://www.idlan.cn/commons/jQuery.dotdotdot-master/src/js/jquery.dotdotdot.min.js
+js/jquery.jscrollpane.min.js: https://www.idlan.cn/commons/jscrollpane/jquery.jscrollpane.min.js
+js/jquery.mousewheel.js: https://www.idlan.cn/commons/jscrollpane/jquery.mousewheel.js
+js/main.js: https://www.idlan.cn/main.js?v=1.030
+js/main_2.js: https://www.idlan.cn/workspace/main.js?v=1.030
+image/_E5_A4_A7_E8_83_8C_E6_99_AF_02.jpg: https://www.idlan.cn/commons/images/%E5%A4%A7%E8%83%8C%E6%99%AF_02.jpg
+image/right_vertical-line_03.jpg: https://www.idlan.cn/commons/images/right_vertical-line_03.jpg
+image/_E7_94_A8_E6_88_B7ICON_03.jpg: https://www.idlan.cn/commons/images/%E7%94%A8%E6%88%B7ICON_03.jpg
+image/_E5_B9_B3_E5_8F_B0_E5_AF_86_E7_A0_81ICON_03.jpg: https://www.idlan.cn/commons/images/%E5%B9%B3%E5%8F%B0%E5%AF%86%E7%A0%81ICON_03.jpg
+image/T_18.jpg: https://www.idlan.cn/commons/images/T_18.jpg
+image/background_03.jpg: https://www.idlan.cn/commons/images/background_03.jpg
+image/button.png: https://www.idlan.cn/commons/images/button.png
+image/horizontal_03.jpg: https://www.idlan.cn/commons/images/horizontal_03.jpg
+image/icon-3.png: https://www.idlan.cn/commons/images/icon-3.png
+image/icon-2_05.png: https://www.idlan.cn/commons/images/icon-2_05.png
+image/icon-4_10.png: https://www.idlan.cn/commons/images/icon-4_10.png
+image/icon-1_03.png: https://www.idlan.cn/commons/images/icon-1_03.png
+image/Lan_logo.png: https://www.idlan.cn/commons/images/Lan_logo.png
+image/search-white.png: https://www.idlan.cn/commons/images/search-white.png
+image/search-button_06.jpg: https://www.idlan.cn/commons/images/search-button_06.jpg

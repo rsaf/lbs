@@ -1,0 +1,301 @@
+
+
+
+
+<div id="loginRegisterModal" class="modal-dialog  accessControl">
+    <div class="modal-content">
+        <div class="modal-header  modal-header-primary blueHeader ">
+            <!--<button type="button" class="close"  aria-hidden="true"><span style="color:white;" data-dismiss="modal">×</span></button>-->
+            <h4 id="recoverModalLoginTitle" class="modal-title">登陆</h4>
+            <h4 id="recoverModalRegTitle" class="modal-title hide">注册</h4>
+            <h4 id="recoverModalForgotPwTitle" class="modal-title hide">重置密码</h4>
+        </div>
+        <div class="modal-body">
+
+
+            <!--loggin-->
+            <div class="modalLoginBox " id="home_login_form">
+                <form>
+                    <h2 class="text-danger reloginPopupForm">{{message}}</h2>
+
+                    <div class="home_input_icon" id="home_username">
+                        <div class="home_img"><img src="/commons/images/用户ICON_03.jpg"></div>
+                        <div class="home_input"><input type="text" placeholder="蓝证ID/邮箱/手机号" id="username" name="username" value="">
+                        </div>
+                    </div>
+                    <div class="home_input_icon" id="home_password">
+                        <div class="home_img"><img src="/commons/images/平台密码ICON_03.jpg"></div>
+                        <div class="home_input"><input type="password" placeholder="蓝证平台密码" id="password" name="password" value="">
+                        </div>
+                    </div>
+
+                    <div class="home_input_icon" id="home_captcha_box">
+                        <div class="home_img"><img src="/commons/images/T_18.jpg"></div>
+
+
+                        <input type="hidden" id="antiBotValue" name="antiBotValue" value="CWVM">
+                    </div>
+                    <h2 class="text-danger login-status"></h2>
+                    <div class="home_input_icon" id="home_submit_buton">
+                        <input type="image" id="homeLoginSubmit" name="login" src="/commons/images/signin.jpg" data-action-click="login">
+                    </div>
+
+
+                    <div class="">
+                        <div class="pull-left" >
+                            <a  data-action-click="modal:recover:password:box">忘记密码</a>
+                        </div>
+
+                      <div class="pull-right" >
+                          <a  id="modalReg"  data-action-click="recover:register">马上注册</a>
+                      </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+            </div>
+
+
+
+
+            <!--register-->
+            <div class="hide" id="popUpResgitration">
+
+
+            <form class="form-horizontal lan_margin_top_30" >
+
+            <div class="form-group">
+            <label for="modalRegUserName" class="col-sm-3 control-label specialBlue">用户名:</label>
+            <div class="col-sm-8">
+
+            <input id="modalRegUserName" class="form-control" type="text" name="loginName"  placeholder="昵称/手机/邮箱" value="">
+
+            </div>
+
+            </div>
+
+
+            <div class="form-group lan_margin_bottom_0">
+            <label for="modalRegUserPassWord" class="col-sm-3 specialBlue control-label">密码:</label>
+            <div class="col-sm-8">
+
+            <input id="modalRegUserPassWord" class="form-control" type="password" name="password"maxlength="16" placeholder="6-16字符的密码">
+
+            </div>
+
+            </div>
+
+            <div class="form-group lan_margin_bottom_0 " >
+                <label for="pwStrengthComment" class="col-sm-3 specialBlue control-label"></label>
+                <div class="col-sm-8 " style=" height: 25px; padding-top: 2px;">
+
+
+                    <ul class="strength modallogin" style="max-width: 128px; margin: auto; display: block;">
+                        <li class="1"></li>
+                        <li class="2"></li>
+                        <li class="3"></li>
+                        <li class="4"></li>
+                        <li class="5"></li>
+                    </ul>
+                    <span id="pwStrengthComment" class="col-xs-12  specialBlue text-center" style="font-size: 80%;display: block; margin-top: 1px; margin-left: auto; margin-right: auto;"></span>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group lan_margin_bottom_0">
+            <label for="modalRegUserConfirmPassWord" class="col-sm-3 specialBlue control-label">确认密码:</label>
+            <div class="col-sm-8">
+
+            <input id="modalRegUserConfirmPassWord" class="form-control" type="password" name="confirmPassword" placeholder="6-16字符的密码">
+
+            </div>
+
+            </div>
+
+
+
+
+                <div class="form-group " >
+                    <label for="pwMatchingComment" class="col-sm-3 specialBlue control-label"></label>
+                    <div class="col-sm-8 ">
+
+                        <div  style="padding-top: 2px;max-width: 105px; height: 13px; margin-left: auto;margin-right: auto;">
+                            <div id="pwMatchingComment" class="col-xs-12  specialBlue" style="font-size: 80%;"></div>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div id="modalRegIdNotMatching"    class="hide form-group">
+                    <label for="modalRegIdNotMatching" class="col-sm-3 specialBlue control-label"></label>
+                    <div class="col-sm-8">
+
+                        <div><span style="color: red; font-size: 80%">密码不匹配!</span></div>
+
+                    </div>
+
+                </div>
+
+            <div class="form-group"  style="margin-top: -10px;">
+            <label for="" class="col-sm-3 specialBlue control-label"></label>
+            <div class="col-sm-8">
+
+            <div class=""> <input type="checkbox" class="lan_margin_bottom_5 lan_margin_right_5" name="termsAndConditions" id="termsAndConditions"><a >我已阅读并同意相关服务条款</a></div>
+
+            </div>
+
+            </div>
+
+
+
+            <input type="hidden" name="userType" id="userType" value="personal">
+
+
+            <div class="form-group">
+                    <label for="" class="col-sm-3 specialBlue control-label"></label>
+                    <div class="col-sm-8">
+
+                        <div class="blueButton "><span  class="form-control " style="max-width: none; height: 46px" data-action-click="recover:register:info:provided">确认</span></div>
+                        <div class="col-xs-12"></div>
+
+                        <div class="">
+                            <div class="pull-left" >
+                                <a data-action-click="modal:recover:password:box" >忘记密码</a>
+                            </div>
+
+                            <div class="pull-right" >
+                                <a  id="modalLoginFromReg" data-action-click="recover:login:from:registration:box">返回登陆</a>
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+            </form>
+
+            </div>
+
+
+
+
+            <!--forgot password-->
+            <div class="hide" id="popUpResetPassWord">
+
+
+                <form class="form-horizontal lan_margin_top_30" >
+
+                    <div class="form-group lan_margin_bottom_10">
+                        <label for="modalResetPassWordPhone" class="col-sm-3 control-label specialBlue">手机号:</label>
+                        <div class="col-sm-6 ">
+
+                            <input id="modalResetPassWordPhone" class="form-control " type="text" name="loginPhone"  placeholder="请输入手机号" value="">
+
+
+                        </div>
+
+                        <div class="col-sm-3 col-xs-12">
+
+
+                            <div class="grayButton"><span class="form-control getVerificationCodeBtn" style="line-height: 10px; font-size: 80%; color: black !important; padding-left:0!important;padding-right:0!important; " data-action-click="reset:password:get:verification:code">获取验证码<em class="transactionCountDown hide lan_text_red  lan_padding_left_5">60</em></span></div>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="modalResetPassWordVerificationCode" class="col-sm-3 specialBlue control-label">验证码:</label>
+                        <div class="col-sm-6">
+
+                            <input id="modalResetPassWordVerificationCode" data-action-click="modal:recover:verification:code" class="form-control" type="text" name="verificationCode"  maxlength="16" placeholder="输入验证码">
+
+                        </div>
+
+                        <span  class=" col-sm-3 verificationCodeSentNote hide " style="  line-height: 30px;"><span class="glyphicon glyphicon-ok lan_padding_right_5 specialBlue" style=" font-size: 1.1em;"></span>已发送</span>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="modalResetPassWordNewPassword" class="col-sm-3 specialBlue control-label">新密码:</label>
+                        <div class="col-sm-6">
+
+                            <input id="modalResetPassWordNewPassword" class="form-control" type="password" name="newPassword"  placeholder="请输入新密码" disabled>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="modalResetPassWordConfirmNewPassword" class="col-sm-3 specialBlue control-label">确认密码:</label>
+                        <div class="col-sm-6">
+
+                            <input id="modalResetPassWordConfirmNewPassword" class="form-control" type="password" name="confirmNewPassword"  placeholder="请输入新密码" disabled>
+
+                        </div>
+
+                    </div>
+
+                    <div id="modalResetPwIdNotMatchingBox"    class="hide form-group">
+                        <label for="modalResetPwIdNotMatching" class="col-sm-3 specialBlue control-label"></label>
+                        <div class="col-sm-6">
+
+                            <div><span id="modalResetPwIdNotMatching" style="color: red; font-size: 80%">密码不匹配!</span></div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-3 specialBlue control-label"></label>
+                        <div class="col-sm-6">
+
+                            <div class="blueButton "><span  class="form-control " style="max-width: none; height: 46px" data-action-click="modal:recover:new:password">确认</span></div>
+                            <div class="col-xs-12"></div>
+
+
+
+                            <div class="">
+                                <div class="pull-left" >
+                                    <a  id="modalLoginFromReg" data-action-click="recover:login:from:registration:box">返回登陆</a>
+                                </div>
+
+                                <div class="pull-right" >
+                                    <a  id="modalReg"  data-action-click="recover:register">马上注册</a>
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                </form>
+
+            </div>
+
+
+
+
+
+            <!--end of modal body--->
+        </div>
+    </div>
+</div>

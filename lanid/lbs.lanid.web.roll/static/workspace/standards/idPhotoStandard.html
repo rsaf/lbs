@@ -1,0 +1,758 @@
+
+<div class="container_top">
+    <div id="directory_indicator"><span id="root_folder">标准管理</span><span id="sub_folder">证照标准</span> </div>
+
+    <form class="right_containter_top_form" >
+        <span>显示</span>
+        <div class="business_task_select" >
+            <select  >
+                <option value="all">所有类型</option>
+                <option value="one">待办事务</option>
+                <option value="two">已提交事务</option>
+                <option value="three">已完成事务</option>
+            </select>
+        </div>
+        <div class="blueButton createNewActivity blueButton-sm pull-right ">
+            <span class="newPhotoStandard" data-toggle="modal" data-target="#newStandardModal"><a  >新建</a></span></div>
+    </form>
+
+    <form class="right_containter_top_form tableHeaderForm">
+
+        <div class="fin_date_picker">
+            <span>日期 </span>
+            <input type="date" name="startdate" id="startdate">
+            <em>-</em>
+            <input type="date" name="enddate" id="enddate">
+        </div>
+
+        <div class="form_right_search">
+            <input type="text" id="searchtext" placeholder="事务编号/事务名称/发布单位" size="32">
+            <input type="submit" name="financesearch" id="financesearch" value="查询" data-action-click="pagination:search" onclick="return false;">
+        </div>
+
+    </form>
+
+    <!--
+    <div id="emergent_task">急需响应事务<span id="number_of_task">(2)</span> </div>
+    -->
+</div><!---end of container_top-->
+
+<div class="container_bottom">
+
+
+    <div class="lan_table col-6-table">
+        <div class="lan_row">
+            <span class="lan_cell Swap">证照代码</span>
+            <span class="lan_cell Swap">证照类别</span>
+            <span class="lan_cell Swap">标注像宽</span>
+            <span class="lan_cell Swap">标准像高</span>
+            <span class="lan_cell Swap">文件格式</span>
+            <span class="lan_cell Swap">操作</span>
+        </div>
+        <div class="lan_row">
+            <span class="lan_cell">Z001</span>
+            <span class="lan_cell">蓝证照近照</span>
+            <span class="lan_cell">390</span>
+            <span class="lan_cell">567</span>
+            <span class="lan_cell">JPG</span>
+                <span class="lan_cell">
+                
+          
+                
+                 <ul class="lan_table_more">
+
+                     <li ><a >详细 </a>
+                         <ul>
+
+                             <li><a >编辑</a></li>
+                             <li><a > 删除</a></li>
+                         </ul>
+                     </li>
+                 </ul>
+
+                
+                </span>
+        </div>
+        <div class="lan_row">
+            <span class="lan_cell">Z002</span>
+            <span class="lan_cell">蓝证通办-白色背景</span>
+            <span class="lan_cell">660</span>
+            <span class="lan_cell">827</span>
+            <span class="lan_cell">JPG</span>
+                <span class="lan_cell">
+
+
+
+                 <ul class="lan_table_more">
+
+                     <li ><a >详细 </a>
+                         <ul>
+
+                             <li><a >编辑</a></li>
+                             <li><a > 删除</a></li>
+                         </ul>
+                     </li>
+                 </ul>
+
+
+                </span>
+        </div>
+        <div class="lan_row">
+            <span class="lan_cell">Z003</span>
+            <span class="lan_cell">蓝证通办-蓝色背景</span>
+            <span class="lan_cell">390</span>
+            <span class="lan_cell">567</span>
+            <span class="lan_cell">JPG</span>
+                <span class="lan_cell">
+
+
+
+                 <ul class="lan_table_more">
+
+                     <li ><a >详细 </a>
+                         <ul>
+
+                             <li><a >编辑</a></li>
+                             <li><a > 删除</a></li>
+                         </ul>
+                     </li>
+                 </ul>
+
+
+                </span>
+        </div>
+        <div class="lan_row">
+            <span class="lan_cell">Z004</span>
+            <span class="lan_cell">蓝证通办-红色背景</span>
+            <span class="lan_cell">390</span>
+            <span class="lan_cell">867</span>
+            <span class="lan_cell">JPG</span>
+                <span class="lan_cell">
+
+
+
+                 <ul class="lan_table_more">
+
+                     <li ><a >详细 </a>
+                         <ul>
+
+                             <li><a >编辑</a></li>
+                             <li><a > 删除</a></li>
+                         </ul>
+                     </li>
+                 </ul>
+
+
+                </span>
+        </div>
+        <div class="lan_row">
+            <span class="lan_cell">Z005</span>
+            <span class="lan_cell">小1寸-白色背景</span>
+            <span class="lan_cell">260</span>
+            <span class="lan_cell">378</span>
+            <span class="lan_cell">JPG</span>
+                <span class="lan_cell">
+
+
+
+                 <ul class="lan_table_more">
+
+                     <li ><a >详细 </a>
+                         <ul>
+
+                             <li><a >编辑</a></li>
+                             <li><a > 删除</a></li>
+                         </ul>
+                     </li>
+                 </ul>
+
+
+                </span>
+        </div>
+        <div class="lan_row">
+            <span class="lan_cell">Z006</span>
+            <span class="lan_cell">小1寸-白色背景</span>
+            <span class="lan_cell">260</span>
+            <span class="lan_cell">567</span>
+            <span class="lan_cell">JPG</span>
+                <span class="lan_cell">
+
+
+
+                 <ul class="lan_table_more">
+
+                     <li ><a >详细 </a>
+                         <ul>
+
+                             <li><a >编辑</a></li>
+                             <li><a > 删除</a></li>
+                         </ul>
+                     </li>
+                 </ul>
+
+
+                </span>
+        </div>
+
+        <div class="lan_row">
+            <span class="lan_cell">Z007</span>
+            <span class="lan_cell">小1寸-蓝色背景</span>
+            <span class="lan_cell">260</span>
+            <span class="lan_cell">378</span>
+            <span class="lan_cell">JPG</span>
+                <span class="lan_cell">
+
+
+
+                 <ul class="lan_table_more">
+
+                     <li ><a >详细 </a>
+                         <ul>
+
+                             <li><a >编辑</a></li>
+                             <li><a > 删除</a></li>
+                         </ul>
+                     </li>
+                 </ul>
+
+
+                </span>
+        </div>
+
+        <div class="lan_row">
+            <span class="lan_cell">Z008</span>
+            <span class="lan_cell">小1寸-红色背景</span>
+            <span class="lan_cell">390</span>
+            <span class="lan_cell">567</span>
+            <span class="lan_cell">JPG</span>
+                <span class="lan_cell">
+
+
+
+                 <ul class="lan_table_more">
+
+                     <li ><a >详细 </a>
+                         <ul>
+
+                             <li><a >编辑</a></li>
+                             <li><a > 删除</a></li>
+                         </ul>
+                     </li>
+                 </ul>
+
+
+                </span>
+        </div>
+
+        <div class="lan_row">
+            <span class="lan_cell">Z009</span>
+            <span class="lan_cell">小1寸-白色背景</span>
+            <span class="lan_cell">390</span>
+            <span class="lan_cell">567</span>
+            <span class="lan_cell">JPG</span>
+                <span class="lan_cell">
+
+
+
+                 <ul class="lan_table_more">
+
+                     <li ><a >详细 </a>
+                         <ul>
+
+                             <li><a >编辑</a></li>
+                             <li><a > 删除</a></li>
+                         </ul>
+                     </li>
+                 </ul>
+
+
+                </span>
+        </div>
+
+
+
+
+    </div><!--end lan_table -->
+
+    <nav class="paginationContainer">
+        <ul class="pagination">
+            <li><a >上一页</a></li>
+            <li><a  class="active">1</a></li>
+            <li><a >2</a></li>
+            <li><a >3</a></li>
+            <li><a >4</a></li>
+            <li><a >5</a></li>
+            <li><a >下一页</a></li>
+        </ul>
+    </nav> <!-- /pagging  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="modal" id="newStandardModal" tabindex="-1" role="dialog" aria-labelledby="newStandardModal" aria-hidden="true">
+        <div class="modal-dialog  much_bigger">
+            <div class="modal-content">
+                <div class="modal-header modal-header-primary blueHeader ">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span
+                            style="color:white;">×</span></button>
+                    <h4 class="modal-title">新建证照标准</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form class="form-horizontal lan_push_down" role="form">
+
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input1" class="col-sm-6 control-label">证照代码</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input1" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input2" class="col-sm-6 control-label">证照类别</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input2" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input8" class="col-sm-6 control-label">备注</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input8" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+
+
+
+                        </div><!---end of row--->
+
+
+
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input9" class="col-sm-6 control-label">标准像宽</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input9" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input10" class="col-sm-6 control-label">标准像高</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input10" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input11" class="col-sm-6 control-label">分辨率</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input11" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+
+
+
+                        </div><!---end of row--->
+
+
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input12" class="col-sm-6 control-label">输出名义尺寸宽 </label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input12" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input3" class="col-sm-6 control-label">输出名义尺寸高</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input3" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input13" class="col-sm-6 control-label">图片格式</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input13" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+
+
+                        </div><!--end of row--->
+
+
+
+
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input14" class="col-sm-6 control-label">像素头顶距 </label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input14" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input15" class="col-sm-6 control-label">像素头部长度</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input15" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input16" class="col-sm-6 control-label">像素脸颊宽度</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input16" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+
+
+                        </div><!--end of row--->
+
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input17" class="col-sm-6 control-label">像素头顶距误差值 </label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input17" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input18" class="col-sm-6 control-label">像素头长度误差值</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input18" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input19" class="col-sm-6 control-label">像素脸颊宽度误差值</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input19" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+
+
+                        </div><!--end of row--->
+
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input50" class="col-sm-6 control-label"> 输出头顶距</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input50" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input20" class="col-sm-6 control-label">输出头部长度</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input20" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input21" class="col-sm-6 control-label">输出脸颊宽度</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input21" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+
+
+                        </div><!--end of row--->
+
+
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input22" class="col-sm-6 control-label">输出头顶距误差值 </label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input22" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input23" class="col-sm-6 control-label">输出头部长度误差值</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input23" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input24" class="col-sm-6 control-label">输出脸颊宽度误差值</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input24" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+
+
+                        </div><!--end of row--->
+
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input25" class="col-sm-6 control-label">背景色 </label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input25" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input26" class="col-sm-6 control-label">RBG误差值</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input26" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input27" class="col-sm-6 control-label">标准文件大小</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input27" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+
+
+                        </div><!--end of row--->
+
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input28" class="col-sm-6 control-label">背景色R </label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input28" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input29" class="col-sm-6 control-label">背景色G</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input29" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input30" class="col-sm-6 control-label">背景色B</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input30" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+
+
+                        </div><!--end of row--->
+
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input31" class="col-sm-6 control-label">出示照片格式 </label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input31" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input32" class="col-sm-6 control-label">初始照片文件大小</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input32" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+                                    <label for="input33" class="col-sm-6 control-label">初始照片清晰度要求</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="input33" class="form-control" value="" >
+                                    </div>
+                                </div>
+
+                            </div><!--end of col-->
+
+
+                        </div><!--end of row--->
+
+
+
+
+
+
+
+                        <div class="clearfix"></div>
+
+                    </form>
+
+
+
+
+                </div>
+                <!--end of modal body--->
+
+
+                <div class="modal-footer  fancyBoxGrayFooter">
+
+
+                    <div class="footer_operation_container">
+                        <div class="grayButton formPreview" data-dismiss="modal"><span>取消</span></div>
+                        <div class="blueButton formPreview " data-dismiss="modal"><span>确认</span></div>
+
+
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>    <!--- modal -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div> <!-- /contaier bottom -->
+
+
+
+
+
+

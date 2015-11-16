@@ -1,0 +1,65 @@
+<!--<div class="table-responsive lan-horizontal-scroll">
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>
+              <div style='width:700px'>
+                
+              </div>-->
+
+            
+              <div class="lan_table col-6-table">
+                <div class="lan_row">
+                    <div class="lan_cell Swap">服务代码</div>
+                    <div class="lan_cell Swap">服务名称</div>
+                    <div class="lan_cell Swap">服务类型</div>
+                    <div class="lan_cell Swap">服务状态</div>
+                    <div class="lan_cell Swap">价格（元）</div>
+                    <div class="lan_cell Swap">操作</div>
+                </div>
+              {{#items}}
+                <div class="lan_row">
+                    <div class="lan_cell">{{serviceCode}}</div>
+                    <div class="lan_cell">{{serviceName.text}}</div>
+                    <div class="lan_cell">{{serviceType.text}}</div>
+                    <div class="lan_cell">{{getStatus}}</div>
+                    <div class="lan_cell">{{standardServicePrice}}</div>
+                    <div class="lan_cell">
+                    {{#_id}}
+                     <ul class="lan_table_more">
+
+                         <li class="">
+
+                             <a> 选项</a>
+                             <ul>
+                                 <li><a data-id='{{_id}}'
+                                        data-action-click='service:detail'> 详细 </a></li>
+                                 <li><a>取消</a></li>
+                                 <li><a data-id='{{_id}}'
+                                        data-action-click='service:delete'> 删除</a></li>
+                             </ul>
+                         </li>
+                     </ul>
+                    {{/_id}}
+                    </div>
+                </div>
+              {{/items}}
+                  <div class="spinnerPlaceHolder "></div>
+            </div><!--end lan_table -->
+            <nav class="paginationContainer">
+
+
+            </nav>
+            <!-- /pagging -->
+
+<!--            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>-->
+
+
+
+
+
+

@@ -1,0 +1,101 @@
+<div class="modal-dialog max500">
+    <div class="modal-content">
+        <div class="modal-header modal-header-primary blueHeader ">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+            <h4 class="modal-title">不合格原因</h4>
+        </div>
+        <div class="modal-body">
+
+
+            <!----inserted part---->
+            <div class=" opsLogDetailsPopUp">
+
+                <div class="regFancyBoxBody" id="requesDetails">
+                    <form  id="feedbackForm" class="">
+                    <div class="opsLogDetailsTop requestRejected ">
+                        <div class="fakeTable">
+
+
+
+                                <div class="radio">
+                                    <label >
+                                        <input type="radio" name="reason" value="尺寸错误" data-bind="rejectReason.reason">
+                                        尺寸错误
+                                    </label>
+                                </div>
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="reason" value="照片大小超限" data-bind="rejectReason.reason">
+                                        照片大小超限
+                                    </label>
+                                </div>
+
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="reason" value="业务中断" data-bind="rejectReason.reason">
+                                        业务中断
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="reason" value="图像不清晰" data-bind="rejectReason.reason">
+                                        图像不清晰
+                                    </label>
+                                </div>
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="reason" value="衣着不规范" data-bind="rejectReason.reason">
+                                        衣着不规范
+                                    </label>
+                                </div>
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="reason" value="图像不完整" data-bind="rejectReason.reason">
+                                        图像不完整
+                                    </label>
+                                </div>
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="reason"  data-bind="rejectReason.reason">
+                                        其他
+                                    </label>
+                                </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="opsLogDetailsBottom noPadding">
+                        <div class="fakeTableLine">
+                            <textarea class="form-control" name="other" rows="4" data-bind="rejectReason.textReason"
+                                      placeholder="请输入自定义动态内容..."></textarea>
+                        </div>
+
+
+                    </div>
+                    </form>
+
+                </div>
+            </div>
+            <!----/inserted part---->
+        </div>
+        <div class="modal-footer  fancyBoxGrayFooter">
+
+            <div class="footer_operation_container">
+                <div class="grayButton formPreview " data-dismiss="modal"><span>取消</span></div>
+                <div class="blueButton formPreview " data-action-click="inspection:unqualified:reason:provided"><span>确认</span></div>
+
+                <div class="clearfix"></div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

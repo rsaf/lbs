@@ -1,0 +1,47 @@
+
+{{#items.length}}
+
+  <div class="lan_table col-4-table">
+    <div class="lan_row">
+
+      <span class="lan_cell Swap">通知标题</span>
+      <span class="lan_cell Swap">通知类型</span>
+      <span class="lan_cell Swap">发送时间</span>
+      <span class="lan_cell Swap">操作</span>
+    </div>
+
+    {{#items}}
+    <div class="lan_row notificationTableRow">
+      <span class="lan_cell     {{^notification.viewStatus}}unread {{/notification.viewStatus}}">{{notification.subject}}</span>
+      <span class="lan_cell {{^notification.viewStatus}}unread {{/notification.viewStatus}}">{{notification.notificationType}}</span>
+      <span class="lan_cell {{^notification.viewStatus}}unread {{/notification.viewStatus}}">{{#limitLengthDate}}{{notification.sendTime}}{{/limitLengthDate}}</span>
+      <span class="lan_cell">
+      {{#notification}}<!-- using fake endpoint but this value cannot be fals(y) data or has to be a helper function to know if this is real data or padding -->
+      <ul class="lan_table_more">
+
+          <li class="">  <a> 选项</a>
+              <ul>
+
+                  <li><a data-action-click="notification:details:show">查看  <span class="displayNone">{{_id}}</span></a></li>
+                  <li><a data-action-click='notification:delete'
+                         data-id='{{_id}}'> 删除</a></li>
+              </ul>
+          </li>
+      </ul>
+      {{/notification}}
+      </span>
+    </div>
+    {{/items}}
+    <div class="spinnerPlaceHolder "></div>
+    
+  </div><!-- end lan_table -->
+
+
+  <nav class="paginationContainer">
+
+  </nav>
+{{/items.length}}
+
+{{^items.length}}
+No items found
+{{/items.length}}

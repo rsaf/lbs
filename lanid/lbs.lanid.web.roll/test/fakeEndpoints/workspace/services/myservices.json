@@ -1,0 +1,56 @@
+{
+  "pl": [{
+      "_id": "54a268b26d79b7df053c4d0e",
+      "serviceName": "service name one",
+      "serviceCode":"L200212020003",
+      "price": 66,
+      "briefOverview": "has the one servicepoint",
+      "__v": 0,
+      "priceList": ["54a268b26d79b7df053c4d0e"],
+      "md": {
+        "uID": "54852b4bada015b113c0df7e",
+        "oID": "54852b4bada015b113c0df7e",
+        "lu": "2014-12-30T08:56:18.929Z"
+      },
+      "ct": {
+        "cuID": "54852b4bada015b113c0df7e",
+        "oID": "54852b4bada015b113c0df7e",
+        "cd": "2014-12-30T08:56:18.929Z"
+      }
+    }
+    , {
+      "_id": "54a266e46d79b7df053c4d06",
+      "serviceName": "service name two",
+      "price": 11,
+      "briefOverview": "Description for service two",
+      "__v": 0,
+      "md": {
+        "uID": "54852b4bada015b113c0df7e",
+        "oID": "54852b4bada015b113c0df7e",
+        "lu": "2014-12-30T08:48:36.538Z"
+      },
+      "ct": {
+        "cuID": "54852b4bada015b113c0df7e",
+        "oID": "54852b4bada015b113c0df7e",
+        "cd": "2014-12-30T08:48:36.538Z"
+      }
+    }, {
+      "_id": "54a266cd6d79b7df053c4d03",
+      "serviceName": "service name one",
+      "serviceCode":"L200212020003",
+      "price": 22,
+      "briefOverview": "description for service",
+      "__v": 0,
+      "md": {
+        "uID": "54852b4bada015b113c0df7e",
+        "oID": "54852b4bada015b113c0df7e",
+        "lu": "2014-12-30T08:48:13.260Z"
+      },
+      "ct": {
+        "cuID": "54852b4bada015b113c0df7e",
+        "oID": "54852b4bada015b113c0df7e",
+        "cd": "2014-12-30T08:48:13.260Z"
+      }
+    }],
+  "er": null
+}

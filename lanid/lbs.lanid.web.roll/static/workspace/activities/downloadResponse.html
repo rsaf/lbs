@@ -1,0 +1,43 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header modal-header-primary blueHeader ">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+            <h4 class="modal-title">响应下载</h4>
+        </div>
+        <div class="modal-body" style="max-height: 400px; overflow-y: auto">
+
+
+
+
+
+
+
+
+            <form id="activityResponseSortingForm" class="form-horizontal">
+
+                <div class="text-center lan_margin_bottom_20">请选择响应索引号: </div>
+
+              {{#data}}
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="sorting" value="{{.}}" {{#data.0}} checked {{/data.0}}> {{.}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                {{/data}}
+
+            </form>
+
+
+
+        </div>
+
+        <div class="modal-footer  fancyBoxGrayFooter">
+            <button type="button" class="btn btn-primary lan_margin_top_10 center-block" data-action-click="activity:response:sort:done">确认</button>
+        </div>
+    </div>
+</div>

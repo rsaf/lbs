@@ -1,0 +1,69 @@
+
+          
+        <form method="post">
+       
+           <div class="lan_table lan_table_first_cells_visible_overflow col-6-table allUsersTable">
+                  <div class="lan_row">
+                    <span class="lan_cell Swap"><input data-action-click="photos:select:all" type="checkbox"> 证照类别</span>
+                    <span class="lan_cell Swap">像素尺寸</span>
+                    <span class="lan_cell Swap">文件大小</span>
+                     <span class="lan_cell Swap">上传时间</span>
+                     <span class="lan_cell">相似值</span>
+                    <span class="lan_cell Swap">操作</span>
+                    
+                  </div>
+
+
+             {{#list}}
+                  <div class="lan_row">
+                    <span class="lan_cell" data-target="#platformAPIsPopover" data-action-hover="show:photo:bigger">
+
+                    {{#urls}}
+                      <input class="pull-left photoSelection"   data-bind="delPhoto.ids" value="{{_id}}" type="checkbox" >
+                    {{/urls}}
+                    <div class="pull-left" >
+                    {{#urls}}
+                     <ul class="lan_inline_block arrow-target"> <img src="{{urls}}" >  <li class="lan-arrow-frame arrow-left-bottom sm-arrow text-center "><img src="{{urlm}}" > <div class="photoType"> {{opp.igt}}</div> </li></ul>
+
+
+                    {{/urls}}
+                    </div><div class="pull-left">{{opp.igt}}</div></span>
+                    <span class="lan_cell">{{opp.irs}}</span>
+                     <span class="lan_cell">{{opp.ofs}}</span>
+                     <span class="lan_cell">{{opp.isd}}</span>
+                     <span class="lan_cell">{{#urls}}80%{{/urls}}</span>
+                   
+                    <span class="lan_cell">
+                    {{#urls}}
+                     <ul class="lan_table_more">
+                         
+                        <li ><a data-action-click="photo:list:details"> 详细 </a>
+                              <ul>
+                                  <li><a  data-action-click="photos:photo:delete:one" data-code="{{_id}}"> 删除</a></li>
+                             </ul>
+                          </li>
+                     </ul>
+                    {{/urls}}
+                   </span>
+                  </div>
+             {{/list}}
+                </div><!--end lan_table -->
+           
+      </form>
+               
+                 
+                <nav class="paginationContainer">
+                  <ul class="pagination">
+                    <li><a >上一页</a></li>
+                    <li><a class="active" >1</a></li>
+                    <li><a >2</a></li>
+                    <li><a >3</a></li>
+                    <li><a >4</a></li>
+                    <li><a >5</a></li>
+                    <li><a >下一页</a></li>
+                  </ul>
+                </nav><!-- /pagination  -->
+
+
+
+

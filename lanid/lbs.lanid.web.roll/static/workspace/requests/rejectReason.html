@@ -1,0 +1,99 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header modal-header-primary blueHeader ">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+      <h4 class="modal-title">拒绝原因</h4>
+    </div>
+    <div class="modal-body">
+
+
+      <!----inserted part---->
+      <div class=" opsLogDetailsPopUp">
+
+        <div class="regFancyBoxBody" id="requesDetails">
+          <div class="opsLogDetailsTop requestRejected ">
+            <div class="fakeTable">
+
+
+              <form class="">
+                <div class="radio">
+                  <label >
+                    <input type="radio" name="reason" value="业务取消" data-bind="rejectReason.reason">
+                    业务取消
+                  </label>
+                </div>
+
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="reason" value="不符合规则" data-bind="rejectReason.reason">
+                    不符合规则
+                  </label>
+                </div>
+
+
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="reason" value="业务中断" data-bind="rejectReason.reason">
+                    业务中断
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="reason" value="信息不完整" data-bind="rejectReason.reason">
+                    信息不完整
+                  </label>
+                </div>
+
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="reason" value="业务停办" data-bind="rejectReason.reason">
+                    业务停办
+                  </label>
+                </div>
+
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="reason" value="单位取消业务" data-bind="rejectReason.reason">
+                    单位取消业务
+                  </label>
+                </div>
+
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="reason" value="其他" data-bind="rejectReason.reason">
+                    其他
+                  </label>
+                </div>
+
+              </form>
+            </div>
+
+          </div>
+
+
+          <div class="opsLogDetailsBottom noPadding">
+            <div class="fakeTableLine">
+              <textarea class="form-control" rows="4" data-bind="rejectReason.textReason"
+                        placeholder="请输入自定义动态内容..."></textarea>
+            </div>
+
+
+          </div>
+
+        </div>
+      </div>
+      <!----/inserted part---->
+    </div>
+    <div class="modal-footer  fancyBoxGrayFooter">
+
+      <div class="footer_operation_container">
+        <div class="grayButton formPreview " data-dismiss="modal"><span>取消</span></div>
+        <div class="blueButton formPreview " data-action-click="request:details:reject:confirm"><span>确认</span></div>
+
+        <div class="clearfix"></div>
+      </div>
+
+
+    </div>
+  </div>
+</div>

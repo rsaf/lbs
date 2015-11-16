@@ -1,0 +1,115 @@
+{
+    "pl":
+            {
+                "_id": "550285061e9ae1ff43b44fd1",
+                "__v": 0,
+                "others": {
+                    "contacts": {
+                        "verificationManager": {
+                            "otherContactInfos": [],
+                            "phone": {
+                                "value": 0
+                            },
+                            "name": {
+                                "value": "无"
+                            }
+                        },
+                        "copyRightManager": {
+                            "otherContactInfos": [],
+                            "phone": {
+                                "value": 0
+                            },
+                            "name": {
+                                "value": "无"
+                            }
+                        }
+                    },
+                    "bankingInfo": {
+                        "alipayAccount": {
+                            "value": "无"
+                        },
+                        "bankName": {
+                            "value": "无"
+                        },
+                        "accountNumber": {
+                            "value": 0
+                        }
+                    },
+                    "economictype": {
+                        "value": "无"
+                    },
+                    "industrytype": {
+                        "value": "无"
+                    },
+                    "businessDepartmentWebSite": {
+                        "value": "无"
+                    },
+                    "officialWebSite": {
+                        "value": "无"
+                    },
+                    "tramarkCopyRightFile": {
+                        "value": "无"
+                    },
+                    "tramarkRegistrationCertificate": {
+                        "value": "无"
+                    },
+                    "officialWechatAccount": {
+                        "value": "无"
+                    },
+                    "tradeMarkName": {
+                        "value": "无"
+                    }
+                },
+                "contacts": {
+                    "phone": {
+                        "value": 0
+                    },
+                    "position": {
+                        "value": "无"
+                    },
+                    "name": {
+                        "value": "无"
+                    }
+                },
+                "basic": {
+                    "authenticationStatus": {
+                        "value": "未认证"
+                    },
+                    "memberCount": {
+                        "value": 50
+                    },
+                    "lzID": "单位认证后获取",
+                    "vs": "单位认证",
+                    "completion": 5,
+                    "userApplicationForm": {
+                        "value": "无"
+                    },
+                    "address": {
+                        "value": "无"
+                    },
+                    "organizationCode": {
+                        "value": "无"
+                    },
+                    "businessLicenseNumber": {
+                        "value": "无"
+                    },
+                    "corporationType": {
+                        "value": "事业单位"
+                    },
+                    "corporationLogo": {
+                        "value": "../../commons/images/bachend/backendProfilePic.png"
+                    },
+                    "corporationPublicName": {
+                        "value": "新单位"
+                    },
+                    "corporationName": {
+                        "value": "新单位"
+                    }
+                },
+                "ow": {
+                    "oID": "55015054be027cbe0a7a52ec",
+                    "uID": "haru"
+                }
+            },
+    "er": null
+}

@@ -1,0 +1,47 @@
+
+
+<div class="modal-dialog  x-smallModal">
+  <div class="modal-content">
+    <div class="modal-header modal-header-primary blueHeader ">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+      <h4 class="modal-title">删除{{entityName}}</h4>
+    </div>
+    <div class="modal-body">
+
+
+
+      <div class="ListUploadRadios text-center center-block">
+          <span class="deleteConfirmWarningIcon"> <img src="/commons/images/warningIcon.png"></span>   
+          <span class="deleteConfirmText">
+            确认删除{{entityName}}?
+          </span>
+      </div>
+      <div class="ListUploadRadios text-center center-block">
+        {{#name}}
+        <p>
+            名称:{{name}}
+        </p>
+        {{/name}}
+        {{#code}}
+        <p>
+            网点:{{code}}
+        </p>
+        {{/code}}        
+      </div>
+    </div>
+
+    <!----/inserted part---->
+
+    <div class="modal-footer  fancyBoxGrayFooter">
+
+      <div class="footer_operation_container">
+        <div class="grayButton formPreview " data-dismiss="modal"><span>取消</span></div>
+        <div class="blueButton formPreview " data-action-click="entity:delete:confirmed"><span>确认</span></div>
+
+        <div class="clearfix"></div>
+      </div>
+
+
+    </div>
+  </div>
+</div>

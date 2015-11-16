@@ -1,0 +1,40 @@
+<div class="lan_table col-6-table">
+  <div class="lan_row">
+    <span class="lan_cell Swap">服务代码</span>
+    <span class="lan_cell Swap">服务名称</span>
+    <span class="lan_cell Swap">总价（元）</span>
+    <span class="lan_cell Swap">服务状态</span>
+    <span class="lan_cell Swap">姓名</span>
+    <span class="lan_cell Swap">操作</span>
+  </div>
+  {{#items}}
+  <div class="lan_row"><!--data row-->
+    <span class="lan_cell">{{serviceCode}}</span>
+    <span class="lan_cell">{{svn}}</span>
+    <span class="lan_cell">{{svp}}</span>
+    <span class="lan_cell">{{st}}</span>
+    <span class="lan_cell">{{usn}}</span>
+    <span class="lan_cell">
+      {{#serviceCode}}<!-- should be a non fals(y) value or helper to determine if this is data or padding -->
+      <ul class="lan_table_more">
+        <li ><a > 详细 </a>
+          <ul>
+            <li><a >取消</a></li>
+            <li><a > 删除</a></li>
+          </ul>
+        </li>
+      </ul>
+      {{/serviceCode}}
+    </span>
+  </div><!--end of the data row-->
+  {{/items}}
+  <div class="spinnerPlaceHolder "></div>
+</div><!--end lan_table -->
+<nav class="paginationContainer">
+
+
+</nav> <!-- /pagging -->
+
+
+
+

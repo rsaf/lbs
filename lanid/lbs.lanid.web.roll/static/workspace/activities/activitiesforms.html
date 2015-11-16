@@ -1,0 +1,32 @@
+<div class="lan_table col-4-table">
+  <div class="lan_row">
+    <span class="lan_cell Swap">名称</span>
+    <span class="lan_cell Swap">创建日期</span>
+    <span class="lan_cell Swap">有无证照</span>
+    <span class="lan_cell Swap">操作</span>
+  </div>
+  {{#items}}
+  <div class="lan_row">
+    <span class="lan_cell">{{fd.fmn}}</span>
+    <span class="lan_cell">{{#date}}{{fd.fcd}}{{/date}}</span>
+    <span class="lan_cell">{{#fd.fmn}}{{#fd.pt}}有{{/fd.pt}}{{^fd.pt}}无{{/fd.pt}} {{/fd.fmn}}</span>
+    <span class="lan_cell">
+      {{#fd.fmn}}<!--  using dummy data but field1 should be a non fals(y) value or a helper function to see if this record is a padding record or a data record-->
+      <ul class="lan_table_more">
+        <li ><a data-action-click="activity:form:details:show" data-code="{{_id}}"> 详细 </a>
+          <!--<ul>-->
+            <!--<li><a >取消</a></li>-->
+            <!--<li><a > 删除</a></li>-->
+          <!--</ul>-->
+        </li>
+      </ul>
+      {{/fd.fmn}}
+    </span>
+  </div>
+  {{/items}}
+</div><!-- end lan_table -->
+
+<nav class="paginationContainer">
+
+</nav><!-- /pagination  -->
+

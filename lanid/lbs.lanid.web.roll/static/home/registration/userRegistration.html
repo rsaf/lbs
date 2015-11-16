@@ -1,0 +1,63 @@
+<!--<div class="notHomeMainContainer" >-->
+
+<div id="regBox" class="mainRegistrationPage  registrationBox light_gray_bg no_borders">
+
+    <div class="mainRegistrationPageInner lan_gray_border">
+
+
+
+        <div id="regBoxHeader">
+
+            <div id="regBoxHeaderLeft" >
+                <div class="mainFrame regBoxHeaderSelectedUserTypePern" data-action-click="register:select:usertype:personal"></div>
+                <div class="arrowFrame  "></div>
+            </div>
+            <div id="regBoxHeaderRight" >
+
+                <div class="mainFrame " data-action-click="register:select:usertype:corporate"></div>
+                <div class="arrowFrame hide"></div>
+            </div>
+
+        </div><!--/regBoxHeader-->
+        <div id="regBoxBody">
+
+            <form id="userRegistrationForm" >
+                <div class="regFormInputLine"><span>用户名</span> <input  type="text"  name="loginName" id="loginName" placeholder="昵称/手机/邮箱" value=""><span class="sideNote"></span></div>
+                <div class="regFormInputLine"> <span>密码</span><input type="password" name="password" id="password" maxlength="16" placeholder="6-16字符的密码">
+                    <div class="sideNote">
+
+                        <ul class="strength">
+                            <li class="1"></li>
+                            <li class="2"></li>
+                            <li class="3"></li>
+                            <li class="4"></li>
+                            <li class="5"></li>
+                        </ul>
+                        <span id="pwStrengthComment"></span>
+
+                    </div>
+                </div>
+                <!--<div class="clearFix"></div>-->
+                <div class="regFormInputLine"><span>确认密码</span> <input type="password" name="confirmPassword" id="conformPassword" placeholder="6-16字符的密码"><span class="sideNote"></span></div>
+                <div class="regFormInputLine"  > <span>验证码</span><input type="text" name="antiBot" id="antiBot"><span id="home_system_captcha" class="systemAntibox home_check">   </span>
+                    <span  onClick="randomString();"  class="refresh sideNote">   点击换一张 </span></div>
+                <div class="regFormInputLine termsAndConditionsClass"> <input type="checkbox" name="termsAndConditions" id="termsAndConditions" ><span>我已阅读并同意相关服务条款</span></div>
+                <input type="hidden" name="userType" id="userType" value="personal">
+                <input type="hidden" name="antiBotValue" id="antiBotValue">
+
+                <div class="regFormInputLine"><input data-action-click="register:submit" type="submit" name="Submit" id="submit" value="确认"></div>
+
+            </form>
+
+        </div><!--/regBoxBody-->
+
+
+
+    </div>
+
+
+<div class="clearfix"></div>
+</div>
+
+
+<div class="" style="margin-top: 20px">&nbsp;</div>

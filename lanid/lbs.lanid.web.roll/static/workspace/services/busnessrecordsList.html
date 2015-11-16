@@ -1,0 +1,38 @@
+       
+
+<div class="lan_table col-7-table businessRecord7ColTable">
+  <div class="lan_row">
+
+    <span class="lan_cell Swap">交易编码</span>
+    <span class="lan_cell Swap">服务代码</span>
+    <span class="lan_cell Swap">服务名称</span>
+    <span class="lan_cell Swap">总价(元)</span>
+    <span class="lan_cell Swap">服务状态</span>
+    <span class="lan_cell Swap">处理时间</span>
+    <span class="lan_cell Swap">姓名</span>
+  </div>
+  {{#items}}
+  <div class="lan_row">
+      <span class="lan_cell">{{btc}}</span>
+      <span class="lan_cell">{{serviceCode}}</span>
+      <span class="lan_cell">{{svn}}</span>
+      <span class="lan_cell">{{svp}}</span>
+      <span class="lan_cell">{{#renderServiceStatus}}{{st}}{{/renderServiceStatus}}</span>
+      <span class="lan_cell">{{#date}}{{spt}}{{/date}}</span>
+      <span class="lan_cell lan_text_overflow">{{usn}}</span>
+
+  </div>
+  {{/items}}
+    <div class="spinnerPlaceHolder "></div>
+
+</div><!--end lan_table -->
+
+
+<nav class="paginationContainer">
+
+
+</nav> <!-- /pagging -->
+
+
+
+

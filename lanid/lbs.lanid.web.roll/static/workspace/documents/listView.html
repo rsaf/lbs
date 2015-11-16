@@ -1,0 +1,68 @@
+
+          
+        <form method="post">
+       
+           <div class="lan_table col-6-table documentManagementListView">
+                  <div class="lan_row">
+                    <span class="lan_cell Swap">
+                        <!--<input style="margin-top: -3px" data-action-click="documents:select:all" type="checkbox"> -->
+                        文件名</span>
+                    <span class="lan_cell Swap">文件大小</span>
+                    <span class="lan_cell Swap">文件类型</span>
+                     <span class="lan_cell Swap">创建时间</span>
+                     <span class="lan_cell">创建人</span>
+                    <span class="lan_cell Swap">操作</span>
+                    
+                  </div>
+
+
+             {{#list}}
+                  <div class="lan_row">
+
+                    <span class="lan_cell">
+                        {{#fn}}
+                        <div class="col-sm-3 noPadding">
+                            <img src="/commons/images/document{{fm}}.png" alt="file">
+                        </div>
+                        <div class="col-sm-9 noPadding text-left fileName">{{fn}}</div>
+                        {{/fn}}
+                    </span>
+                     <span class="lan_cell">{{#size}}{{fs}}{{/size}}</span>
+                     <span class="lan_cell">{{fm}}</span>
+                      <span class="lan_cell">{{#date}}{{ct.cd}}{{/date}}</span>
+                     <span class="lan_cell">{{ct.uID}}</span>
+                   
+                    <span class="lan_cell">
+                    {{#uri}}
+                     <ul class="lan_table_more">
+                         
+                        <li ><a data-action-click="document:list:details" data-id="{{_id}}"> 详细 </a>
+                              <ul>
+                                  <li><a  data-action-click="documents:document:delete:one" data-code="{{_id}}"> 删除</a></li>
+                             </ul>
+                          </li>
+                     </ul>
+                    {{/uri}}
+                   </span>
+                  </div>
+             {{/list}}
+                </div><!--end lan_table -->
+           
+      </form>
+               
+                 
+                <nav class="paginationContainer">
+                  <ul class="pagination">
+                    <li><a >上一页</a></li>
+                    <li><a class="active" >1</a></li>
+                    <li><a >2</a></li>
+                    <li><a >3</a></li>
+                    <li><a >4</a></li>
+                    <li><a >5</a></li>
+                    <li><a >下一页</a></li>
+                  </ul>
+                </nav><!-- /pagination  -->
+
+
+
+

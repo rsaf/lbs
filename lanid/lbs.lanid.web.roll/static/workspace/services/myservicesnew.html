@@ -1,0 +1,265 @@
+<div class="modal-dialog much_bigger newServiceModal">
+  <div class="modal-content">
+    <div class="modal-header modal-header-primary blueHeader ">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span
+          style="color:white;">×</span></button>
+      <h4 class="modal-title">新建服务</h4>
+    </div>
+    <div class="modal-body">
+
+
+      <div class="row space_down_10">
+
+        <form class="form-horizontal lan_gray_border" role="form" >
+
+
+
+
+          <div class="row space_down_10">
+
+
+            <div class="col-sm-4">
+
+              <div class="form-group lessPadding">
+                <label class="col-sm-5 control-label">服务类型</label>
+                <div class="col-sm-7">
+                  <select class="selectpicker" data-bind="service.serviceType">
+                    <option>选择</option>
+                    {{#serviceTypes}}
+                    <option value="{{_id}}" {{selectedType}}>{{text}}</option>
+                    {{/serviceTypes}}
+
+                  </select>
+                </div>
+              </div>
+
+            </div><!--end of col-->
+
+            <div class="col-sm-4">
+
+              <div class="form-group lessPadding has-feedback">
+                <label for="new:price" class="col-sm-5 control-label">标准服务价格</label>
+                <div class="col-sm-7">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="new:price"
+                    data-bind='service.standardServicePrice'
+                    data-validate='service.price'
+                    value="{{service.standardServicePrice}}">
+                  <span
+                    class="glyphicon form-control-feedback hidden"
+                    aria-hidden="true"></span>
+                </div>
+              </div>
+
+            </div><!--end of col-->
+
+            <div class="col-sm-4">
+
+              <div class="form-group lessPadding">
+                <label for="service:standardServiceNotes" class="col-sm-5 control-label">标准服务备注</label>
+                <div class="col-sm-7">
+                  <input type="text" 
+                         class="form-control" 
+                         id="service:standardServiceNotes" 
+                         data-bind='service.standardServiceNotes'
+                         value="{{service.standardServiceNotes}}" >
+                </div>
+              </div>
+
+            </div><!--end of col-->
+
+
+
+          </div><!---end of row--->
+
+
+          <div class="row">
+
+
+            <div class="col-sm-4">
+
+              <div class="form-group lessPadding">
+                <label  class="col-sm-5 control-label">标准支付方式</label>
+                <div class="col-sm-7">
+                  <select class="selectpicker" data-bind='service.standardPayment'>
+                    {{#standardPayment}}
+                      <option value='{{val}}' {{standardPaymentIsSelected}}>{{text}}</option>
+                    {{/standardPayment}}
+                  </select>
+                </div>
+              </div>
+
+            </div><!--end of col-->
+
+            <div class="col-sm-4">
+
+              <div class="form-group lessPadding">
+                <label for="new:promotion:price" class="col-sm-5 control-label">标准优惠价格</label>
+                <div class="col-sm-7">
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    data-bind='service.standardPricing'
+                    id="new:promotion:price"
+                    value="{{service.standardPricing}}" >
+                </div>
+              </div>
+
+            </div><!--end of col-->
+
+            <div class="col-sm-4">
+
+              <div class="form-group lessPadding">
+                <label class="col-sm-5 control-label">标准预约要求</label>
+                <div class="col-sm-7">
+                  <select class="selectpicker"
+                          data-bind='service.standardReservationRequest'>
+                    {{#standardReservationRequest}}
+                      <option value='{{val}}' {{standardReservationRequestIsSelected}}>{{text}}</option>
+                    {{/standardReservationRequest}}
+                  </select>
+                </div>
+              </div>
+
+            </div><!--end of col-->
+
+
+
+          </div><!---end of row--->
+
+
+
+
+          <div class="row">
+
+
+            <div class="col-sm-4">
+
+              <div class="form-group lessPadding">
+                <label  class="col-sm-5 control-label">服务名称</label>
+                <div class="col-sm-7">
+                  <select
+                    class="selectpicker service-edit-new-select-name"
+                    data-action-change='nameSelectChange'
+                    data-bind="service.serviceFromSL">
+                    {{#serviceNames.length}}
+                    <option value=''>选择</option>
+                    {{/serviceNames.length}}
+                    {{#serviceNames}}
+                    <option value="{{_id}}" {{selectedName}}>{{text}}</option>
+                    {{/serviceNames}}
+                    <option value='--fromtb--' {{tbNameUsed}}>手动输入</option>
+                  </select>
+                </div>
+                </div>
+            </div><!--end of col-->
+
+
+            <div class="col-sm-4">
+
+              <div class="form-group lessPadding">
+                <label  class="col-sm-5 control-label">平台服务费</label>
+                <div class="col-sm-7">
+
+                  <input
+                          type="text"
+                          class="form-control">
+                </div>
+              </div>
+            </div><!--end of col-->
+
+            <div class="col-sm-4">
+
+              <div class="form-group lessPadding">
+                <label  class="col-sm-5 control-label">状态</label>
+                <div class="col-sm-7">
+                  <input
+                          type="text"
+                          class="form-control" value="{{getStatus}}" readonly>
+                </div>
+              </div>
+            </div><!--end of col-->
+          </div><!---end of row--->
+
+
+
+
+
+          <div class="row " id='service:new:name:row'  style="{{showTB}}">
+            <div class="col-sm-4">
+              <div class="form-group noPadding">
+                <label  class="col-sm-5 control-label"></label>
+                <div class="col-sm-7">
+                  <input class=" form-control"
+                         id='service:new:name:text'
+                         type="text" class="form-control"
+                         data-bind="service.serviceFromTB"
+                         value="{{service.serviceFromTB}}"
+                         placeholder="专业人像拍摄">
+                </div>
+
+
+                <!--@todo: this show and hides with script but if the value is 0 then show else do not-->
+
+                 </div>
+
+            </div><!--end of col-->
+
+
+
+
+          </div><!---end of row--->
+
+
+        </form>
+
+      </div>
+      <!--end of row--->
+
+
+      <dl class='servicePointDescBox '>
+        <dt class='lan_black_text'>简要概述:</dt>
+        <dd >
+          <textarea 
+            data-bind='service.briefOverview' 
+            class='lan_gray_border form-control serviceDescriptionFiled' rows='5'>{{service.briefOverview}}</textarea>
+        </dd>
+      </dl>
+
+
+      <div class="clearfix "></div>
+      <div class="space_down_10"></div>
+
+      <div id="myservicesnew:servicepoints">
+        <img src="/commons/images/ajax-loader.gif" style='display: block;margin-left: auto;margin-right: auto;'/>
+      </div>
+      <div class="clearfix"></div>
+
+    </div>
+    <!--end of modal body--->
+
+
+    <div class="modal-footer  fancyBoxGrayFooter">
+
+
+      <div class="footer_operation_container">
+        <div class="grayButton formPreview" data-dismiss="modal"><span>取消</span></div>
+        <div class="blueButton formPreview service_saveButton" 
+             data-action-click='saveService'><span>确认</span></div>
+
+        {{^hideEditBtn}}
+            <div class="blueButton formPreview service_editButton" style='display:none'
+                 data-action-click='service:enableEdit'><span>编辑</span></div>
+
+        {{/hideEditBtn}}
+        
+        <div class="clearfix"></div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

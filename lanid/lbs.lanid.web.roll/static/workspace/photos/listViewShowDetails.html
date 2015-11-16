@@ -1,0 +1,155 @@
+
+<div class="modal-dialog showPhotoDetails">
+    <div class="modal-content">
+        <div class="modal-header modal-header-primary blueHeader ">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+            <h4 class="modal-title">文件详情</h4>
+        </div>
+        <div class="modal-body">
+
+
+            <!----inserted part---->
+            <div class=" opsLogDetailsPopUp">
+
+                <div class="regFancyBoxBody">
+
+                    <div class="opsLogDetailsTop">
+                        <div class="fakeTable lan_margin_top_20">
+                        <div class="col-sm-2 listViewDetailImage">
+
+                                <img src="{{details.photoUri}}" alt="image" />
+
+                        </div>
+
+                        <div class="col-sm-10">
+                            <dl class="dl-horizontal col-sm-6 noStrip">
+                                <dt class="lan_blurshish">
+                        照片名称:
+                                </dt>
+                                <dd>
+                        {{details.name}}
+                                </dd>
+
+
+                                <dt class="lan_blurshish">
+                                    像素尺寸:
+                                </dt>
+                                <dd>
+                                    {{details.resolution}}
+                                </dd>
+
+                                <dt class="lan_blurshish">
+                                    文件大小:
+                                </dt>
+                                <dd> {{details.fileSize}}
+                                </dd>
+
+
+                                <dt class="lan_blurshish">
+                                    上传时间:
+                                </dt>
+                                <dd>
+                                    {{details.uploadDate}}
+                                </dd>
+
+                            </dl>
+
+
+
+
+                            <dl class="dl-horizontal col-sm-6 noStrip">
+                                <dt class="lan_blurshish">
+                                    证照类别:
+                                </dt>
+                                <dd>
+                                    {{details.photoType}}
+                                </dd>
+
+
+                                <dt class="lan_blurshish">
+                                    拍摄方式:
+                                </dt>
+                                <dd>
+                                    {{details.shootingMode}}
+                                </dd>
+
+                                <dt class="lan_blurshish">
+                                    拍摄地点:
+                                </dt>
+                                <dd>
+                                    {{details.shootingAddress}}
+                                </dd>
+
+
+                                <dt class="lan_blurshish">
+                                    拍摄时间:
+                                </dt>
+                                <dd>
+                                    {{details.shootingDate}}
+                                </dd>
+
+                            </dl>
+
+
+
+                        </div>
+
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                    </div>
+                    <div class="opsLogDetailsBottom">
+
+                        <div class="fakeTableLine">
+
+
+
+
+
+
+                          <dl>
+                              <dt class="lan_vpadding_5">
+                                  相关事务:
+                              </dt>
+                              <dd>
+
+                                  <div class="lan_table ">
+                                      <div class="lan_row ">
+
+                                          <span class="lan_cell Swap col-sm-4">事务代码</span>
+                                          <span class="lan_cell Swap col-sm-4">事务名称</span>
+                                          <span class="lan_cell Swap col-sm-4">操作时间</span>
+                                      </div>
+
+                                      {{#activities}}
+                                      <div class="lan_row ">
+                                          <span class="lan_cell col-sm-4 lan_blurshish">{{code}}</span>
+                                          <span class="lan_cell col-sm-4 lan_blurshish">{{name}}</span>
+                                          <span class="lan_cell col-sm-4 lan_blurshish">{{date}}</span>
+                                      </div>
+                                      {{/activities}}
+
+                                  </div><!-- end lan_table -->
+
+
+
+                              </dd>
+
+                          </dl>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="clearfix"></div>
+            <!----/inserted part---->
+        </div>
+        <div class="modal-footer  fancyBoxGrayFooter">
+            <button type="button" class="btn btn-primary lan_margin_top_10 center-block" data-dismiss="modal">知道了</button>
+        </div>
+
+    </div>
+</div>

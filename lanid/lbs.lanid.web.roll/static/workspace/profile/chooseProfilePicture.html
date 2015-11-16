@@ -1,0 +1,129 @@
+<div class="modal-dialog much_bigger newServiceModal">
+    <div class="modal-content">
+        <div class="modal-header lan_margin_bottom_20 modal-header-primary blueHeader ">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span
+                    style="color:white;">×</span></button>
+            <h4 class="modal-title">新建服务</h4>
+        </div>
+        <div class="modal-body lan_margin_20  noPadding idPhotoGalery galeryInIntroBoxContainer">
+          <form >
+
+            <div class="detailPageUserIntroBox noMargin">
+                <div class="detailPageUserIntroBoxHeader" style="padding-bottom: 25px; ">
+
+                {{#settings.showSwichType}}
+                   <form class="selectedPhotoType " >
+                       <label class="radio-inline">
+                           <input type="radio" name="inlineRadioOptions" id="inlineRadio1" data-action-click="profile:photos:list:switch"
+                              {{#helpers.photoTypeSelected}}idphoto{{/helpers.photoTypeSelected}}
+                              data-endpoint="idphoto"  value="option1"> 证照照片
+                       </label>
+                       <label class="radio-inline">
+                           <input type="radio" name="inlineRadioOptions" id="inlineRadio2"  data-action-click="profile:photos:list:switch"
+                            {{#helpers.photoTypeSelected}}others {{/helpers.photoTypeSelected}}
+                            data-endpoint="others" value="option2"> 其他照片
+                       </label>
+
+                   </form>
+
+                {{/settings.showSwichType}}
+
+
+                </div>
+                <div class="detailPageUserIntroBoxBody">
+
+
+                    <div class="idPhotoGaleryArrowContainerLeft disabled"
+                         data-direction='left'
+                         data-action-click='profile:photos:list:movePage'></div>
+                    <div class="idPhotoGaleryArrow  left disabled"
+                         data-direction='left'
+                         data-action-click='profile:photos:list:movePage'></div>
+
+                    <div id="idphotoGaleryContain" class="idphotoAlbum galeryInIntroBox">
+          <span class="photoframeRow">
+
+            {{#list}}
+            {{#page}}
+            <span class="photoframeContainer">
+              {{#photourl}}
+              <span class="siglephtoframe withSelection">
+                <span class="siglephotoImage">
+                  <img src="{{photourl}}" alt="photo">
+                  <input type="radio" name="photo" value="{{_id}}" {{helpers.isSelected}}
+                          data-bind="profile.selectedPhoto">
+                </span>
+                {{^settings.hideOther}}
+                <span class="siglephotoAction" >
+                  <span class="text-left pull-left"  >其他照片</span>
+                  <span > <img class="pull-right"  src="../../commons/images/IDphotoDropdownIcon.png" alt="dropdown"></span>
+                  <div class="clearfix"></div>
+                </span><!--end of siglephotoAction -->
+                {{/settings.hideOther}}
+              </span><!--end of siglephtoframe-->
+            {{/photourl}}
+            </span><!--end of photoframeContainer--->
+            {{#row}}
+              <div class="clearfix"></div>
+              </span>
+              <span class="photoframeRow">
+            {{/row}}
+            {{/page}}
+            {{/list}}
+      <div class="clearfix"></div>
+      </span><!--end of photo frame row--->
+                        <div class="clearfix"></div>
+
+
+                    </div> <!--end of idphotoGalerycontain-->
+
+                    <div class="idPhotoGaleryArrowContainerRight"
+                         data-direction='right'
+                         data-action-click='profile:photos:list:movePage'></div>
+                    <div class="idPhotoGaleryArrow  right"
+                         data-direction='right'
+                         data-action-click='profile:photos:list:movePage'></div>
+
+
+
+
+                    <div class="clearfix"></div>
+
+
+
+                </div>   <!---end of detailPageUserIntroBoxBody-->
+
+
+                <div class="clearfix"></div>
+            </div> <!--/detailPageUserIntroBox--->
+
+
+
+          </form>
+
+        </div> <!--end of modal body--->
+
+
+        <div class="modal-footer  fancyBoxGrayFooter">
+
+
+            <div class="footer_operation_container">
+                <div class="grayButton formPreview" data-dismiss="modal"><span>取消</span></div>
+                 <div class="blueButton formPreview"
+                      data-dismiss="modal"
+                      {{#settings.action.savePrivate}}
+                      data-action-click="profile:save:selected:photo:private"
+                      {{/settings.action.savePrivate}}
+
+                        {{#settings.action.saveBasic}}
+                        data-action-click="profile:save:selected:photo:basic"
+                        {{/settings.action.saveBasic}}>
+
+                <span>确认</span></div>
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

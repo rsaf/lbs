@@ -1,0 +1,200 @@
+<div class="relationshipsRightContainter  searchResultHeader">
+    <div class="top_container">
+        <div class="breadCrumbs"><span><a href="/">首页</a> </span><span><a href="/#/processes/activities/activities">事务办理 </a></span><span class="breadCrumbsLast">{{acInfo.an}}</span></div>
+        {{^responseComplete}}
+        <div class="wizard"> <a class="current"><span class="badge"></span> 信息填写</a> <a ><span class="badge badge-inverse"></span> 费用支付</a> <a><span class="badge"></span> 完成</a> </div>
+        <div class="clearfix"></div>
+        {{/responseComplete}}
+    </div>
+    <!---end of container_top-->
+
+    <div class="activities_container_bottom">
+        <div id="applicationFormModal"  class="white_bg fluid-container lan_form">
+            <div class="application_form_header_container">
+                <div class="application_form_header hide">
+                    <div class="application_form_logo">
+                        <!--{{!#logo}} <img src="{{!logo}}" alt="corporation logo">{{!/logo}}-->
+                    </div>
+
+                    <div class="application_form_title">
+                        <h1 class="dynamicFormTitle"></h1><!---the title goes here--->
+                    </div>
+                </div>
+            </div>
+            <div class="lanDynamicForm " >
+
+                <!--end of responsive table-->
+            </div>
+            <!--end of form-->
+
+
+        </div>
+        <!--end of container -->
+        <div class="clearfix"></div>
+
+        <div class="lan_relative">
+            <div id="holdSpinnerContainer"></div>
+        </div>
+
+        <div class="footer_operation_container">
+            <!--<div class="grayButton formPreview"  data-toggle="modal" data-target="#applicationFormModal"> <span>预览</span> </div>-->
+            <!--<div class="grayButton formPreview "> <span>打印</span> </div>-->
+            <!--<div class="clearfix"></div>-->
+        </div>
+
+
+        <div class="clearfix"></div>
+
+
+        {{#services}}
+        {{increment}}
+        {{#hsf}}
+        <div class="detailPageUserIntroBox responseFormFillingPageTable hidden">
+        {{/hsf}}
+        {{^hsf}}
+        <div class="detailPageUserIntroBox responseFormFillingPageTable">
+        {{/hsf}}
+            <div class="detailPageUserIntroBoxHeader lan_gray_border">
+                <span><b  class="serviceContainerHead" data-service="{{i}}" data-serviceId="">   {{#.}}{{serviceName.text}}{{/.}}</b></span>
+                <span class="glyphicon detailPageDropDownIcon  glyphicon-menu-up   pull-right"></span>
+
+            </div>
+            <div class="detailPageUserIntroBoxBody lan_gray_border lan_horizontal_scrolable_box_container scroll-pane lan_border_top_none lan_padding_10">
+
+
+
+                <!--@todo search by location: not needed now-->
+
+                <!--<div class="container_bottom_table_container">-->
+                    <!--<div class=" lan_horiz_input_group">-->
+                        <!--<div class="lan_input_line pull-left  lan_horiz_input"> <span class="lan_lable">地区:</span> <span class="lan_input">-->
+                                <!--<select class="selectpicker">-->
+                                    <!--<option>上海</option>-->
+                                    <!--<option></option>-->
+                                <!--</select>-->
+                            <!--</span>-->
+                        <!--</div>-->
+                        <!--<div class="lan_input_line pull-left  lan_horiz_input"> <span class="lan_lable"></span> <span class="lan_input">-->
+                                <!--<select class="selectpicker" >-->
+                                    <!--<option>上海</option>-->
+                                    <!--<option></option>-->
+                                <!--</select>-->
+                            <!--</span> </div>-->
+                        <!--<div class="lan_input_line pull-left  lan_horiz_input"> <span class="lan_lable"></span> <span class="lan_input">-->
+                                <!--<select class="selectpicker" >-->
+                                    <!--<option>上海</option>-->
+                                    <!--<option></option>-->
+                                <!--</select>-->
+                            <!--</span> </div>-->
+                    <!--</div>-->
+
+                    <!--end of inputgroup-->
+
+                    <div class="lan_table not_hidding_cols col-6-table lan_margin_bottom_0" style="float: none;display: inline-block">
+                        <div class="lan_row"> <span class="lan_cell Swap">
+                                服务代码
+                            </span> 
+                            <span class="lan_cell Swap">
+                                服务提供方
+                            </span> 
+                            <span class="lan_cell Swap">服务价格</span>
+                            <span class="lan_cell Swap">支付方式</span> 
+                            <span class="lan_cell Swap">服务备注</span> 
+                            <span class="lan_cell Swap">服务地址</span> 
+                        </div>
+                        {{#.}}
+                        
+                        <div class="lan_row"> <span class="lan_cell">
+                                <input class="lan_margin_top__5 availableService" type="radio" name="{{service.serviceName}}"
+                                       data-id='{{_id}}'
+                                       data-action-click='activity:response:select:service' data-serviceCode="{{service.serviceCode}}">
+                                {{service.serviceCode}}</span> 
+                            <span class="lan_cell">{{servicePoint.servicePointName}}</span> 
+                            <span class="lan_cell"> 
+                                {{#discountedPrice}}<strong><strike>{{servicePrices}}</strike></strong>{{/discountedPrice}}
+                                <strong>{{discountedPrice}}</strong> 
+                                <!--needs helper for payment method and will be too long-->
+                            </span> <span class="lan_cell">{{#convertpay}}{{paymentMethod}}{{/convertpay}}</span>
+                            <span class="lan_cell">{{remark}}</span>
+                            <span class="lan_cell lan_text_overflow">{{servicePoint.servicePointAddress}}</span>
+                        </div>
+                        {{/.}}
+                        <div class="clearfix"></div>
+                    </div>
+                    <!--end lan_table g2618-->
+
+
+
+
+
+
+
+                <div class="clearfix"></div>
+
+
+                <!--div class="reservationINfoBox lan_margin_bottom_10 ">
+
+                    <div class="reservationFormHeader lan_vpadding_5">您选择的网点需要预约，请填写预约信息:</div>
+                    <form class="form-inline lan_gray_border lan_padding_5">
+
+                        <div class="form-group col-sm-4">
+                            <label for="ResponseReservationDate">预约日期：</label>
+                            <input type="date" id="ResponseReservationDate" class="form-control">
+                        </div>
+
+                        <div class="form-group col-sm-4">
+                            <label for="ResponseReservationTime">预约时间：</label>
+
+                            <select id="ResponseReservationTime" class="col-sm-7 selectpicker" style="max-width: 200px">
+                                <option>上午</option>
+                                <option>中午</option>
+                                <option>下午</option>
+
+                            </select>
+                        </div>
+
+                        <div class="form-group col-sm-4">
+                            <label for="ResponseReservationContact">确认预约电话：</label>
+                            <input type="text" id="ResponseReservationContact" class="form-control">
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                    </form>
+
+
+
+                </div-->
+
+
+                </div>
+                <!--end of container_bottom_table_Container--->
+                <div class="clearfix"></div>
+
+
+
+            </div><!---end of detailPageUserIntroBoxBody-->
+
+        {{/services}}
+        <div class="clearfix"></div>
+
+        {{#responseComplete}}
+        <div class="regFormInputLine register_submit lan_padding_top_20">
+            <input type="submit" value="确认" id="submit" name="Submit"
+                   data-linkto='/workspace/responses/all'
+                   data-action-click='response:go:to:list'>
+        </div>
+        {{/responseComplete}}
+        {{^responseComplete}}
+        <div class="blueButton applicationNextStep">
+            <span data-linkto="/processes/activities/payment/{{rc}}" data-action-click="response:submit">下一步</span>
+        </div>
+        {{/responseComplete}}
+
+        <div id="formRequiredFieldsFeedBack" class="pull-right lan_margin_top_20 lan_text_red hide"> 带红色标志必须填合格的值!</div>
+        </div>
+
+    </div>
+    <!--  /activities_container_bottom -->
+    <div class="clearfix"></div>
+   </div> <!--end of relationship container -->

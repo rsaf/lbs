@@ -1,0 +1,67 @@
+
+          
+        <form method="post">
+       
+           <div class="lan_table col-6-table allUsersTable">
+                  <div class="lan_row">
+                    <span class="lan_cell Swap"><input data-action-click="photos:select:all" type="checkbox"> 证照类别</span>
+                    <span class="lan_cell Swap">像素尺寸</span>
+                    <span class="lan_cell Swap">文件大小</span>
+                     <span class="lan_cell Swap">上传时间</span>
+                     <span class="lan_cell">相似值</span>
+                    <span class="lan_cell Swap">操作</span>
+                    
+                  </div>
+
+
+             {{#list}}
+                  <div class="lan_row">
+                    <span class="lan_cell" data-target="#platformAPIsPopover" data-action-hover="show:photo:bigger">
+
+                    {{#photourl}}
+                      <input class="pull-left photoSelection"   data-bind="delPhoto.ids" value="{{code}}" type="checkbox" >
+                    {{/photourl}}  
+                    <div class="pull-left" >
+                    {{#photourl}}
+                      <img src="{{photourl}}" >
+                    {{/photourl}}
+                    </div><div class="pull-left">{{category}}</div></span>
+                    <span class="lan_cell">{{pixelSize}}</span>
+                     <span class="lan_cell">{{fileSize}}</span>
+                     <span class="lan_cell">{{uploadDate}}</span>
+                     <span class="lan_cell">{{#photourl}}80%{{/photourl}}</span>
+                   
+                    <span class="lan_cell">
+                    {{#photourl}}
+                     <ul class="lan_table_more">
+                         
+                        <li ><a data-action-click="photo:list:details"> 详细 </a>
+                              <ul>
+                                  <li><a  data-action-click="photos:photo:delete:one" data-code="{{code}}"> 删除</a></li>
+                             </ul>
+                          </li>
+                     </ul>
+                    {{/photourl}}
+                   </span>
+                  </div>
+             {{/list}}
+                </div><!--end lan_table -->
+           
+      </form>
+               
+                 
+                <nav class="paginationContainer">
+                  <ul class="pagination">
+                    <li><a >上一页</a></li>
+                    <li><a class="active" >1</a></li>
+                    <li><a >2</a></li>
+                    <li><a >3</a></li>
+                    <li><a >4</a></li>
+                    <li><a >5</a></li>
+                    <li><a >下一页</a></li>
+                  </ul>
+                </nav><!-- /pagination  -->
+
+
+
+

@@ -1,0 +1,148 @@
+{{dumpData}}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header modal-header-primary blueHeader ">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+            <h4 class="modal-title">详细</h4>
+        </div>
+        <div class="modal-body">
+
+
+            <!----inserted part---->
+            <div class=" opsLogDetailsPopUp">
+
+                <div class="regFancyBoxBody" id="requesDetails">
+                        <div class="opsLogDetailsTop ">
+                            <div class="fakeTable">
+
+                                <dl class="dl-horizontal lan_line-height">
+                                    <dt >
+
+                                        申请代码:
+
+                                    </dt>
+                                    <dd>
+                                        {{request.rc}}
+                                    </dd>
+                                </dl>
+                            </div>
+
+                            <div class="fakeTable">
+
+                                <dl class="dl-horizontal lan_line-height">
+                                    <dt>
+
+                                        申请标题:
+
+                                    </dt>
+                                    <dd>
+                                        {{request.rt}}
+                                    </dd>
+                                </dl>
+                            </div>
+
+
+                            <div class="fakeTable">
+
+                                <dl class="dl-horizontal lan_line-height">
+                                    <dt>
+
+                                        申请时间:
+
+                                    </dt>
+                                    <dd>
+                                        {{#shortDate}}{{request.rd}}{{/shortDate}}
+                                    </dd>
+                                </dl>
+                            </div>
+
+                            <div class="fakeTable">
+
+                                <dl class="dl-horizontal lan_line-height">
+                                    <dt>
+
+                                        申请单位:
+
+                                    </dt>
+                                    <dd>
+                                        {{request.ric}}
+                                    </dd>
+                                </dl>
+                            </div>
+
+
+
+                            <div class="fakeTable">
+
+                                <dl class="dl-horizontal lan_line-height">
+                                    <dt>
+
+                                        申请人:
+
+                                    </dt>
+                                    <dd>
+                                        {{request.rsu}}
+                                    </dd>
+                                </dl>
+                            </div>
+
+
+
+                            <div class="fakeTable">
+
+                                <dl class="dl-horizontal lan_line-height">
+                                    <dt>
+
+                                        申请状态:
+
+                                    </dt>
+                                    <dd>
+                                        {{#showStatus}}{{request.rs}}{{/showStatus}}
+                                    </dd>
+                                </dl>
+                            </div>
+
+
+
+                        </div>
+                        <div class="opsLogDetailsBottom">
+                            <div class="fakeTableLine">
+                                <div class="requestDetailsBody" style="min-height: 0;" >
+
+                                    {{request.rb}}
+                                          {{#request.url}}
+                                          <div><a 
+                                              target="_blank"
+                                              href="#{{#RenderUrl}}{{{request.url}}}{{/RenderUrl}}/{{request.ei.0.ei}}"
+                                              class="pull-right">详细内容>></a></div>
+                                          {{/request.url}}
+                                        <div class="clearfix"></div>
+                                </div>
+
+
+
+                            </div>
+
+
+                        </div>
+
+                </div>
+
+            </div>
+
+            <!----/inserted part---->
+        </div>
+        <div class="modal-footer  fancyBoxGrayFooter">
+
+            <div class="footer_operation_container">
+                <div class="grayButton formPreview " data-action-click="request:details:reject"><span>拒绝</span></div>
+                <div class="blueButton formPreview " data-action-click="request:details:accept"><span>通过</span></div>
+
+                <div class="clearfix"></div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,428 @@
+<div class="container_bottom_welcome workspaceWelcomePage personalHomeBottomContainer">
+
+
+    <div class=" container-fluid">
+        <div class="bs row-fluid">
+
+
+            <div class="col-xs-12 personalHomeTables">
+                <!-- mobile only -->
+                <div class=" profile col-xs-12  mobile_only" style="background-color:#f5f5f5">
+
+                    <div class="profile_innter">
+                        <div class="profile_picture_wrapper">
+                            <img class="profile_picture" src="{{profile.basic.corporationLogo.value}}"
+                                 alt="profile picture"></div>
+                        <div class=" profile_info_line">
+                            <h1>{{profile.basic.corporationName.value}}</h1>
+
+                        </div>
+                        <div class="id_line profile_info_line">
+                            <img class="Lan_id_logo" src="../commons/images/lan-zheng_logo.png" alt="Lan Id logo">
+                            <span>{{profile.basic.lzID}}</span></div>
+                        <div class="name_line profile_info_line">
+                            <img class="name_logo" src="../../commons/images/man_icon.png" alt="name logo">
+                            <!--<span class="profile_name">李玉华</span></div>-->
+                            <span class="profile_name"> {{user.loginName}}</span></div>
+
+                        <div class="Complete_Percentage_line profile_info_line">
+
+                            <!--<img class="Complete_Percentage_logo" src="../commons/images/iconDataIntegrity.png">-->
+                         <span class="Complete_percentage">
+                            <!--单位资料完善:-->
+                            {{!profile.basic.completion}}
+                            <!--%-->
+                            </span></div>
+
+                    </div>
+                </div> <!-- end of profile -->
+
+                <!-- /end of mobile only -->
+
+
+                <div class="full-side-of-table">
+
+
+
+
+                    <div class="row-fluid mainServicesLinks">
+
+
+
+
+                        <div class="col-xs-12">
+
+                            <a href="#/processes/activities/activities" target="_blank">
+                            <span><img
+                                    src="../commons/images/personalHomepageBusinessMangement.png"></span><span>事务办理</span>
+                            </a>
+
+                        </div>
+                        <div class="col-xs-12" >
+                            <a data-action-click="processes:activities:findbycode">
+                             <span><img
+                                     src="../commons/images/personalHomepageCreditCertification.png"></span><span>有蓝证码</span>
+
+                            </a>
+
+                        </div>
+
+
+                        <div class="col-xs-12">
+                            <a href="#/details/public/activitydetail/LZB102" target="_blank">
+                                 <span><img
+                                         src="../commons/images/personalHomepageCertificateShooting.png"></span><span>证照核验</span>
+                            </a>
+                        </div>
+                        <div class="col-xs-12">
+
+
+                            <a href="#/details/public/activitydetail/LZB107" target="_blank">
+                                <span><img src="../commons/images/personalHomepageInformationVerification.png"></span><span>身份认证</span>
+                            </a>
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <div class="detailPageUserIntroBox">
+                        <div class="detailPageUserIntroBoxHeader">
+                            <span><b>未读通知</b></span>
+                            <span class="glyphicon detailPageDropDownIcon  glyphicon-menu-up   pull-right"></span>
+
+                        </div>
+                        <div class="detailPageUserIntroBoxBody">
+
+                            <div class="container_bottom_table_container">
+
+
+
+
+
+
+                                <div class="lan_table pcOnlyView">
+                                    <div class="lan_row">
+
+                                        <span class="lan_cell lan-col-33_33 Swap">通知标题</span>
+                                        <span class="lan_cell lan-col-33_33 Swap">通知类型</span>
+                                        <span class="lan_cell lan-col-33_33 Swap">发送时间</span>
+                                        <!--<span class="lan_cell Swap">操作</span>-->
+                                    </div>
+
+                                    {{#items1}}
+                                    <div class="lan_row notificationTableRow">
+                                        <span class="lan_cell  lan-col-33_33   {{^notification.viewStatus}}unread {{/notification.viewStatus}}">{{notification.subject}}</span>
+                                        <span class="lan_cell lan-col-33_33 {{^notification.viewStatus}}unread {{/notification.viewStatus}}">{{notification.notificationType}}</span>
+                                        <span class="lan_cell lan-col-33_33 {{^notification.viewStatus}}unread {{/notification.viewStatus}}">{{#limitLengthDate}}{{notification.sendTime}}{{/limitLengthDate}}</span>
+                                        <!--<span class="lan_cell">-->
+                                        <!--{{#notification}}&lt;!&ndash; using fake endpoint but this value cannot be fals(y) data or has to be a helper function to know if this is real data or padding &ndash;&gt;-->
+                                        <!--<ul class="lan_table_more">-->
+                                        <!--<li ><a data-action-click="notification:details:show">查看  <span class="displayNone">{{_id}}</span></a>-->
+                                        <!--<ul>-->
+                                        <!--<li><a data-action-click='notification:delete'-->
+                                        <!--data-id='{{_id}}'> 删除</a></li>-->
+                                        <!--</ul>-->
+                                        <!--</li>-->
+                                        <!--</ul>-->
+                                        <!--{{/notification}}-->
+                                        <!--</span>-->
+                                    </div>
+                                    {{/items1}}
+
+                                </div><!-- end lan_table -->
+
+
+
+
+
+
+
+
+
+                                <div class="lan_table mobileOnlyView">
+                                    <div class="lan_row">
+
+                                        <span class="lan_cell lan-col-45 Swap">通知标题</span>
+                                        <span class="lan_cell lan-col-35 Swap">发送时间</span>
+                                        <span class="lan_cell lan-col-20 Swap lan_padding_left_0">操作</span>
+                                        <!--<span class="lan_cell Swap">操作</span>-->
+                                    </div>
+
+                                    {{#items1}}
+                                        <div class="lan_row notificationTableRow">
+                                            <span class="lan_cell lan-col-45    ">{{notification.subject}}</span>
+                                            <span class="lan_cell lan-col-35 " style="-webkit-text-fill-color:#8A7575 !important;">{{#limitLengthDate}}{{notification.sendTime}}{{/limitLengthDate}}</span>
+                                            <span class="lan_cell  lan-col-20  lan_padding_left_0"> {{#notification.subject}} <em class="specialBlue" data-action-click="notification:details:show"  style="padding: 3px 8px;max-width: 46px;margin: auto;">详细 <span class="displayNone">{{_id}}</span></em> {{/notification.subject}}</span>
+                                        </div>
+                                    {{/items1}}
+
+                                </div>
+                                <!-- end lan_table -->
+
+                            </div>
+                            <!--end of container_bottom_table_Container--->
+                            <div class="clearFix"></div>
+                            <div class="PersonalHomeCheckAll lan_vpadding_10 lanLink"><span><a href="#/workspace/notifications/unread">查看全部</a></span></div>
+
+
+
+                        </div><!---end of detailPageUserIntroBoxBody-->
+                        <div class="clearfix"></div>
+
+                    </div><!--end of detailPageUserIntroBox-->
+
+
+                    <div class="detailPageUserIntroBox">
+                        <div class="detailPageUserIntroBoxHeader">
+                            <span><b>事务列表</b></span>
+                            <span class="glyphicon detailPageDropDownIcon  glyphicon-menu-up   pull-right"></span>
+
+                        </div>
+                        <div class="detailPageUserIntroBoxBody">
+
+
+                            <div class="container_bottom_table_container businessTaskSumaryTable">
+
+                                <div class="lan_table col-4-table pcOnlyView">
+                                    <div class="lan_row">
+                                        <span class="lan_cell Swap">事务代码</span>
+                                        <span class="lan_cell Swap">事务名称</span>
+                                        <span class="lan_cell Swap">截止日期</span>
+                                        <span class="lan_cell Swap">事务状态</span>
+                                        <!--<span class="lan_cell Swap">操作</span>-->
+                                    </div>
+                                    {{#items2}}
+                                    <div class="lan_row">
+                                        <span class="lan_cell">{{abd.ac}}</span>
+                                        <span class="lan_cell">{{abd.an}}</span>
+                                        <span class="lan_cell">{{#date}}{{abd.acd}}{{/date}}</span>
+                                        <span class="lan_cell">{{#status2}}{{abd.aps}}{{/status2}}</span>
+                                        <!--<span class="lan_cell">-->
+                                        <!--{{!#abd.ac}}&lt;!&ndash;  field1 is just the fake json, should be a field of real data that cannot be fals(y) or a function&ndash;&gt;-->
+                                        <!--<ul class="lan_table_more">-->
+                                        <!--<li ><a-->
+                                        <!--target="_blank"-->
+                                        <!--href="#/workspace/publishing/activities/{{!abd.ac}}"> 详细 </a>-->
+                                        <!--<ul>-->
+                                        <!--<li><a data-action-click='activities:delete'-->
+                                        <!--data-id='{{!_id}}'> 删除</a></li>-->
+                                        <!--&lt;!&ndash;<li><a  target="_blank" href="#/details/activitydetail/{{!abd.ac}}"> 事务详情</a></li>&ndash;&gt;-->
+                                        <!--</ul>-->
+                                        <!--</li>-->
+                                        <!--</ul>-->
+                                        <!--{{!/abd.ac}}-->
+                                        <!--</span>-->
+                                    </div>
+                                    {{/items2}}
+                                </div><!--end lan_table -->
+
+
+
+
+                                <div class="lan_table mobileOnlyView">
+                                    <div class="lan_row">
+
+                                        <span class="lan_cell lan-col-45 Swap">事务名称</span>
+                                        <span class="lan_cell lan-col-35 Swap">事务状态</span>
+                                        <span class="lan_cell lan-col-20 Swap lan_padding_left_0">操作</span>
+                                        <!--<span class="lan_cell Swap">操作</span>-->
+                                    </div>
+
+                                    {{#items2}}
+                                        <div class="lan_row notificationTableRow">
+                                            <span class="lan_cell lan-col-45    ">{{abd.an}}</span>
+                                            <span class="lan_cell lan-col-35 " >{{#status2}}{{abd.aps}}{{/status2}}</span>
+                                            <span class="lan_cell  lan-col-20  lan_padding_left_0"> {{#abd.ac}} <a style="padding: 3px 8px;max-width: 46px;margin: auto;" target="_blank" href="#/details/workspace/activitydetail/{{abd.ac}}"> 详情 </a> {{/abd.ac}}</span>
+                                        </div>
+                                    {{/items2}}
+
+                                </div>
+                                <!-- end lan_table -->
+
+
+
+                            </div>
+                            <!--end of container_bottom_table_Container--->
+
+                            <div class="clearFix"></div>
+
+                            <div class="PersonalHomeCheckAll lan_vpadding_10 lanLink"><span><a href="#/workspace/activities/activitieslist">查看全部</a></span></div>
+
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div><!---end of detailPageUserIntroBox-->
+                    <div class="clearFix"></div>
+
+
+                </div>
+
+
+                <!--<div class="mobile_only afterSidebarProfile  businessTaskRating" style="background-color:#f5f5f5">-->
+                    <!--<div class="mommentsLine"><span>事务评价</span></div>-->
+                    <!--<div class="userWorkLogTitle"><span>您还有3项事务待评价：</span></div>-->
+                    <!--<div><span>团体照片补拍</span><span>评价</span></div>-->
+                    <!--<div><span>常用证件照拍摄</span><span>评价</span></div>-->
+                    <!--<div><span>同济大学入学申请</span><span>评价</span></div>-->
+
+                <!--</div>-->
+
+
+                <!--<div class="mobile_only messageBoard afterSidebarProfile " style="background-color:#f5f5f5">-->
+                <!--<div class="mommentsLine"><span>动态</span><span class="lanLink">发动态</span></div>-->
+                <!--<div><span class="friedsMomentspic"><img src="../commons/images/people_first.png"> </span>-->
+                <!---->
+                <!--<span class="friedsMomentsInfo">-->
+                <!--<span> 孙悟空</span>-->
+                <!--<span>2014.9.22 15:35</span>-->
+                <!--<span>我在南京出差中</span>-->
+                <!--</span>-->
+                <!--</div>-->
+                <!--<div><span class="friedsMomentspic"><img src="../commons/images/people_second.png"></span>-->
+                <!---->
+                <!--<span class="friedsMomentsInfo">-->
+                <!--<span> Andy</span>-->
+                <!--<span>2014.9.22 15:35</span>-->
+                <!--<span>我手机坏了，暂时打不通</span>-->
+                <!--</span>-->
+
+
+                <!--</div>-->
+                <!--<div><span class="friedsMomentspic"><img src="../commons/images/people_third.png"></span>-->
+                <!--<span class="friedsMomentsInfo">-->
+                <!--<span> James</span>-->
+                <!--<span>2014.9.22 15:35</span>-->
+                <!--<span>我在徐家汇参加会议</span>-->
+                <!--</span>-->
+                <!--</div>-->
+                <!--<div><span class="friedsMomentspic"><img src="../commons/images/people_forth.jpg"></span>-->
+                <!---->
+                <!--<span class="friedsMomentsInfo">-->
+                <!--<span> Jurffry</span>-->
+                <!--<span>2014.9.22 15:35</span>-->
+                <!--<span> 北京天气很好晴朗</span>-->
+                <!--</span>-->
+
+
+                <!--</div>-->
+
+                <!--</div> &lt;!&ndash;--/end of mobile only--&ndash;&gt;-->
+
+
+
+            </div> <!---end of personalHomeTables -->
+
+            <div class="noPadding pesonalHomePageRightSidebar">
+
+                <div class="profile">
+                    <div class="profile_picture_wrapper">
+                        <img class="profile_picture" src="{{profile.basic.corporationLogo.value}}" alt="profile picture">
+                    </div>
+                    <div class=" profile_info_line">
+                        <h1 class="">{{profile.basic.corporationName.value}}</h1>
+
+                    </div>
+                    <div class="id_line profile_info_line">
+                        <img class="Lan_id_logo" src="../commons/images/lan-zheng_logo.png" alt="Lan Id logo">
+                        <span>{{profile.basic.lzID}}</span></div>
+                    <div class="name_line profile_info_line">
+                        <img class="name_logo" src="../../commons/images/man_icon.png" alt="name logo">
+                        <span class="profile_name">{{user.loginName}}</span></div>
+
+
+
+
+
+
+                    <div class="authentication_line profile_info_line"><img class="authentication_logo"
+                                                                            src="../commons/images/Certified.png"
+                                                                            alt="authentication logo"> <span
+                            class="authenticaton_status">{{profile.basic.vs}}</span></div>
+
+
+                    <div class="Complete_Percentage_line profile_info_line">
+
+                        <!--<img class="Complete_Percentage_logo" src="../commons/images/iconDataIntegrity.png">-->
+                        <span class="Complete_percentage">
+                            <!--单位资料完善:-->
+                            {{!profile.basic.completion}}
+                            <!--%-->
+                        </span></div>
+                </div>
+
+
+
+                <!----end of profile--->
+
+
+                <!--<div class="afterSidebarProfile businessTaskRating">-->
+                    <!--<div><span>事务评价</span></div>-->
+                    <!--<div class="userWorkLogTitle"><span>您还有3项事务待评价：</span></div>-->
+                    <!--<div><span>团体照片补拍</span><span>评价</span></div>-->
+                    <!--<div><span>常用证件照拍摄</span><span>评价</span></div>-->
+                    <!--<div><span>同济大学入学申请</span><span>评价</span></div>-->
+
+                <!--</div>-->
+
+
+                <!--<div class="messageBoard afterSidebarProfile ">-->
+                <!--<div class="mommentsLine"><span>动态</span><span class="lanLink">发动态</span></div>-->
+                <!--<div><span class="friedsMomentspic"><img src="../commons/images/people_first.png"> </span>-->
+                <!---->
+                <!--<span class="friedsMomentsInfo">-->
+                <!--<span> 孙悟空</span>-->
+                <!--<span>2014.9.22 15:35</span>-->
+                <!--<span>我在南京出差中</span>-->
+                <!--</span>-->
+                <!--</div>-->
+                <!--<div><span class="friedsMomentspic"><img src="../commons/images/people_second.png"></span>-->
+                <!---->
+                <!--<span class="friedsMomentsInfo">-->
+                <!--<span> Andy</span>-->
+                <!--<span>2014.9.22 15:35</span>-->
+                <!--<span>我手机坏了，暂时打不通</span>-->
+                <!--</span>-->
+
+
+                <!--</div>-->
+                <!--<div><span class="friedsMomentspic"><img src="../commons/images/people_third.png"></span>-->
+                <!--<span class="friedsMomentsInfo">-->
+                <!--<span> James</span>-->
+                <!--<span>2014.9.22 15:35</span>-->
+                <!--<span>我在徐家汇参加会议</span>-->
+                <!--</span>-->
+                <!--</div>-->
+                <!--<div><span class="friedsMomentspic"><img src="../commons/images/people_forth.jpg"></span>-->
+                <!---->
+                <!--<span class="friedsMomentsInfo">-->
+                <!--<span> Jurffry</span>-->
+                <!--<span>2014.9.22 15:35</span>-->
+                <!--<span> 北京天气很好晴朗</span>-->
+                <!--</span>-->
+
+
+                <!--</div>-->
+
+                <!--</div>-->
+
+
+            </div> <!--end of personal home page right sidebar-->
+
+
+        </div> <!--/row--->
+
+
+    </div> <!--/fluid container-->
+
+
+</div>
+<!---/contaier bottom----->

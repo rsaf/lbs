@@ -1,0 +1,130 @@
+
+
+    <div class="lan_table col-5-table" >
+        <div class="lan_row">
+            <span class="lan_cell Swap">业务类型</span>
+            <span class="lan_cell Swap">操作名称</span>
+            <span class="lan_cell Swap">操作时间</span>
+            <span class="lan_cell Swap">IP地址</span>
+            <span class="lan_cell Swap">操作</span>
+        </div>
+
+    {{#items}}
+
+
+        <div class="lan_row">
+            <span class="lan_cell">{{opType}}</span>
+            <span class="lan_cell">{{opName}}</span>
+            <span class="lan_cell">{{#dateTime}}{{opDate}}{{/dateTime}}</span>
+
+            <span class="lan_cell">{{srcIP}}</span>
+
+            <span class="lan_cell">
+
+                {{#_id}}
+                <ul class="lan_table_more">
+                  <li>
+                      <a> 选项 </a>
+
+                      <ul>
+                          <li> <a  data-action-click="operation:show:details" data-id="{{_id}}" >详细 </a>
+                          </li>
+
+                      </ul>
+
+
+
+                  </li>
+                </ul>
+                {{/_id}}
+            </span>
+
+
+
+        </div>
+
+
+
+
+
+        <!---modal-->
+
+        <!--<div class="modal " id="{{_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
+            <!--<div class="modal-dialog">-->
+                <!--<div class="modal-content">-->
+                    <!--<div class="modal-header modal-header-primary blueHeader ">-->
+                        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>-->
+                        <!--<h4 class="modal-title">操作详细</h4>-->
+                    <!--</div>-->
+                    <!--<div class="modal-body">-->
+
+
+                        <!--&lt;!&ndash;--inserted part--&ndash;&gt;-->
+                        <!--<div class=" opsLogDetailsPopUp">-->
+
+                            <!--<div class="regFancyBoxBody">-->
+
+                                <!--<div class="opsLogDetailsTop">-->
+                                    <!--<div class="fakeTable">-->
+
+                                        <!--<div class="fakeTableLine">-->
+                                            <!--<span>操作名称:</span><span>{{opName}}</span>-->
+
+                                        <!--</div>-->
+                                        <!--<div class="fakeTableLine">-->
+                                            <!--<span>操作类型:</span><span>{{opType}}</span>-->
+
+                                        <!--</div>-->
+                                        <!--<div class="fakeTableLine">-->
+                                            <!--<span>操作时间:</span><span>{{opDate}}</span>-->
+
+                                        <!--</div>-->
+                                        <!--<div class="fakeTableLine">-->
+                                            <!--<span>IP地址:</span><span>{{srcIP}}</span>-->
+
+                                        <!--</div>-->
+
+                                    <!--</div>-->
+
+                                <!--</div>-->
+                                <!--<div class="opsLogDetailsBottom">-->
+                                    <!--<div class="fakeTableLine">-->
+                                        <!--<span>操作对象:</span><span>{{srcURI}}</span>-->
+
+                                    <!--</div>-->
+                                    <!--<div class="fakeTableLine">-->
+
+                                        <!--<span>是否成功:</span><span>是</span>-->
+
+                                    <!--</div>-->
+
+
+                                <!--</div>-->
+
+
+
+                            <!--</div>-->
+
+
+                        <!--</div>-->
+
+                        <!--&lt;!&ndash;--/inserted part--&ndash;&gt;-->
+                    <!--</div>-->
+                    <!--<div class="modal-footer  fancyBoxGrayFooter">-->
+                        <!--<button type="button" class="btn btn-primary center-block" data-dismiss="modal">知道了</button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--- modal -->
+
+        {{/items}}
+
+
+
+</div><!-- end lan_table -->
+
+
+<nav class="paginationContainer">
+
+</nav>

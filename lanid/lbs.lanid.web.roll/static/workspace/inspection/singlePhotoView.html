@@ -1,0 +1,275 @@
+<div class="dfetailPageUserIntroBox siglePhotoViewBox noMargin">
+    {{#list.0}}
+  <div class="detailPageUserIntroBoxHeader">
+    <div class="row">
+      <div class="col-sm-4">
+        <ul class="list-inline">
+
+          <li>
+
+            共有{{total}}项，
+
+
+          </li>
+          <!--<li>-->
+            <!--&lt;!&ndash;已检测1010项???，&ndash;&gt;-->
+
+          <!--</li>-->
+          <!--<li>-->
+
+            <!--&lt;!&ndash;剩下1540项???，&ndash;&gt;-->
+
+
+          <!--</li>-->
+
+
+        </ul>
+
+
+
+
+      </div><!--end of col-->
+
+      <div class="col-sm-6">
+
+
+        <ul class="list-inline">
+
+          <li>
+
+            事务编号: {{ac}},
+
+
+          </li>
+          <li>
+
+            事务名称: {{can}},
+
+
+          </li>
+          <li>
+
+            证照类型: {{tpp.it}},
+
+
+          </li>
+
+
+        </ul>
+
+
+
+      </div><!--end of col-->
+
+
+
+      <div class="col-sm-2">
+
+
+
+
+        <!--<a class="pull-right">检测标准PDF</a>-->
+        <div class="clearfix"></div>
+
+
+
+
+      </div><!--end of col-->
+
+
+
+
+
+
+    </div><!--end of row-->
+
+  </div>
+  <div class="detailPageUserIntroBoxBody ">
+
+
+    <div class="idPhotoGaleryArrowContainerLeft"
+         data-direction='left'
+         data-action-click='inspection:list:movePage' data-view="single"></div>
+    <div class="idPhotoGaleryArrow  left"
+         data-direction='left'
+         data-action-click='inspection:list:movePage' data-view="single"></div>
+
+    <div id="idphotoGaleryContain" class="idphotoAlbum galeryInIntroBox">
+
+
+
+      <div class=" container-fluid">
+
+          <div class="col-sm-7 ">
+            <div class="singleImageContainer lan_margin_bottom_10 lan_gray_border">
+
+              {{#uri}}
+
+              <img class="toggleImg"  data-toggle="modal" data-target="#singlePhotoViewModal"    src="{{uri}}">
+
+              <img   class="modal fade" id="singlePhotoViewModal"    src="{{uri}}">
+              {{/uri}}
+
+            </div>
+
+          </div><!--end of col--->
+          <div class="col-sm-5 ">
+
+
+            <div class="singlePhotoSideInfoContainer">
+
+
+              <div class=" gray_bg  lan_gray_border", style="height: 450px;">
+
+
+                <h2 class="text-center">初始照片属性</h2>
+
+                <dl class="dl-horizontal">
+                  <!--<dt>业务序号:</dt> <dd>LZ000021</dd>-->
+                    <dt>事务名称:</dt> <dd>{{can}}</dd>
+                  <dt>文件大小:</dt> <dd> {{pp.ofs}}</dd>
+                  <dt>像素尺寸:</dt> <dd>{{pp.ifr}}</dd>
+                  <!--<dt>拍摄地点:</dt> <dd>长顺路30号</dd>-->
+                  <!--<dt>证照来源:</dt> <dd>{{category}}</dd>-->
+                  <!--<dt>拍摄时间:</dt> </dt> <dd>2014-08-06</dd>-->
+                  <dt>提交时间:</dt> </dt> <dd>{{#date}}{{ct.cd}}{{/date}}</dd>
+                  <!--<dt>拍摄备注:</dt> </dt> <dd>无</dd>-->
+                </dl>
+
+                <h2 class="text-center">目标证照属性</h2>
+
+                <dl class="dl-horizontal">
+                  <dt>像素尺寸:</dt> <dd>{{tpp.ifr}}</dd>
+                  <dt>背景颜色:</dt> <dd>{{tpp.bc}}</dd>
+                  <!--<dt>证照来源:</dt > <dd>自助机-K</dd>-->
+                  <dt>图片格式:</dt> </dt> <dd>{{tpp.fm}}</dd>
+                  <dt>分辨率:</dt> </dt> <dd>{{tpp.rs}}</dd>
+                  <dt>文件大小:</dt> </dt> <dd> {{tpp.ofs}}</dd>
+                </dl>
+
+
+
+
+              </div><!--end of gray border-->
+
+
+
+              <div class="blueButton pull-left"><span  data-action-click="inspection:provide:feedback"  data-type="qualified" class='inspection' data-type="unqualified" type="radio"  data-id="{{_id}}"  name='{{helpers.someId}}'>合格</span></div>
+              <div class="grayButton pull-right"><span data-action-click="inspection:provide:feedback"  data-type="unqualified" class='inspection' data-type="unqualified" type="radio"  data-id="{{_id}}"  name='{{helpers.someId}}'> 不合格</span></div>
+              <div class="clearfix"></div>
+
+
+            </div><!--end of singlePhotoSideInfoContainer -->
+
+
+
+
+          </div><!--end of col--->
+
+
+      </div><!--end of container-->
+
+
+
+
+
+
+
+    </div> <!--end of idphotoGalerycontain-->
+
+
+
+    <!--<div id="idphotoGaleryContainNext" class="idphotoAlbum galeryInIntroBox">-->
+
+      <!--<div class=" container-fluid">-->
+
+        <!--<div class="row">-->
+          <!--<div class="col-sm-7">-->
+            <!--<div class="singleImageContainer lan_gray_border">-->
+
+
+
+              <!--{{!#urll}}-->
+
+              <!--<img class="toggleImg"  data-toggle="modal" data-target="#singlePhotoViewModal2"    src="{{!urll}}">-->
+
+              <!--<img   class="modal fade" id="singlePhotoViewModal2"    src="{{!urll}}">-->
+              <!--{{!/urll}}-->
+
+            <!--</div>-->
+          <!--</div>&lt;!&ndash;end of col-&ndash;&gt;-->
+          <!--<div class="col-sm-5 ">-->
+
+
+            <!--<div class="singlePhotoSideInfoContainer">-->
+
+              <!--<div class=" gray_bg lan_gray_border">-->
+
+                <!--<h2 class="text-center">初始照片属性2</h2>-->
+
+                <!--<dl class="dl-horizontal">-->
+                  <!--<dt>业务序号:</dt> <dd>LZ000021</dd>-->
+                  <!--<dt>文件大小:</dt> <dd>1254 Kb</dd>-->
+                  <!--<dt>像素尺寸:</dt> <dd>800*1200</dd>-->
+                  <!--<dt>拍摄地点:</dt> <dd>长顺路30号</dd>-->
+                  <!--<dt>证照来源:</dt> <dd>自助机-K</dd>-->
+                  <!--<dt>拍摄时间:</dt> </dt> <dd>2014-08-06</dd>-->
+                  <!--<dt>提交时间:</dt> </dt> <dd>2014-08-07</dd>-->
+                  <!--<dt>拍摄备注:</dt> </dt> <dd>无</dd>-->
+                <!--</dl>-->
+
+                <!--<h2 class="text-center">目标证照属性2</h2>-->
+
+                <!--<dl class="dl-horizontal">-->
+                  <!--<dt>像素尺寸:</dt> <dd>390*567</dd>-->
+                  <!--<dt>背景颜色:</dt> <dd>蓝色</dd>-->
+                  <!--<dt>证照来源:</dt> <dd>自助机-K</dd>-->
+                  <!--<dt>图片格式:</dt> </dt> <dd>JPG</dd>-->
+                  <!--<dt>分辨率:</dt> </dt> <dd>300 DPI</dd>-->
+                  <!--<dt>文件大小:</dt> </dt> <dd> &le; 100 &gt; KB</dd>-->
+                <!--</dl>-->
+
+              <!--</div>&lt;!&ndash;end of gray border&ndash;&gt;-->
+
+              <!--<div class="blueButton pull-left"><span>合格</span></div>-->
+              <!--<div class="grayButton pull-right"><span>不合格</span></div>-->
+              <!--<div class="clearfix"></div>-->
+
+            <!--</div>&lt;!&ndash;end of singlePhotoSideInfoContainer &ndash;&gt;-->
+
+          <!--</div>&lt;!&ndash;end of col-&ndash;&gt;-->
+        <!--</div>&lt;!&ndash;end of row-&ndash;&gt;-->
+
+      <!--</div>&lt;!&ndash;end of container&ndash;&gt;-->
+
+      <!--<div class="clearfix"></div>-->
+    <!--</div> &lt;!&ndash;end of idphotoGalerycontain&ndash;&gt;-->
+
+    <div class="idPhotoGaleryArrowContainerRight"
+         data-direction='right'
+         data-action-click='inspection:list:movePage' data-view="single"></div>
+    <div class="idPhotoGaleryArrow  right"
+         data-direction='right'
+         data-action-click='inspection:list:movePage' data-view="single"></div>
+    <div class="clearfix"></div>
+  </div>   <!---end of detailPageUserIntroBoxBody-->
+
+
+  <div class="clearfix"></div>
+    {{/list.0}}
+</div> <!--/detailPageUserIntroBox--->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

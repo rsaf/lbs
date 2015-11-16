@@ -1,0 +1,188 @@
+
+
+
+{{#menu1.length}}
+<div id="left_nav" class="hideSide menu{{menuNumber}}">
+
+    <nav class="nav-menu ">
+
+      {{#menu1}}
+        <div class="nav_list_bg">
+            <div class="service_name" 
+                 data-action-click='slideOpen'
+                 style="cursor:pointer;">
+                <img src="{{main.icon}}">
+
+                <div class="toggle">
+                  <a href="#{{main.url}}" style="cursor:pointer;"> {{main.label}}
+                  </a></div>
+            </div>
+             {{#sub.length}}
+              <div class="detail_frame">
+                {{#sub}}
+                  <div class="details"
+                     data-action-click='highLightSelectedSubmunuItem,bbqUpdate'
+                     data-linkto='{{url}}'>
+                      <img src="/commons/images/所有事务箭头_22.jpg">
+                      <a href="#{{url}}">{{label}}</a>
+                  </div>
+                {{/sub}}
+              </div>
+            {{/sub.length}}
+        </div>
+      {{/menu1}}
+    {{#menu2.length}}
+    </nav>
+    <nav class="nav-menu">
+      {{#menu2}}
+        <div class="nav_list_bg">
+            <div class="service_name" 
+                 data-action-click='slideOpen'
+                 style="cursor:pointer;">
+                <img src="{{main.icon}}">
+
+                <div class="toggle">
+                  <a href="#{{main.url}}" style="cursor:pointer;"> {{main.label}}
+                  </a></div>
+            </div>
+             {{#sub.length}}
+              <div class="detail_frame">
+                {{#sub}}
+                  <div class="details"
+                     data-action-click='highLightSelectedSubmunuItem,bbqUpdate'
+                     data-linkto='{{url}}'>
+                      <img src="/commons/images/所有事务箭头_22.jpg">
+                      <a href="#{{url}}">{{label}}</a>
+                  </div>
+                {{/sub}}
+              </div>
+            {{/sub.length}}
+        </div>
+      {{/menu2}}
+    {{/menu2.length}}
+
+    </nav>
+    <div class="clickMeHide hidden-xxs"
+         data-action-click='miniMaxi'></div>
+</div>
+<!---end of left nav---->
+{{/menu1.length}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<div id="left_nav_mini">
+    <div class="service_icon">
+        <div class="nav_list_bg">
+            <div class="service_name" style="cursor:pointer;">
+                <div class="toggle"><a  style="cursor:pointer;"> 事务管理</a></div>
+            </div>
+            <div class="detail_frame">
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有事务</a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有表单 </a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有文件 </a></div>
+            </div>
+        </div>
+    </div>
+    <div class="service_icon">
+        <div class="nav_list_bg">
+            <div class="service_name" style="cursor:pointer;">
+                <div class="toggle"><a  style="cursor:pointer;"> 事务管理</a></div>
+            </div>
+            <div class="detail_frame">
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有事务</a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有表单 </a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有文件 </a></div>
+            </div>
+        </div>
+    </div>
+    <div class="service_icon">
+        <div class="nav_list_bg">
+            <div class="service_name" style="cursor:pointer;">
+                <div class="toggle"><a  style="cursor:pointer;"> 事务管理</a></div>
+            </div>
+            <div class="detail_frame">
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有事务</a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有表单 </a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有文件 </a></div>
+            </div>
+        </div>
+    </div>
+    <div class="service_icon">
+        <div class="nav_list_bg">
+            <div class="service_name" style="cursor:pointer;">
+                <div class="toggle"><a  style="cursor:pointer;"> 事务管理</a></div>
+            </div>
+            <div class="detail_frame">
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有事务</a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有表单 </a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有文件 </a></div>
+            </div>
+        </div>
+    </div>
+    <div class="service_icon">
+        <div class="nav_list_bg">
+            <div class="service_name" style="cursor:pointer;">
+                <div class="toggle"><a  style="cursor:pointer;"> 事务管理</a></div>
+            </div>
+            <div class="detail_frame">
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有事务</a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有表单 </a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有文件 </a></div>
+            </div>
+        </div>
+    </div>
+    <div class="service_icon">
+        <div class="nav_list_bg">
+            <div class="service_name" style="cursor:pointer;">
+                <div class="toggle"><a  style="cursor:pointer;"> 事务管理</a></div>
+            </div>
+            <div class="detail_frame">
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有事务</a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有表单 </a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有文件 </a></div>
+            </div>
+        </div>
+    </div>
+    <div class="service_icon">
+        <div class="nav_list_bg">
+            <div class="service_name" style="cursor:pointer;">
+                <div class="toggle"><a  style="cursor:pointer;"> 事务管理</a></div>
+            </div>
+            <div class="detail_frame">
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有事务</a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有表单 </a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有文件 </a></div>
+            </div>
+        </div>
+    </div>
+    <div class="service_icon">
+        <div class="nav_list_bg">
+            <div class="service_name" style="cursor:pointer;">
+                <div class="toggle"><a  style="cursor:pointer;"> 事务管理</a></div>
+            </div>
+            <div class="detail_frame">
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有事务</a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有表单 </a></div>
+                <div class="details"><img src="../commons/images/所有事务箭头_22.jpg"> <a >所有文件 </a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="service_icon clickMe"></div>
+</div>-->
+<!---end of left nav mini--> 

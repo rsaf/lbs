@@ -1,0 +1,42 @@
+<div class="modal-dialog uploadPhotoInfo lanIdCodeModal" style=" max-width: 400px ">
+    <div class="modal-content">
+        <form  class="form-horizontal" id="photoInforForm" method="POST" enctype="multipart/form-data" >
+        <div class="modal-header modal-header-primary blueHeader ">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+            <h4 class="modal-title">蓝证码搜索</h4>
+        </div>
+        <div class="modal-body">
+
+
+                                <div class="form-group " style="margin: 50px auto; min-height: 50px;">
+                                    <label for="lanzhengCodeForResponse" class="col-sm-3 col-sm-offset-1 control-label">蓝证码:</label>
+                                    <div class="col-sm-7 ">
+                                        <input type="text" class="form-control lan_relative" id="lanzhengCodeForResponse" name="photoName" placeholder="请输入蓝证码..." >
+
+                                        <div id="spinning_icon_sm" class="hide">
+
+                                        </div>
+
+                                        <div id="errorMessageHolder" class="errorMessageHolder lan_margin_top_5 lan_text_red"> </div>
+                                    </div>
+
+                                </div>
+
+
+
+            <div class="clearfix"></div>
+            <!----/inserted part---->
+        </div>
+        <div class="modal-footer  fancyBoxGrayFooter">
+
+            <div class="footer_operation_container">
+                <div class="grayButton formPreview " data-dismiss="modal" ><span>取消</span></div>
+                <div class="blueButton formPreview " data-action-click="processes:seach:by:code"><span>确定</span></div>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        </form>
+
+    </div>
+</div>

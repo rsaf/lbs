@@ -1,0 +1,55 @@
+<div class="lan_row">
+    <span class="lan_cell lan-col-15  Swap">服务代码</span>
+    <span class="lan_cell lan-col-27_5 Swap">服务名称</span>
+    <span class="lan_cell lan-col-27_5 Swap">网点名称</span>
+    <span class="lan_cell lan-col-15 Swap">服务价格</span>
+    <span class="lan_cell lan-col-15 Swap">操作</span>
+
+</div>
+
+{{#items}}
+{{#isATotal}}
+<div class="lan_row">
+    <span class="lan_cell lan-col-15">{{service.serviceCode}}</span>
+    <span class="lan_cell lan-col-27_5">{{serviceName.text}}</span>
+    <span class="lan_cell lan-col-27_5">所有网点</span>
+    <span class="lan_cell lan-col-15">{{min}}元 - {{max}}元</span>
+    <span class="lan_cell lan-col-15">
+        <button type="button"   
+                data-action-click="publishing:activity:service:select" 
+                data-q="{{q}}"
+                class="selectContent selectAll  lan_margin_top_5 center-block btn-sm btn btn-primary">全部选择</button>
+    </span>
+</div>
+{{/isATotal}}
+{{#isAResult}}
+<div class="lan_row">
+    <span class="lan_cell lan-col-15">{{service.serviceCode}}</span>
+    <span class="lan_cell lan-col-27_5">{{serviceName.text}}</span>
+    <span class="lan_cell lan-col-27_5">{{servicePoint.servicePointName}}</span>
+    <span class="lan_cell lan-col-15">{{servicePrices}}元</span>
+    <span class="lan_cell lan-col-15">
+        <button 
+            type="button" 
+            data-action-click="publishing:activity:service:select" 
+            data-q="{{q}}"
+            class="selectContent lan_margin_top_5 center-block btn-sm btn btn-primary">选择</button>
+    </span> 
+</div>
+{{/isAResult}}
+
+{{^isATotal}}
+{{^isAResult}}
+<div class="lan_row">
+    <span class="lan_cell lan-col-15"></span>
+    <span class="lan_cell lan-col-27_5"></span>
+    <span class="lan_cell lan-col-27_5"></span>
+    <span class="lan_cell lan-col-15"></span>
+    <span class="lan_cell lan-col-15"></span>
+</div>
+{{/isAResult}}
+{{/isATotal}}
+
+{{/items}}
+
+<div class="spinnerPlaceHolder "></div>

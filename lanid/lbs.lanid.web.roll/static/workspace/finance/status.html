@@ -1,0 +1,40 @@
+
+<div class="lan_table col-5-table">
+  <div class="lan_row">
+    <span class="lan_cell Swap">交易编号</span>
+    <span class="lan_cell Swap">收支金额</span>
+    <span class="lan_cell Swap">可用余额</span>
+    <span class="lan_cell Swap">事务名称</span>
+    <span class="lan_cell Swap">交易时间</span>
+    <!--<span class="lan_cell Swap">操作</span>-->
+  </div>
+  
+  {{#items}}
+  <div class="lan_row">
+    <span class="lan_cell">{{transactionId}}</span>
+    <span class="lan_cell {{color}}">{{transactionAmount}}</span>
+    <span class="lan_cell">{{accountBalance}}</span> <!-- add the class red to lan cell if its negative, green if it is positive -->
+    <span class="lan_cell">{{serviceName}}</span>
+    <span class="lan_cell">{{shorter}}</span>
+    <!--<span class="lan_cell">-->
+      <!--{{#transactionId}}-->
+      <!--<ul class="lan_table_more">-->
+        <!--<li ><a > 详细 </a>-->
+        <!--</li>-->
+      <!--</ul>-->
+      <!--{{/transactionId}}-->
+    <!--</span>-->
+  </div>
+  {{/items}}
+  <div class="spinnerPlaceHolder "></div>
+</div>  
+
+
+<nav class="paginationContainer">
+
+
+</nav><!-- /pagination  -->
+
+
+<!-- /contaier bottom -->
+

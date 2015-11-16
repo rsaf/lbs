@@ -1,0 +1,45 @@
+
+    <div class="lan_table idPhotoUsageTable col-4-table">
+        <div class="lan_row">
+            <span class="lan_cell Swap">用途代码</span>
+            <span class="lan_cell Swap">证照用途</span>
+            <span class="lan_cell Swap">可选证照类</span>
+            <span class="lan_cell Swap">操作</span>
+        </div>
+      {{#items}}
+        <div class="lan_row">
+            <span class="lan_cell">{{uc}}</span>
+            <span class="lan_cell">{{un}}</span>
+            <span class="lan_cell">{{#sd}}{{it}} , &nbsp;  {{/sd}}</span>
+            <span class="lan_cell">
+  <!--            todo: should use a filed that cannot be false here-->
+              {{#uc}}
+             <ul class="lan_table_more">
+                 <li >
+
+                     <a> 选项 </a>
+
+
+                     <ul>
+                         
+                         <li>   <a data-id="{{uc}}"
+                                   data-action-click="usage:edit"
+                                 >详细 </a></li>
+                         <li><a data-id="{{uc}}"
+                                 data-action-click="usage:delete" > 删除</a></li>
+                     </ul>
+                 </li>
+             </ul>
+            {{/uc}}
+            </span>
+        </div>
+      {{/items}}
+        <div class="spinnerPlaceHolder "></div>
+    </div><!--end lan_table -->
+
+    <nav class="paginationContainer">
+
+
+    </nav> <!-- /pagging  -->
+
+

@@ -1,0 +1,92 @@
+
+
+<div class="detailPageUserIntroBox noMargin">
+    <div class="detailPageUserIntroBoxHeader">
+    {{#helpers.showAction}}
+        <span> <input type="checkbox"></span>
+        <span>本页全选</span>
+        <span>已选择3页</span>
+    {{/helpers.showAction}}
+    </div>
+    <div class="detailPageUserIntroBoxBody">
+
+
+        <div class="idPhotoGaleryArrowContainerLeft"
+             data-direction='left'
+             data-action-click='corrections:list:movePage'></div>
+        <div class="idPhotoGaleryArrow  left"
+             data-direction='left'
+             data-action-click='corrections:list:movePage'></div>
+
+        <div id="idphotoGaleryContain" class="idphotoAlbum galeryInIntroBox">
+          <span class="photoframeRow"> 
+          
+            {{#list}}
+            {{#page}}<!--Page is a helper function that will not more items than the size of the page-->
+            <span class="photoframeContainer">
+              {{#urlm}}
+              <span class="siglephtoframe withSelection">
+                <span class="siglephotoImage">
+                  <img src="{{urlm}}?s={{photostage}}" alt="photo">
+                </span>
+                <!--{{#helpers.showAction}}-->
+                <!--<span class="siglephotoAction" >-->
+                    <!--<span class=" qualified"  ><input class='inspection' type="radio" name='{{helpers.someId}}'><span>合格</span></span>-->
+                    <!--<span class=" unqualified"  > <input class='inspection' type="radio" name='{{helpers.someId}}'><span>不合格</span></span>-->
+                    <!--<div class="clearfix"></div>-->
+                <!--</span>&lt;!&ndash;end of siglephotoAction &ndash;&gt;-->
+                <!--{{/helpers.showAction}}-->
+                {{#helpers.showDetail}}
+                  <!--<span class="siglephotoAction text-center" >-->
+                    <!--{{!category}}-->
+                  <!--</span>-->
+
+                      <dl class="dl-horizontal photoSizeInfo">
+                          <dt>照片尺寸:</dt><dd>{{pp.ifr}}</dd>
+                          <dt>文件大小:</dt><dd>{{pp.ofs}}</dd>
+
+                      </dl>
+
+                    <!--end of siglephotoAction -->
+                {{/helpers.showDetail}}
+              </span><!--end of siglephtoframe-->
+            {{/urlm}}
+            </span><!--end of photoframeContainer--->
+            {{#row}}
+              <div class="clearfix"></div>
+              </span>
+              <span class="photoframeRow">
+            {{/row}}
+            {{/page}}
+            {{/list}}
+      <div class="clearfix"></div>
+      </span><!--end of photo frame row--->
+      <div class="clearfix"></div>
+
+
+        </div> <!--end of idphotoGalerycontain-->
+
+        <div class="idPhotoGaleryArrowContainerRight"
+             data-direction='right'
+             data-action-click='corrections:list:movePage'></div>
+        <div class="idPhotoGaleryArrow  right"
+             data-direction='right'
+             data-action-click='corrections:list:movePage'></div>
+
+
+
+
+        <div class="clearfix"></div>
+
+
+
+    </div>   <!---end of detailPageUserIntroBoxBody-->
+
+
+    <div class="clearfix"></div>
+</div> <!--/detailPageUserIntroBox--->
+            
+            
+            
+         
+          

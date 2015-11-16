@@ -1,0 +1,53 @@
+{
+  "pl": [{
+      "_id": "111111",
+      "servicePointCode": null
+      ,
+      "servicePointName": "name 3",
+      "servicePointCode":"Y200212020003",
+      "price" : 200,
+      "servicePointStatus": null,
+      "servicePointAddress": "service point address 1",
+      "servicePointType": "servicepoint type one",
+      "operatingHours": "1",
+      "contactPerson": "2",
+      "contactPhone": "5",
+      "servicePointDescription": "description",
+      "__v": 0,
+      "md": {
+        "uID": "54852b4bada015b113c0df7e",
+        "oID": "54852b4bada015b113c0df7e",
+        "lu": "2014-12-30T08:49:04.125Z"
+      },
+      "ct": {
+        "cuID": "54852b4bada015b113c0df7e",
+        "oID": "54852b4bada015b113c0df7e",
+        "cd": "2014-12-30T08:49:04.125Z"
+      }
+    },{
+      "_id": "2222",
+      "servicePointCode": null
+      ,
+      "servicePointName": "name 4",
+      "servicePointCode":"Y200212020003",
+      "servicePointStatus": null,
+      "servicePointAddress": "service point address 2",
+      "servicePointType": "servicepoint type one",
+      "operatingHours": "1",
+      "contactPerson": "2",
+      "contactPhone": "5",
+      "servicePointDescription": "description",
+      "__v": 0,
+      "md": {
+        "uID": "54852b4bada015b113c0df7e",
+        "oID": "54852b4bada015b113c0df7e",
+        "lu": "2014-12-30T08:49:04.125Z"
+      },
+      "ct": {
+        "cuID": "54852b4bada015b113c0df7e",
+        "oID": "54852b4bada015b113c0df7e",
+        "cd": "2014-12-30T08:49:04.125Z"
+      }
+    }],
+  "er": null
+}

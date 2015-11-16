@@ -1,0 +1,89 @@
+
+
+
+<div class="lan_table col-7-table pcOnlyView">
+
+    <div class="lan_row">
+        <span class="lan_cell Swap">事务编号</span>
+        <span class="lan_cell Swap">事务名称</span>
+        <span class="lan_cell Swap swapBg">事务类型</span>
+        <span class="lan_cell Swap">发布单位</span>
+        <span class="lan_cell Swap">发布日期</span>
+        <span class="lan_cell Swap">截止日期</span>
+        <span class="lan_cell Swap">操作</span>
+    </div>
+    {{#items}}
+        <div class="lan_row">
+            <span class="lan_cell">{{abd.ac}}</span>
+            <span class="lan_cell">{{abd.an}}</span>
+            <span class="lan_cell">{{#renderActivityTypes}}{{abd.at}}{{/renderActivityTypes}}</span>
+            <span class="lan_cell">{{abd.pcn}}</span>
+            <span class="lan_cell">{{shorterStart}}</span>
+            <span class="lan_cell">{{shorterEnd}}</span>
+        <span class="lan_cell">
+            {{#abd.ac}}
+                <ul class="lan_table_more ">
+                    <li><a>选项</a>
+                        <ul>
+                            <li class="home_activities_respond" ><a data-action-click="take:user:to:response"  data-code="{{_id}}">响应</a></li>
+                            <li><a  href="#/details/processes/activitydetail/{{abd.ac}}"> 查看详情 </a>  </li>
+                        </ul>
+
+                    </li>
+
+                </ul>
+            {{/abd.ac}}
+        </span>
+        </div>
+    {{/items}}
+
+
+</div>
+<!-- end of lan_table -->
+
+
+
+<div class="mobileOnlyView">
+
+    <div class="lan_gray_border lan_margin_top_20 lan_margin_bottom_10 lan_padding_top_10 lan_padding_bottom_10 lan_padding_left_5 gray_bg2">事务办理</div>
+
+{{#items}}
+    <div  class=" {{#abd.an}} lan_padding_top_5 lan_padding_bottom_5 lan_padding_left_5 lan_padding_right_5 white_bg {{/abd.an}}"  >
+
+        <div {{#abd.an}} class=" lan_padding_5 gray_bg2" {{/abd.an}}>
+
+
+            {{#abd.an}}  <img class="pull-left" src="../commons/images/BusinessManagementDetailLogo.jpg" style="width: 50px;height: 50px" alt=" logo" >{{/abd.an}}
+
+
+
+            <div class="pull-left lan_margin_left_5">
+
+                <div class="activityListMobileViewItemName lan_margin_top_10 lan_text_overflow"> {{abd.an}}</div>
+                <div class="lan_margin_top_10">{{shorterEnd}}</div>
+
+
+            </div>
+
+
+
+            {{#abd.an}}
+
+                <div class="mobileActivityListActionButtons pull-right" style="padding-top:10px;">
+
+                    <a><button class="btn gray_bg" data-action-click="take:user:to:response"  data-code="{{_id}}">响应</button></a>
+
+                    <a  href="#/details/processes/activitydetail/{{abd.ac}}"> <button class="btn gray_bg"> 详情   </button></a>
+                </div>
+            {{/abd.an}}
+
+            <div class="clearfix"></div>
+
+
+        </div>
+
+    </div>
+{{/items}}
+
+
+</div>

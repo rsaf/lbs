@@ -1,0 +1,553 @@
+<div class="container_bottom corporateProfileFirstPage">
+
+  <div id="directory_indicator" class="detailPageDirectory breadCrumbs"><span><a href="/">首页</a></span><span><a href="{{config.previousUrl}}">{{config.previousPageName}}</a></span> <span class="breadCrumbsLast">{{config.currentPage}}</span> </div>
+  
+         <div class="detailPageMaincontainer corporateDetails">
+
+                <div class="detailPageTopTable " >
+                          <div class="detailPageTopTableTop">
+                            
+                                <div class="detailPageTopTableTopLeft">
+                                    <div class="detailPageTopTableTopLeftTop">
+                                    <div class="detailPageProfilePic">
+
+
+                      <form  id="uploadForm" method="" enctype="multipart/form-data" class="customFileUploader  corporateDetailsLogo"  >
+                          <img id="corporateDetailsLogo" src="{{profile.cb.basic.corporationLogo.value}}" alt="corporation logo" >
+                          <!--<a>从本地上传</a>-->
+                          <!--<input data-action-change="corporate:details:logo:upload" name="file" type="file">-->
+                      </form>
+
+
+                        <div class="clearfix"></div>
+                                    </div>
+                                    
+                                    <div class="detailPageTitleAndNav">
+                                        <div class="detailPageProfileTitle">{{profile.cb.basic.corporationName.value}}</div>
+                                        <!--<div class="detailPageTopTableTopNav"><span class="lanLink">收藏</span><span class="lanLink">分享</span><span class="lanLink">关注</span></div>-->
+                                        <div class="detailPageIdNumber"><span>单位代码:</span><span>{{profile.cdc}}</span> </div>
+                                    </div>
+
+                                    </div>
+                                    <div id="corporateDetailsGeneralInfo">
+                                        <div class="detailPageTopTableTopLeftBottom" >
+                                            <div class="detailPageTopTableRow">
+                                                <span class="detailPageTopTableCell"><strong> 单位类型:</strong></span>
+
+                                                <span class="detailPageTopTableCell">{{profile.cb.basic.corporationName.value}}</span>
+
+                                                <span class="detailPageTopTableCell"><strong>单位官网地址:</strong></span>
+
+                                                <span  class="detailPageTopTableCell corporateDetailsEditable lanLink"><a href="{{profile.officialWebSite.value}}" target="_blank" >{{profile.officialWebSite.value}}</a></span>
+
+
+                                            </div>
+                                            <div class="detailPageTopTableRow">
+                                                <span class="detailPageTopTableCell"><strong>认证属性:</strong></span>
+
+                                                <span class="detailPageTopTableCell ">{{profile.cb.basic.vs}}</span>
+
+                                                <span class="detailPageTopTableCell "><strong>事务部门网址:</strong></span>
+
+                                                <span class="detailPageTopTableCell corporateDetailsEditable lanLink"><a href="{{profile.businessDepartmentWebSite.value}}" target="_blank">{{profile.businessDepartmentWebSite.value}}</a></span>
+
+
+
+                                            </div>
+
+                                        </div>
+                                        <div class="detailPageTopAfterTable">
+                                            <span ><strong>单位地址:</strong></span>
+
+                                            <span class="corporateDetailsEditable">{{profile.address.value}}</span>
+
+
+                                        </div>
+
+                                    </div>
+
+
+                                    </div>
+                               
+                                
+                                <div class="detailPageTopTableTopRight" id="detailsPageStatistics">
+
+                                      <div class=" " style="margin-top: 57px">
+
+                                          <div class="blueButton  lan_margin_top_30 ">
+
+                                              <span data-action-click="send:notification:from:detailpage" data-user="{{profile.ow.uID}}" data-subject="详情页内信"  class="{{^loggedIn}}disabled {{/loggedIn}}">站内信</span>
+
+                                          </div>
+
+                                      </div>
+
+
+                                    <!--<div class="blueButton removePadding lan_margin_top_30 lan_padding_top_20"><span>站内信</span></div>-->
+
+                                    <!--<div class="detailPageStatistics"><span>个事务</span><span>103</span></div>-->
+
+                                    <!--<div class="detailPageStatistics"><span>人响应</span><span>11350</span></div>-->
+
+                                </div>
+                                
+                            </div>
+
+
+                    <div class="corporateDetailsContactsINfo" id="corporateDetailsContacts">
+
+                        <div class="detailPageTopTableContacts" >
+                            <div > <span><strong>管理人联系方式：</strong></span></div>
+
+                            <div > <span class="ContactMeans">管理人：</span><span>{{profile.contacts.manager.name.value}}</span> <span class="ContactMeans">联系电话：</span><span >{{profile.contacts.manager.phone.value}}</span>
+                                <!--<span class="ContactMeans">其他联系方式：</span>-->
+                                 <!--<span>-->
+                                 <!--<img src="../commons/images/BusinessManagementDetailQQ.jpg" alt="QQ"-->
+                                      <!--data-container="body" data-toggle="popover"-->
+                                      <!--data-placement="bottom"  data-trigger="hover"-->
+                                      <!--data-content="{{profile.contacts.manager.qq.value}}"-->
+
+                                         <!-->
+                                 <!--<img src="../commons/images/BusinessManagementDetailWeixin.jpg" alt="WeiXin"-->
+
+                                      <!--data-container="body" data-toggle="popover"-->
+                                      <!--data-placement="bottom"  data-trigger="hover"-->
+                                      <!--data-content="{{profile.contacts.manager.wx.value}}"-->
+                                         <!-->
+                                 <!--<img src="../commons/images/BusinessManagementDetailEmail.jpg" alt="email"-->
+                                      <!--data-container="body" data-toggle="popover"-->
+                                      <!--data-placement="bottom"  data-trigger="hover"-->
+                                      <!--data-content="{{profile.contacts.manager.email.value}}"-->
+                                         <!-->
+                                 <!--<img src="../commons/images/BusinessManagementDetailMessage.jpg" alt="message"-->
+                                      <!--data-container="body" data-toggle="popover"-->
+                                      <!--data-placement="bottom"  data-trigger="hover"-->
+                                      <!--data-content="{{profile.contacts.manager.inmail.value}}"-->
+                                         <!-->
+                                 <!--</span>-->
+                            </div>
+
+                        </div>
+                        <div class="detailPageTopTableContacts">
+                            <div> <span><strong>单位关系认证人联系方式：</strong></span></div>
+
+                            <div> <span class="ContactMeans">管理人：</span><span>{{profile.contacts.verificationManager.name.value}}</span> <span class="ContactMeans">联系电话：</span><span>{{profile.contacts.verificationManager.phone.value}}</span>
+                                <!--<span class="ContactMeans">其他联系方式：</span>-->
+                                 <!--<span>-->
+
+                                <!--<img src="../commons/images/BusinessManagementDetailQQ.jpg" alt="QQ"-->
+                                     <!--data-container="body" data-toggle="popover"-->
+                                     <!--data-placement="bottom"  data-trigger="hover"-->
+                                     <!--data-content="{{profile.contacts.verificationManager.qq.value}}"-->
+
+                                        <!-->
+                                 <!--<img src="../commons/images/BusinessManagementDetailWeixin.jpg" alt="WeiXin"-->
+
+                                      <!--data-container="body" data-toggle="popover"-->
+                                      <!--data-placement="bottom"  data-trigger="hover"-->
+                                      <!--data-content="{{profile.contacts.verificationManager.wx.value}}"-->
+                                         <!-->
+                                 <!--<img src="../commons/images/BusinessManagementDetailEmail.jpg" alt="email"-->
+                                      <!--data-container="body" data-toggle="popover"-->
+                                      <!--data-placement="bottom"  data-trigger="hover"-->
+                                      <!--data-content="{{profile.contacts.verificationManager.email.value}}"-->
+
+                                         <!-->
+                                 <!--<img src="../commons/images/BusinessManagementDetailMessage.jpg" alt="message"-->
+                                      <!--data-container="body" data-toggle="popover"-->
+                                      <!--data-placement="bottom"  data-trigger="hover"-->
+                                      <!--data-content="{{profile.contacts.verificationManager.inmail.value}}"-->
+                                         <!-->
+                                 <!--</span>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+             {{#user}}
+                 <div class="blueButton pull-right editDetailPageBtn" id="editGeneralINfoBtn"><span  class="lan_vpadding_8" data-action-click="corporate:details:general:edit">编辑</span></div>
+                 <div class="blueButton pull-right editDetailPageBtn hide" id="saveGeneralINfoBtn"><span  class="lan_vpadding_8" data-action-click="corporate:details:general:save">保存</span></div>
+
+             {{/user}}
+
+
+
+
+             <div class="clearfix"></div>
+                <div class="detailPageDownTables">
+                
+                <div class="detailPageSlideDownBoxes removeMargin">
+                
+                    <div class="detailPageUserIntroBox">
+                        <div class="detailPageUserIntroBoxHeader">
+                        <span><b>单位简介</b></span><span class="glyphicon detailPageDropDownIcon  glyphicon-menu-down   pull-right"></span>
+                        
+                        </div>
+                       <div class="detailPageUserIntroBoxBody " id="corporateDetailsDescription">
+
+
+                           <div class="corporateDetailsDescriptionContainer lan_margin_top_20">
+
+                               <span>单位简介:</span>
+                               <p>
+                                   {{profile.description.text.value}}
+                               </p>
+                               <div class="clearfix"></div>
+                               <span>附属文件:</span>
+                               <ul class="detailPageAttatchmentLine">
+                                   {{#profile.description.attachment}}
+                                   <li>
+                                       <img src="../commons/images/attachment{{fm}}.jpg"> <a href="{{url}}">{{nm}}</a>
+
+                                   </li>
+
+                                   {{/profile.description.attachment}}
+                               </ul>
+
+                           </div>
+                 </div>
+                       </div>
+
+                    {{#user}}
+
+                        <div class="blueButton pull-right editDetailPageBtn" id="editDescINfoBtn"><span  class="lan_vpadding_8" data-action-click="corporate:details:description:edit">编辑</span></div>
+                        <div class="blueButton pull-right editDetailPageBtn hide" id="saveDescINfoBtn"><span  class="lan_vpadding_8" data-action-click="corporate:details:description:save">保存</span></div>
+
+
+                    {{/user}}
+
+                    <div class="clearfix"></div>
+
+                    
+                    <div class="detailPageUserIntroBox">
+                        <div class="detailPageUserIntroBoxHeader">
+                        <span><b>单位图片</b></span><span class="glyphicon detailPageDropDownIcon glyphicon-menu-down pull-right"></span>
+                        
+                        </div>
+                       <div class="detailPageUserIntroBoxBody " id="corporateDetailsImage">
+
+
+                           <div class="corporateDetailsImageContainer lan_gray_border">
+                               {{#profile.images}}
+                               <div class="lan_margin_10 singleCorporateDetailsImage  ">
+                                   <span data-id="{{uuid}}" data-action-click="corporate:details:image:delete" class="glyphicon glyphicon-trash hide deleteCorporatedetailsImage"></span>
+                                   <img src="{{url}}" alt="image">
+                               </div>
+                               {{/profile.images}}
+                           </div>
+
+
+
+
+                           <div class="imageUploaderContainer hide">
+
+
+                               <div class="attachmentFileUploaderUploader   uploadFileContainer">
+
+                                   <dl class="dl-horizontal">
+                                       <dt>
+
+                                           选择文件：
+                                       </dt>
+
+                                       <dd >
+                                           <div class="uploadedFileName lan_gray_border"></div>
+                                           <div class="grayButton grayButton-file stripped-Button">
+             <span  data-action-change="corporate:details:image:upload" > 选择文件
+                 <form  id="uploadCorporateDetailsImageForm" method="" enctype="multipart/form-data">
+                     <input name="file"  type="file" accept="image/*">
+                 </form>
+              </span>
+                                           </div>
+
+                                       </dd>
+                                   </dl>
+
+                               </div>
+
+
+
+                           </div>
+
+
+                        
+                       </div>
+                    
+                    </div>
+
+
+
+                {{#user}}
+                    <div class="blueButton pull-right editDetailPageBtn" id="editImageINfoBtn"><span  class="lan_vpadding_8" data-action-click="corporate:details:image:edit">编辑</span></div>
+                    <div class="blueButton pull-right editDetailPageBtn hide" id="saveImageINfoBtn"><span  class="lan_vpadding_8" data-action-click="corporate:details:image:save">完成</span></div>
+
+                {{/user}}
+
+                    <div class="clearfix"></div>
+
+                    <div class="detailPageUserIntroBox">
+                        <div class="detailPageUserIntroBoxHeader">
+                            <span><b>单位视频</b></span><span class="glyphicon detailPageDropDownIcon  glyphicon-menu-down   pull-right"></span>
+
+                        </div>
+                    <div class="detailPageUserIntroBoxBody noPadding"  id="corporateDetailsVideos">
+
+
+                        <div class="videoUploaderContainer hide">
+
+
+
+                            <div class="multimediaLinksUploader">
+
+                                <div class=" col-sm-7 form-group lan_margin_left_0">
+                                    <label  class="col-sm-4 control-label">添加音频连接:</label>
+                                    <div class="col-sm-8 noPadding ">
+                                        <input type="text" id="videoLinkToEmbed" class=" noPadding form-control" >
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2 grayButton  stripped-Button">
+                                    <span  data-action-click="corporate:details:video:new" > 确认</span>
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+
+
+                        </div>
+
+
+
+
+                       <!--<div class="videoContainer lan_padding_20">-->
+
+                           <!--<span data-id="{{uuid}}" data-action-click="corporate:details:video:delete" class="glyphicon glyphicon-trash hide deleteCorporatedetailsVideo"></span>-->
+
+                         <!--<embed src="http://player.youku.com/player.php/sid/XODY4NDUwOTA4/v.swf"  allowFullScreen="true" quality="high" width="100%" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>-->
+
+                       <!--</div>-->
+
+                        <div class="corporateDetailsVideoContainer">
+
+                        {{#profile.videos}}
+                        <div class="videoContainer lan_padding_20">
+                            <span data-id="{{uuid}}" data-action-click="corporate:details:video:delete" class="glyphicon glyphicon-trash hide  deleteCorporatedetailsVideo"></span>
+
+                            <embed src="{{{url}}}"  allowFullScreen="true" quality="high" width="100%" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
+
+                        </div>
+                        {{/profile.videos}}
+
+                        
+                       </div>
+
+                    </div>
+                    
+                    </div>
+
+
+
+                    {{#user}}
+
+                        <div class="blueButton pull-right editDetailPageBtn" id="editVideoINfoBtn"><span  class="lan_vpadding_8" data-action-click="corporate:details:video:edit">编辑</span></div>
+                        <div class="blueButton pull-right editDetailPageBtn hide" id="saveVideoINfoBtn"><span  class="lan_vpadding_8" data-action-click="corporate:details:video:save">完成</span></div>
+
+
+                    {{/user}}
+
+                    <div class="clearfix"></div>
+                    
+                  <div class="detailPageUserIntroBox">
+                        <div class="detailPageUserIntroBoxHeader">
+                        <span><b>单位音频</b></span><span class="glyphicon detailPageDropDownIcon glyphicon-menu-down pull-right"></span>
+                        
+                        </div>
+                       <div class="detailPageUserIntroBoxBody noPadding" id="corporateDetailsAudios">
+
+
+                           <div class="audioUploaderContainer hide">
+
+
+
+                               <div class="multimediaLinksUploader">
+
+                                   <div class=" col-sm-7 form-group lan_margin_left_0">
+                                       <label  class="col-sm-4 control-label">添加音频连接:</label>
+                                       <div class="col-sm-8 noPadding ">
+                                           <input type="text" id="audioLinkToEmbed" class=" noPadding form-control" >
+                                       </div>
+                                   </div>
+
+                                   <div class="col-sm-2 grayButton  stripped-Button">
+                                       <span  data-action-click="corporate:details:audio:new" > 确认</span>
+                                   </div>
+
+                                   <div class="clearfix"></div>
+                               </div>
+
+
+                           </div>
+
+
+
+
+                           <div class="corporateDetailsAudioContainer">
+
+                           {{#profile.audios}}
+
+                           <!--<audio controls="">  <source src="http://media.w3.org/2010/07/bunny/04-Death_Becomes_Fur.mp4" type="audio/mp4">  </audio>-->
+
+                           <div class="audioContainer lan_padding_20">
+                               <span data-id="{{uuid}}" data-action-click="corporate:details:audio:delete" class="glyphicon glyphicon-trash hide deleteCorporatedetailsAudio"></span>
+
+                               <audio controls=""><source src="{{{url}}}" type="audio/mp4">  </audio>
+
+
+                           </div>
+
+                           {{/profile.audios}}
+
+                        </div>
+                       </div>
+                    
+                    </div>
+
+
+                    {{#user}}
+
+                        <div class="blueButton pull-right editDetailPageBtn" id="editAudioINfoBtn"><span  class="lan_vpadding_8" data-action-click="corporate:details:audio:edit">编辑</span></div>
+                        <div class="blueButton pull-right editDetailPageBtn hide" id="saveAudioINfoBtn"><span  class="lan_vpadding_8" data-action-click="corporate:details:audio:save">完成</span></div>
+
+                    {{/user}}
+
+
+                    <div class="clearfix"></div>
+
+
+                    <div class="detailPageUserIntroBox">
+                        <div class="detailPageUserIntroBoxHeader">
+                            <span><b>常见问题解答</b></span><span class="glyphicon detailPageDropDownIcon glyphicon-menu-down pull-right"></span>
+
+                        </div>
+
+
+                       <div class="detailPageUserIntroBoxBody  gray_bg noPadding" id="corporateDetailsFAQs">
+                           &nbsp;
+                           <div class="corporateDetailsFAQContainer">
+                               &nbsp;
+
+                               {{#profile.faq}}
+                               <div class="questionAnswerPairs">
+
+                                   <form class="form-horizontal">
+
+
+                                       <div class="faqContain">
+
+                                           <div class="question form-group">
+                                               <label  class="col-sm-2 control-label">问题:</label>
+                                               <div class="col-sm-10 ">
+                                                   <div class="questionText">{{q}}</div>
+
+                                               </div>
+                                           </div>
+
+                                           <div class="answer form-group">
+                                               <label class="col-sm-2 control-label">解答:</label>
+                                               <div class="col-sm-10 ">
+
+                                                   <div class="answerText">{{a}}</div>
+
+                                               </div>
+                                           </div>
+
+
+                                       </div>
+
+                                   </form>
+                               </div>
+                               {{/profile.faq}}
+
+                           </div>
+
+
+
+
+                        
+                       </div>
+                    
+                    </div>
+
+
+
+                    {{#user}}
+                        <div class="blueButton pull-right editDetailPageBtn" id="editFaqINfoBtn"><span  class="lan_vpadding_8" data-action-click="corporate:details:faq:edit">编辑</span></div>
+                        <div class="blueButton pull-right editDetailPageBtn hide" id="saveFaqINfoBtn"><span  class="lan_vpadding_8" data-action-click="corporate:details:faq:save">完成</span></div>
+
+                    {{/user}}
+
+
+
+                    <div class="clearfix"></div>
+
+
+                </div>
+                  
+                    </div><!--end of detailPageSlideDownBoxes-->
+                    
+                  
+
+                   <div class="clearfix"></div>
+
+                   
+             <div class="detailPageTableContainter lan_margin_top_15">
+
+                 <div class="lan_table col-6-table">
+                     <!--<div class="lan_row"> @todo enable this when we have activies from main.js-->
+                         <!--<span class="lan_cell Swap">事务代码</span>-->
+                         <!--<span class="lan_cell Swap">事务名称</span>-->
+                         <!--<span class="lan_cell Swap">发布日期</span>-->
+                         <!--<span class="lan_cell Swap">截止日期</span>-->
+                         <!--<span class="lan_cell Swap">事务状态</span>-->
+                         <!--<span class="lan_cell Swap">操作</span>-->
+                     <!--</div>-->
+                     {{#items}}
+                     <div class="lan_row">
+                         <span class="lan_cell">{{abd.ac}}</span>
+                         <span class="lan_cell">{{abd.an}}</span>
+                         <span class="lan_cell">{{shortStart}}</span>
+                         <span class="lan_cell">{{shortEnd}}</span>
+                         <span class="lan_cell">{{statusText}}</span>
+                    <span class="lan_cell">
+                      {{#abd.ac}}<!--  field1 is just the fake json, should be a field of real data that cannot be fals(y) or a function-->
+                      <ul class="lan_table_more">
+                          <li ><a
+                                  target="_blank"
+                                  href="#/workspace/publishing/activities/{{abd.ac}}"> 详细 </a>
+                              <ul>
+                                  <li><a data-action-click='activities:delete'
+                                         data-id='{{_id}}'> 删除</a></li>
+                                  <li><a  target="_blank" href="#/details/activitydetail/{{abd.ac}}"
+                                          > 事务详情</a></li>
+                              </ul>
+                          </li>
+                      </ul>
+                      {{/abd.ac}}
+                    </span>
+                     </div>
+                     {{/items}}
+                 </div><!--end lan_table -->
+
+                 <!--<nav class="paginationContainer">-->
+           <!---->
+                 <!--</nav>-->
+                 <!-- /pagging  -->
+
+             </div>
+
+                </div><!-- end of detailPageDownTable-->
+
+          
+            <!---/contaier bottom -->
+        </div>

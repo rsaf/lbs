@@ -1,0 +1,66 @@
+<div class="modal-dialog  mediumModal listSelecetionModal">
+  <div class="modal-content">
+    <div class="modal-header modal-header-primary blueHeader ">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span
+              style="color:white;">×</span></button>
+      <h4 class="modal-title">添加名单</h4>
+    </div>
+    <div class="modal-body">
+
+      <div class=" lan_push_down lan_padding_5">选择名单</div>
+
+
+      <div class="lan_table  ">
+        <div class="lan_row">
+          <span class="lan_cell lan-col-30 Swap"><input type="checkbox"> 名称</span>
+          <span class="lan_cell lan-col-30 Swap">索引项</span>
+          <span class="lan_cell lan-col-20 Swap">创建日期</span>
+          <span class="lan_cell lan-col-20 Swap">名单人数</span>
+        </div>
+        {{#items}}
+        <div class="lan_row">
+          <span class="lan_cell lan-col-30"><input type="checkbox"> {{field1}}</span>
+          <span class="lan_cell lan-col-30">{{field2}}</span>
+          <span class="lan_cell lan-col-20">{{field3}}</span>
+          <span class="lan_cell lan-col-20">{{field4}}</span>
+
+        </div>
+        {{/items}}
+      </div><!--end lan_table -->
+
+
+
+      <div class="clearfix"></div>
+      <nav class="paginationContainer">
+        <ul class="pagination">
+          <li><a >上一页</a></li>
+          <li><a class="active" >1</a></li>
+          <li><a >2</a></li>
+          <li><a >3</a></li>
+          <li><a >4</a></li>
+          <li><a >5</a></li>
+          <li><a >下一页</a></li>
+        </ul>
+      </nav><!-- /pagination  -->
+
+
+      <div class="clearfix"></div>
+
+
+    </div><!--end of modal body--->
+    <div class="modal-footer  fancyBoxGrayFooter">
+
+
+      <div class="footer_operation_container">
+        <div class="grayButton formPreview" data-dismiss="modal"><span>取消</span></div>
+        <div class="blueButton formPreview "    data-dismiss="modal"><span>确认</span></div>
+
+
+        <div class="clearfix"></div>
+      </div>
+
+    </div>
+
+
+  </div>
+</div>

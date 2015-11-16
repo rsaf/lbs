@@ -1,0 +1,40 @@
+<div class="modal-dialog  smallModal">
+    <div class="modal-content">
+        <div class="modal-header modal-header-primary blueHeader ">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span
+                    style="color:white;">×</span></button>
+            <h4 class="modal-title">发邮箱</h4>
+        </div>
+        <div class="modal-body">
+            <div class="ListUploadRadios center-block">
+
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">邮箱</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="inputEmail3" placeholder="请输入邮箱地址"
+                                   data-bind="contacts.email.value">
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+
+        </div><!--end of modal body--->
+        <div class="modal-footer  fancyBoxGrayFooter">
+
+
+            <div class="footer_operation_container">
+                <div class="grayButton formPreview" data-dismiss="modal"><span>取消</span></div>
+                <div class="blueButton formPreview " data-action-click="contacts:set:email:success"><span>确认</span></div>
+
+
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>

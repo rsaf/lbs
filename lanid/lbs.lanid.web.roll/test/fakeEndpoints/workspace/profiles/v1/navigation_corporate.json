@@ -1,0 +1,240 @@
+{
+  "pl": [{
+      "main": {
+        "icon": "/commons/images/notification%20Center.png",
+        "url": "/workspace/notifications",
+        "label": "通知中心",
+        "class": "notifications"
+      }
+      ,
+      "sub": [{
+          "url": "/workspace/notifications/all",
+          "label": "所有通知",
+          "class": "allNotificationsID"
+        }, {
+          "url": "/workspace/notifications/unread",
+          "label": "未读通知",
+          "class": "accountNotificationsID"
+        }, {
+          "url": "/workspace/notifications/read",
+          "label": "已读通知",
+          "class": "serviceNotificationsID"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/bussiness%20management.png",
+        "url": "/workspace/activities",
+        "label": "事务管理",
+        "class": ""
+      },
+      "sub": [{
+          "url": "/workspace/activities/activitieslist",
+          "label": "事务列表",
+          "class": "activitiesList"
+        }, {
+          "url": "/workspace/activities/nameslist",
+          "label": "事务名单",
+          "class": "namesList"
+        }, {
+          "url": "/workspace/activities/activitiesforms",
+          "label": "事务表单",
+          "class": "activitiesForms"
+        }, {
+          "url": "/workspace/activities/publicforms",
+          "label": "公共表单",
+          "class": "publicForms"
+        }, {
+          "url": "/workspace/activities/serviceslist",
+          "label": "服务列表",
+          "class": "servicesList"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/Financial%20management.png",
+        "url": "/workspace/finance",
+        "label": "财务管理",
+        "class": ""
+      },
+      "sub": [{
+          "url": "/workspace/finance/status",
+          "label": "账户状态",
+          "class": "finInformationID"
+        }, {
+          "url": "/workspace/finance/history",
+          "label": "交易统计",
+          "class": "finTransactionRecordID"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/Financial%20management.png",
+        "url": "/workspace/users",
+        "label": "用户管理",
+        "class": ""
+      },
+      "sub": [{
+          "url": "/workspace/users/all",
+          "label": "所有用户",
+          "class": "allUsers"
+        }, {
+          "url": "/workspace/users/groups",
+          "label": "安全小组",
+          "class": "securityGroup"
+        }, {
+          "url": "/workspace/users/acl",
+          "label": "功能授权",
+          "class": "featureACL"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/bussiness%20management.png",
+        "url": "/workspace/responses",
+        "label": "事务响应",
+        "class": ""
+      },
+      "sub": [{
+          "url": "/workspace/responses/all",
+          "label": "所有事务",
+          "class": "allResponses"
+        }, {
+          "url": "/workspace/responses/conventional",
+          "label": "常规事务",
+          "class": "conventionalResponses"
+        }, {
+          "url": "/workspace/responses/favorite",
+          "label": "收藏事务",
+          "class": "favoriteResponses"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/Company%20data.png",
+        "url": "/workspace/profile",
+        "label": "单位资料",
+        "class": ""
+      },
+      "sub": [{
+          "url": "/workspace/profile/corporateprofile",
+          "label": "单位信息",
+          "class": "corporateProfile"
+        }, {
+          "url": "/workspace/profile/corporatedetail",
+          "label": "单位详情",
+          "class": "corporateDetail"
+        }, {
+          "url": "/workspace/profile/personalprofile",
+          "label": "我的信息",
+          "class": "personalProfile"
+        }, {
+          "url": "/workspace/profile/securitymanagement",
+          "label": "安全管理",
+          "class": "securityManagement"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/Operation%20record.png",
+        "url": "/workspace/operationslog",
+        "label": "操作记录",
+        "class": ""
+      },
+      "sub": [{
+          "url": "/workspace/operationslog/all",
+          "label": "所有操作",
+          "class": "opsLogID"
+        }, {
+          "url": "/workspace/operationslog/business",
+          "label": "业务操作",
+          "class": "opsLogBusiness"
+        }, {
+          "url": "/workspace/operationslog/access",
+          "label": "授权操作",
+          "class": "opsLogAccess"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/Relationship%20management.png",
+        "url": "/workspace/requests",
+        "label": "申请管理",
+        "class": ""
+      },
+      "sub": [{
+          "url": "/workspace/requests/all",
+          "label": "所有申请",
+          "class": "allRequests"
+        }, {
+          "url": "/workspace/requests/unprocess",
+          "label": "未审核",
+          "class": "unProcessRequests"
+        }, {
+          "url": "/workspace/requests/approved",
+          "label": "已通过",
+          "class": "approvedRequests"
+        }, {
+          "url": "/workspace/requests/rejected",
+          "label": "已拒绝",
+          "class": "rejectedRequests"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/bussiness%20management.png",
+        "url": "/workspace/services",
+        "label": "检测中心",
+        "class": "inspection"
+      },
+      "sub": [{
+          "url": "/workspace/inspection/unInspected",
+          "label": "待检照片",
+          "class": "unInspected"
+        }, {
+          "url": "/workspace/inspection/qualified",
+          "label": "合格照片",
+          "class": "qualified"
+        }, {
+          "url": "/workspace/inspection/unQualified",
+          "label": "不合格照",
+          "class": "unQualified"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/bussiness%20management.png",
+        "url": "/workspace/corrections",
+        "label": "制作中心"
+      },
+      "sub": [{
+          "url": "/workspace/corrections/unProcessed",
+          "label": "待制作照",
+          "class": "unProcessed"
+        }, {
+          "url": "/workspace/corrections/processSuccessful",
+          "label": "制作成功",
+          "class": "processSucessful"
+        }, {
+          "url": "/workspace/corrections/processFailed",
+          "label": "制作失败",
+          "class": "processFailed"
+        }]
+    }, {
+      "main": {
+        "icon": "/commons/images/bussiness%20management.png",
+        "url": "/workspace/services",
+        "label": "服务管理",
+        "class": "services"
+      },
+      "sub": [{
+          "url": "/workspace/services/allbookings",
+          "label": "所有预约",
+          "class": "allBookings"
+        }, {
+          "url": "/workspace/services/busnessrecords",
+          "label": "业务记录",
+          "class": "businessRecords"
+        }, {
+          "url": "/workspace/services/myservicepoints",
+          "label": "我的网店",
+          "class": "myServicePoints"
+        }, {
+          "url": "/workspace/services/myservices",
+          "label": "我的服务",
+          "class": "myServices"
+        }]
+    }],
+  "er": null
+}

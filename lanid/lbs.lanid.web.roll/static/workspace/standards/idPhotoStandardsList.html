@@ -1,0 +1,49 @@
+<div class="lan_table col-6-table">
+        <div class="lan_row">
+            <span class="lan_cell Swap">证照代码</span>
+            <span class="lan_cell Swap">证照类别</span>
+            <span class="lan_cell Swap">标注像宽</span>
+            <span class="lan_cell Swap">标准像高</span>
+            <span class="lan_cell Swap">文件格式</span>
+            <span class="lan_cell Swap">操作</span>
+        </div>
+      {{#items}}
+        <div class="lan_row">
+            <span class="lan_cell">{{sc}}</span>
+            <span class="lan_cell">{{it}}</span>
+            <span class="lan_cell">{{swp}}</span>
+            <span class="lan_cell">{{shp}}</span>
+            <span class="lan_cell">{{fm}}</span>
+            <span class="lan_cell">
+             {{#sc}}
+             <ul class="lan_table_more">
+
+                 <li >
+                     <a> 选项 </a>
+
+                     <ul>
+
+                         <li>
+                             <a data-id="{{sc}}"  data-id2="{{_id}}"
+                                data-action-click="standard:edit"
+                                     >详细 </a>
+                         </li>
+                         <li><a data-id="{{sc}}"
+                                data-action-click="standard:delete"
+
+
+                                 > 删除</a></li>
+                     </ul>
+                 </li>
+             </ul>
+             {{/sc}}
+            </span>
+        </div>
+      {{/items}}
+    <div class="spinnerPlaceHolder "></div>
+    </div><!--end lan_table -->
+
+    <nav class="paginationContainer">
+
+
+    </nav> <!-- /pagging  -->

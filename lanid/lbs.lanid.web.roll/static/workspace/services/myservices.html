@@ -1,0 +1,47 @@
+<div class="container_top service-form-container">
+    <div id="directory_indicator"><span id="root_folder">服务管理</span><span id="sub_folder">我的服务</span></div>
+
+    <form class="right_containter_top_form">
+        <span>显示</span>
+
+        <div class="business_task_select">
+            <select>
+                <option value="all">我的服务</option>
+                <option value="one">待办事务</option>
+                <option value="two">已提交事务</option>
+                <option value="three">已完成事务</option>
+            </select>
+        </div>
+
+        <div class="blueButton blueButton-sm pull-right " 
+             data-action-click='handleNew'
+             >
+            <span>新建</span></div>
+
+    </form>
+
+    <form class="right_containter_top_form tableHeaderForm">
+
+        <div class="fin_date_picker">
+            <span>日期 </span>
+            <input type="date" name="startdate" id="startdate">
+            <em>-</em>
+            <input type="date" name="enddate" id="enddate">
+        </div>
+
+        <div class="form_right_search">
+            <input type="text" id="searchtext" placeholder="事务编号/事务名称/发布单位" size="32">
+            <input type="submit" name="financesearch" id="financesearch" value="查询" data-action-click="pagination:search" onclick="return false;">
+        </div>
+
+    </form>
+
+</div><!---end of container_top-->
+
+<div class="container_bottom myservices-list-container">
+      <img src="/commons/images/ajax-loader.gif" style='display: block;margin-left: auto;margin-right: auto;'/>
+</div><!---/contaier bottom -->
+
+<div class="modal  " id="newServiceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+</div>    <!--- modal -->

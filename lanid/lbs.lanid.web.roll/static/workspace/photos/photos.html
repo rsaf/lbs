@@ -1,0 +1,125 @@
+
+<div class="idphotoSubMenuRightContainter"> 
+  <div class="container_top">
+    <div id="directory_indicator"><span id="root_folder">{{settings.root}}</span><span id="arrow"> </span><span id="sub_folder">{{settings.currentPage}}</span> </div>
+
+
+
+
+
+
+
+    <div class="galeryActionMenu">
+
+
+
+      <!--<form class=" pull-left right_containter_top_form">-->
+        <!--<span>显示</span>-->
+        <!--<div class="business_task_select">-->
+          <!--<select>-->
+            <!--<option value="all">所有事务</option>-->
+            <!--<option value="one">待办事务</option>-->
+            <!--<option value="two">已提交事务</option>-->
+            <!--<option value="three">已完成事务</option>-->
+          <!--</select>-->
+        <!--</div>-->
+        <!--<div class="clearfix"></div>-->
+      <!--</form>-->
+
+      {{#settings.showDownload}}
+      <div class="pull-left download lan_gray_border">
+        <div class="pull-left">
+          <img src="/commons/images/IDphotoDownloadIcon.png" alt="download"></div>
+        <div class="pull-left">下载证照</div></div>
+      {{/settings.showDownload}}
+
+
+      <div class="pull-right displaymode inspectionDisplyModes">
+        {{#settings.showSingle}}
+        <div class="singlePhotoMode"
+             data-action-click='photos:singleView,setSelectedMode'> &nbsp; </div>
+        {{/settings.showSingle}}
+        {{#settings.showList}}
+        <div class="listMode"
+             data-action-click="photos:listView,setSelectedMode">&nbsp;</div>
+        {{/settings.showList}}
+        {{#settings.showGallery}}
+        <div class="albumMode albumModeClicked"
+             data-action-click="photos:galleryView,setSelectedMode">&nbsp;</div>
+        {{/settings.showGallery}}
+      </div>
+
+
+
+      {{#settings.showDropDown}}  
+      <div class="dropdown dropdownLessPadding pull-right">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+          操作
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          <!--<li role="presentation"><a role="menuitem" tabindex="-1" >详细</a></li>-->
+          <!--<li role="presentation"><a role="menuitem" tabindex="-1"  data-action-click="photo:send:email">发邮件</a></li>-->
+          <!--<li role="presentation"><a role="menuitem" tabindex="-1" >转到证件</a></li>-->
+          <li role="presentation">
+            <a role="menuitem" tabindex="-1" class="customFileUploader">
+            上传证件
+
+              <form  id="uploadForm"  action="/workspace/photos/upload.json" method="POST" enctype="multipart/form-data">
+                <input name="file" id="baseFileUpload" class="baseFileUpload" data-action-change="photo:new:upload" type="file">
+                <!--<input type="submit" class="hide" value="Submit Comment" />-->
+              </form>
+          </a>
+          </li>
+          <li role="presentation"><a data-action-click="photos:photo:delete" role="menuitem" tabindex="-1">删除</a></li>
+        </ul>
+      </div> <!--end of dropdown-->
+
+
+
+
+        <!--<span class="customFileUploader" data-action-change="profile:avatar:upload">从本地上传-->
+                      <!--<form  id="uploadForm"  method="POST" enctype="multipart/form-data">-->
+                        <!--<input name="file" type="file">-->
+                      <!--</form>-->
+                    <!--</span>-->
+
+
+
+      {{/settings.showDropDown}}
+      {{#settings.showNewAlbum}}
+      <div class="createNewAlbumBtn pull-left lan_gray_border">
+        <div class="pull-left">
+          <img src="../../commons/images/IDphotoNewAlbumIcon.png" alt="download"></div>
+        <div class="pull-left">新建相册</div>
+      </div>
+      {{/settings.showNewAlbum}}
+
+  <div class="clearfix"></div>
+
+    </div><!--galery action menu-->
+
+      <form class="right_containter_top_form tableHeaderForm">
+
+          <div class="fin_date_picker">
+              <span>日期 </span>
+              <input type="date" name="startdate" id="startdate">
+              <em>-</em>
+              <input type="date" name="enddate" id="enddate">
+          </div>
+
+          <div class="form_right_search">
+              <input type="text" id="searchtext" placeholder="事务编号/事务名称/发布单位" size="32">
+              <input type="submit" name="financesearch" id="financesearch" value="查询" data-action-click="pagination:search" onclick="return false;">
+          </div>
+
+      </form>
+
+  </div><!---end of container_top-->
+
+  <div class="container_bottom idPhotoGalery galeryInIntroBoxContainer">
+
+
+  </div>  <!-- /contaier bottom -->
+
+</div> <!-- end of idphotoSubMenuRightContainter -->

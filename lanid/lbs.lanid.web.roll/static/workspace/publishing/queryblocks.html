@@ -1,0 +1,11 @@
+{{#items}}
+    <div class="selectedService pull-left lan_margin_5 lan_gray_border" > 
+        <span>{{vals.ui.serviceCode}}</span>
+        <span>{{vals.ui.serviceName}}</span> 
+        <i  
+            data-action-click="publishing:activity:service:selection:delete"  
+            data-q='{{q}}'
+            class="glyphicon glyphicon-remove"></i>
+    </div>
+    <!--how to add class allServices after glyphicon when this is an all service??-->
+{{/items}}

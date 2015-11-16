@@ -1,0 +1,21 @@
+<div class="lan_row">
+  <span class="lan_cell Swap">表单编号</span>
+  <span class="lan_cell Swap">表单类型</span>
+  <span class="lan_cell Swap">表单来源</span>
+  <span class="lan_cell Swap">操作</span>
+</div>
+{{#fm}}
+<div class="lan_row">
+  <span class="lan_cell">{{fc}}</span>
+  <span class="lan_cell">{{fd.fmn}}</span>
+  <span class="lan_cell">{{#fc}}导入{{/fc}}</span>
+
+  <span class="lan_cell">
+    {{#fm._id}}
+    <button type="button" class="center-block btn-sm btn btn-primary"
+            data-id="{{fm._id}}"
+            data-action-click="publishing:activities:edit:form">编辑</button>
+    {{/fm._id}}
+  </span>
+</div>
+{{/fm}}

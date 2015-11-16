@@ -1,0 +1,45 @@
+<div id="forgotPwBox">
+
+    <div id="regBoxHeader">
+        <div id="forgotPwHeaderContent">
+
+            <div id="forgotPwHeaderLeftContent">
+                <span>重置登录密码</span>
+
+
+            </div>
+            <div id="forgotPwHeaderRightContent">
+                <span id="forgotPw" class="forgotPwLevel1">输入用户名</span>
+                <span id="forgotPwConfEmail" class="forgotPwLevel2">验证身份</span>
+                <span id="forgotPwResetPw" class="forgotPwLevel3">重置密码</span>
+                <span id="forgotPwDone" class="forgotPwLevel4">完成</span>
+            </div>
+        </div>
+
+    </div>
+    <!--/regBoxHeader-->
+    <div id="regBoxBody">
+
+        <form>
+            <!-- <form method="post">-->
+            <div class="regFormInputLine"><span>用户名</span>
+                <input type="email" name="email" id="forgotPw_email" > <span class="sideNote"></span>
+            </div>
+
+            <div class="regFormInputLine"><span>验证码</span><input type="text" name="antiBot" id="antiBot"><span
+                    id="home_system_captcha" class="systemAntibox home_check">   </span>
+                <span onClick="randomString();" class="refresh sideNote">   点击换一张 </span></div>
+            <input type="hidden" name="usertype" id="usertype" value="usertype">
+            <input type="hidden" name="antiBotValue" id="antiBotValue">
+
+            <div class="regFormInputLine"><input type="image" src="/commons/images/forget-password_submit button.png"
+                                                 name="bubmit" id="forgotPwSubmit" class="forgotPwSubmitBtn" value="提交">
+            </div>
+        </form>
+
+    </div>
+    <!--/regBoxBody-->
+
+
+</div><!--end of forgot password box-->
+

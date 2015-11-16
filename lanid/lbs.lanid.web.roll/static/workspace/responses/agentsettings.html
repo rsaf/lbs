@@ -1,0 +1,46 @@
+
+
+<div class="lan_table col-5-table">
+  <div class="lan_row">
+    <span class="lan_cell Swap">蓝证号码</span>
+    <span class="lan_cell Swap">委托人姓名</span>
+    <span class="lan_cell Swap">接受委托时间</span>
+    <span class="lan_cell Swap">状态</span>
+    <span class="lan_cell Swap">操作</span>
+  </div>
+  {{#items}}
+  <div class="lan_row">
+    <span class="lan_cell">{{field1}}</span>
+    <span class="lan_cell">{{field2}}</span>
+    <span class="lan_cell">{{field3}}</span>
+    <span class="lan_cell">{{field4}}</span>
+    <span class="lan_cell">
+      {{#field1}}<!-- only show if this row has data and is not used as padding (empty object) -->
+      <ul class="lan_table_more">
+        <li ><a > 详细 </a>
+          <ul>
+            <li><a > 导出</a></li>
+            <li><a >修改</a></li>
+            <li><a data-action-click='response:delete'
+                   data-id='{{_id}}'> 删除</a></li>
+          </ul>
+        </li>
+      </ul>
+    </span>
+    {{/field1}}
+  </div>
+  {{/items}}
+</div><!--end lan_table -->
+
+
+<nav class="paginationContainer">
+  <ul class="pagination">
+    <li><a >上一页</a></li>
+    <li><a  class="active">1</a></li>
+    <li><a >2</a></li>
+    <li><a >3</a></li>
+    <li><a >4</a></li>
+    <li><a >5</a></li>
+    <li><a >下一页</a></li>
+  </ul>
+</nav> <!-- /pagging -->

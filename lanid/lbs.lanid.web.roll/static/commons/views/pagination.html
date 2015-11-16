@@ -1,0 +1,16 @@
+
+<ul class="pagination ">
+
+
+    <li {{^showPrev}}class="disabled"{{/showPrev}}><a {{#showPrev}} class="pagebutton" data-action-click="pagination:change:page" data-page = "{{prevPage}}" {{/showPrev}}>上一页</a></li>
+
+    {{#pages}}
+        <li><a {{#current}} class="active pagebutton" {{/current}}{{^current}} class="pagebutton"{{/current}} data-action-click="pagination:change:page" data-page = "{{p}}">{{label}}</a></li>
+    {{/pages}}
+    <!--<li><a class="active" data-action-click="pagination:change:page" data-page = "1" >1</a></li>-->
+    <li {{^showNext}}class="disabled"{{/showNext}}><a {{#showNext}} class="pagebutton" data-action-click="pagination:change:page" data-page = "{{nextPage}}" {{/showNext}} >下一页</a></li>
+</ul>
+
+{{#total}}<div class="totalCount  " style="margin-top: -15px;"><span>
+    <!--当页{{!current}}，-->
+    共 {{total}}条记录</span></div>{{/total}}

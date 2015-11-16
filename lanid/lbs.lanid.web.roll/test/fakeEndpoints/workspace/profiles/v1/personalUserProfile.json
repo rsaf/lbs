@@ -1,0 +1,28 @@
+{
+ "pl":{
+    "basic":{
+     "avatar":"../../commons/images/bachend/backendProfilePic.png"
+    ,"userName":"Frankie"
+    ,"gender":"女"
+    ,"dateOfBirth":"1990/10/20"
+    ,"country":"中国"
+    ,"placeOfBrith":"江苏省南京市"
+    ,"currentResidence":"江苏省南京市"
+
+    }
+  ,"private":{
+      "lastestPhoto":"../../commons/images/Latest-photo.jpg"
+    ,"IDNumber":"无"
+    ,"fullName":"无"
+    ,"lanID":"无"
+
+    }
+  ,"contacts":{
+      "email":"**780183@qq.con"
+    ,"linkToPhone":"150****0157可直接使用此号码登录"
+    ,"linkToQQ":"未设置QQ绑定"
+    ,"linkToWechat":"未设置微信绑定"
+
+    }
+  }
+}

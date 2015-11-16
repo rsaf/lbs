@@ -1,0 +1,65 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header modal-header-primary blueHeader ">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+            <h4 class="modal-title">操作详细</h4>
+        </div>
+        <div class="modal-body">
+
+
+            <!----inserted part---->
+            <div class=" opsLogDetailsPopUp">
+
+                <div class="regFancyBoxBody">
+
+                    <div class="opsLogDetailsTop">
+                        <div class="fakeTable">
+
+                            <div class="fakeTableLine">
+                                <span>操作名称:</span><span>{{opName}}</span>
+
+                            </div>
+                            <div class="fakeTableLine">
+                                <span>操作类型:</span><span>{{opType}}</span>
+
+                            </div>
+                            <div class="fakeTableLine">
+                                <span>操作时间:</span><span>{{opDate}}</span>
+
+                            </div>
+                            <div class="fakeTableLine">
+                                <span>IP地址:</span><span>{{srcIP}}</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="opsLogDetailsBottom">
+                        <div class="fakeTableLine">
+                            <span>操作对象:</span><span>{{srcURI}}</span>
+
+                        </div>
+                        <div class="fakeTableLine">
+
+                            <span>是否成功:</span><span>是</span>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+
+
+            </div>
+
+            <!----/inserted part---->
+        </div>
+        <div class="modal-footer  fancyBoxGrayFooter">
+            <button type="button" class="btn btn-primary center-block" data-dismiss="modal">知道了</button>
+        </div>
+    </div>
+</div>

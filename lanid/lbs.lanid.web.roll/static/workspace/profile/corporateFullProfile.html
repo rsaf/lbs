@@ -1,0 +1,472 @@
+ 
+  <div class="">
+
+
+
+                    <div class="form-group">
+                        <label for="companyName" class="col-sm-4 control-label text-right lan_line-height required_on_lable">单位名称:</label>
+                        <div class="col-sm-4">
+                            <input id="companyName" data-name="basic.corporationName"  data-bind="entity.fields.basic.corporationName" data-verification="true" data-default=""  data-class="text" type="text" class="lan_full_width form-control" placeholder="请输入正确的单位名称" value="{{profileData.basic.corporationName.value}}">
+                        </div>
+
+
+
+                        <div class="col-xs-12 col-sm-4">
+
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="companyPublicName" class="col-sm-4 control-label text-right lan_line-height">单位公共名称:</label>
+                        <div class="col-sm-4">
+                            <input id="companyPublicName" data-name="basic.corporationPublicName" name="basic.corporationPublicName"  data-bind="entity.fields.basic.corporationPublicName" data-verification="true" data-default=""  data-class="text"  type="text" class="lan_full_width form-control" placeholder="请输入正确的单位公共名称" value=" {{profileData.basic.corporationPublicName.value}}">
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4">
+
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label text-right lan_line-height required_on_lable">单位类型:</label>
+                        <div class="col-sm-4">
+                                <select class="selectpicker striped ">
+                                    <option  data-name="basic.corporationType"  data-bind="entity.fields.basic.corporationType" data-verification="true" data-default=""  data-class="text"> {{profileData.basic.corporationType.value}}</option>
+                                    <option>2</option>
+                                    <option>3</option>
+
+                                </select>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4">
+
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="companyAddress" class="col-sm-4 control-label text-right lan_line-height required_on_lable">单位地址:</label>
+                        <div class="col-sm-4">
+                            <input id="companyAddress" type="text" class="lan_full_width form-control" placeholder="请输入正确地址" data-name="basic.address"  name="basic.address" data-bind="entity.fields.basic.address" data-verification="true" data-default=""  data-class="text" value="{{profileData.basic.address.value}}">
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4">
+
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="companyOrganizationCode" class="col-sm-4 control-label text-right lan_line-height required_on_lable">组织机构代码:</label>
+                        <div class="col-sm-4">
+                            <input id="companyOrganizationCode" type="text" class="lan_full_width form-control" placeholder="请输入组织机构代码" data-name="basic.organizationCode" name="basic.organizationCode"  data-bind="entity.fields.basic.organizationCode" data-verification="true" data-default=""  data-class="text" value=" {{profileData.basic.organizationCode.value}}">
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 lan_padding_top_2">
+
+                            <div style="max-width: 210px" data-action-change="corporate:validation:upload:document" class="gray_bg lan_gray_border customFileUploader FileUploadderBlock lan_pointer  lan_padding_top_5 lan_padding_bottom_5 lan_padding_left_5 lan_padding_right_5 text-center">上传组织机构代码复印件
+
+                                <form id="organizationCodeDocumentForm" method="POST" enctype="multipart/form-data">
+                                    <input  style="opacity: 0" data-doc="organizationCodeDocument" name="file" type="file">
+                                    <input type="text" id="organizationCodeDocument" name="basic.organizationCodeDocument" data-name="basic.organizationCodeDocument"  data-bind="entity.fields.basic.organizationCodeDocument" data-verification="true" data-default=""  data-class="text" value=" {{profileData.basic.organizationCodeDocument.value}}" hidden>
+                                </form>
+
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="companyRegistrationNumber" class="col-sm-4 control-label text-right lan_line-height required_on_lable">工商者证照注册号:</label>
+                        <div class="col-sm-4">
+                            <input id="companyRegistrationNumber" type="text" class="lan_full_width form-control" placeholder="请输入组织机构代码" data-name="basic.businessLicenseNumber"  data-bind="entity.fields.basic.businessLicenseNumber" name="businessLicenseNumber" data-verification="true" data-default=""  data-class="text" value=" {{profileData.basic.businessLicenseNumber.value}}">
+
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 lan_padding_top_2">
+
+                            <div style="max-width: 210px" data-action-change="corporate:validation:upload:document" class="gray_bg lan_gray_border customFileUploader FileUploadderBlock lan_pointer  lan_padding_top_5 lan_padding_bottom_5 lan_padding_left_5 lan_padding_right_5 text-center">上传营业执照
+
+                                <form id="businessLicenseDocumentForm" method="POST" enctype="multipart/form-data">
+                                    <input  style="opacity: 0" data-doc="businessLicenseDocument" name="file" type="file">
+                                    <input  type="text" id="businessLicenseDocument" name="basic.businessLicenseDocument" data-name="basic.businessLicenseDocument"  data-bind="entity.fields.basic.businessLicenseDocument" data-verification="true" data-default=""  data-class="text" value=" {{profileData.basic.businessLicenseDocument.value}}" hidden>
+                                </form>
+
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="contactName" class="col-sm-4 control-label text-right lan_line-height required_on_lable">联系人姓名:</label>
+                        <div class="col-sm-4">
+                            <input id="contactName" type="text" class="lan_full_width form-control"  name="contacts.name" placeholder="请输入组织机构代码" data-name="contacts.name"  data-bind="entity.fields.contacts.name" data-verification="true" data-default=""  data-class="text" value=" {{profileData.contacts.name.value}}">
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 lan_padding_top_2">
+
+
+                            <div style="max-width: 210px" data-action-change="corporate:validation:upload:document" class="gray_bg lan_gray_border customFileUploader FileUploadderBlock lan_pointer  lan_padding_top_5 lan_padding_bottom_5 lan_padding_left_5 lan_padding_right_5 text-center">上传身份证照片或者扫描件
+
+                                <form id="userIdDocumentForm" method="POST" enctype="multipart/form-data">
+                                    <input  style="opacity: 0" data-doc="userIdDocument" name="file" type="file">
+                                    <input type="text" id="userIdDocument" name="basic.userIdDocument" data-name="basic.userIdDocument"  data-bind="entity.fields.basic.userIdDocument" data-verification="true" data-default=""  data-class="text" value=" {{profileData.basic.userIdDocument.value}}" hidden>
+                                </form>
+
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="contactPosition" class="col-sm-4 control-label text-right lan_line-height required_on_lable">联系人职位:</label>
+                        <div class="col-sm-4">
+                            <input id="contactPosition" type="text" class="lan_full_width form-control" placeholder="联系人职位" name="contacts.position" data-name="contacts.position"  data-bind="entity.fields.contacts.position" data-verification="true" data-default=""  data-class="text" value="{{profileData.contacts.position.value}}">
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 ">
+
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactNumber" class="col-sm-4 control-label text-right lan_line-height required_on_lable">联系人电话:</label>
+                        <div class="col-sm-4">
+                            <input id="contactNumber" type="text" class="lan_full_width form-control" placeholder="联系人电话" name="contacts.phone" data-name="contacts.phone"  data-bind="entity.fields.contacts.phone" data-verification="true" data-default=""  data-class="text" value="{{profileData.contacts.phone.value}}">
+                        </div>
+
+                        <div class=" col-xs-12 col-sm-4 ">
+
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="applicationForm" class="col-sm-4 control-label text-right lan_line-height required_on_lable">用户申请表照片或复印件:</label>
+                        <div class="col-sm-4">
+                            <span id="applicationForm"  data-action-change="corporate:validation:upload:document" class="gray_bg customFileUploader lan_gray_border lan_pointer  lan_full_width form-control text-center"> 点击上传
+
+                                  <form id="userApplicationFormForm" method="POST" enctype="multipart/form-data">
+                                      <input  style="opacity: 0" data-doc="userApplicationForm" name="file" type="file">
+                                      <input type="text" id="userApplicationForm" name="basic.userApplicationForm" data-name="basic.userApplicationForm"  data-bind="entity.fields.basic.userApplicationForm" data-verification="true" data-default=""  data-class="text" value=" {{profileData.basic.userApplicationForm.value}}" hidden>
+                                  </form>
+                              </span>
+
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 ">
+
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+           
+
+
+         
+                 
+             
+             
+             
+             
+             
+             
+             
+                         <div class="detailPageUserIntroBox lan_border_top">
+
+
+                             <div class="detailPageUserIntroBoxHeader lan_border_right lan_border_left">
+                                 <span><b>其他信息</b></span>
+                                 <span class=" glyphicon    detailPageDropDownIcon    pull-right glyphicon-menu-up"></span>
+
+                             </div>
+
+                       <div class="detailPageUserIntroBoxBody lan_border_right lan_border_bottom lan_border_left lan_padding_top_20 white_bg">
+
+
+
+                           <div class="form-group">
+                               <label for="bussinessName" class="col-sm-4 control-label text-right lan_line-height ">商标名称:</label>
+                               <div class="col-sm-4">
+                                   <input id="bussinessName" type="text" class="lan_full_width form-control" placeholder="" data-name="others.tradeMarkName"  data-bind="entity.fields.others.tradeMarkName" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.tradeMarkName.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+
+
+                           <div class="form-group">
+                               <label for="wechatId" class="col-sm-4 control-label text-right lan_line-height ">单位微信公众号:</label>
+                               <div class="col-sm-4">
+                                   <input id="wechatId" type="text" class="lan_full_width form-control" placeholder="" data-name="others.officialWechatAccount"  data-bind="entity.fields.others.officialWechatAccount" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.officialWechatAccount.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+
+
+                           <div class="form-group">
+                               <label for="registrationDocs" class="col-sm-4 control-label text-right lan_line-height ">商标登记证书或扫描件:</label>
+                               <div class="col-sm-4">
+
+                                 <span id="registrationDocs"  data-action-change="corporate:validation:upload:document" class="gray_bg customFileUploader lan_gray_border lan_pointer  lan_full_width form-control text-center"> 点击上传
+
+                                  <form id="tramarkRegistrationCertificateForm" method="POST" enctype="multipart/form-data">
+                                      <input  style="opacity: 0" data-doc="tramarkRegistrationCertificate" name="file" type="file">
+                                      <input type="text" id="tramarkRegistrationCertificate" name="tramarkRegistrationCertificate" data-name="others.tramarkRegistrationCertificate"  data-bind="entity.fields.others.tramarkRegistrationCertificate" data-verification="true" data-default=""  data-class="text" value=" {{profileData.others.tramarkRegistrationCertificate.value}}" hidden>
+                                  </form>
+                              </span>
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+
+                           <div class="form-group">
+                               <label for="copyRightDocs" class="col-sm-4 control-label text-right lan_line-height ">商标授权文件照片或扫描件:</label>
+                               <div class="col-sm-4">
+
+
+                                 <span id="copyRightDocs"  data-action-change="corporate:validation:upload:document" class="gray_bg customFileUploader lan_gray_border lan_pointer  lan_full_width form-control text-center"> 点击上传
+
+                                  <form id="tramarkCopyRightFileForm" method="POST" enctype="multipart/form-data">
+                                      <input  style="opacity: 0" data-doc="tramarkCopyRightFile" name="file" type="file">
+                                      <input type="text" id="tramarkCopyRightFile" name="others.tramarkCopyRightFile" data-name="others.tramarkCopyRightFile"  data-bind="entity.fields.others.tramarkCopyRightFile" data-verification="true" data-default=""  data-class="text" value=" {{profileData.others.tramarkCopyRightFile.value}}" hidden>
+                                  </form>
+                              </span>
+
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+
+
+                           <div class="form-group">
+                               <label for="officialWeb" class="col-sm-4 control-label text-right lan_line-height ">单位官网地址:</label>
+                               <div class="col-sm-4">
+                                   <input id="officialWeb" type="text" class="lan_full_width form-control" placeholder="" data-name="others.officialWebSite"  data-bind="entity.fields.others.officialWebSite" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.officialWebSite.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+                           <div class="form-group">
+                               <label for="affairsOfficeWeb" class="col-sm-4 control-label text-right lan_line-height ">事务部门网址:</label>
+                               <div class="col-sm-4">
+                                   <input id="affairsOfficeWeb" type="text" class="lan_full_width form-control" placeholder="" data-name="others.businessDepartmentWebSite"  data-bind="entity.fields.others.businessDepartmentWebSite" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.businessDepartmentWebSite.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+                           <div class="form-group">
+                               <label for="copyRightManagerName" class="col-sm-4 control-label text-right lan_line-height ">单位授权管理人姓名:</label>
+                               <div class="col-sm-4">
+                                   <input id="copyRightManagerName" type="text" class="lan_full_width form-control" placeholder="" data-name="others.contacts.copyRightManager.name"  data-bind="entity.fields.others.contacts.copyRightManager.name" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.contacts.copyRightManager.name.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+
+                           <div class="form-group">
+                               <label for="copyRightManagerPhone" class="col-sm-4 control-label text-right lan_line-height ">授权管理人联系电话:</label>
+                               <div class="col-sm-4">
+                                   <input id="copyRightManagerPhone" type="text" class="lan_full_width form-control" placeholder="" data-name="others.contacts.copyRightManager.phone"  data-bind="entity.fields.others.contacts.copyRightManager.phone" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.contacts.copyRightManager.phone.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+
+                           <div class="form-group">
+                               <label for="copyRightManagerOtherContacts" class="col-sm-4 control-label text-right lan_line-height ">授权管理人其他联系方式:</label>
+                               <div class="col-sm-4">
+                                   <input id="copyRightManagerOtherContacts" type="text" class="lan_full_width form-control" placeholder="如QQ、微信、邮箱" data-name="others.contacts.copyRightManager.otherContactInfos"  data-bind="entity.fields.others.contacts.copyRightManager.otherContactInfos" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.contacts.copyRightManager.otherContactInfos.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+
+                           <div class="form-group">
+                               <label for="validatorName" class="col-sm-4 control-label text-right lan_line-height ">单位关系认证姓名:</label>
+                               <div class="col-sm-4">
+                                   <input id="validatorName" type="text" class="lan_full_width form-control" placeholder="" data-name="others.contacts.verificationManager.name"  data-bind="entity.fields.others.contacts.verificationManager.name" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.contacts.verificationManager.name.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+
+                           <div class="form-group">
+                               <label for="validatorContact" class="col-sm-4 control-label text-right lan_line-height ">单位关系认证联系电话:</label>
+                               <div class="col-sm-4">
+                                   <input id="validatorContact" type="text" class="lan_full_width form-control" placeholder="" data-name="others.contacts.verificationManager.phone"  data-bind="entity.fields.others.contacts.verificationManager.phone" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.contacts.verificationManager.phone.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+                           <div class="form-group">
+                               <label for="validatorOtherContacts" class="col-sm-4 control-label text-right lan_line-height ">单位关系认证人其他联系方式:</label>
+                               <div class="col-sm-4">
+                                   <input id="validatorOtherContacts" type="text" class="lan_full_width form-control" placeholder="如QQ、微信、邮箱" data-name="others.contacts.verificationManager.otherContactInfos"  data-bind="entity.fields.others.contacts.verificationManager.otherContactInfos" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.contacts.verificationManager.otherContactInfos.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+                           <div class="form-group">
+                               <label for="linkedBankAccount" class="col-sm-4 control-label text-right lan_line-height ">单位绑定的银行账号:</label>
+                               <div class="col-sm-4">
+                                   <input id="linkedBankAccount" type="text" class="lan_full_width form-control" placeholder="" data-name="others.bankingInfo.accountNumber"  data-bind="entity.fields.others.bankingInfo.accountNumber" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.bankingInfo.accountNumber.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+                           <div class="form-group">
+                               <label for="linkedBank" class="col-sm-4 control-label text-right lan_line-height ">单位绑定银行账号开户银行:</label>
+                               <div class="col-sm-4">
+                                   <input id="linkedBank" type="text" class="lan_full_width form-control" placeholder="" data-name="others.bankingInfo.bankName"  data-bind="entity.fields.others.bankingInfo.bankName" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.bankingInfo.bankName.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+                           <div class="form-group">
+                               <label for="linkedAlipay" class="col-sm-4 control-label text-right lan_line-height ">单位绑定支付宝号码:</label>
+                               <div class="col-sm-4">
+                                   <input id="linkedAlipay" type="text" class="lan_full_width form-control" placeholder="" data-name="others.bankingInfo.alipayAccount"  data-bind="entity.fields.others.bankingInfo.alipayAccount" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.bankingInfo.alipayAccount.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+
+                           <div class="form-group">
+                               <label for="bussinessModel" class="col-sm-4 control-label text-right lan_line-height ">单位印业类型:</label>
+                               <div class="col-sm-4">
+                                   <input id="bussinessModel" type="text" class="lan_full_width form-control" placeholder="" data-name="others.industrytype"  data-bind="entity.fields.others.industrytype" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.industrytype.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+
+
+                           <div class="form-group">
+                               <label for="economicModel" class="col-sm-4 control-label text-right lan_line-height ">单位经济类型:</label>
+                               <div class="col-sm-4">
+                                   <input id="economicModel" type="text" class="lan_full_width form-control" placeholder="" data-name="others.economictype"  data-bind="entity.fields.others.economictype" data-verification="true" data-default=""  data-class="text" value="{{profileData.others.economictype.value}}">
+                               </div>
+
+                               <div class="col-xs-12 col-sm-4 ">
+
+                               </div>
+                               <div class="clearfix"></div>
+
+                           </div>
+                      <div class="clearfix"></div>
+          
+          
+
+                        
+                       </div><!--end of detailPageUserIntroBoxBody--->
+                    
+                    </div> <!---end of detailPageUserIntroBox-->
+
+            </div>
+            
+                
+            
+
+     
+     
+     
+     
+            

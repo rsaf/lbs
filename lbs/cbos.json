@@ -1,0 +1,378 @@
+{
+  "name": "cbos",
+  "fullname": "cloud business operating system",
+  "description": "CBOS is a cloud business operating system developed by LBS",
+  "version": "1.0.0",
+  "license": "private",
+  "application": {
+    "init_message": {
+      "dns": "wms",
+      "sns": "esb",
+      "vr": "1.0.0",
+      "ac": {
+        "uid": "sa",
+        "oid": "500000000000000000000000"
+      },
+      "wf": {
+        "wid": "CBWI101",
+        "wtk": "CBWD101",
+        "ev": "begin"
+      },
+      "pl": {
+        "user": {
+          "username": "sa",
+          "password": "123456",
+          "usertype": "super",
+          "organizationID": "500000000000000000000000",
+          "email": "sa@saascbos.com",
+          "mobile": "15900755434",
+          "fullname": "Lion Leo",
+          "avatar": "cbos_layouts/desktop/theme/images/profile_icon_man.png",
+          "role":"Marketing Manager"
+        },
+        "desktop": {
+          "name": "desktop",
+          "desc": "Desktop application",
+          "linkTo": "desktop",
+          "icons": {
+            "idefault": "cbos_layouts/desktop/theme/images/desktop_menu_gray.jpg",
+            "iselected": "cbos_layouts/desktop/theme/images/desktop_menu_blue.jpg"
+          }
+        },
+        "hrm": {
+          "name": "hrm",
+          "desc": "HRM application",
+          "linkTo": "desktop.app({appName:'hrm'})",
+          "icons": {
+            "idefault": "cbos_layouts/desktop/theme/images/hrm_menu_gray.jpg",
+            "iselected": "cbos_layouts/desktop/theme/images/hrm_menu_blue.jpg"
+          }
+        },
+        "crm": {
+          "name": "crm",
+          "desc": "CRM application",
+          "linkTo": "desktop.app({appName:'crm'})",
+          "icons": {
+            "idefault": "cbos_layouts/desktop/theme/images/crm_menu_gray.jpg",
+            "iselected": "cbos_layouts/desktop/theme/images/crm_menu_blue.jpg"
+          }
+        },
+        "desktopnavigationleft":{
+          "name": "Desktop Navigation Left",
+          "dltu": "cbos_layouts/desktop/main.view.html",
+          "dlb": "Desktop",
+          "dln": "Desktop",
+          "layouts": {
+            "ln": "Desktop",
+            "lb": "Desktop",
+            "ltu": "cbos_layouts/desktop/main.view.html",
+            "linkTo":"desktop()",
+            "icons": {
+              "idefault": "cbos_layouts/desktop/theme/images/newapp_menu_gray.jpg",
+              "iselected": "cbos_layouts/desktop/theme/images/newapp_menu_blue.jpg"
+            }
+          }
+        },
+        "hrmnavigationleft":{
+          "name": "HRM Navigation Left",
+          "dltu": "cbos_layouts/templates/run-time/grids/1y.html",
+          "dlb": "HOME",
+          "dln": "HOME",
+          "layouts": {
+            "ln": "HOME",
+            "ltu": "cbos_layouts/templates/run-time/grids/1y.html",
+            "linkTo":"desktop.app({appName:'hrm'})",
+            "icons": {
+              "idefault": "cbos_layouts/desktop/theme/images/newapp_menu_gray.jpg",
+              "iselected": "cbos_layouts/desktop/theme/images/newapp_menu_blue.jpg"
+            }
+          }
+        },
+        "crmnavigationleft":{
+          "name": "CRM Navigation Left",
+          "dltu": "cbos_layouts/templates/run-time/grids/2y-sidebar.html",
+          "dlb": "HOME",
+          "dln": "HOME",
+          "layouts": {
+            "ln": "HOME",
+            "lb": "HOME",
+            "ltu": "cbos_layouts/templates/run-time/grids/2y-sidebar.html",
+            "linkTo":"desktop.app({appName:'crm'})",
+            "icons": {
+              "idefault": "cbos_layouts/desktop/theme/images/newapp_menu_gray.jpg",
+              "iselected": "cbos_layouts/desktop/theme/images/newapp_menu_blue.jpg"
+            }
+          }
+        },
+        "navigationtop": {
+          "name": "navigationtop",
+          "desc": "top navigations for apps links"
+        },
+        "navigationtop_desktop": {
+          "apps": {
+            "name": "DESKTOP",
+            "linkTo": "desktop",
+            "icons": {
+              "idefault": "cbos_layouts/desktop/theme/images/desktop_menu_gray.jpg",
+              "iselected": "cbos_layouts/desktop/theme/images/desktop_menu_blue.jpg"
+            }
+          }
+        },
+        "navigationtop_hrm": {
+          "apps": {
+            "name": "HRM",
+            "linkTo": "desktop.app({appName:'hrm'})",
+            "icons": {
+              "idefault": "cbos_layouts/desktop/theme/images/hrm_menu_gray.jpg",
+              "iselected": "cbos_layouts/desktop/theme/images/hrm_menu_blue.jpg"
+            }
+          }
+        },
+        "navigationtop_crm": {
+          "apps": {
+            "name": "CRM",
+            "linkTo": "desktop.app({appName:'crm'})",
+            "icons": {
+              "idefault": "cbos_layouts/desktop/theme/images/crm_menu_gray.jpg",
+              "iselected": "cbos_layouts/desktop/theme/images/crm_menu_blue.jpg"
+            }
+          }
+        },
+        "desktop_canvas": {
+          "name": "desktop canvas1",
+          "desc": "canvas1 for desktop"
+        },
+        "desktop_mytasks": {
+          "name": "mytasks",
+          "desc": "my tasks table in desktop",
+          "fields": [
+            {"fn": "Task Name", "ft":"String", "fid":"01", "fdn": "Task_Name"},
+            {"fn": "Start Date", "ft":"Date", "fid":"02", "fdn": "Start_Date"},
+            {"fn": "Due Date", "ft":"Date", "fid":"03", "fdn": "Due_Date"},
+            {"fn": "Asigned To", "ft":"String", "fid":"04", "fdn": "Asigned_To"},
+            {"fn": "Asigned By", "ft":"String", "fid":"05", "fdn": "Asigned_By"}
+          ],
+          "views": [
+            {"vid": "view1", "vn": "My Tasks", "vfields":[{"fid":"01"},{"fid":"02"}, {"fid":"03"}]},
+            {"vid": "view2", "vn": "Tasks Summary", "vfields":[{"fid":"01"}]}
+          ],
+          "dvid": "view2"
+        },
+        "desktop_mytasks_records": {
+          "data":[
+            {"rdt": {"Task_Name": "finish contract", "Start_Date": "2015.10.12", "Due_Date": "2015.10.20"}},
+            {"rdt": {"Task_Name": "Buy New PC", "Start_Date": "2015.10.15", "Due_Date": "2015.10.25"}},
+            {"rdt": {"Task_Name": "Buy notebook", "Start_Date": "2015.10.15", "Due_Date": "2015.10.25"}},
+            {"rdt": {"Task_Name": "Write Proposal", "Start_Date": "2015.10.15", "Due_Date": "2015.10.25"}},
+            {"rdt": {"Task_Name": "Make review...", "Start_Date": "2015.10.15", "Due_Date": "2015.10.25"}},
+            {"rdt": {"Task_Name": "Buy New PC", "Start_Date": "2015.10.15", "Due_Date": "2015.10.25"}},
+            {"rdt": {"Task_Name": "Buy New PC", "Start_Date": "2015.10.15", "Due_Date": "2015.10.25"}},
+            {"rdt": {"Task_Name": "Buy New PC", "Start_Date": "2015.10.15", "Due_Date": "2015.10.25"}},
+            {"rdt": {"Task_Name": "Buy New PC", "Start_Date": "2015.10.15", "Due_Date": "2015.10.25"}},
+            {"rdt": {"Task_Name": "Buy New PC", "Start_Date": "2015.10.15", "Due_Date": "2015.10.25"}}
+          ]
+        },
+        "desktop_mydocuments": {
+          "name": "mydocuments",
+          "desc": "my documents table in desktop"
+        },
+        "desktop_companynews": {
+          "name": "companynews",
+          "desc": "company news table in desktop"
+        },
+        "desktop_companytwits": {
+          "name": "companytwits",
+          "desc": "company twits table in desktop"
+        },
+        "desktop_freq_apps": {
+          "name": "frequentapps",
+          "desc": "company new table in desktop",
+          "eid":  "563af9119430a2d5541ea436",
+          "_id":  "563af9119430a2d5541ea436"
+        },
+        "desktop_freq_apps_records": {
+        "data":[
+          {"rdt": { "icons": {"idefault": "cbos_layouts/desktop/theme/images/app_icon_pms.png", "iselected": "cbos_layouts/desktop/theme/images/app_icon_pms.png"}, "name": "PMS", "linkTo": "desktop.app({appName:'pms'})" }, "parent": "563af9119430a2d5541ea436"},
+          {"rdt": { "icons": {"idefault": "cbos_layouts/desktop/theme/images/app_icon_scm.png" , "iselected": "cbos_layouts/desktop/theme/images/app_icon_scm.png" } , "name": "SCM", "linkTo": "desktop.app({appName:'scm'})" }, "parent": "563af9119430a2d5541ea436"},
+          {"rdt": { "icons": {"idefault": "cbos_layouts/desktop/theme/images/app_icon_finance.png" , "iselected": "cbos_layouts/desktop/theme/images/app_icon_finance.png"},"name": "FINANCE", "linkTo": "desktop.app({appName:'finance'})" }, "parent": "563af9119430a2d5541ea436"},
+          {"rdt": { "icons": {"idefault": "cbos_layouts/desktop/theme/images/app_icon_kms.png", "iselected":"cbos_layouts/desktop/theme/images/app_icon_kms.png"}, "name": "KMS", "linkTo": "desktop.app({appName:'kms'})" }, "parent": "563af9119430a2d5541ea436"},
+          {"rdt": { "icons": {"idefault": "cbos_layouts/desktop/theme/images/app_icon_ppm.png", "iselected":"cbos_layouts/desktop/theme/images/app_icon_ppm.png"}, "name": "PPM", "linkTo": "desktop.app({appName:'ppm'})" }, "parent": "563af9119430a2d5541ea436"},
+          {"rdt": { "icons": {"idefault": "cbos_layouts/desktop/theme/images/app_icon_relations.png", "iselected":"cbos_layouts/desktop/theme/images/app_icon_relations.png"}, "name": "IT", "linkTo": "desktop.app({appName:'it'})" }, "parent": "563af9119430a2d5541ea436"},
+          {"rdt": { "icons": {"idefault": "cbos_layouts/desktop/theme/images/app_icon_bpm.png", "iselected": "cbos_layouts/desktop/theme/images/app_icon_bpm.png"}, "name": "BPM", "linkTo": "desktop.app({appName:'bpm'})" }, "parent": "563af9119430a2d5541ea436"},
+          {"rdt": { "icons": {"idefault": "cbos_layouts/desktop/theme/images/app_icon_dms.png", "iselected":  "cbos_layouts/desktop/theme/images/app_icon_dms.png"}, "name": "DMS", "linkTo": "desktop.app({appName:'dms'})" }, "parent": "563af9119430a2d5541ea436"},
+          {"rdt": { "icons": {"idefault": "cbos_layouts/desktop/theme/images/app_icon_crm.png", "iselected":"cbos_layouts/desktop/theme/images/app_icon_crm.png"}, "name": "CRM", "linkTo": "desktop.app({appName:'crm'})" }, "parent": "563af9119430a2d5541ea436"},
+          {"rdt": { "icons": {"idefault": "cbos_layouts/desktop/theme/images/app_icon_sales.png", "iselected": "cbos_layouts/desktop/theme/images/app_icon_sales.png"}, "name": "SALES", "linkTo": "desktop.app({appName:'sales'})" }, "parent": "563af9119430a2d5541ea436"},
+          {"rdt": { "icons": {"idefault": "cbos_layouts/desktop/theme/images/app_icon_hr.png", "iselected": "cbos_layouts/desktop/theme/images/app_icon_hr.png"}, "name": "HRM", "linkTo": "desktop.app({appName:'hrm'})" }, "parent": "563af9119430a2d5541ea436"}
+           ]
+         },
+        "desktop_dlayout": {
+          "name": "desktop default layout",
+          "desc": "layout for desktop",
+          "type": "2x2y"
+        },
+        "hrm_dlayout": {
+          "name": "hrm default layout",
+          "desc": "layout for hrm",
+          "type": "2y-sidebar"
+        },
+        "crm_dlayout": {
+          "name": "crm default layout",
+          "desc": "layout for crm",
+          "type": "2y-sidebar"
+        }
+      }
+    },
+    "api": {
+      "execution_mode": "single_service",
+      "codebase_root": "/Users/lbs005/dev/bitbucket/lbs",
+      "main": {
+        "namespace": "wms",
+        "version": "1.0.0",
+        "description": "workflow management service",
+        "hosts": [
+          {
+            "name": "localhost",
+            "port": "9000"
+          }
+        ],
+        "endpoint": "/wms/message.json",
+        "account": "leo",
+        "ssh_private_key": "/.ssh/id_rsa",
+        "codebase": "/lbs.cbos.wms"
+      },
+      "services": [
+        {
+          "namespace": "ams",
+          "version": "1.0.0",
+          "description": "apps management service",
+          "hosts": [
+            {
+              "name": "localhost",
+              "port": "9200"
+            }
+          ],
+          "endpoint": "/ams/message.json",
+          "account": "leo",
+          "ssh_private_key": "/.ssh/id_rsa",
+          "codebase": "/services/lbs.cbos.ams"
+        },
+        {
+          "namespace": "bms",
+          "version": "1.0.0",
+          "description": "bucket management service",
+          "hosts": [
+            {
+              "name": "localhost",
+              "port": "9100"
+            },
+            {
+              "name": "localhost",
+              "port": "9101"
+            }
+          ],
+          "endpoint": "/bms/message.json",
+          "account": "leo",
+          "ssh_private_key": "/.ssh/id_rsa",
+          "codebase": "/services/lbs.cbos.bms",
+          "bucket1_location": "/buckets/bucket1",
+          "bucket2_location": "/buckets/bucket2"
+        },
+        {
+          "namespace": "ups",
+          "version": "1.0.0",
+          "description": "user profile service",
+          "hosts": [
+            {
+              "name": "localhost",
+              "port": "9600"
+            }
+          ],
+          "endpoint": "/ups/message.json",
+          "account": "leo",
+          "ssh_private_key": "/.ssh/id_rsa",
+          "codebase": "/services/lbs.cbos.ups"
+        }
+
+      ]
+    }
+  },
+  "external_services": {
+    "pgconfig": {
+      "host": "localhost",
+      "user": "postgres",
+      "pass": "postgres",
+      "port": "5432"
+    },
+    "mgconfig": {
+      "uri": "mongodb://localhost/",
+      "options": {
+        "db": {"native_parser": true},
+        "server": {
+          "poolSize": 1
+        },
+        "user": null,
+        "pass": null
+      }
+    },
+    "rdconfig": {
+      "host": "localhost",
+      "pass": null,
+      "port": 6379
+    },
+    "smtpconfig": {
+      "options": {
+        "host": "smtp.mailgun.org",
+        "port": 587,
+        "auth": {
+          "user": "postmaster@saascbos.com",
+          "pass": "3f927b0ccb57e33e9893880d5efa4689"
+        }
+      },
+      "from": "services@saascbos.com"
+    },
+    "smsconfig": {
+      "username": "jiekou-clcs-04",
+      "password": "Tch147369",
+      "endpoint": "http://222.73.117.158/msg/HttpBatchSendSM?"
+    },
+    "alipayconfig": {
+      "partner": "",
+      "apiKey": "",
+      "seller_email": "",
+      "host": "",
+      "port": 80,
+      "cacert": "",
+      "transport": "http",
+      "inputCharset": "utf-8",
+      "signatureType": "MD5",
+      "create_direct_pay_by_user_return_url": "",
+      "create_direct_pay_by_user_notify_url": "",
+      "http_verify_url": "http://mapi.alipay.com/gateway.do?service=notify_verify&",
+      "https_verify_url": "https://mapi.alipay.com/gateway.do?service=notify_verify&",
+      "alipayGateway": "https://mapi.alipay.com/gateway.do?",
+      "error_notify_url": ""
+    },
+    "weixinconfig": {
+      "appId": "",
+      "appSecret": "",
+      "partnerKey": "",
+      "mchId": "",
+      "notifyUrl": "",
+      "pfx": "",
+      "oauthUrl": "https://api.weixin.qq.com/sns/oauth2/access_token?",
+      "apiTokenUrl": "https://api.weixin.qq.com/cgi-bin/token?",
+      "userInfoUrl": "https://api.weixin.qq.com/cgi-bin/user/info?",
+      "host": "",
+      "return_url": "",
+      "notify_url": "",
+      "weixinpay": {
+        "UNIFIED_ORDER": "https://api.mch.weixin.qq.com/pay/unifiedorder",
+        "ORDER_QUERY": "https://api.mch.weixin.qq.com/pay/orderquery",
+        "REFUND": "https://api.mch.weixin.qq.com/secapi/pay/refund",
+        "REFUND_QUERY": "https://api.mch.weixin.qq.com/pay/refundquery",
+        "DOWNLOAD_BILL": "https://api.mch.weixin.qq.com/pay/downloadbill",
+        "SHORT_URL": "https://api.mch.weixin.qq.com/tools/shorturl"
+      }
+    }
+  }
+}

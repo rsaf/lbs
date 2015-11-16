@@ -1,0 +1,736 @@
+[
+  {
+"_comment": "LZP101",
+    "persist": {
+      "ns": "smm",
+      "op": "persistServicePoint",
+      "tgtField": "servicePoint",
+      "pl": {
+        "servicePointCode": "400000000000000000000001",
+        "servicePointName": "蓝证平台实名认证网点",
+        "servicePointStatus":30,
+        "status": 30,
+        "servicePointAddress": "云端网点",
+        "servicePointType": "云端网点",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find" : "smm_servicePointCodeInUse",
+      "op": "smm_changeServicePointCode",
+      "tgtField": "servicePointCode",
+      "pl": "LZP101"
+    }
+  },
+  {
+"_comment":"LZS101",
+    "persist": {
+      "ns": "smm",
+      "op": "persistService",
+      "tgtField": "service",
+      "pl": {
+        "serviceCode": "LZS101",
+        "PriceList": [
+          {
+            "servicePoint": "LZP101",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "0",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "信息核验",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "实名认证服务",
+        "serviceName": "实名认证服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find":"smm_serviceCodeInUse",
+      "op": "smm_changeServiceCode",
+      "tgtField": "serviceCode",
+      "pl": "LZS101",
+      "reid" : "300000000000000000000001"
+    }
+  },
+  {
+"_comment": "LZP102",
+    "persist": {
+      "ns": "smm",
+      "op": "persistServicePoint",
+      "tgtField": "servicePoint",
+      "pl": {
+        "servicePointCode": "400000000000000000000002",
+        "servicePointName": "蓝证平台证照核验网点",
+        "servicePointStatus":30,
+        "status": 30,
+        "servicePointAddress": "云端网点",
+        "servicePointType": "云端网点",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find" : "smm_servicePointCodeInUse",
+      "op": "smm_changeServicePointCode",
+      "tgtField": "servicePointCode",
+      "pl": "LZP102"
+    }
+  },
+  {
+"_comment":"LZS102",
+    "persist": {
+      "ns": "smm",
+      "op": "persistService",
+      "tgtField": "service",
+      "pl": {
+        "serviceCode": "LZS102",
+        "PriceList": [
+          {
+            "servicePoint": "LZP102",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "0",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "信息核验",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "蓝证证照核验",
+        "serviceName": "蓝证证照核验服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find":"smm_serviceCodeInUse",
+      "op": "smm_changeServiceCode",
+      "tgtField": "serviceCode",
+      "pl": "LZS102",
+      "reid" : "300000000000000000000002"
+    }
+  },
+  {
+"_comment": "LZP103",
+    "persist": {
+      "ns": "smm",
+      "op": "persistServicePoint",
+      "tgtField": "servicePoint",
+      "pl": {
+        "servicePointCode": "400000000000000000000003",
+        "servicePointName": "蓝证平台单位核验网点",
+        "status": 30,
+        "servicePointAddress": "云端网点",
+        "servicePointType": "云端网点",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "蓝证平台单位核验网点",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find" : "smm_servicePointCodeInUse",
+      "op": "smm_changeServicePointCode",
+      "tgtField": "servicePointCode",
+      "pl": "LZP103"
+    }
+  },
+  {
+"_comment":"LZS103",
+    "persist": {
+      "ns": "smm",
+      "op": "persistService",
+      "tgtField": "service",
+      "pl": {
+        "serviceCode": "LZS103",
+        "PriceList": [
+          {
+            "servicePoint": "LZP103",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "0",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "信息核验",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "蓝证单位信息核验服务",
+        "serviceName": "蓝证单位信息核验服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find":"smm_serviceCodeInUse",
+      "op": "smm_changeServiceCode",
+      "tgtField": "serviceCode",
+      "pl": "LZS103",
+      "reid" : "300000000000000000000002"
+    }
+  },
+  {
+"_comment": "LZP104",
+    "persist": {
+      "ns": "smm",
+      "op": "persistServicePoint",
+      "tgtField": "servicePoint",
+      "pl": {
+        "servicePointCode": "400000000000000000000003",
+        "servicePointName": "蓝证平台充值网点",
+        "status": 30,
+        "servicePointAddress": "云端网点",
+        "servicePointType": "云端网点",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "蓝证平台充值网点",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find" : "smm_servicePointCodeInUse",
+      "op": "smm_changeServicePointCode",
+      "tgtField": "servicePointCode",
+      "pl": "LZP104"
+    }
+  },
+  {
+"_comment":"LZS104",
+    "persist": {
+      "ns": "smm",
+      "op": "persistService",
+      "tgtField": "service",
+      "pl": {
+        "serviceCode": "LZS104",
+        "PriceList": [
+          {
+            "servicePoint": "LZP104",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "0",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "充值服务",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "蓝证充值服务",
+        "serviceName": "蓝证充值服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find":"smm_serviceCodeInUse",
+      "op": "smm_changeServiceCode",
+      "tgtField": "serviceCode",
+      "pl": "LZS104",
+      "reid" : "300000000000000000000003"
+    }
+  },
+  {
+"_comment": "LZP105",
+    "persist": {
+      "ns": "smm",
+      "op": "persistServicePoint",
+      "tgtField": "servicePoint",
+      "pl": {
+        "servicePointCode": "400000000000000000000002",
+        "servicePointName": "蓝证证照检测网点",
+        "servicePointStatus":30,
+        "status": 30,
+        "servicePointAddress": "云端网点",
+        "servicePointType": "证照网点",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find" : "smm_servicePointCodeInUse",
+      "op": "smm_changeServicePointCode",
+      "tgtField": "servicePointCode",
+      "pl": "LZP105"
+    }
+  },
+  {
+"_comment":"LZS105",
+    "persist": {
+      "ns": "smm",
+      "op": "persistService",
+      "tgtField": "service",
+      "pl": {
+        "serviceCode": "LZS105",
+        "PriceList": [
+          {
+            "servicePoint": "LZP105",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "0",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "证照服务",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "证照检测",
+        "serviceName": "蓝证证照检测服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find":"smm_serviceCodeInUse",
+      "op": "smm_changeServiceCode",
+      "tgtField": "serviceCode",
+      "pl": "LZS105",
+      "reid" : "300000000000000000000002"
+    }
+  },
+  {
+"_comment": "LZP106",
+    "persist": {
+      "ns": "smm",
+      "op": "persistServicePoint",
+      "tgtField": "servicePoint",
+      "pl": {
+        "servicePointCode": "400000000000000000000002",
+        "servicePointName": "蓝证证照制作网点",
+        "servicePointStatus":30,
+        "status": 30,
+        "servicePointAddress": "云端网点",
+        "servicePointType": "证照网店",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find" : "smm_servicePointCodeInUse",
+      "op": "smm_changeServicePointCode",
+      "tgtField": "servicePointCode",
+      "pl": "LZP106"
+    }
+  },
+  {
+"_comment":"LZS106",
+    "persist": {
+      "ns": "smm",
+      "op": "persistService",
+      "tgtField": "service",
+      "pl": {
+        "serviceCode": "LZS106",
+        "PriceList": [
+          {
+            "servicePoint": "LZP106",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "0",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "sa",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "证照服务",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "蓝证证照制作服务",
+        "serviceName": "蓝证证照制作服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find":"smm_serviceCodeInUse",
+      "op": "smm_changeServiceCode",
+      "tgtField": "serviceCode",
+      "pl": "LZS106",
+      "reid" : "300000000000000000000002"
+    }
+  },
+  {
+    "_comment": "LZP107",
+    "persist": {
+      "ns": "smm",
+      "op": "persistServicePoint",
+      "tgtField": "servicePoint",
+      "pl": {
+        "servicePointCode": "400000000000000000000001",
+        "servicePointName": "API实名认证网点",
+        "servicePointStatus":30,
+        "status": 30,
+        "servicePointAddress": "云端网点",
+        "servicePointType": "云端网点",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find" : "smm_servicePointCodeInUse",
+      "op": "smm_changeServicePointCode",
+      "tgtField": "servicePointCode",
+      "pl": "LZP107"
+    }
+  },
+  {
+    "_comment":"LZS107",
+    "persist": {
+      "ns": "smm",
+      "op": "persistService",
+      "tgtField": "service",
+      "pl": {
+        "serviceCode": "LZS107",
+        "PriceList": [
+          {
+            "servicePoint": "LZP107",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "0",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "信息核验",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "实名认证服务",
+        "serviceName": "API实名认证服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find":"smm_serviceCodeInUse",
+      "op": "smm_changeServiceCode",
+      "tgtField": "serviceCode",
+      "pl": "LZS107",
+      "reid" : "300000000000000000000001"
+    }
+  },
+  {
+    "_comment": "LZP108",
+    "persist": {
+      "ns": "smm",
+      "op": "persistServicePoint",
+      "tgtField": "servicePoint",
+      "pl": {
+        "servicePointCode": "400000000000000000000001",
+        "servicePointName": "蓝证平台身份认证服务网点",
+        "servicePointStatus":30,
+        "status": 30,
+        "servicePointAddress": "云端网点",
+        "servicePointType": "云端网点",
+        "operatingHours": "00:00 - 24:00",
+        "contactPerson": "",
+        "contactPhone": "",
+        "servicePointDescription": "",
+        "postalCode": "230904",
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find" : "smm_servicePointCodeInUse",
+      "op": "smm_changeServicePointCode",
+      "tgtField": "servicePointCode",
+      "pl": "LZP108"
+    }
+  },
+  {
+    "_comment":"LZS108",
+    "persist": {
+      "ns": "smm",
+      "op": "persistService",
+      "tgtField": "service",
+      "pl": {
+        "serviceCode": "LZS108",
+        "PriceList": [
+          {
+            "servicePoint": "LZP108",
+            "servicePrices": "0",
+            "discountedPrice": "0",
+            "paymentMethod": ["1"],
+            "remark": "0",
+            "pc": "230904",
+            "clientCommandAddNew": true,
+            "ct": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            },
+            "md": {
+              "uID": "a1ed",
+              "oID": "200000000000000000000000"
+            }
+          }
+        ],
+        "status": 30,
+        "serviceFromSL": "5548375f02f7c81622e557a5",
+        "serviceType": "信息核验",
+        "standardPayment": ["1"],
+        "standardServicePrice": "0",
+        "standardPricing": "0",
+        "standardServiceNotes": "0",
+        "briefOverview": "实名认证服务",
+        "serviceName": "身份认证服务",
+        "standardReservationRequest": true,
+        "ct": {
+          "uID": "a1ed",
+          "oID": "200000000000000000000000"
+        },
+        "md": {
+          "uID": "sa",
+          "oID": "200000000000000000000000"
+        }
+      }
+    },
+    "rename": {
+      "ns": "smm",
+      "find":"smm_serviceCodeInUse",
+      "op": "smm_changeServiceCode",
+      "tgtField": "serviceCode",
+      "pl": "LZS108",
+      "reid" : "300000000000000000000001"
+    }
+  }
+]

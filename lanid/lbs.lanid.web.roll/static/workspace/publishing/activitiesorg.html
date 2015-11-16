@@ -1,0 +1,1141 @@
+  <!DOCTYPE html>
+<html>
+<head>
+  <title>我们是最真实的公民认证</title>
+  <!--- Meta -->
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<!--  <meta property="qc:admins" content="174717463042337635441676375636" />-->
+<!---conditional support for IE version < 9 --->
+<!--[if lt IE 9]>
+	<script src="/commons/js/css3-mediaqueries.js"></script>
+<![endif]-->
+<!-- javascripts -->
+<script  src="../../commons/js/mustache.js" type="text/javascript"></script>
+<script src="../../commons/js/jquery-1.11.1.js" type="text/javascript"></script>
+<script src="../../commons/js/jquery-ui.js" type="text/javascript" ></script>
+<script src="../../commons/js/jquerybbq.min.js" type="text/javascript"></script>
+<script src="../../commons/bootstrap/js/bootstrap.js"   type="text/javascript"></script>
+<script src="../../commons/bootstrapselect/js/bootstrap-select.js"   type="text/javascript"></script>
+
+<!--style sheet-->
+<link rel="stylesheet" href="../../commons/bootstrap/css/bootstrap.css" type="text/css"  >
+<link rel="stylesheet" href="../../commons/bootstrapselect/css/bootstrap-select.css" type="text/css"  >
+
+<!-- Page Stylesheets -->
+<link rel="stylesheet" href="../../commons/css/home.css" type="text/css"  >
+<link rel="stylesheet" href="../../commons/css/workSpace.css" type="text/css" />
+
+<!-- Page Javascripts -->
+   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries(respond.js) -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="/commons/js/html5shiv.min.js"></script>
+      <script src="/commons/js/respond.min.js"></script>
+  <![endif]-->
+  <!--libraries should be loaded after the body content, for faster page loading -->
+</head>
+<body id="body">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!---wrapper-->
+  <div id="wrapperSelector" class="wrapper container">
+     
+     
+        
+
+        <div class="row">
+            <!---header----personal-->
+         <div id="header">
+            
+      			
+             <div id="logo" class="not_home_logo">  </div>
+            <!-- <a href="#/workspace/welcome"><div id="locatiion"><div id="location_text">上海 <span>切换所在城市</span></div></div></a>-->
+            <div id="top_right_info_and_search">
+             
+                <div id="top_right_info">
+                 
+                
+                <ul>
+                     <li><a href="/">安全退出</a></li>
+                    <li id="settings_tab">设置
+                     	  <ul>
+                             <li><a > 全局配置</a></li>
+                             <li><a >修改密码</a></li>
+                       	 </ul>
+                      </li>
+                     <li>女士</li>
+                     <li>李玉华</li>
+                     <li>欢迎</li>
+                 </ul>
+                 <div id="clearFix"></div>
+         		
+               <!-- <div id="settings_logout"><span id="logout">   安全退出</span>     
+
+                    <div id="settings_menu">
+                     <ul>
+                     	  <li>设计
+                     		<ul>
+                                <li><a href="personal.html"> 全局配置</a></li>
+                                <li><a href="personal.html">修改密码</a></li>
+                       		 </ul>
+                        </li>
+                       
+                    </ul>
+               		 </div>
+
+                
+                
+                 </div><!-  /Setting_logout
+                <div id="user_welcome"><span id="user_title">女士</span><span id="user_name">李玉华</span> <span id="welcome">欢饮</span></div>-->
+           		
+            </div><!---top right info -->
+         
+            
+            
+            
+            
+            
+             <div id="search_container"> 
+                <div class="mobile_search_icon2">
+                       <img  src="../../commons/images/search-white.png" style="width:35px;">
+              
+                      </div>
+             <div id="search">
+              
+               <form action="" method="get">
+              
+            	<div id="search_text_field">
+               <input id="submit_search" type="image" src="../../commons/images/search-button_06.jpg" value="Submit" />
+               <input type="search" name="lan_search"  placeholder="事务编号/ID" class="search-id">
+              </div>
+                 <!-- <div id="home_search_arrow"><img src="../../../../../../Lan_loggin/search-frame_arrow.jpg" /></div>-->
+                  
+            	 <!-- <div id="select_list" >
+                 <span class="css-select-moz">
+             	<select class="css-select" >
+                  <option value="1">全部</option>
+                  <option value="2">网点</option>
+                  <option value="3">单位</option>
+                  <option value="4">用户</option>
+             	</select>
+                  </span>
+                </div> -->
+
+                <div class="input-group-btn">
+                            <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button">
+                                    全部
+                            <span class="caret">
+                            </span></button>
+                            <ul role="menu" class="dropdown-menu">
+                              <li><a >网点</a></li>
+                              <li><a >单位</a></li>
+                              <li><a >用户</a></li>
+                            </ul>
+                          </div>
+                </form>
+  
+                         
+            
+             
+                 </div><!---end of search---->
+                 <!-- <div id="search_botom_border"></div> -->
+             
+             </div><!--/search container-->
+            </div>  <!---end of top_right_info_and_search---->
+      
+         
+         </div><!---end of header---->
+        
+        <!-- responsive navifation starts from here -->
+  <nav class="navbar navbar-default" role="navigation" id="stickyribbon">
+   <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" 
+         data-target="#example-navbar-collapse">
+         <span class="sr-only">Toggle navigation</span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+      </button>
+   </div>
+   <div class="collapse navbar-collapse" id="example-navbar-collapse">
+      <div class="topMobileNavigations"></div>
+   </div>
+</nav>
+
+<!-- responsive nevigation here -->
+
+        
+        <div id="main_container">
+        
+        
+        
+        
+        
+
+            <div class="container_top">
+            <div id="directory_indicator"><span id="root_folder">事务管理</span><span id="sub_folder">新建事务</span> </div>
+            
+             
+             
+  
+  
+       
+            </div><!---end of container_top-->
+                     
+          <div class="container_bottom fluid-container">
+          
+          <form class="form-horizontal lan_push_down" role="form">
+          
+         <div class="row">
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">事务名称</label>
+                <div class="col-sm-7">
+                  <input type="email" class="form-control" value="入学申请" >
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">事务类别</label>
+                    <div class="col-sm-7">
+                     <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">事务前台显示限制</label>
+                <div class="col-sm-7">
+                           <select class="selectpicker">
+                            <option>选择核验目的</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         
+         
+         
+         </div><!---end of row---> 
+         
+         
+         
+               <div class="row">
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">事务编号</label>
+                <div class="col-sm-7">
+                  <input type="email" class="form-control" id="inputEmail3" >
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">事务发布状态</label>
+                    <div class="col-sm-7">
+                     <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">事务结果单位审核</label>
+                <div class="col-sm-7">
+                           <select class="selectpicker">
+                            <option>选择核验目的</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         
+         
+         
+         </div><!---end of row---> 
+           <div class="row">
+         <div class="col-sm-4">
+         
+                <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">前台显示名称</label>
+                    <div class="col-sm-7">
+                     <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">事务有效开始日期</label>
+                    <div class="col-sm-7">
+                     <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">事务信息校对</label>
+                <div class="col-sm-7">
+                           <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         
+         
+        </div><!--end of row---> 
+        
+       
+             <div class="row space_down_10">
+         <div class="col-sm-4">
+         
+                <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">收费方式</label>
+                    <div class="col-sm-7">
+                     <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">事务有效截止日期</label>
+                    <div class="col-sm-7">
+                     <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">发布行为类型</label>
+                <div class="col-sm-7">
+                           <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         
+         
+        </div><!--end of row---> 
+        
+     <div class="lan_push_down10 lan_line-height" >事务清分方式</div>
+     <div class="lan_gray_border lan_padding_10 ">
+         <div class="row space_down_10">
+         
+           <span class="lan_hpadding_10  lan_line-height point push_right" >清分参与方</span> 
+             <label class="checkbox-inline ">
+              <input type="checkbox" id="inlineCheckbox1" value="option1"> 蓝证平台
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="inlineCheckbox2" value="option2"> 事务单位
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="inlineCheckbox3" value="option3">服务商
+            </label>
+         </div>
+         <div class="lan_space_down"></div>
+           <div class="row space_down_10">
+         <div class="col-sm-4">
+         
+                <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">清分计算方式</label>
+                    <div class="col-sm-7">
+                     <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">清分时间</label>
+                    <div class="col-sm-7">
+                     <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">清分频率</label>
+                <div class="col-sm-7">
+                           <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         
+         
+        </div><!--end of row---> 
+         
+
+     
+     
+     
+      </div>
+          
+          
+          
+          
+    
+      <div class="lan_push_down lan_line-height" >事务响应限制</div>
+     <div class="lan_gray_border lan_padding_20">
+
+         <div class="lan_space_down"></div>
+   
+   
+   
+          <div class="row">
+         <div class="col-sm-4">
+
+                <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">响应地区</label>
+                    <div class="col-sm-6">
+                     <input type="email" class="form-control" >
+                </div>
+              </div>
+
+         </div><!--end of col-->
+         <div class="col-sm-2">
+
+            <div class="form-group">
+                    <div class="col-sm-12">
+                     <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+
+         </div><!--end of col-->
+         <div class="col-sm-2">
+
+            <div class="form-group">
+                <div class="col-sm-12">
+                           <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+
+         </div><!--end of col-->
+
+
+        </div><!--end of row---> 
+       
+ <div class="row">
+         <div class="col-sm-4">
+         
+                <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">响应人数</label>
+                    <div class="col-sm-7">
+                     <input type="email" class="form-control"  >
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">响应对象</label>
+                    <div class="col-sm-7">
+                     <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">性别</label>
+                <div class="col-sm-7">
+                           <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         
+         
+        </div><!--end of row---> 
+       
+
+        
+        
+        
+        
+           <div class="row">
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">年龄限制</label>
+                <div class="col-sm-7">
+                  <input type="email" class="form-control"  value="入学申请" >
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+         <div class="col-sm-4">
+         
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-5 control-label">用户性质</label>
+                    <div class="col-sm-7">
+                     <select class="selectpicker">
+                            <option>选择</option>
+                            <option>1</option>
+                            <option>2</option>
+                          </select>
+                </div>
+              </div>
+         
+         </div><!--end of col-->
+
+         
+         
+         
+         </div><!---end of row---> 
+         
+         
+    </div><!--end of gray container-->
+     
+            
+          
+           
+
+        
+              
+  
+         <div class="lan_table col-5-table serveListActionTable lan_push_down lan_gray_border">
+              <div class="lan_row lan_black_text  text-center">
+              事务配置
+              </div>
+              <div class="lan_row gray_bg2">
+       <div class="container-fluid"  >     
+      <div class="row fancySeparatorContainer">
+             <div class="col-sm-5 fancySeparator "> </div>
+             <div class="col-sm-2 lan_gray_border fancySeparator lan_black_text text-center" >选择服务</div>
+             <div class="col-sm-5 fancySeparator "></div>
+        </div>
+        
+        
+        
+              <div class="lan_vpadding_10">
+              
+              <p class="lan_space_down">
+              你可以再拍摄现场通过手机关注蓝证平台微信公众号:“蓝证”或 “lanidcn”,及时获取你办理证照事务的蓝证码；根据自助设备型号的不同，您可凭身份证或者蓝证码在PHOTO-NE自助机上输入蓝证码直接拍摄并自动将证照提交给您的事务，也可
+              </p>
+              </div>
+              <div class=" lan_relative ">
+               <div class="blueButton "> 
+              <span class="center-block"    data-toggle="modal" data-target="#chooseServiceModal">选择服务</span>
+              
+           
+            </div> 
+            
+               <div class="lan_absolute lan_gray_border"> 选择服务</div>
+            
+            </div>  
+           
+           
+           
+           
+           
+           
+           
+             <div class="lan_table col-5-table">
+              <div class="lan_row">
+                <span class="lan_cell Swap">服务代码</span>
+                <span class="lan_cell Swap">服务名称</span>
+                <span class="lan_cell Swap">服务商</span>
+                 <span class="lan_cell Swap">服务价格</span>
+                <span class="lan_cell Swap">操作</span>
+              </div>
+              <div class="lan_row">
+   				<span class="lan_cell">LZ2002370025</span>
+                <span class="lan_cell">证照拍摄</span>
+                 <span class="lan_cell">凌云路柯达网络</span>
+                 <span class="lan_cell">200元</span>
+               
+                <span class="lan_cell">
+              <button type="button" class="center-block btn-sm btn btn-primary">移除</button>
+             
+                </span>
+              </div>
+                      
+              
+      </div><!--end lan_table -->
+      
+      <div class="clearfix"></div>
+       
+
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+        </div> <!--end of fluid container-->  
+        
+        
+        
+        
+        
+         <div class="container-fluid"  >     
+      <div class="row fancySeparatorContainer">
+             <div class="col-sm-5 fancySeparator "> </div>
+             <div class="col-sm-2 lan_gray_border fancySeparator lan_black_text text-center">表单</div>
+             <div class="col-sm-5 fancySeparator "></div>
+        </div>
+        
+        
+        
+              <div class="lan_vpadding_10">
+              
+              <p class="lan_space_down">
+              你可以再拍摄现场通过手机关注蓝证平台微信公众号:“蓝证”或 “lanidcn”,及时获取你办理证照事务的蓝证码；根据自助设备型号的不同，您可凭身份证或者蓝证码在PHOTO-NE自助机上输入蓝证码直接拍摄并自动将证照提交给您的事务，也可
+              </p>
+              </div>
+              <div class=" lan_relative ">
+               <div class="blueButton serviceListCreateForm "> 
+              <span class="center-block">  <a  href="formtool/formdesign.html" target="_blank">创建表单</a></span>
+              
+           
+            </div> 
+            
+               <div class="lan_absolute lan_gray_border"> 导入模板</div>
+            
+            </div>  
+           
+           
+           
+           
+           
+           
+           
+             <div class="lan_table col-4-table">
+              <div class="lan_row">
+                <span class="lan_cell Swap">表单编号</span>
+                <span class="lan_cell Swap">表单类型</span>
+                <span class="lan_cell Swap">表单来源</span>
+                <span class="lan_cell Swap">操作</span>
+              </div>
+              <div class="lan_row">
+   				<span class="lan_cell">L2002370030</span>
+                <span class="lan_cell">申请表单</span>
+                 <span class="lan_cell">导入</span>
+               
+                <span class="lan_cell">
+              <button type="button" class="center-block btn-sm btn btn-primary">编辑</button>
+             
+                </span>
+              </div>
+                      
+              
+      </div><!--end lan_table -->
+      
+      <div class="clearfix"></div>
+       
+
+        
+           
+        </div> <!--end of fluid container-->  
+  
+              
+              
+        
+        
+         <div class="container-fluid"  >     
+      <div class="row fancySeparatorContainer">
+             <div class="col-sm-5 fancySeparator "> </div>
+             <div class="col-sm-2 lan_gray_border fancySeparator lan_black_text text-center">表单</div>
+             <div class="col-sm-5 fancySeparator "></div>
+        </div>
+        
+        
+        
+              <div class="lan_vpadding_10">
+              
+              <p class="lan_space_down">
+              你可以再拍摄现场通过手机关注蓝证平台微信公众号:“蓝证”或 “lanidcn”,及时获取你办理证照事务的蓝证码；根据自助设备型号的不同，您可凭身份证或者蓝证码在PHOTO-NE自助机上输入蓝证码直接拍摄并自动将证照提交给您的事务，也可
+              </p>
+              </div>
+              <div class=" lan_relative ">
+               <div class="blueButton "> 
+              <span class="center-block">添加表单</span>
+              
+           
+            </div> 
+            
+               <div class="lan_absolute lan_gray_border"> 导入模板</div>
+            
+            </div>  
+           
+           
+           
+           
+           
+           
+           
+             <div class="lan_table col-4-table">
+              <div class="lan_row">
+                <span class="lan_cell Swap">名单</span>
+                <span class="lan_cell Swap">创建时间</span>
+                <span class="lan_cell Swap">文件大小</span>
+                <span class="lan_cell Swap">操作</span>
+              </div>
+              <div class="lan_row">
+   				<span class="lan_cell">事务响应名单1-A</span>
+                <span class="lan_cell">2014-06-20  12：25：20</span>
+                 <span class="lan_cell">80Kb</span>
+               
+                <span class="lan_cell">
+              <button type="button" class="center-block btn-sm btn btn-primary">删除</button>
+             
+                </span>
+              </div>
+                      
+              
+      </div><!--end lan_table -->
+      
+      <div class="clearfix"></div>
+       
+
+        
+           
+        </div> <!--end of fluid container-->  
+  
+              
+              
+              
+   			
+              </div><!--end lanrow--->
+
+    
+              
+              
+
+              
+            </div><!--end lan_table -->
+  
+  
+        <div class="clearfix"></div>
+          
+            <div class="blueButton servicelistActivitySubmit"> 
+              <span class="center-block">提交</span>
+              
+           
+            </div> 
+            
+          
+
+            
+
+        </form>
+        </div><!--end of container bottom-->
+        
+        </div><!-----end of main container---->
+
+          </div><!--end of row-->
+
+
+
+
+
+
+            <div id="footer" >
+        <div id="footer_text">
+            <div id="footer_nav">
+                <a ><span>  关于我们 </span></a>
+                <a ><span>   联系我们	</span></a>
+                <a > <span>   合作伙伴</span></a>
+                <a ><span>   网点注册	</span></a>
+                
+            </div>
+             <div id="copy_right"> 
+            Copyright © 2013 Lanid.cn.
+            <br class="mobile_display_break hidden-lg">
+            上海蓝迪数码科技有限公司 版权所有 
+            <br class="mobile_display_break hidden-lg">
+            All Rights Reserved. POWER BY Landigital  
+             </div>
+         </div>
+         <div id="partners">
+
+              <!--<img src="../images/登陆界面/Footer/vertical_line.jpg" />-->
+            <a > <div id="kexinwang" class="parnter_icon"> </div></a>
+            <!-- <img  src="../commons/images/right_vertical-line_03.jpg"  > -->
+            <a > <div id="union_pay" class="parnter_icon"> </div></a>
+            <a > <div id="zhifubao" class="parnter_icon"> </div></a>
+             <a > <div id="verysign" class="parnter_icon"> </div></a>
+            <!-- <img  src="../commons/images/right_vertical-line_03.jpg"  > -->
+           <a >  <div id="web_police" class="parnter_icon"> </div></a>
+         </div><!--end of partners-->
+        
+        
+        
+        </div>  <!--end of footer-->
+    
+
+
+      <!--  <div class="popUpContainer"></div>-->
+
+
+
+
+
+
+
+
+
+
+
+
+        </div><!--  end of wrapper -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="modal stripped_modal " id="chooseServiceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog bigger">
+            <div class="modal-content">
+                <div class="modal-header modal-header-primary blueHeader ">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+                    <h4 class="modal-title">选择服务</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row fancySeparatorContainer ">
+                        <div class="col-sm-5 fancySeparator "> </div>
+                        <div class="col-sm-2 lan_gray_border fancySeparator lan_black_text text-center" >服务列表</div>
+                        <div class="col-sm-5 fancySeparator "></div>
+                    </div>
+                    <form class="form-horizontal lan_push_down" role="form">
+                        <div class=" lan_padding_20">
+                            <div class="lan_space_down"></div>
+                            <div class="row lan_vpadding_10">
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-4 control-label">服务类型</label>
+                                        <div class="col-sm-8">
+                                            <select class="selectpicker">
+                                                <option>证照服务</option>
+                                                <option>1</option>
+                                                <option>2</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end of col-->
+
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-4 control-label">服务名称</label>
+                                        <div class="col-sm-8">
+                                            <select class="selectpicker">
+                                                <option>证照拍摄</option>
+                                                <option>1</option>
+                                                <option>2</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end of col-->
+
+                            </div> <!--end of row--->
+
+                            <div class="lan_space_down"></div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-5 control-label">选择地区</label>
+                                        <div class="col-sm-7">
+                                            <select class="selectpicker">
+                                                <option>浙江省</option>
+                                                <option>1</option>
+                                                <option>2</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end of col-->
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            <select class="selectpicker">
+                                                <option>杭州市</option>
+                                                <option>1</option>
+                                                <option>2</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end of col-->
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="col-sm-9">
+                                            <select class="selectpicker">
+                                                <option>临安县</option>
+                                                <option>1</option>
+                                                <option>2</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end of col-->
+
+                                <div class="col-sm-3">
+                                    <div class="right-inner-addon"> <i class="icon-search glyphicon glyphicon-search"></i>
+                                        <input type="search"
+                                               class="form-control"
+                                               placeholder="搜索" />
+                                    </div>
+                                </div>
+                                <!--end of col-->
+
+                            </div>
+                                   <!--end of row--->
+
+                        </div>
+                        <div class="lan_table col-5-table">
+                            <div class="lan_row">
+                                <span class="lan_cell Swap">服务代码</span>
+                                <span class="lan_cell Swap">服务名称</span>
+                                <span class="lan_cell  Swap">服务商</span>
+                                <span class="lan_cell Swap">服务价格</span>
+                                <span class="lan_cell  Swap">操作</span>
+
+                            </div>
+                            <div class="lan_row">
+                                <span class="lan_cell">LZ2002370025</span>
+                                <span class="lan_cell">证照拍摄</span>
+                                <span class="lan_cell">所有服务商</span>
+                                <span class="lan_cell">200元-300元</span>
+                                <span class="lan_cell">
+                                    <button type="button" class="selectContent  center-block btn-sm btn btn-primary">选择</button>
+                                    </span> </div>
+                            <div class="lan_row"> <span class="lan_cell">LZ2002370025</span> <span class="lan_cell">证照拍摄</span>
+                                <span class="lan_cell">凌云路柯达网络</span> <span class="lan_cell">200元</span> <span class="lan_cell">
+                                    <button type="button" class="selectContent center-block btn-sm btn btn-primary">选择</button>
+                                    </span> </div>
+                            <div class="lan_row"> <span class="lan_cell">LZ2002370025</span> <span class="lan_cell">证照拍摄</span>
+                                <span class="lan_cell">凌云路柯达网络</span> <span class="lan_cell">210元</span> <span class="lan_cell">
+                                    <button type="button" class=" selectContent center-block btn-sm btn btn-primary">选择</button>
+                                    </span> </div>
+                            <div class="lan_row"> <span class="lan_cell">LZ20023701678</span> <span class="lan_cell">证照拍摄</span>
+                                <span class="lan_cell">凌云路柯达网络</span> <span class="lan_cell">210元</span> <span class="lan_cell">
+                                    <button type="button" class="selectContent center-block btn-sm btn btn-primary">选择</button>
+                                    </span> </div>
+                            <div class="lan_row">
+                                <span class="lan_cell">LZ2002371209</span> <span class="lan_cell">证照拍摄</span>
+                                <span class="lan_cell">凌云路柯达网络</span> <span class="lan_cell">205元</span>
+                                <span class="lan_cell">
+                                    <button type="button" class="selectContent center-block btn-sm btn btn-primary">选择</button>
+                                    </span>
+                            </div>
+                        </div>
+                        <!--end lan_table -->
+
+                        <nav class="paginationContainer">
+                            <ul class="pagination">
+                                <li><a href="">上一页</a></li>
+                                <li><a class="active" href="">1</a></li>
+                                <li><a href="">2</a></li>
+                                <li><a href="">3</a></li>
+                                <li><a href="">4</a></li>
+                                <li><a href="">5</a></li>
+                                <li><a href="">下一页</a></li>
+                            </ul>
+                        </nav>
+                        <!-- /pagination  -->
+
+                        <div class="clearfix"></div>
+                        <dl class=" servicePointDescBox ">
+                            <dt class="lan_black_text">已选择服务:</dt>
+                            <dd class=" selectedServicesContainer lan_gray_border">
+                                <div class="selectedService selected pull-left lan_gray_border" >
+                                    <span>LZ20023701678</span><span>证照拍摄</span> <i class="glyphicon glyphicon-remove"></i></div>
+                                <div class="selectedService pull-left lan_gray_border" >
+                                    <span>LZ2002370011209</span><span>证照拍摄</span> <i class="glyphicon glyphicon-remove"></i></div>
+                                <div class="selectedService pull-left lan_gray_border" >
+                                    <span>LZ20023701678</span><span>常见证件拍摄</span> <i class="glyphicon glyphicon-remove"></i></div>
+                                <div class="selectedService pull-left lan_gray_border" >
+                                    <span>LZ20023701678</span><span>常见证件拍摄</span> <i class="glyphicon glyphicon-remove"></i></div>
+                                <div class="clearfix"></div>
+                            </dd>
+                        </dl>
+                    </form>
+                </div>
+                <!--end of modal-body-->
+
+
+                <div class="modal-footer  fancyBoxGrayFooter">
+                    <div class="footer_operation_container">
+                        <div class="blueButton formPreview " data-dismiss="modal"> <span>选择完成</span> </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div> <!--- modal -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+                  
+        
+            
+            
+            
+            
+            
+            
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     

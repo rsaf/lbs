@@ -1,0 +1,53 @@
+<div class="modal-dialog  smallModal">
+  <div class="modal-content">
+    <div class="modal-header modal-header-primary blueHeader ">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span
+              style="color:white;">×</span></button>
+      <h4 class="modal-title">添加名单</h4>
+    </div>
+    <div class="modal-body">
+
+
+
+      <div class="listUploader uploadFileContainer center-block">
+
+        <div class="divCaption" >选择添加名单文件:</div>
+
+
+            <div id="uploadedFileName" class="uploadedFileName lan_gray_border"></div>
+
+                      <div class="grayButton grayButton-file stripped-Button">
+
+                          <span  data-action-change="list:new:file:upload" > 选择文件
+
+
+                              <form id="uploadForm" action="" method="POST" enctype="multipart/form-data">
+                       
+                                       <input name="file" type="file" accept="application/zip" multiple="">
+                                <!--<input type="submit" class="hide" value="Submit Comment" />-->
+                              </form>
+
+                      </span>
+             </div>
+
+
+      </div>
+
+
+    </div>
+    <div class="modal-footer  fancyBoxGrayFooter">
+
+
+      <div class="footer_operation_container">
+        <div class="grayButton formPreview" data-dismiss="modal"><span>取消</span></div>
+        <div class="blueButton formPreview "  data-action-click="list:new:file.submit"><span>确认</span></div>
+
+
+        <div class="clearfix"></div>
+      </div>
+
+    </div>
+
+
+  </div>
+</div>

@@ -1,0 +1,122 @@
+
+<div class="lan_table col-5-table" >
+    <div class="lan_row">
+        <span class="lan_cell Swap">业务类型</span>
+        <span class="lan_cell Swap">操作名称</span>
+        <span class="lan_cell Swap">操作时间</span>
+        <span class="lan_cell Swap">IP地址</span>
+        <span class="lan_cell Swap">操作</span>
+    </div>
+    {{#logs}}
+    <div class="lan_row">
+        <span class="lan_cell">{{opType}}</span>
+        <span class="lan_cell">{{opName}}</span>
+        <span class="lan_cell">{{#limitLength}}{{opDate}}{{/limitLength}}</span>
+        <!--
+        <span class="lan_cell">{{opDate}}</span>
+        -->
+
+        <span class="lan_cell">{{srcIP}}</span>
+
+            <span class="lan_cell">
+                <ul class="lan_table_more">
+                    <li data-toggle="modal" data-target="#{{_id}}"  > <a>详细 </a>
+                    </li>
+                </ul>
+            </span>
+
+
+
+    </div>
+
+    <!---modal-->
+
+
+    <div class="modal " id="{{_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-primary blueHeader ">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span style="color:white;">×</span></button>
+                    <h4 class="modal-title">操作纤细</h4>
+                </div>
+                <div class="modal-body">
+
+
+                    <!----inserted part---->
+                    <div class=" opsLogDetailsPopUp">
+
+                        <div class="regFancyBoxBody">
+
+                            <div class="opsLogDetailsTop">
+                                <div class="fakeTable">
+
+                                    <div class="fakeTableLine">
+                                        <span>操作名称:</span><span>{{opName}}</span>
+
+                                    </div>
+                                    <div class="fakeTableLine">
+                                        <span>操作类型:</span><span>{{opType}}</span>
+
+                                    </div>
+                                    <div class="fakeTableLine">
+                                        <span>操作时间:</span><span>{{opDate}}</span>
+
+                                    </div>
+                                    <div class="fakeTableLine">
+                                        <span>IP地址:</span><span>{{srcIP}}</span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="opsLogDetailsBottom">
+                                <div class="fakeTableLine">
+                                    <span>操作对象:</span><span>{{srcURI}}</span>
+
+                                </div>
+                                <div class="fakeTableLine">
+
+                                    <span>是否成功:</span><span>是</span>
+
+                                </div>
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+                    </div>
+
+                    <!----/inserted part---->
+                </div>
+                <div class="modal-footer  fancyBoxGrayFooter">
+                    <button type="button" class="btn btn-primary center-block" data-dismiss="modal">知道了</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--- modal -->
+    {{/logs}}
+
+    <div class="spinnerPlaceHolder "></div>
+</div><!--end lan_table -->
+
+
+
+
+<nav class="paginationContainer">
+    <ul class="pagination">
+        <li><a >上一页</a></li>
+        <li><a class="active" >1</a></li>
+        <li><a >2</a></li>
+        <li><a >3</a></li>
+        <li><a >4</a></li>
+        <li><a >5</a></li>
+        <li><a >下一页</a></li>
+    </ul>
+</nav><!-- /pagination  -->
+

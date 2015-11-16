@@ -1,0 +1,38 @@
+                <table class="table table-striped table-bordered  table_text_center  table-hover ">
+                  <tbody>
+                    <tr>
+                      <td>服务名称</td>
+                      <td>服务网点</td>
+                      <td>服务费用（元）</td>
+                      <td>优惠费用（元）</td>
+                      <td>小计（元）</td>
+                    </tr>
+
+                    {{#data.sb}}
+                    <tr>
+                        {{#notPaidByMe}}
+                            <td>{{svn}} {(单位付款 {{svp}}RMB)</td>
+                            <td>{{spn}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        {{/notPaidByMe}}
+                        {{^notPaidByMe}}
+                            <td>{{svn}}{{#marathon}} (单人数:{{singlePayment}}X{{singleUnitPrice}} + 双人数:{{couplePayment}}X{{coupleUnitPrice}}) {{/marathon}}{{#offline}} (现场付款 {{sdp}}RMB){{/offline}}</td>
+                            <td>{{spn}}</td>
+                            <td>{{#offline}}0{{/offline}}{{^offline}}{{svp}}{{/offline}}RMB</td>
+                            <td>{{#offline}}0{{/offline}}{{^offline}}{{sdp}}{{/offline}}RMB</td>
+                            <td>{{#offline}}0{{/offline}}{{^offline}}{{sdp}}{{/offline}}RMB</td>
+                        {{/notPaidByMe}}
+                    </tr>
+                    {{/data.sb}}
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td><strong>{{#notPaidByMe}}0 RMB{{/notPaidByMe}}{{^notPaidByMe}}{{total}}RMB{{/notPaidByMe}}</strong></td>
+                    </tr>
+                 
+                  </tbody>
+                </table> 

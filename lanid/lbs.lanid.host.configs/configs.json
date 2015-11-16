@@ -1,0 +1,91 @@
+{
+  "pgconfig": {
+    "host": "localhost",
+    "user": "postgres",
+    "pass": "postgres",
+    "port": "5432"
+  },
+  "mgconfig": {
+    "uri": "mongodb://localhost/",
+    "options": {
+      "db": {"native_parser": true},
+      "server": {"poolSize": 1},
+      "replset": {"rs_name": null},
+      "user": null,
+      "pass": null
+    }
+  },
+  "rdconfig": {
+    "host": "localhost",
+    "pass": null,
+    "port": 6379
+  },
+  "bkconfig": {
+    "bucket1": "localhost",
+    "bucket2": "localhost",
+    "privatekey": "/.ssh/uploadbot"
+  },
+  "smtpconfig": {
+    "options": {
+      "host": "smtp.mailgun.org",
+      "port": 587,
+      "auth": {
+        "user": "postmaster@sandbox1253bb8e56534c53ad8d905f6f3b93df.mailgun.org",
+        "pass": "367973b284cf196e720118237fe3160c"
+      }
+    },
+    "from": "services@lanid.cn"
+  },
+  "bsconfig": {
+    "bsport": 80
+  },
+  "smsconfig": {
+    "username": "jiekou-clcs-04",
+    "password": "Tch147369",
+    "endpoint": "http://222.73.117.158/msg/HttpBatchSendSM?"
+  },
+  "ivsconfig": {
+    "idlicense": null,
+    "photolicense": null,
+    "endpoint": "http://dev.as.idlan.cn/landibd/services/LanDigitalService?wsdl"
+  },
+  "alipayconfig": {
+    "partner": "2088811743322164",
+    "apiKey": "xo9flreoz3hezvzrjnz2g05z9zrds6io",
+    "seller_email": "idlancn@aliyun.com",
+    "host": "http://dev.www.idlan.cn",
+    "port": 80,
+    "cacert": "../node_modules_local/lbs.api.fmm.leo/lib/alipay/cacert.pem",
+    "transport": "http",
+    "inputCharset": "utf-8",
+    "signatureType": "MD5",
+    "create_direct_pay_by_user_return_url": "/workspace/finance/response",
+    "create_direct_pay_by_user_notify_url": "/workspace/finance/order",
+    "http_verify_url" : "http://mapi.alipay.com/gateway.do?service=notify_verify&",
+    "https_verify_url" : "https://mapi.alipay.com/gateway.do?service=notify_verify&",
+    "alipayGateway": "https://mapi.alipay.com/gateway.do?",
+    "error_notify_url": "/home/error"
+  },
+  "weixinpayconfig": {
+    "appId": "wx5a85d57385f32302",
+    "appSecret": "58d8d4b4e937d35cc7b462ee33c92453",
+    "partnerKey": "200007b4e937d35cc7b462ee33clbs02",
+    "mchId": "1239025702",
+    "notifyUrl": "http://dev.www.idlan.cn/wechat/notify",
+    "pfx": "../node_modules_local/lbs.api.fmm.leo/lib/weixinpay/lib/apiclient_cert.p12",
+    "oauthUrl": "https://api.weixin.qq.com/sns/oauth2/access_token?",
+    "apiTokenUrl" : "https://api.weixin.qq.com/cgi-bin/token?",
+    "userInfoUrl" : "https://api.weixin.qq.com/cgi-bin/user/info?",
+    "host": "http://dev.www.idlan.cn",
+    "return_url": "http://dev.www.idlan.cn/workspace/finance/response",
+    "notify_url": "http://dev.www.idlan.cn/workspace/finance/order",
+    "URLS": {
+      "UNIFIED_ORDER": "https://api.mch.weixin.qq.com/pay/unifiedorder",
+      "ORDER_QUERY": "https://api.mch.weixin.qq.com/pay/orderquery",
+      "REFUND": "https://api.mch.weixin.qq.com/secapi/pay/refund",
+      "REFUND_QUERY": "https://api.mch.weixin.qq.com/pay/refundquery",
+      "DOWNLOAD_BILL": "https://api.mch.weixin.qq.com/pay/downloadbill",
+      "SHORT_URL": "https://api.mch.weixin.qq.com/tools/shorturl"
+    }
+  }
+}

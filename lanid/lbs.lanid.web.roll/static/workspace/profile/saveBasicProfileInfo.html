@@ -1,0 +1,31 @@
+<ul>
+    <li>
+        <span class>用户名 : </span>
+        <span>{{profile.basic.userName.value}}</span>
+    </li>
+    <li>
+        <span>性别:</span>
+        <span>{{profile.basic.gender.value}} </span>
+    </li>
+    <li>
+        <span>出生日期 : </span>
+        <span>{{#limitLength}}{{profile.basic.dateOfBirth.value}} {{/limitLength}}</span>
+    </li>
+</ul>
+
+<ul>
+    <li>
+        <span>国家 : </span>
+        <span> {{profile.basic.country.value}}</span>
+    </li>
+    <li>
+        <span>户口地 : </span>
+        <span>{{profile.basic.placeOfBrith.value}} </span>
+    </li>
+
+    <li>
+        <span>现居地 : </span>
+        <span>{{profile.basic.currentResidence.value}}</span>
+    </li>
+</ul>
+<span class="edit-info" data-action-click="basic:edit">编辑信息</span>

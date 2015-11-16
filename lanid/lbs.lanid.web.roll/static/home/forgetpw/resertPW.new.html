@@ -1,0 +1,181 @@
+<div id="resetPasswordPageContainer"  style="max-width: 800px;min-width: 600px ; margin: auto; min-height: 650px;height: 100%; display: table;">
+
+
+
+    <div class="" id="resetPassWordPage" style="display: table-cell;vertical-align: middle;">
+
+
+        <div class="resetSuccesfull lan_padding_bottom_10 text-center"></div>
+
+        <form class="lan_gray_border form-horizontal lan_padding_top_20 lan_padding_bottom_20 lan_padding_right_10 lan_padding_left_10" >
+
+            <div class="form-group lan_margin_bottom_10">
+                <label for="modalResetPassWordPhone" class="col-sm-3 control-label specialBlue">手机号:</label>
+                <div class="col-sm-6 ">
+
+                    <input id="modalResetPassWordPhone" class="form-control " type="text" name="loginPhone"  placeholder="请输入手机号" value="">
+
+
+                </div>
+
+                <div class="col-sm-3 col-xs-12">
+
+
+                    <div class="grayButton"><span class="form-control getVerificationCodeBtn" style="line-height: 10px; font-size: 80%; color: black !important; padding-left:0!important;padding-right:0!important; " data-action-click="reset:password:get:verification:code">获取验证码<em class="transactionCountDown hide lan_text_red  lan_padding_left_5">60</em></span></div>
+                </div>
+
+
+            </div>
+
+
+            <div class="form-group">
+                <label for="modalResetPassWordVerificationCode" class="col-sm-3 specialBlue control-label">验证码:</label>
+                <div class="col-sm-6">
+
+                    <input id="modalResetPassWordVerificationCode" data-action-click="modal:recover:verification:code" class="form-control" type="text" name="verificationCode"  maxlength="16" placeholder="输入验证码">
+
+                </div>
+
+                <span  class=" col-sm-3 verificationCodeSentNote hide " style="  line-height: 30px;"><span class="glyphicon glyphicon-ok lan_padding_right_5 specialBlue" style=" font-size: 1.1em;"></span>已发送</span>
+
+            </div>
+
+
+            <div class="form-group">
+                <label for="modalResetPassWordNewPassword" class="col-sm-3 specialBlue control-label">新密码:</label>
+                <div class="col-sm-6">
+
+                    <input id="modalResetPassWordNewPassword" class="form-control" type="password" name="newPassword"  placeholder="请输入新密码" disabled>
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label for="modalResetPassWordConfirmNewPassword" class="col-sm-3 specialBlue control-label">确认密码:</label>
+                <div class="col-sm-6">
+
+                    <input id="modalResetPassWordConfirmNewPassword" class="form-control" type="password" name="confirmNewPassword"  placeholder="请输入新密码" disabled>
+
+                </div>
+
+            </div>
+
+            <div id="modalResetPwIdNotMatchingBox"    class="hide form-group">
+                <label for="modalResetPwIdNotMatching" class="col-sm-3 specialBlue control-label"></label>
+                <div class="col-sm-6">
+
+                    <div><span id="modalResetPwIdNotMatching" style="color: red; font-size: 80%">密码不匹配!</span></div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="form-group">
+                <label for="" class="col-sm-3 specialBlue control-label"></label>
+                <div class="col-sm-6">
+
+                    <div class="blueButton "><span  class="form-control " style="max-width: none; height: 46px" data-action-click="modal:recover:new:password">确认</span></div>
+                    <div class="col-xs-12"></div>
+
+
+
+                    <div class="">
+                        <div class="pull-left" >
+                            <a  href="#">返回登陆</a>
+                        </div>
+
+                        <div class="pull-right" >
+                            <a  href="#/home/registration/user">马上注册</a>
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+        </form>
+
+    </div>
+
+
+
+
+
+    <!--loggin-->
+
+
+    <div class="setPasswordPageLogin hide" style="display: table-cell;vertical-align: middle;">
+
+
+        <div class="lan_gray_border">
+
+
+
+
+
+            <div class="  lan_padding_bottom_20 lan_padding_top_20" id="home_login_form">
+                <form class="lan_padding_bottom_20 lan_padding_top_20">
+                    <h2 class="specialBlue reloginPopupForm" style="font-size: 1.2em;">请用新密码登陆！</h2>
+
+                    <div class="home_input_icon lan_gray_border" id="home_username">
+                        <div class="home_img"><img src="/commons/images/用户ICON_03.jpg"></div>
+                        <div class="home_input"><input type="text" placeholder="手机号/用户名" id="username" name="username" value="">
+                        </div>
+                    </div>
+                    <div class="home_input_icon lan_gray_border" id="home_password">
+                        <div class="home_img"><img src="/commons/images/平台密码ICON_03.jpg"></div>
+                        <div class="home_input"><input type="password" placeholder="新密码" id="password" name="password" value="">
+                        </div>
+                    </div>
+
+                    <!--<div class="home_input_icon" id="home_captcha_box">-->
+                    <!--<div class="home_img"><img src="/commons/images/T_18.jpg"></div>-->
+
+
+                    <!--<input type="hidden" id="antiBotValue" name="antiBotValue" value="CWVM">-->
+                    <!--</div>-->
+                    <h2 class="text-danger login-status"></h2>
+                    <div class="home_input_icon" id="home_submit_buton">
+                        <input type="image" id="homeLoginSubmit" name="login" src="/commons/images/signin.jpg" data-action-click="resertpw:done:login">
+                    </div>
+
+
+                    <div class="lan_padding_bottom_20">
+                        <div class="pull-left" >
+                            <a class="specialBlue" data-action-click="resertpw:reset:again">忘记密码</a>
+                        </div>
+
+                        <div class="pull-right" >
+                            <a  class="specialBlue" href="#/home/registration/user">马上注册</a>
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+            </div>
+
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+</div>

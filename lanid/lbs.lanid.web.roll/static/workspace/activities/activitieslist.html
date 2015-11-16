@@ -1,0 +1,58 @@
+
+<div id="activitiesListTable" class="lan_table col-6-table lan_relative">
+
+  <div class="lan_row">
+    <span class="lan_cell Swap">事务代码</span>
+    <span class="lan_cell Swap">事务名称</span>
+    <span class="lan_cell Swap">发布日期</span>
+    <span class="lan_cell Swap">截止日期</span>
+    <span class="lan_cell Swap">事务状态</span>
+    <span class="lan_cell Swap">操作</span>
+  </div>
+  {{#items}}
+  <div class="lan_row">
+    <span class="lan_cell">{{abd.ac}}</span>
+    <span class="lan_cell">{{abd.an}}</span>
+    <span class="lan_cell">{{shortStart}}</span>
+    <span class="lan_cell">{{shortEnd}}</span>
+    <span class="lan_cell">{{statusText}}</span>
+    <span class="lan_cell">
+      {{#abd.ac}}<!--  field1 is just the fake json, should be a field of real data that cannot be fals(y) or a function-->
+      <ul class="lan_table_more">
+
+          <li class="" >
+
+              <a> 选项</a>
+              <ul>
+                  <li><a
+                          target="_blank"
+                          href="#/workspace/publishing/activities/{{abd.ac}}"> 详细 </a></li>
+                  <li><a data-action-click='activities:report:download'
+                         data-id='{{abd.ac}}'> 下载</a></li>
+                  <li><a data-action-click='activities:delete'
+                         data-id='{{_id}}'> 删除</a></li>
+                {{#abd.mass}}<li><a data-action-click="activities:process" data-id="{{abd.ac}}">批量处理</a></li>{{/abd.mass}}
+                  <li><a  target="_blank" href="#/details/workspace/activitydetail/{{abd.ac}}"
+                          > 事务详情</a></li>
+
+
+              </ul>
+          </li>
+
+      </ul>
+      {{/abd.ac}}
+    </span>
+  </div>
+  {{/items}}
+  <div class="spinnerPlaceHolder "></div>
+</div><!--end lan_table -->
+
+<nav class="paginationContainer">
+
+
+</nav> <!-- /pagging  -->
+
+</div>
+
+<!-- /contaier bottom -->
+

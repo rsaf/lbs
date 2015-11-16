@@ -1,0 +1,60 @@
+
+
+
+<div id="home_login_form" class="exteranlLogin white_bg">
+
+    <div class="externalLoginHeader">
+        <h1 class="text-center">登录蓝证平台</h1>
+    </div>
+    <form class="exteranlLoginForm">
+
+
+
+        <div id="home_username" class="home_input_icon">
+
+            <div class="home_img"><img src="/commons/images/用户ICON_03.jpg"/></div>
+            <div class="home_input"><input type="text" name="username" id="username" placeholder="蓝证ID/邮箱/手机号"/>
+            </div>
+        </div>
+        <div id="home_password" class="home_input_icon">
+            <div class="home_img"><img src="/commons/images/平台密码ICON_03.jpg"/></div>
+            <div class="home_input"><input type="password" name="password" id="password" placeholder="蓝证平台密码"/>
+            </div>
+        </div>
+        <div class="home_forget_password"><a href="#/home/forgetpw/forgotPw" class="content specialBlue clickToResetPw">忘记密码</a></div>
+        <div id="home_captcha_box" class="home_input_icon">
+            <div class="home_img"><img src="/commons/images/T_18.jpg"/></div>
+
+
+            <div id="home_system_captcha"><a onclick="randomString();">
+                <span class="home_check">{{randomString}}</span> </a></div>
+            <div id="home_user_captcha"><input type="text" name="user_captcha" id="user_captcha"
+                                               placeholder="右侧的验证码"/></div>
+            <!--<img src="../images/分隔条_15.jpg" />-->
+            <input type="hidden" name="antiBotValue" id="antiBotValue" value='{{randomString}}'>
+        </div>
+        <div id="home_submit_buton" class="home_input_icon" ondragstart="return false;" ondrop="return false;">
+            <!--<input type="image" src="/commons/images/signin.jpg" name="login" id="homeLoginSubmit"-->
+            <!--data-action-click='home-default:login'/>-->
+
+            <div id="homeLoginSubmit"
+                 data-action-click='home-default:login' class="text-center"> 登录</div>
+
+
+        </div>
+
+        <a href="#/home/userRegistration" class="content specialBlue "
+           data-action-click='home-default:bbqUpdate'
+           data-linkto='/home/userRegistration'>马上注册</a>
+
+        <div class="home_forget_password mobile_home_forget_password">
+            <a href="#/home/forgotPw" class="content specialBlue clickToResetPw push_down_20"
+               data-action-click='home-default:bbqUpdate'
+               data-linkto='/home/forgetpw/forgotPw'>忘记密码</a>
+        </div>
+
+
+    </form>
+
+
+</div>

@@ -1,0 +1,50 @@
+<div class="lan_table col-5-table">
+  <div class="lan_row">
+    <span class="lan_cell Swap">服务代码</span>
+    <span class="lan_cell Swap">服务名称</span>
+    <span class="lan_cell Swap">服务类型</span>
+    <!--<span class="lan_cell Swap">服务商</span>-->
+    <span class="lan_cell Swap">价格（元）</span>
+    <span class="lan_cell Swap">操作</span>
+  </div>
+  {{#items}}
+  <div class="lan_row">
+    <span class="lan_cell">{{serviceCode}}</span>
+    <span class="lan_cell">{{serviceName.text}}</span>
+    <span class="lan_cell">{{serviceType.text}}</span>
+    <!--<span class="lan_cell">{{field4}}</span>-->
+    <span class="lan_cell">{{standardServicePrice}}</span>
+    <span class="lan_cell">
+      {{#serviceCode}}<!-- using field1 because using dummy data, with real data use a non fals(y) field or a helper function to determine if this is data or padding -->
+      <ul class="lan_table_more">
+
+
+
+
+          <li class="">
+
+              <a> 选项</a>
+              <ul>
+                  <li><a data-id='{{_id}}'
+                         data-action-click='service:detail'> 详细 </a></li>
+                  <!--<li><a>取消</a></li>-->
+                  <!--<li><a data-id='{{!_id}}'-->
+                         <!--data-action-click='activities:delete'> 删除</a></li>-->
+              </ul>
+          </li>
+
+
+
+
+      </ul>
+      {{/serviceCode}}
+    </span>
+  </div>
+  {{/items}}
+  <div class="spinnerPlaceHolder "></div>
+</div><!--end lan_table -->
+
+<nav class="paginationContainer">
+
+
+</nav><!-- /pagination  -->
